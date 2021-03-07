@@ -1,0 +1,2 @@
+git lfs track "*.png" Tracking *.png
+git lfs track "*.fbx" Tracking *.fbx
