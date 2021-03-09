@@ -1,0 +1,31 @@
+﻿<Properties StartupConfiguration="{C184845D-7F4E-46EA-B122-443682063747}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Map.cs">
+    <Files>
+      <File FileName="MainGame.cs" Line="15" Column="47" />
+      <File FileName="app.manifest" Line="1" Column="1" />
+      <File FileName="Map.cs" Line="13" Column="3" />
+      <File FileName="Program.cs" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Grimmetropolis" expanded="True">
+            <Node name="Grimmetropolis" expanded="True">
+              <Node name="Dependencies" expanded="True">
+                <Node name="PackageDependencies" expanded="True" />
+              </Node>
+              <Node name="Map.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Grimmetropolis PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
