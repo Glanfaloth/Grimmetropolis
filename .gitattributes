@@ -1,4 +1,4 @@
-git lfs track "*.png" Tracking *.png
-git lfs track "*.fbx" Tracking *.fbx
-git lfs track "*.blend" Tracking *.blend
-git lfs track "*.zip" Tracking *.zip
+*.png filter=lfs diff=lfs merge=lfs -text
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.blend filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
