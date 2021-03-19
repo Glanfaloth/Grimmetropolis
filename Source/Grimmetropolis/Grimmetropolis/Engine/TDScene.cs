@@ -7,8 +7,8 @@ public class TDScene
 
     public List<TDObject> TDObjects = new List<TDObject>();
 
-    public TDCameraComponent CameraObject;
-    public List<TDMeshComponent> MeshObjects = new List<TDMeshComponent>();
+    public TDCamera CameraObject;
+    public List<TDMesh> MeshObjects = new List<TDMesh>();
 
     public virtual void Initialize() { }
 
@@ -22,7 +22,7 @@ public class TDScene
 
     public void Draw()
     {
-        foreach (TDMeshComponent meshObject in MeshObjects)
+        foreach (TDMesh meshObject in MeshObjects)
         {
             meshObject.Draw();
         }

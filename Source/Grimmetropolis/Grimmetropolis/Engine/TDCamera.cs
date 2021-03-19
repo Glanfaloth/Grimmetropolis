@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
-public class TDCameraComponent : TDComponent
+public class TDCamera : TDComponent
 {
-
     public static GraphicsDeviceManager Graphics { private get; set; }
+
     public Vector3 CameraPosition
     {
         get { return TDObject.Transform.Position; }
@@ -71,7 +71,7 @@ public class TDCameraComponent : TDComponent
     public Matrix ProjectionMatrix { get; private set; }
     public Matrix ViewProjectionMatrix { get; private set; }
 
-    public TDCameraComponent(TDObject tdObject, float fieldOfView, float nearPlaneDistance, float farPlaneDistance)
+    public TDCamera(TDObject tdObject, float fieldOfView, float nearPlaneDistance, float farPlaneDistance)
         : base(tdObject)
     {
         _fieldOfView = fieldOfView;

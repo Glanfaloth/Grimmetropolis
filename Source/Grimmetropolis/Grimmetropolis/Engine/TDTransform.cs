@@ -2,11 +2,11 @@
 
 using System.Collections.Generic;
 
-public class TDTransformComponent : TDComponent
+public class TDTransform : TDComponent
 {
-    private TDObject _parent;
+    private TDTransform _parent;
 
-    public TDObject Parent
+    public TDTransform Parent
     {
         get { return _parent; }
 
@@ -21,7 +21,7 @@ public class TDTransformComponent : TDComponent
         }
     }
 
-    public List<TDObject> Children = new List<TDObject>();
+    public List<TDTransform> Children = new List<TDTransform>();
 
     public Matrix TransformMatrix { get; private set; }
 
@@ -34,6 +34,9 @@ public class TDTransformComponent : TDComponent
             _localPosition = value;
             CalculatePosition();
             CalculateTransform();
+
+            CalculateChildrenPosition();
+            CalculateChildrenTransform();
         }
     }
 
@@ -46,6 +49,9 @@ public class TDTransformComponent : TDComponent
             _localRotation = value;
             CalculateRotation();
             CalculateTransform();
+
+            CalculateChildrenRotation();
+            CalculateChildrenTransform();
         }
     }
 
@@ -58,6 +64,9 @@ public class TDTransformComponent : TDComponent
             _localScale = value;
             CalculateScale();
             CalculateTransform();
+
+            CalculateChildrenScale();
+            CalculateChildrenTransform();
         }
     }
 
@@ -70,6 +79,9 @@ public class TDTransformComponent : TDComponent
             _position = value;
             CalculateLocalPosition();
             CalculateTransform();
+
+            CalculateChildrenPosition();
+            CalculateChildrenTransform();
         }
     }
 
@@ -82,6 +94,9 @@ public class TDTransformComponent : TDComponent
             _rotation = value;
             CalculateLocalRotation();
             CalculateTransform();
+
+            CalculateChildrenRotation();
+            CalculateChildrenTransform();
         }
     }
 
@@ -94,10 +109,13 @@ public class TDTransformComponent : TDComponent
             _scale = value;
             CalculateLocalScale();
             CalculateTransform();
+
+            CalculateChildrenScale();
+            CalculateChildrenTransform();
         }
     }
 
-    public TDTransformComponent(TDObject tdObject, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDObject parent)
+    public TDTransform(TDObject tdObject, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent)
         : base(tdObject)
     {
         _parent = parent;
@@ -114,41 +132,75 @@ public class TDTransformComponent : TDComponent
 
     private void AddChildToParent()
     {
-        _parent?.Transform.Children.Add(TDObject);
+        _parent?.Children.Add(this);
     }
 
     private void CalculateLocalPosition()
     {
-        _localPosition = Parent == null ? _position : Vector3.Transform(_position, Matrix.Invert(Parent.Transform.TransformMatrix));
+        _localPosition = _parent == null ? _position : Vector3.Transform(_position, Matrix.Invert(_parent.TransformMatrix));
     }
 
     private void CalculateLocalRotation()
     {
-        _localRotation = Parent == null ? _localRotation : _localRotation * Quaternion.Inverse(Parent.Transform.Rotation);
+        _localRotation = Parent == null ? _localRotation : _localRotation * Quaternion.Inverse(_parent.Rotation);
     }
 
     private void CalculateLocalScale()
     {
-        _localScale = Parent == null ? _localScale : Vector3.Divide(_localScale, Parent.Transform.Scale);
+        _localScale = _parent == null ? _localScale : Vector3.Divide(_localScale, _parent.Scale);
     }
 
     private void CalculatePosition()
     {
-        _position = Parent == null ? _localPosition : Vector3.Transform(_localPosition, Parent.Transform.TransformMatrix);
+        _position = _parent == null ? _localPosition : Vector3.Transform(_localPosition, _parent.TransformMatrix);
     }
 
     private void CalculateRotation()
     {
-        _rotation = Parent == null ? _localRotation : _localRotation * Parent.Transform.Rotation;
+        _rotation = _parent == null ? _localRotation : _localRotation * _parent.Rotation;
     }
 
     private void CalculateScale()
     {
-        _scale = Parent == null ? _localScale : Vector3.Multiply(_localScale, Parent.Transform.Scale);
+        _scale = _parent == null ? _localScale : Vector3.Multiply(_localScale, _parent.Scale);
     }
 
     private void CalculateTransform()
     {
         TransformMatrix = Matrix.CreateScale(_scale) * Matrix.CreateFromQuaternion(_rotation) * Matrix.CreateTranslation(_position);
+    }
+
+    private void CalculateChildrenPosition()
+    {
+        foreach (TDTransform child in Children)
+        {
+            child.CalculatePosition();
+        }
+    }
+
+    private void CalculateChildrenRotation()
+    {
+        foreach (TDTransform child in Children)
+        {
+            child.CalculateRotation();
+            child.CalculatePosition();
+        }
+    }
+
+    private void CalculateChildrenScale()
+    {
+        foreach (TDTransform child in Children)
+        {
+            child.CalculateScale();
+            child.CalculatePosition();
+        }
+    }
+
+    private void CalculateChildrenTransform()
+    {
+        foreach (TDTransform child in Children)
+        {
+            child.CalculateTransform();
+        }
     }
 }

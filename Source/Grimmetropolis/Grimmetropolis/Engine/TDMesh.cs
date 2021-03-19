@@ -1,12 +1,11 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-public class TDMeshComponent : TDComponent
+public class TDMesh : TDComponent
 {
-    // TODO: add effect object
     private Model _model;
     private Texture2D _texture;
 
-    public TDMeshComponent(TDObject tdObject, Model model, Texture2D texture) : base(tdObject)
+    public TDMesh(TDObject tdObject, Model model, Texture2D texture) : base(tdObject)
     {
         _model = model;
         _texture = texture;

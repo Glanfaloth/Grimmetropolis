@@ -29,7 +29,7 @@ public class Grimmetropolis : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        TDCameraComponent.Graphics = _graphics;
+        TDCamera.Graphics = _graphics;
         TDContentManager.Content = Content;
     }
 

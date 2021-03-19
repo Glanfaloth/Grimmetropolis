@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class TDObject
 {
-    public TDTransformComponent Transform;
+    public TDTransform Transform;
 
     public List<TDComponent> Components = new List<TDComponent>();
 
-    public TDObject(Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDObject parent)
+    public TDObject(Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent)
     {
-        Transform = new TDTransformComponent(this, localPosition, localRotation, localScale, parent);
+        Transform = new TDTransform(this, localPosition, localRotation, localScale, parent);
 
         TDSceneManager.ActiveScene.TDObjects.Add(this);
     }
