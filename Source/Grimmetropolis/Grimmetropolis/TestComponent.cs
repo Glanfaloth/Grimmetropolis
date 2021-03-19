@@ -18,6 +18,30 @@ public class TestComponent : TDComponent
     {
         base.Update(gameTime);
 
+        GamePadCapabilities capabilities = GamePad.GetCapabilities(PlayerIndex.One);
+
+        if (capabilities.IsConnected)
+        {
+            GamePadState gamepadState = GamePad.GetState(PlayerIndex.One);
+
+            if (capabilities.HasLeftXThumbStick)
+            {
+                _eulerAngles.X += gamepadState.ThumbSticks.Left.X * _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            if (capabilities.HasLeftYThumbStick)
+            {
+                _eulerAngles.Y += gamepadState.ThumbSticks.Left.Y * _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            if (capabilities.HasLeftTrigger)
+            {
+                _eulerAngles.Z += gamepadState.Triggers.Left * _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            if (capabilities.HasRightTrigger)
+            {
+                _eulerAngles.Z -= gamepadState.Triggers.Right * _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+        }
+
         KeyboardState state = Keyboard.GetState();
 
         if (state.IsKeyDown(Keys.Q)) _eulerAngles.X += _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
