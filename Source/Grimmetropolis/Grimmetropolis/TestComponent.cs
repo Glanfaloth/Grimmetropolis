@@ -18,40 +18,15 @@ public class TestComponent : TDComponent
     {
         base.Update(gameTime);
 
-        GamePadCapabilities capabilities = GamePad.GetCapabilities(PlayerIndex.One);
-
-        if (capabilities.IsConnected)
+        foreach (TDInput input in TDInputManager.Inputs)
         {
-            GamePadState gamepadState = GamePad.GetState(PlayerIndex.One);
-
-            if (capabilities.HasLeftXThumbStick)
-            {
-                _eulerAngles.X += gamepadState.ThumbSticks.Left.X * _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            if (capabilities.HasLeftYThumbStick)
-            {
-                _eulerAngles.Y += gamepadState.ThumbSticks.Left.Y * _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            if (capabilities.HasLeftTrigger)
-            {
-                _eulerAngles.Z += gamepadState.Triggers.Left * _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            if (capabilities.HasRightTrigger)
-            {
-                _eulerAngles.Z -= gamepadState.Triggers.Right * _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
+            Vector2 j1Direction = input.J1Direction();
+            _eulerAngles.X += j1Direction.X * _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _eulerAngles.Y += j1Direction.Y * _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (input.L1Pressed()) _eulerAngles.Z += _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (input.L2Pressed()) _eulerAngles.Z -= _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        KeyboardState state = Keyboard.GetState();
-
-        if (state.IsKeyDown(Keys.Q)) _eulerAngles.X += _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        if (state.IsKeyDown(Keys.A)) _eulerAngles.X -= _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        if (state.IsKeyDown(Keys.W)) _eulerAngles.Y += _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        if (state.IsKeyDown(Keys.S)) _eulerAngles.Y -= _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        if (state.IsKeyDown(Keys.E)) _eulerAngles.Z += _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        if (state.IsKeyDown(Keys.D)) _eulerAngles.Z -= _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
         TDObject.Transform.LocalRotation = Quaternion.CreateFromYawPitchRoll(_eulerAngles.X, _eulerAngles.Y, _eulerAngles.Z);
-        Debug.WriteLine(_eulerAngles);
     }
 }

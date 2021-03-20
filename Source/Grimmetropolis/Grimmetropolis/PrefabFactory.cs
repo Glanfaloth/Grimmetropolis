@@ -4,7 +4,7 @@ public enum PrefabType
 {
     Camera,
     Default,
-    DefaultWithKey
+    DefaultKeyInput
 }
 
 public static class PrefabFactory
@@ -21,7 +21,7 @@ public static class PrefabFactory
             case PrefabType.Default:
                 prefab.Components.Add(new TDMesh(prefab, TDContentManager.LoadModel("DefaultModel"), TDContentManager.LoadTexture("DefaultTexture")));
                 break;
-            case PrefabType.DefaultWithKey:
+            case PrefabType.DefaultKeyInput:
                 prefab.Components.Add(new TDMesh(prefab, TDContentManager.LoadModel("DefaultModel"), TDContentManager.LoadTexture("DefaultTexture")));
                 prefab.Components.Add(new TestComponent(prefab));
                 break;

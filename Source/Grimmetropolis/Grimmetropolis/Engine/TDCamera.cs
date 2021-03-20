@@ -4,68 +4,12 @@ public class TDCamera : TDComponent
 {
     public static GraphicsDeviceManager Graphics { private get; set; }
 
-    public Vector3 CameraPosition
-    {
-        get { return TDObject.Transform.Position; }
-        set
-        {
-            TDObject.Transform.Position = value;
-            CalculateViewMatrix();
-            CalculateCameraTarget();
-            CalculateProjectionViewMatrix();
-        }
-    }
-
     public Vector3 CameraTarget { get; private set; }
     public Vector3 CameraUpVector { get; private set; }
-    public Quaternion CameraRotation
-    {
-        get { return TDObject.Transform.Rotation; }
-        set
-        {
-            TDObject.Transform.Rotation = value;
-            CalculateCameraTarget();
-            CalculateCameraUpVector();
-            CalculateViewMatrix();
-            CalculateProjectionViewMatrix();
-        }
-    }
 
-    private float _fieldOfView;
-    public float FieldOfView
-    {
-        get { return _fieldOfView; }
-        set
-        {
-            _fieldOfView = value;
-            CalculateProjectionMatrix();
-            CalculateProjectionViewMatrix();
-        }
-    }
-
-    private float _nearPlaneDistance;
-    public float NearPlaneDistance
-    {
-        get { return _nearPlaneDistance; }
-        set
-        {
-            _nearPlaneDistance = value;
-            CalculateProjectionMatrix();
-            CalculateProjectionViewMatrix();
-        }
-    }
-
-    private float _farPlaneDistance;
-    public float FarPlaneDistance
-    {
-        get { return _farPlaneDistance; }
-        set
-        {
-            _farPlaneDistance = value;
-            CalculateProjectionMatrix();
-            CalculateProjectionViewMatrix();
-        }
-    }
+    public float FieldOfView { get; set; }
+    public float NearPlaneDistance { get; set; }
+    public float FarPlaneDistance { get; set; }
 
     public Matrix ViewMatrix { get; private set; }
     public Matrix ProjectionMatrix { get; private set; }
@@ -74,22 +18,27 @@ public class TDCamera : TDComponent
     public TDCamera(TDObject tdObject, float fieldOfView, float nearPlaneDistance, float farPlaneDistance)
         : base(tdObject)
     {
-        _fieldOfView = fieldOfView;
-        _nearPlaneDistance = nearPlaneDistance;
-        _farPlaneDistance = farPlaneDistance;
+        FieldOfView = fieldOfView;
+        NearPlaneDistance = nearPlaneDistance;
+        FarPlaneDistance = farPlaneDistance;
 
+        UpdateCamera();
+
+        TDSceneManager.ActiveScene.CameraObject = this;
+    }
+
+    public void UpdateCamera()
+    {
         CalculateCameraTarget();
         CalculateCameraUpVector();
         CalculateViewMatrix();
         CalculateProjectionMatrix();
         CalculateProjectionViewMatrix();
-
-        TDSceneManager.ActiveScene.CameraObject = this;
     }
 
     private void CalculateCameraTarget()
     {
-        CameraTarget = CameraPosition + Vector3.Transform(Vector3.Right, TDObject.Transform.Rotation);
+        CameraTarget = TDObject.Transform.Position + Vector3.Transform(Vector3.Right, TDObject.Transform.Rotation);
     }
 
     private void CalculateCameraUpVector()
@@ -99,12 +48,12 @@ public class TDCamera : TDComponent
 
     private void CalculateViewMatrix()
     {
-        ViewMatrix = Matrix.CreateLookAt(CameraPosition, CameraTarget, CameraUpVector);
+        ViewMatrix = Matrix.CreateLookAt(TDObject.Transform.Position, CameraTarget, CameraUpVector);
     }
 
     private void CalculateProjectionMatrix()
     {
-        ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(_fieldOfView, Graphics.GraphicsDevice.Viewport.AspectRatio, _nearPlaneDistance, _farPlaneDistance);
+        ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(FieldOfView, Graphics.GraphicsDevice.Viewport.AspectRatio, NearPlaneDistance, FarPlaneDistance);
     }
 
     private void CalculateProjectionViewMatrix()

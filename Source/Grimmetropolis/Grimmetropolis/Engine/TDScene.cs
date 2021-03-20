@@ -14,6 +14,8 @@ public class TDScene
 
     public void Update(GameTime gameTime)
     {
+        TDInputManager.Update();
+
         foreach (TDObject tdObject in TDObjects)
         {
             tdObject.Update(gameTime);
@@ -22,6 +24,8 @@ public class TDScene
 
     public void Draw()
     {
+        CameraObject.UpdateCamera();
+
         foreach (TDMesh meshObject in MeshObjects)
         {
             meshObject.Draw();

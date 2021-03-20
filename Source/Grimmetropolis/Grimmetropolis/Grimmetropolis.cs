@@ -20,8 +20,9 @@ public class Grimmetropolis : Game
         _graphics.PreferredBackBufferWidth *= 2;
         _graphics.PreferredBackBufferHeight *= 2;
         _graphics.ApplyChanges();
-
         Window.Title = "Grimmetropolis";
+
+        TDInputManager.Initialize();
         TDSceneManager.LoadScene(new GameScene());
     }
 
@@ -38,6 +39,7 @@ public class Grimmetropolis : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        TDInputManager.Update();
         TDSceneManager.ActiveScene.Update(gameTime);
 
         base.Update(gameTime);
