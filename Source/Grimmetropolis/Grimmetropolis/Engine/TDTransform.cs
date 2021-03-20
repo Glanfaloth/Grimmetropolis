@@ -35,8 +35,7 @@ public class TDTransform : TDComponent
             CalculatePosition();
             CalculateTransform();
 
-            CalculateChildrenPosition();
-            CalculateChildrenTransform();
+            CalculateChildrenPositionTransform();
         }
     }
 
@@ -50,8 +49,7 @@ public class TDTransform : TDComponent
             CalculateRotation();
             CalculateTransform();
 
-            CalculateChildrenRotation();
-            CalculateChildrenTransform();
+            CalculateChildrenRotationTransform();
         }
     }
 
@@ -65,8 +63,7 @@ public class TDTransform : TDComponent
             CalculateScale();
             CalculateTransform();
 
-            CalculateChildrenScale();
-            CalculateChildrenTransform();
+            CalculateChildrenScaleTransform();
         }
     }
 
@@ -80,8 +77,7 @@ public class TDTransform : TDComponent
             CalculateLocalPosition();
             CalculateTransform();
 
-            CalculateChildrenPosition();
-            CalculateChildrenTransform();
+            CalculateChildrenPositionTransform();
         }
     }
 
@@ -95,8 +91,7 @@ public class TDTransform : TDComponent
             CalculateLocalRotation();
             CalculateTransform();
 
-            CalculateChildrenRotation();
-            CalculateChildrenTransform();
+            CalculateChildrenRotationTransform();
         }
     }
 
@@ -110,8 +105,7 @@ public class TDTransform : TDComponent
             CalculateLocalScale();
             CalculateTransform();
 
-            CalculateChildrenScale();
-            CalculateChildrenTransform();
+            CalculateChildrenScaleTransform();
         }
     }
 
@@ -170,37 +164,38 @@ public class TDTransform : TDComponent
         TransformMatrix = Matrix.CreateScale(_scale) * Matrix.CreateFromQuaternion(_rotation) * Matrix.CreateTranslation(_position);
     }
 
-    private void CalculateChildrenPosition()
+    private void CalculateChildrenPositionTransform()
     {
         foreach (TDTransform child in Children)
         {
             child.CalculatePosition();
-        }
-    }
-
-    private void CalculateChildrenRotation()
-    {
-        foreach (TDTransform child in Children)
-        {
-            child.CalculateRotation();
-            child.CalculatePosition();
-        }
-    }
-
-    private void CalculateChildrenScale()
-    {
-        foreach (TDTransform child in Children)
-        {
-            child.CalculateScale();
-            child.CalculatePosition();
-        }
-    }
-
-    private void CalculateChildrenTransform()
-    {
-        foreach (TDTransform child in Children)
-        {
             child.CalculateTransform();
+
+            child.CalculateChildrenPositionTransform();
+        }
+    }
+
+    private void CalculateChildrenRotationTransform()
+    {
+        foreach (TDTransform child in Children)
+        {
+            child.CalculatePosition();
+            child.CalculateRotation();
+            child.CalculateTransform();
+
+            child.CalculateChildrenRotationTransform();
+        }
+    }
+
+    private void CalculateChildrenScaleTransform()
+    {
+        foreach (TDTransform child in Children)
+        {
+            child.CalculatePosition();
+            child.CalculateScale();
+            child.CalculateTransform();
+
+            child.CalculateChildrenScaleTransform();
         }
     }
 }

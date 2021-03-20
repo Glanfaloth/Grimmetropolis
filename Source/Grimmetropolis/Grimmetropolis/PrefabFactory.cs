@@ -2,9 +2,9 @@
 
 public enum PrefabType
 {
-    Camera,
+    Empty,
     Default,
-    DefaultKeyInput
+    Camera
 }
 
 public static class PrefabFactory
@@ -15,15 +15,11 @@ public static class PrefabFactory
 
         switch (type)
         {
-            case PrefabType.Camera:
-                prefab.Components.Add(new TDCamera(prefab, .5f * MathHelper.Pi, .1f, 100f));
-                break;
             case PrefabType.Default:
                 prefab.Components.Add(new TDMesh(prefab, TDContentManager.LoadModel("DefaultModel"), TDContentManager.LoadTexture("DefaultTexture")));
                 break;
-            case PrefabType.DefaultKeyInput:
-                prefab.Components.Add(new TDMesh(prefab, TDContentManager.LoadModel("DefaultModel"), TDContentManager.LoadTexture("DefaultTexture")));
-                prefab.Components.Add(new TestComponent(prefab));
+            case PrefabType.Camera:
+                prefab.Components.Add(new TDCamera(prefab, .5f * MathHelper.Pi, .1f, 100f));
                 break;
         }
 
