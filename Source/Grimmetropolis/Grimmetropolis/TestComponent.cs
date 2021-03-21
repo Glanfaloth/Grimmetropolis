@@ -1,7 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-
-using System.Diagnostics;
 
 public class TestComponent : TDComponent
 {

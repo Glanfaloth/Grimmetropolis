@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-public class TDComponent
+public abstract class TDComponent
 {
     public TDObject TDObject;
 
@@ -8,5 +8,6 @@ public class TDComponent
     {
         TDObject = tdObject;
     }
+
     public virtual void Update(GameTime gametime) { }
 }
