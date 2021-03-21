@@ -16,18 +16,8 @@ public abstract class TDCollider : TDComponent
 
     public abstract void UpdateCollision(TDCollider collider);
 
-    protected bool CuboidCuboidCollision(TDCuboidCollider cuboid1, TDCuboidCollider cuboid2)
-    {
-        cuboid1.CalculateCuboid();
-        cuboid2.CalculateCuboid();
+    // TODO: Collision detection and resolve need a lot of optimization!
 
-        return cuboid1.CuboidCornerLow.X < cuboid2.CuboidCornerHigh.X
-            && cuboid1.CuboidCornerHigh.X > cuboid2.CuboidCornerLow.X
-            && cuboid1.CuboidCornerLow.Y < cuboid2.CuboidCornerHigh.Y
-            && cuboid1.CuboidCornerHigh.Y > cuboid2.CuboidCornerLow.Y
-            && cuboid1.CuboidCornerLow.Z < cuboid2.CuboidCornerHigh.Z
-            && cuboid1.CuboidCornerHigh.Z > cuboid2.CuboidCornerLow.Z;
-    }
     protected bool CylinderCylinderCollision(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2)
     {
         cylinder1.CalculateCylinder();
@@ -40,7 +30,8 @@ public abstract class TDCollider : TDComponent
 
         return false;
     }
-    protected bool CuboidCylinderCollision(TDCuboidCollider cuboid, TDCylinderCollider cylinder)
+
+    protected bool CylinderCuboidCollision(TDCylinderCollider cylinder, TDCuboidCollider cuboid)
     {
         cuboid.CalculateCuboid();
         cylinder.CalculateCylinder();
@@ -54,5 +45,31 @@ public abstract class TDCollider : TDComponent
         }
 
         return false;
+    }
+
+    protected void ResolveCylinderCylinderCollision(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2)
+    {
+        float intersection = cylinder1.Radius + cylinder2.Radius - Vector2.Distance(cylinder1.CenterXY, cylinder2.CenterXY);
+        Vector3 direction = new Vector3(.5f * intersection * Vector2.Normalize(cylinder1.CenterXY - cylinder2.CenterXY), 0f);
+
+        cylinder1.TDObject.Transform.LocalPosition += direction;
+        cylinder2.TDObject.Transform.LocalPosition -= direction;
+
+        cylinder1.IsColliding = false;
+        cylinder2.IsColliding = false;
+    }
+
+    protected void ResolveCylinderCuboidCollision(TDCylinderCollider cylinder, TDCuboidCollider cuboid)
+    {
+        Vector2 closest = new Vector2(MathHelper.Clamp(cylinder.CenterXY.X, cuboid.CuboidCornerLow.X, cuboid.CuboidCornerHigh.X),
+                MathHelper.Clamp(cylinder.CenterXY.Y, cuboid.CuboidCornerLow.Y, cuboid.CuboidCornerHigh.Y));
+
+        float intersection = cylinder.Radius - Vector2.Distance(closest, cylinder.CenterXY);
+        Vector3 direction = new Vector3(intersection * Vector2.Normalize(cylinder.CenterXY - closest), 0f);
+
+        cylinder.TDObject.Transform.LocalPosition += direction;
+
+        cylinder.IsColliding = false;
+        cuboid.IsColliding = false;
     }
 }

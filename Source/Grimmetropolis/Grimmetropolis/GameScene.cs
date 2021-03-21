@@ -21,8 +21,12 @@ public class GameScene : TDScene
         // TEST SCENE 2
         PrefabFactory.CreatePrefab(PrefabType.Camera, new Vector3(2f, 0f, 6f), Quaternion.CreateFromYawPitchRoll(-.4f * MathHelper.Pi, 0f, MathHelper.Pi));
 
-        TDObject mainBlock = PrefabFactory.CreatePrefab(PrefabType.Default, new Vector3(1.5f, 1.5f, 0f), Quaternion.Identity);
+        TDObject mainBlock = PrefabFactory.CreatePrefab(PrefabType.Default, new Vector3(-1.5f, -1.5f, 0f), Quaternion.Identity);
         mainBlock.Components.Add(new TDCuboidCollider(mainBlock, Vector3.One, new Vector3(0f, 0f, .5f)));
+
+        TDObject calmCylinder = PrefabFactory.CreatePrefab(PrefabType.Empty, new Vector3(1.5f, 1.5f, 0f), Quaternion.Identity);
+        calmCylinder.Components.Add(new TDMesh(calmCylinder, TDContentManager.LoadModel("DefaultCylinder"), TDContentManager.LoadTexture("DefaultTexture")));
+        calmCylinder.Components.Add(new TDCylinderCollider(calmCylinder, .5f, 1f, new Vector3(0f, 0f, .5f)));
 
         TDObject cylinder = PrefabFactory.CreatePrefab(PrefabType.Empty);
         cylinder.Components.Add(new TDMesh(cylinder, TDContentManager.LoadModel("DefaultCylinder"), TDContentManager.LoadTexture("DefaultTexture")));

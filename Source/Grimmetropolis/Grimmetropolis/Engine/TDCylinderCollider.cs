@@ -23,12 +23,14 @@ public class TDCylinderCollider : TDCollider
     {
         if (collider is TDCuboidCollider cuboidCollider)
         {
-            CuboidCylinderCollision(cuboidCollider, this);
+            IsColliding = CylinderCuboidCollision(this, cuboidCollider);
+            if (IsColliding) ResolveCylinderCuboidCollision(this, cuboidCollider);
         }
 
         if (collider is TDCylinderCollider cylinderCollider)
         {
-            CylinderCylinderCollision(this, cylinderCollider);
+            IsColliding = CylinderCylinderCollision(this, cylinderCollider);
+            if (IsColliding) ResolveCylinderCylinderCollision(this, cylinderCollider);
         }
 
         collider.IsColliding = IsColliding;

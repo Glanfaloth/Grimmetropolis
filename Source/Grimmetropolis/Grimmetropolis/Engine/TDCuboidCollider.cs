@@ -18,14 +18,10 @@ public class TDCuboidCollider : TDCollider
 
     public override void UpdateCollision(TDCollider collider)
     {
-        if (collider is TDCuboidCollider cuboidCollider)
-        {
-            IsColliding = CuboidCuboidCollision(this, cuboidCollider);
-        }
-
         if (collider is TDCylinderCollider cylinderCollider)
         {
-            IsColliding = CuboidCylinderCollision(this, cylinderCollider);
+            IsColliding = CylinderCuboidCollision(cylinderCollider, this);
+            if (IsColliding) ResolveCylinderCuboidCollision(cylinderCollider, this);
         }
 
         collider.IsColliding = IsColliding;
