@@ -32,7 +32,7 @@ public class GameScene : TDScene
             calmCylinders[i].Components.Add(new TDCylinderCollider(calmCylinders[i], false, .5f, 1f, new Vector3(0f, 0f, .5f)));
         }
 
-        TDObject cylinder = PrefabFactory.CreatePrefab(PrefabType.Empty, new Vector3(0f, 0f, .5f), Quaternion.Identity);
+        TDObject cylinder = PrefabFactory.CreatePrefab(PrefabType.Empty);
         cylinder.Components.Add(new TDMesh(cylinder, TDContentManager.LoadModel("DefaultCylinder"), TDContentManager.LoadTexture("DefaultTexture")));
         TDCylinderCollider cylinderCollider = new TDCylinderCollider(cylinder, false, .5f, 1f, new Vector3(0f, 0f, .5f));
         cylinder.Components.Add(cylinderCollider);

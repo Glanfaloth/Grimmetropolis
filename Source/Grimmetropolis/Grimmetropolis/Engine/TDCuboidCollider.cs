@@ -16,19 +16,19 @@ public class TDCuboidCollider : TDCollider
         Offset = offset;
     }
 
-    public override void UpdateCollision(TDCollider collider)
+    public override void UpdateCollision()
+    {
+        base.UpdateCollision();
+
+        CuboidCornerLow = TDObject.Transform.Position - .5f * Vector3.Multiply(TDObject.Transform.Scale, Size) + Offset;
+        CuboidCornerHigh = CuboidCornerLow + Vector3.Multiply(TDObject.Transform.Scale, Size);
+    }
+
+    public override void Collide(TDCollider collider)
     {
         if (collider is TDCylinderCollider cylinderCollider)
         {
-            IsColliding = CylinderCuboidCollision(cylinderCollider, this);
+            CollideCylinderCuboid(cylinderCollider, this);
         }
-
-        collider.IsColliding = IsColliding;
-    }
-
-    public void CalculateCuboid()
-    {
-        CuboidCornerLow = TDObject.Transform.Position - .5f * Vector3.Multiply(TDObject.Transform.Scale, Size) + Offset;
-        CuboidCornerHigh = CuboidCornerLow + Vector3.Multiply(TDObject.Transform.Scale, Size);
     }
 }

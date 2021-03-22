@@ -22,4 +22,10 @@ public class TDObject
             component.Update(gameTime);
         }
     }
+
+    public T GetComponent<T>()
+    {
+        object component = Components.Find(o => o is T);
+        return (T)component;
+    }
 }

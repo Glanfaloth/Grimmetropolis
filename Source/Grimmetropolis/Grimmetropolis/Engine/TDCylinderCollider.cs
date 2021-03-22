@@ -19,26 +19,25 @@ public class TDCylinderCollider : TDCollider
         Offset = offset;
     }
 
-    public override void UpdateCollision(TDCollider collider)
+    public override void UpdateCollision()
     {
-        if (collider is TDCuboidCollider cuboidCollider)
-        {
-            IsColliding = CylinderCuboidCollision(this, cuboidCollider);
-        }
+        base.UpdateCollision();
 
-        if (collider is TDCylinderCollider cylinderCollider)
-        {
-            IsColliding = CylinderCylinderCollision(this, cylinderCollider);
-        }
-
-        collider.IsColliding = IsColliding;
-    }
-
-    public void CalculateCylinder()
-    {
         Vector3 Center = TDObject.Transform.Position + Offset;
         CenterXY = new Vector2(Center.X, Center.Y);
         CenterZLow = Center.Z - .5f * TDObject.Transform.Scale.Z * Height;
         CenterZHigh = CenterZLow + TDObject.Transform.Scale.Z * Height;
+    }
+
+    public override void Collide(TDCollider collider)
+    {
+        if (collider is TDCuboidCollider cuboidCollider)
+        {
+            CollideCylinderCuboid(this, cuboidCollider);
+        }
+        else if (collider is TDCylinderCollider cylinderCollider)
+        {
+            CollideCylinderCylinder(this, cylinderCollider);
+        }
     }
 }

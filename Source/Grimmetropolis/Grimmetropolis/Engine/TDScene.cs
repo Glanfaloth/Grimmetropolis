@@ -20,11 +20,15 @@ public class TDScene
             tdObject.Update(gameTime);
         }
 
+        foreach (TDCollider colliderObject in ColliderObjects)
+        {
+            colliderObject.UpdateCollision();
+        }
         for (int i = 0; i < ColliderObjects.Count; i++)
         {
             for (int j = i + 1; j < ColliderObjects.Count; j++)
             {
-                ColliderObjects[i].UpdateCollision(ColliderObjects[j]);
+                ColliderObjects[i].Collide(ColliderObjects[j]);
             }
         }
     }
