@@ -10,7 +10,7 @@ public class TDCuboidCollider : TDCollider
     public Vector3 CuboidCornerLow { get; private set; }
     public Vector3 CuboidCornerHigh { get; private set; }
 
-    public TDCuboidCollider(TDObject tdObject, Vector3 size, Vector3 offset) : base(tdObject)
+    public TDCuboidCollider(TDObject tdObject, bool isTrigger, Vector3 size, Vector3 offset) : base(tdObject, isTrigger)
     {
         Size = size;
         Offset = offset;
@@ -21,7 +21,6 @@ public class TDCuboidCollider : TDCollider
         if (collider is TDCylinderCollider cylinderCollider)
         {
             IsColliding = CylinderCuboidCollision(cylinderCollider, this);
-            if (IsColliding) ResolveCylinderCuboidCollision(cylinderCollider, this);
         }
 
         collider.IsColliding = IsColliding;

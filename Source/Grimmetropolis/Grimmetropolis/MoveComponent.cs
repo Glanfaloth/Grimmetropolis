@@ -1,17 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 
-using System.Diagnostics;
-
 public class MoveComponent : TDComponent
 {
 
     private float _speedMovement;
 
-    private TDCollider _collider;
-    public MoveComponent(TDObject tdObject, TDCollider collider) : base(tdObject)
+    public MoveComponent(TDObject tdObject) : base(tdObject)
     {
         _speedMovement = 4f;
-        _collider = collider;
     }
 
     public override void Update(GameTime gameTime)
@@ -27,7 +23,5 @@ public class MoveComponent : TDComponent
         }
 
         TDObject.Transform.LocalPosition += movement;
-
-        Debug.WriteLine(_collider.IsColliding);
     }
 }

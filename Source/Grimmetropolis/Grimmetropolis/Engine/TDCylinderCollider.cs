@@ -12,7 +12,7 @@ public class TDCylinderCollider : TDCollider
     public float CenterZLow { get; private set; }
     public float CenterZHigh { get; private set; }
 
-    public TDCylinderCollider(TDObject tdObject, float radius, float height, Vector3 offset) : base(tdObject)
+    public TDCylinderCollider(TDObject tdObject, bool isTrigger, float radius, float height, Vector3 offset) : base(tdObject, isTrigger)
     {
         Radius = radius;
         Height = height;
@@ -24,13 +24,11 @@ public class TDCylinderCollider : TDCollider
         if (collider is TDCuboidCollider cuboidCollider)
         {
             IsColliding = CylinderCuboidCollision(this, cuboidCollider);
-            if (IsColliding) ResolveCylinderCuboidCollision(this, cuboidCollider);
         }
 
         if (collider is TDCylinderCollider cylinderCollider)
         {
             IsColliding = CylinderCylinderCollision(this, cylinderCollider);
-            if (IsColliding) ResolveCylinderCylinderCollision(this, cylinderCollider);
         }
 
         collider.IsColliding = IsColliding;
