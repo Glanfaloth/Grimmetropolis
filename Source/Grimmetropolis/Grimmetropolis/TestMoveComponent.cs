@@ -1,13 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 
-public class MoveComponent : TDComponent
+using System.Diagnostics;
+
+public class TestMoveComponent : TDComponent
 {
 
     private float _speedMovement;
+    private TDCollider _collider;
 
-    public MoveComponent(TDObject tdObject) : base(tdObject)
+    public TestMoveComponent(TDObject tdObject) : base(tdObject)
     {
         _speedMovement = 4f;
+        _collider = TDObject.GetComponent<TDCollider>();
+        _collider.collisionCylinderCylinderEvent += ReactToCylinderCollision;
+        _collider.collisionCylinderCuboidEvent += ReactToCuboidCollision;
     }
 
     public override void Update(GameTime gameTime)
@@ -25,5 +31,15 @@ public class MoveComponent : TDComponent
         }
 
         TDObject.Transform.LocalPosition += movement;
+    }
+
+    public void ReactToCylinderCollision(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2, float intersection)
+    {
+        Debug.WriteLine("I hit a cylinder.");
+    }
+
+    public void ReactToCuboidCollision(TDCylinderCollider cylinder, TDCuboidCollider cuboid, Vector2 closest, float intersection)
+    {
+        Debug.WriteLine("I hit a cube.");
     }
 }

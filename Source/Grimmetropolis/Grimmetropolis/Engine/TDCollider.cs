@@ -1,12 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 
-using System;
+public delegate void CollisionCylinderCylinderEvent(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2, float intersection);
+public delegate void CollisionCylidnerCuboidEvent(TDCylinderCollider cylinder, TDCuboidCollider cuboid, Vector2 closest, float intersection);
 
 public abstract class TDCollider : TDComponent
 {
 
     public bool IsColliding;
     public bool IsTrigger;
+
+    public CollisionCylinderCylinderEvent collisionCylinderCylinderEvent;
+    public CollisionCylidnerCuboidEvent collisionCylinderCuboidEvent;
 
     public TDCollider(TDObject tdObject, bool isTrigger) : base(tdObject)
     {
@@ -30,6 +34,8 @@ public abstract class TDCollider : TDComponent
             float intersection = cylinder1.Radius + cylinder2.Radius - Vector2.Distance(cylinder1.CenterXY, cylinder2.CenterXY);
             if (intersection > 0f)
             {
+                collisionCylinderCylinderEvent?.Invoke(cylinder1, cylinder2, intersection);
+
                 if (cylinder1.IsTrigger || cylinder2.IsTrigger)
                 {
                     cylinder1.IsColliding = true;
@@ -56,6 +62,8 @@ public abstract class TDCollider : TDComponent
             float intersection = cylinder.Radius - Vector2.Distance(closest, cylinder.CenterXY);
             if (intersection > 0f)
             {
+                collisionCylinderCuboidEvent?.Invoke(cylinder, cuboid, closest, intersection);
+
                 if (cylinder.IsTrigger || cuboid.IsTrigger)
                 {
                     cylinder.IsColliding = true;

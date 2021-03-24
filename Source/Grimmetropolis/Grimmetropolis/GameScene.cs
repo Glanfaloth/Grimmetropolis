@@ -50,7 +50,7 @@ public class GameScene : TDScene
         TDObject movingCylinder = PrefabFactory.CreatePrefab(PrefabType.Empty);
         movingCylinder.Components.Add(new TDMesh(movingCylinder, "DefaultCylinder", "DefaultTexture"));
         movingCylinder.Components.Add(new TDCylinderCollider(movingCylinder, false, .5f, 1f, .5f * Vector3.Backward));
-        movingCylinder.Components.Add(new MoveComponent(movingCylinder));
+        movingCylinder.Components.Add(new TestMoveComponent(movingCylinder));
 
         TDObject cylinder = PrefabFactory.CreatePrefab(PrefabType.Empty, 1.5f * Vector3.Down, Quaternion.Identity);
         cylinder.Components.Add(new TDMesh(cylinder, "DefaultCylinder", "DefaultTexture"));
