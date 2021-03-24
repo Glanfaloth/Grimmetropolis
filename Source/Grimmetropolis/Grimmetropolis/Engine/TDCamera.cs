@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 public class TDCamera : TDComponent
-{
-    public static GraphicsDeviceManager Graphics { private get; set; }
-
+{ 
     public Vector3 CameraTarget { get; private set; }
     public Vector3 CameraUpVector { get; private set; }
 
@@ -53,7 +51,7 @@ public class TDCamera : TDComponent
 
     private void CalculateProjectionMatrix()
     {
-        ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(FieldOfView, Graphics.GraphicsDevice.Viewport.AspectRatio, NearPlaneDistance, FarPlaneDistance);
+        ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(FieldOfView, TDSceneManager.Graphics.GraphicsDevice.Viewport.AspectRatio, NearPlaneDistance, FarPlaneDistance);
     }
 
     private void CalculateProjectionViewMatrix()

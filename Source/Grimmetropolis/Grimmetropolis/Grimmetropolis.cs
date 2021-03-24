@@ -7,6 +7,8 @@ public class Grimmetropolis : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
+    private Rectangle _targetWindow;
+
     public Grimmetropolis()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -17,9 +19,12 @@ public class Grimmetropolis : Game
     protected override void Initialize()
     {
         base.Initialize();
-        _graphics.PreferredBackBufferWidth *= 2;
-        _graphics.PreferredBackBufferHeight *= 2;
+        _graphics.PreferredBackBufferWidth = 1280;
+        _graphics.PreferredBackBufferHeight = 720;
         _graphics.ApplyChanges();
+
+        _targetWindow = new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+
         Window.Title = "Grimmetropolis";
 
         TDInputManager.Initialize();
@@ -30,7 +35,7 @@ public class Grimmetropolis : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        TDCamera.Graphics = _graphics;
+        TDSceneManager.Graphics = _graphics;
         TDContentManager.Content = Content;
     }
 
@@ -51,6 +56,10 @@ public class Grimmetropolis : Game
         GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
         TDSceneManager.ActiveScene.Draw();
+
+        _spriteBatch.Begin(blendState: BlendState.Opaque);
+        _spriteBatch.Draw(TDSceneManager.ActiveScene.ImageRender, _targetWindow, Color.White);
+        _spriteBatch.End();
 
         base.Draw(gameTime);
     }

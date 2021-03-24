@@ -3,8 +3,9 @@
 public enum PrefabType
 {
     Empty,
+    Camera,
+    Light,
     Default,
-    Camera
 }
 
 public static class PrefabFactory
@@ -15,11 +16,14 @@ public static class PrefabFactory
 
         switch (type)
         {
-            case PrefabType.Default:
-                prefab.Components.Add(new TDMesh(prefab, TDContentManager.LoadModel("DefaultModel"), TDContentManager.LoadTexture("DefaultTexture")));
-                break;
             case PrefabType.Camera:
-                prefab.Components.Add(new TDCamera(prefab, .5f * MathHelper.Pi, .1f, 100f));
+                prefab.Components.Add(new TDCamera(prefab, MathHelper.PiOver2, 2f, 20f));
+                break;
+            case PrefabType.Light:
+                prefab.Components.Add(new TDLight(prefab, MathHelper.PiOver2, 2f, 20f));
+                break;
+            case PrefabType.Default:
+                prefab.Components.Add(new TDMesh(prefab, "DefaultModel", "DefaultTexture"));
                 break;
         }
 

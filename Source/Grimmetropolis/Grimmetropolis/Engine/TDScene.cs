@@ -1,17 +1,26 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using System.Collections.Generic;
 
 public class TDScene
 {
-
     public List<TDObject> TDObjects = new List<TDObject>();
 
     public TDCamera CameraObject;
+    public TDLight LightObject;
     public List<TDMesh> MeshObjects = new List<TDMesh>();
     public List<TDCollider> ColliderObjects = new List<TDCollider>();
 
-    public virtual void Initialize() { }
+    public RenderTarget2D ShadowRender;
+    public RenderTarget2D ImageRender;
+
+    public virtual void Initialize()
+    {
+        ShadowRender = new RenderTarget2D(TDSceneManager.Graphics.GraphicsDevice, 2048, 2048, true, SurfaceFormat.Single, DepthFormat.Depth24);
+        ImageRender = new RenderTarget2D(TDSceneManager.Graphics.GraphicsDevice, 2 * TDSceneManager.Graphics.GraphicsDevice.Viewport.Width,
+            2 * TDSceneManager.Graphics.GraphicsDevice.Viewport.Height, true, SurfaceFormat.Color, DepthFormat.Depth24);
+    }
 
     public void Update(GameTime gameTime)
     {
@@ -35,11 +44,21 @@ public class TDScene
 
     public void Draw()
     {
-        CameraObject?.UpdateCamera();
+        CameraObject.UpdateCamera();
+        LightObject.UpdateLight();
 
+        TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(ShadowRender);
+        foreach (TDMesh meshObject in MeshObjects)
+        {
+            meshObject.DrawShadow();
+        }
+
+        TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(ImageRender);
         foreach (TDMesh meshObject in MeshObjects)
         {
             meshObject.Draw();
         }
+
+        TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(null);
     }
 }

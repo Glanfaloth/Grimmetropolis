@@ -9,6 +9,7 @@ public static class TDContentManager
 
     private static Dictionary<string, Model> _loadedModels = new Dictionary<string, Model>();
     private static Dictionary<string, Texture2D> _loadedTextures = new Dictionary<string, Texture2D>();
+    private static Dictionary<string, Effect> _loadedEffects = new Dictionary<string, Effect>();
 
     public static Model LoadModel(string name)
     {
@@ -34,5 +35,18 @@ public static class TDContentManager
         }
 
         return _loadedTextures[name];
+    }
+
+    public static Effect LoadEffect(string name)
+    {
+        if (!_loadedEffects.ContainsKey(name))
+        {
+            Effect effect = Content.Load<Effect>(@"Effects\" + name);
+            _loadedEffects.Add(name, effect);
+
+            return effect;
+        }
+
+        return _loadedEffects[name];
     }
 }

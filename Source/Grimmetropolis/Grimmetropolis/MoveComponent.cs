@@ -20,6 +20,8 @@ public class MoveComponent : TDComponent
             Vector2 j1Direction = input.J1Direction();
             movement.X -= j1Direction.Y * _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
             movement.Y += j1Direction.X * _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (input.L1Pressed()) movement.Z += _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (input.L2Pressed()) movement.Z -= _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         TDObject.Transform.LocalPosition += movement;
