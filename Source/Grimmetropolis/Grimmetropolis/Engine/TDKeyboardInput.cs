@@ -45,8 +45,6 @@ public class TDKeyboardInput : TDInput
 
     public override void UpdateDevice()
     {
-        base.UpdateDevice();
-
         _keyboard = Keyboard.GetState();
     }
 }

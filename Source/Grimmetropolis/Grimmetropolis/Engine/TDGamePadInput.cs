@@ -26,6 +26,7 @@ public class TDGamePadInput : TDInput
         if (!_capabilities.HasLeftStickButton) return Vector2.Zero;
 
         Vector2 direction = _gamePad.ThumbSticks.Left;
+        if (direction.LengthSquared() > 1f) direction.Normalize();
         return direction.LengthSquared() > _joystickThreshold ? direction : Vector2.Zero;
     }
 
@@ -59,8 +60,6 @@ public class TDGamePadInput : TDInput
 
     public override void UpdateDevice()
     {
-        base.UpdateDevice();
-
         _capabilities = GamePad.GetCapabilities(GamePadIndex);
         _gamePad = GamePad.GetState(GamePadIndex);
     }
