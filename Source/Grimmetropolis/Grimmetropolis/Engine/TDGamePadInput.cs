@@ -5,6 +5,8 @@ using System;
 
 public class TDGamePadInput : TDInput
 {
+    public int GamePadIndex { get; private set; }
+
     private GamePadCapabilities _capabilities;
     private GamePadState _gamePad;
 
@@ -21,7 +23,7 @@ public class TDGamePadInput : TDInput
         _triggerThreshold = 0.95f;
     }
 
-    public override Vector2 J1Direction()
+    public Vector2 GetMoveDirection()
     {
         if (!_capabilities.HasLeftStickButton) return Vector2.Zero;
 
@@ -30,37 +32,57 @@ public class TDGamePadInput : TDInput
         return direction.LengthSquared() > _joystickThreshold ? direction : Vector2.Zero;
     }
 
-    public override bool APressed()
+    public bool IsActionButtonPressed()
     {
         if (!_capabilities.HasAButton) return false;
 
         return _gamePad.Buttons.A == ButtonState.Pressed;
     }
 
-    public override bool BPressed()
+    public bool IsCycleNextItemPressed()
     {
         if (!_capabilities.HasBButton) return false;
 
         return _gamePad.Buttons.B == ButtonState.Pressed;
     }
 
-    public override bool L1Pressed()
+    public bool IsSelectBuildingTypePressed()
     {
         if (!_capabilities.HasLeftShoulderButton) return false;
 
         return _gamePad.Buttons.LeftShoulder == ButtonState.Pressed;
     }
 
-    public override bool L2Pressed()
+    public bool IsSpecialAbilityPressed()
     {
         if (!_capabilities.HasLeftTrigger) return false;
 
         return _gamePad.Triggers.Left > _triggerThreshold;
     }
 
-    public override void UpdateDevice()
+    public void UpdateDevice()
     {
         _capabilities = GamePad.GetCapabilities(GamePadIndex);
         _gamePad = GamePad.GetState(GamePadIndex);
+    }
+
+    public bool IsUseItemPressed()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool IsCyclePreviousItemPressed()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool IsSwapItemPressed()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetSelectedBuildingIndex()
+    {
+        throw new NotImplementedException();
     }
 }

@@ -11,7 +11,7 @@ public class TDKeyboardInput : TDInput
         UpdateDevice();
     }
 
-    public override Vector2 J1Direction()
+    public Vector2 GetMoveDirection()
     {
         Vector2 direction = Vector2.Zero;
         if (_keyboard.IsKeyDown(Keys.D)) direction.X += 1f;
@@ -23,28 +23,48 @@ public class TDKeyboardInput : TDInput
         return direction;
     }
 
-    public override bool APressed()
+    public bool IsActionButtonPressed()
     {
         return _keyboard.IsKeyDown(Keys.Space) || _keyboard.IsKeyDown(Keys.Enter);
     }
 
-    public override bool BPressed()
+    public bool IsCycleNextItemPressed()
     {
         return _keyboard.IsKeyDown(Keys.Back);
     }
 
-    public override bool L1Pressed()
+    public bool IsSelectBuildingTypePressed()
     {
         return _keyboard.IsKeyDown(Keys.LeftShift);
     }
 
-    public override bool L2Pressed()
+    public bool IsSpecialAbilityPressed()
     {
         return _keyboard.IsKeyDown(Keys.LeftControl);
     }
 
-    public override void UpdateDevice()
+    public void UpdateDevice()
     {
         _keyboard = Keyboard.GetState();
+    }
+
+    public bool IsUseItemPressed()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool IsCyclePreviousItemPressed()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool IsSwapItemPressed()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetSelectedBuildingIndex()
+    {
+        throw new NotImplementedException();
     }
 }
