@@ -46,17 +46,10 @@ public class GameScene : TDScene
 
         TDObject groundBlock = PrefabFactory.CreatePrefab(PrefabType.Default, Vector3.Zero, Quaternion.CreateFromYawPitchRoll(MathHelper.Pi, 0f, 0f));
         groundBlock.Transform.LocalScale *= 8f;
+        PrefabFactory.CreatePrefab(PrefabType.Player);
+        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-3f, .5f, 0f), Quaternion.Identity);
 
-        TDObject movingCylinder = PrefabFactory.CreatePrefab(PrefabType.Empty);
-        movingCylinder.Components.Add(new TDMesh(movingCylinder, "DefaultCylinder", "DefaultTexture"));
-        movingCylinder.Components.Add(new TDCylinderCollider(movingCylinder, false, .5f, 1f, .5f * Vector3.Backward));
-        movingCylinder.Components.Add(new TestMoveComponent(movingCylinder));
-
-        TDObject cylinder = PrefabFactory.CreatePrefab(PrefabType.Empty, 1.5f * Vector3.Down, Quaternion.Identity);
-        cylinder.Components.Add(new TDMesh(cylinder, "DefaultCylinder", "DefaultTexture"));
-        cylinder.Components.Add(new TDCylinderCollider(cylinder, false, .5f, 1f, .5f * Vector3.Backward));
-
-        TDObject block = PrefabFactory.CreatePrefab(PrefabType.Default, 1.5f * Vector3.Up, Quaternion.Identity);
+        TDObject block = PrefabFactory.CreatePrefab(PrefabType.Default, new Vector3(-1f, .5f, 0f), Quaternion.Identity);
         block.Components.Add(new TDCuboidCollider(block, false, Vector3.One, .5f * Vector3.Backward));
     }
 }

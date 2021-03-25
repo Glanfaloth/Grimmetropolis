@@ -9,5 +9,5 @@ public abstract class TDComponent
         TDObject = tdObject;
     }
 
-    public virtual void Update(GameTime gametime) { }
+    public virtual void Update(GameTime gameTime) { }
 }
