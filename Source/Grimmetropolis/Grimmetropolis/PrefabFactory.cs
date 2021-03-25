@@ -28,12 +28,12 @@ public static class PrefabFactory
                 prefab.Components.Add(new TDMesh(prefab, "DefaultModel", "DefaultTexture"));
                 break;
             case PrefabType.Player:
-                prefab.Components.Add(new TDMesh(prefab, "PlayerCindarella", "PlayerCindarellaTexture"));
+                prefab.Components.Add(new TDMesh(prefab, "PlayerCindarella", "ColorPaletteTexture"));
                 prefab.Components.Add(new TDCylinderCollider(prefab, false, .5f, 1f, .5f * Vector3.Backward));
                 prefab.Components.Add(new Player(prefab, 0f));
                 break;
             case PrefabType.Enemy:
-                prefab.Components.Add(new TDMesh(prefab, "EnemyWitch", "PlayerCindarellaTexture"));
+                prefab.Components.Add(new TDMesh(prefab, "EnemyWitch", "ColorPaletteTexture"));
                 prefab.Components.Add(new TDCylinderCollider(prefab, false, .5f, 1f, .5f * Vector3.Backward));
                 prefab.Components.Add(new Enemy(prefab, 0f));
                 break;
