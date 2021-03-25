@@ -6,6 +6,7 @@ public enum PrefabType
     Camera,
     Light,
     Default,
+    Map,
     Player,
     Enemy
 }
@@ -26,6 +27,9 @@ public static class PrefabFactory
                 break;
             case PrefabType.Default:
                 prefab.Components.Add(new TDMesh(prefab, "DefaultModel", "DefaultTexture"));
+                break;
+            case PrefabType.Map:
+                prefab.Components.Add(new Map(prefab));
                 break;
             case PrefabType.Player:
                 prefab.Components.Add(new TDMesh(prefab, "PlayerCindarella", "ColorPaletteTexture"));

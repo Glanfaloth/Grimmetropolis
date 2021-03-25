@@ -1,39 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 
 public class Map : TDComponent
 {
 
-    public int width;
-    public int height;
-    public float cellSize = 1f;
-    public TDObject[,] mapTiles;
-    public int[,] mapArray = {{0,0,0,0,0,0,0,2,2,0,},
-{0,0,0,1,1,0,2,2,0,0,},
-{0,0,0,1,1,2,2,0,0,0,},
-{0,0,0,0,0,2,2,0,0,0,},
-{0,0,0,0,0,2,2,0,0,0,},
-{0,0,0,0,0,0,2,2,0,0,},
-{0,0,0,0,0,0,2,2,0,0,},
-{0,0,0,0,0,0,2,2,0,0,},
-{1,1,0,0,0,0,0,2,2,0,},
-{1,1,0,0,0,0,0,2,2,0,},};
+    public int Width { get; private set; }
+    public int Height { get; private set; }
+
+    public MapTile[,] mapTiles;
+
+    private int[,] loadedMap;
 
     //public string mapPath = "Content/Maps/testmap.txt";
 
     public Map(TDObject tdObject) : base(tdObject)
     {
+        loadedMap = new int [,]
+            { { 0, 0, 0, 0, 0, 0, 0, 2, 2, 0 , 0 , 0 },
+              { 0, 0, 0, 1, 1, 0, 2, 2, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 1, 1, 2, 2, 0, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 2, 2, 0, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 2, 2, 0, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0 , 0 , 0 },
+              { 1, 1, 0, 0, 0, 0, 0, 2, 2, 0 , 0 , 0 },
+              { 1, 1, 0, 0, 0, 0, 0, 2, 2, 0 , 0 , 0 } };
+
         //using (Stream fileStream = TitleContainer.OpenStream("Content/Maps/testmap.txt"))
         //    LoadTiles(fileStream);
-        LoadTiles(mapArray);
+        LoadMap();
     }
 
     // load map tiles
-    public void LoadTiles(int[,] mapArray)
+    public void LoadMap()
     {
         //List<string> lines = new List<string>();
         //using (StreamReader reader = new StreamReader(fileStream))
@@ -49,29 +49,30 @@ public class Map : TDComponent
         //    }
         //}
         //height = lines.Count;
-        height = mapArray.GetLength(0);
-        width = mapArray.GetLength(1);
-        mapTiles = new TDObject[width, height];
-        Vector3 center = new Vector3(width * cellSize / 2, height * cellSize / 2, 0f);
+        Width = loadedMap.GetLength(0);
+        Height = loadedMap.GetLength(1);
+        mapTiles = new MapTile[Width, Height];
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++)
+        Vector3 center = new Vector3(-.5f * Height, -.5f * Width, 0);
+        Vector3 offcenter = .5f * Vector3.One;
+
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y++)
             {
-                //char type = lines[y][x];
-                int type = mapArray[y, x];
-                TDObject tile = PrefabFactory.CreatePrefab(PrefabType.Empty);
-                if (type == 1)
-                    tile.Components.Add(new TDMesh(tile, "Stone", "BaseTexture"));
-                else if (type == 2)
-                    tile.Components.Add(new TDMesh(tile, "Water", "BaseTexture"));
-                else
-                    tile.Components.Add(new TDMesh(tile, "Ground", "BaseTexture"));
+                Vector3 position = center + offcenter + new Vector3(x, y, 0f);
+                TDObject tile = PrefabFactory.CreatePrefab(PrefabType.Empty, position, Quaternion.Identity, TDObject.Transform);
+                switch (loadedMap[x, y])
+                {
+                    case 1: tile.Components.Add(new TDMesh(tile, "MapTileStone", "ColorPaletteTexture")); break;
+                    case 2: tile.Components.Add(new TDMesh(tile, "MapTileWater", "ColorPaletteTexture")); break;
+                    default: tile.Components.Add(new TDMesh(tile, "MapTileGround", "ColorPaletteTexture")); break;
+                }
+                MapTile mapTile = new MapTile(tile, x, y);
+                tile.Components.Add(mapTile);
+                mapTiles[x, y] = mapTile;
 
-                tile.Transform.Position = center - new Vector3(x * cellSize, y * cellSize, 0f);
-                mapTiles[x,y] = tile;
             }
         }
-
     }
-
 }
