@@ -1,12 +1,17 @@
 ﻿
+public enum MapTileType
+{
+    Ground,
+    Water,
+    Stone
+}
+
 public class MapTile : TDComponent
 {
-    private int _x;
-    private int _y;
+    private MapTileType _type;
 
-    public MapTile(TDObject tdObject, int x, int y) : base(tdObject)
+    public MapTile(TDObject tdObject, MapTileType type) : base(tdObject)
     {
-        _x = x;
-        _y = y;
+        _type = type;
     }
 }

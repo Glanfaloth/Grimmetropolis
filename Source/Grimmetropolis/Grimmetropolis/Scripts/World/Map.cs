@@ -16,16 +16,16 @@ public class Map : TDComponent
     public Map(TDObject tdObject) : base(tdObject)
     {
         loadedMap = new int [,]
-            { { 0, 0, 0, 0, 0, 0, 0, 2, 2, 0 , 0 , 0 },
-              { 0, 0, 0, 1, 1, 0, 2, 2, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 1, 1, 2, 2, 0, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 0, 0, 2, 2, 0, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 0, 0, 2, 2, 0, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0 , 0 , 0 },
-              { 1, 1, 0, 0, 0, 0, 0, 2, 2, 0 , 0 , 0 },
-              { 1, 1, 0, 0, 0, 0, 0, 2, 2, 0 , 0 , 0 } };
+            { { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 , 0 , 0 },
+              { 0, 0, 0, 2, 2, 0, 1, 1, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 2, 2, 1, 1, 0, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0 , 0 , 0 },
+              { 2, 2, 0, 0, 0, 0, 0, 1, 1, 0 , 0 , 0 },
+              { 2, 2, 0, 0, 0, 0, 0, 1, 1, 0 , 0 , 0 } };
 
         //using (Stream fileStream = TitleContainer.OpenStream("Content/Maps/testmap.txt"))
         //    LoadTiles(fileStream);
@@ -54,24 +54,21 @@ public class Map : TDComponent
         mapTiles = new MapTile[Width, Height];
 
         Vector3 center = new Vector3(-.5f * Height, -.5f * Width, 0);
-        Vector3 offcenter = .5f * Vector3.One;
+        Vector3 offcenter = .5f * new Vector3(.5f, .5f, 0f);
 
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
             {
                 Vector3 position = center + offcenter + new Vector3(x, y, 0f);
-                TDObject tile = PrefabFactory.CreatePrefab(PrefabType.Empty, position, Quaternion.Identity, TDObject.Transform);
-                switch (loadedMap[x, y])
+                TDObject mapTileObject = (MapTileType)loadedMap[x, y] switch
                 {
-                    case 1: tile.Components.Add(new TDMesh(tile, "MapTileStone", "ColorPaletteTexture")); break;
-                    case 2: tile.Components.Add(new TDMesh(tile, "MapTileWater", "ColorPaletteTexture")); break;
-                    default: tile.Components.Add(new TDMesh(tile, "MapTileGround", "ColorPaletteTexture")); break;
-                }
-                MapTile mapTile = new MapTile(tile, x, y);
-                tile.Components.Add(mapTile);
-                mapTiles[x, y] = mapTile;
-
+                    MapTileType.Ground => PrefabFactory.CreatePrefab(PrefabType.MapTileGround, position, Quaternion.Identity, TDObject.Transform),
+                    MapTileType.Water => PrefabFactory.CreatePrefab(PrefabType.MapTileWater, position, Quaternion.Identity, TDObject.Transform),
+                    MapTileType.Stone => PrefabFactory.CreatePrefab(PrefabType.MapTileStone, position, Quaternion.Identity, TDObject.Transform),
+                    _ => PrefabFactory.CreatePrefab(PrefabType.MapTileGround, position, Quaternion.Identity, TDObject.Transform),
+                };
+                mapTiles[x, y] = mapTileObject.GetComponent<MapTile>();
             }
         }
     }
