@@ -28,8 +28,8 @@ public class TestMoveComponent : TDComponent
             movement.Y += j1Direction.X * _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // the names will make sense when controlling the character.
-            if (input.IsSelectBuildingTypePressed()) movement.Z += _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (input.IsSpecialAbilityPressed()) movement.Z -= _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (input.IsCycleNextItemPressed()) movement.Z += _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (input.IsCyclePreviousItemPressed()) movement.Z -= _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         TDObject.Transform.LocalPosition += movement;

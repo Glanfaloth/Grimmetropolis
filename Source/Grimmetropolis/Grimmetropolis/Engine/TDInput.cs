@@ -12,6 +12,7 @@ public interface TDInput
     public abstract bool IsSwapItemPressed();
 
     // TODO: decide how selecting the build will be done
+    // depending on input type, we may consider a different UI.
     public abstract bool IsSelectBuildingTypePressed();
     public abstract int GetSelectedBuildingIndex();
 
