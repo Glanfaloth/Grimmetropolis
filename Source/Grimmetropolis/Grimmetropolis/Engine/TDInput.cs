@@ -1,14 +1,25 @@
 ﻿using Microsoft.Xna.Framework;
 
-public abstract class TDInput
+public interface TDInput
 {
-    public int GamePadIndex { get; set; }
+    // TODO: double check what actions are supported.
+    public abstract Vector2 GetMoveDirection();
 
-    public abstract Vector2 J1Direction();
-    public abstract bool APressed();
-    public abstract bool BPressed();
-    public abstract bool L1Pressed();
-    public abstract bool L2Pressed();
+    // TODO: if we only support two items, maybe we should have button for each item individualy?
+    public abstract bool IsUseItemPressed();
+    public abstract bool IsCycleNextItemPressed();
+    public abstract bool IsCyclePreviousItemPressed();
+    public abstract bool IsSwapItemPressed();
+
+    // TODO: decide how selecting the build will be done
+    // depending on input type, we may consider a different UI.
+    public abstract bool IsSelectBuildingTypePressed();
+    public abstract int GetSelectedBuildingIndex();
+
+    public abstract bool IsSpecialAbilityPressed();
 
     public abstract void UpdateDevice();
+
+    // TODO: how will we do aiming? Shoot straight or aim at target?
+    // TODO: menu navigation?
 }

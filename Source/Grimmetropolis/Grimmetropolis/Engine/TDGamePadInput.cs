@@ -5,62 +5,106 @@ using System;
 
 public class TDGamePadInput : TDInput
 {
+    /// <summary>
+    /// The values refer to the XBox controller.
+    /// 
+    /// Xbox controller:
+    ///      Y
+    ///    X   B
+    ///      A
+    ///
+    /// PS4 controller:
+    ///      ^
+    ///   []   O
+    ///      X
+    ///
+    /// Switch controller
+    ///      X
+    ///    Y   A
+    ///      B
+    ///      
+    /// </summary>
+    public class GamePadConfig
+    {
+        // TODO: decide on button mappings.
+        // TODO: should we be able to choose which joystick to use
+        public Buttons UseItem = Buttons.B;
+        public Buttons CycleNext = Buttons.RightTrigger;
+        public Buttons CyclePrevious = Buttons.LeftTrigger;
+        public Buttons SwapItem = Buttons.Y;
+
+        // TODO: do we need this for keyboard?
+        public Buttons SelectBuildingType = Buttons.LeftShoulder;
+        public Buttons SpecialAbility = Buttons.A;
+    }
+
+    public int GamePadIndex { get; private set; }
+
+    private GamePadConfig _config;
     private GamePadCapabilities _capabilities;
     private GamePadState _gamePad;
 
-    private float _joystickThreshold;
-    private float _triggerThreshold;
-
-    public TDGamePadInput(int gamePadIndex) {
+    public TDGamePadInput(int gamePadIndex, GamePadConfig config = null) 
+    {
+        // TODO: do we need to check if controller is a gamepad?
+        _config = config ?? new GamePadConfig();
 
         GamePadIndex = gamePadIndex;
 
         UpdateDevice();
-
-        _joystickThreshold = MathF.Pow(0.05f, 2f);
-        _triggerThreshold = 0.95f;
     }
 
-    public override Vector2 J1Direction()
+    public Vector2 GetMoveDirection()
     {
-        if (!_capabilities.HasLeftStickButton) return Vector2.Zero;
+        // TODO: what if only one of the two is available?
+        // TODO: check for right ThumbStick?
+        if (!_capabilities.HasLeftXThumbStick || !_capabilities.HasLeftYThumbStick) return Vector2.Zero;
 
         Vector2 direction = _gamePad.ThumbSticks.Left;
         if (direction.LengthSquared() > 1f) direction.Normalize();
-        return direction.LengthSquared() > _joystickThreshold ? direction : Vector2.Zero;
+        return direction;
     }
 
-    public override bool APressed()
+    public bool IsUseItemPressed()
     {
-        if (!_capabilities.HasAButton) return false;
-
-        return _gamePad.Buttons.A == ButtonState.Pressed;
+        // TODO: check capabilities doesn't work with config.
+        return _gamePad.IsButtonDown(_config.UseItem);
     }
 
-    public override bool BPressed()
+    public bool IsCycleNextItemPressed()
     {
-        if (!_capabilities.HasBButton) return false;
-
-        return _gamePad.Buttons.B == ButtonState.Pressed;
+        return _gamePad.IsButtonDown(_config.CycleNext);
     }
 
-    public override bool L1Pressed()
+    public bool IsCyclePreviousItemPressed()
     {
-        if (!_capabilities.HasLeftShoulderButton) return false;
-
-        return _gamePad.Buttons.LeftShoulder == ButtonState.Pressed;
+        return _gamePad.IsButtonDown(_config.CyclePrevious);
     }
 
-    public override bool L2Pressed()
+    public bool IsSwapItemPressed()
     {
-        if (!_capabilities.HasLeftTrigger) return false;
-
-        return _gamePad.Triggers.Left > _triggerThreshold;
+        return _gamePad.IsButtonDown(_config.SwapItem);
     }
 
-    public override void UpdateDevice()
+
+    public bool IsSelectBuildingTypePressed()
+    {
+        return _gamePad.IsButtonDown(_config.SelectBuildingType);
+    }
+
+    public bool IsSpecialAbilityPressed()
+    {
+        return _gamePad.IsButtonDown(_config.SpecialAbility);
+    }
+
+    public void UpdateDevice()
     {
         _capabilities = GamePad.GetCapabilities(GamePadIndex);
         _gamePad = GamePad.GetState(GamePadIndex);
+    }
+
+    public int GetSelectedBuildingIndex()
+    {
+        throw new NotImplementedException();
     }
 }

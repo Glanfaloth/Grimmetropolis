@@ -5,45 +5,86 @@ using System;
 
 public class TDKeyboardInput : TDInput
 {
-    private KeyboardState _keyboard;
+    public class KeyboardConfig
+    {
+        // TODO: decide on key mappings.
+        // TODO: alternative options for all keys?
 
-    public TDKeyboardInput() {
+        public Keys MoveUp      = Keys.W;
+        public Keys MoveLeft    = Keys.A;
+        public Keys MoveDown    = Keys.S;
+        public Keys MoveRight   = Keys.D;
+
+        public Keys UseItem     = Keys.Space;
+        public Keys UseItemAlt  = Keys.Enter;
+
+        public Keys CycleNext     = Keys.Q;
+        public Keys CyclePrevious = Keys.E;
+        public Keys SwapItem = Keys.LeftShift;
+
+        // TODO: do we need this for keyboard?
+        public Keys SelectBuildingType = Keys.Tab;
+        public Keys SpecialAbility = Keys.LeftControl;
+    }
+
+    private KeyboardState _keyboard;
+    private readonly KeyboardConfig _config;
+
+    public TDKeyboardInput(KeyboardConfig config = null) {
+        _config = config ?? new KeyboardConfig();
         UpdateDevice();
     }
 
-    public override Vector2 J1Direction()
+    public Vector2 GetMoveDirection()
     {
         Vector2 direction = Vector2.Zero;
-        if (_keyboard.IsKeyDown(Keys.D)) direction.X += 1f;
-        if (_keyboard.IsKeyDown(Keys.A)) direction.X -= 1f;
-        if (_keyboard.IsKeyDown(Keys.W)) direction.Y += 1f;
-        if (_keyboard.IsKeyDown(Keys.S)) direction.Y -= 1f;
+        if (_keyboard.IsKeyDown(_config.MoveRight)) direction.X += 1f;
+        if (_keyboard.IsKeyDown(_config.MoveLeft)) direction.X -= 1f;
+        if (_keyboard.IsKeyDown(_config.MoveUp)) direction.Y += 1f;
+        if (_keyboard.IsKeyDown(_config.MoveDown)) direction.Y -= 1f;
         if (direction.LengthSquared() > 1f) direction.Normalize();
 
         return direction;
     }
 
-    public override bool APressed()
+    public bool IsUseItemPressed()
     {
-        return _keyboard.IsKeyDown(Keys.Space) || _keyboard.IsKeyDown(Keys.Enter);
+        return _keyboard.IsKeyDown(_config.UseItem) || _keyboard.IsKeyDown(_config.UseItemAlt);
     }
 
-    public override bool BPressed()
+    public bool IsCycleNextItemPressed()
     {
-        return _keyboard.IsKeyDown(Keys.Back);
+        return _keyboard.IsKeyDown(_config.CycleNext);
     }
 
-    public override bool L1Pressed()
+    public bool IsCyclePreviousItemPressed()
     {
-        return _keyboard.IsKeyDown(Keys.LeftShift);
+        return _keyboard.IsKeyDown(_config.CyclePrevious);
     }
 
-    public override bool L2Pressed()
+    public bool IsSwapItemPressed()
     {
-        return _keyboard.IsKeyDown(Keys.LeftControl);
+        return _keyboard.IsKeyDown(_config.SwapItem);
     }
 
-    public override void UpdateDevice()
+
+    public bool IsSelectBuildingTypePressed()
+    {
+        return _keyboard.IsKeyDown(_config.SelectBuildingType);
+    }
+
+    public int GetSelectedBuildingIndex()
+    {
+        throw new NotImplementedException();
+    }
+
+
+    public bool IsSpecialAbilityPressed()
+    {
+        return _keyboard.IsKeyDown(_config.SpecialAbility);
+    }
+
+    public void UpdateDevice()
     {
         _keyboard = Keyboard.GetState();
     }
