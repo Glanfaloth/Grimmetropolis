@@ -10,7 +10,7 @@ public class Player : Character
 
     public override void Update(GameTime gameTime)
     {
-        Vector2 inputDirection = _input.J1Direction();
+        Vector2 inputDirection = _input.GetMoveDirection();
         Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
     }
 }
