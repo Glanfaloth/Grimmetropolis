@@ -18,7 +18,6 @@ public class GameScene : TDScene
         PrefabFactory.CreatePrefab(PrefabType.Player);
         PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(.5f, -3f, 0f), Quaternion.Identity);
 
-        TDObject block = PrefabFactory.CreatePrefab(PrefabType.Default, new Vector3(.5f, -1f, 0f), Quaternion.Identity);
-        block.Components.Add(new TDCuboidCollider(block, false, Vector3.One, .5f * Vector3.Backward));
+        TDObject block = PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost, new Vector3(0f, 4.5f, 0f), Quaternion.Identity);
     }
 }

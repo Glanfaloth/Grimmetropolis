@@ -10,7 +10,8 @@ public enum PrefabType
     Enemy,
     MapTileGround,
     MapTileWater,
-    MapTileStone
+    MapTileStone,
+    BuildingOutpost
 }
 
 public static class PrefabFactory
@@ -21,6 +22,7 @@ public static class PrefabFactory
 
         switch (type)
         {
+            // Basic prefabs
             case PrefabType.Camera:
                 prefab.Components.Add(new TDCamera(prefab, MathHelper.PiOver2, 2f, 20f));
                 break;
@@ -33,6 +35,7 @@ public static class PrefabFactory
                 prefab.Components.Add(new TDMesh(prefab, "DefaultModel", "DefaultTexture"));
                 break;
 
+            // Characters
             case PrefabType.Player:
                 prefab.Components.Add(new TDMesh(prefab, "PlayerCindarella", "ColorPaletteTexture"));
                 prefab.Components.Add(new TDCylinderCollider(prefab, false, .25f, .5f, .5f * Vector3.Backward));
@@ -45,6 +48,7 @@ public static class PrefabFactory
                 prefab.Components.Add(new Enemy(prefab, 0f));
                 break;
 
+            // Map tiles
             case PrefabType.MapTileGround:
                 prefab.Components.Add(new TDMesh(prefab, "MapTileGround", "ColorPaletteTexture"));
                 prefab.Components.Add(new TDCuboidCollider(prefab, false, Vector3.One, .5f * Vector3.Forward));
@@ -61,6 +65,12 @@ public static class PrefabFactory
                 prefab.Components.Add(new TDMesh(prefab, "MapTileStone", "ColorPaletteTexture"));
                 prefab.Components.Add(new TDCuboidCollider(prefab, false, Vector3.One, .5f * Vector3.Forward));
                 prefab.Components.Add(new MapTile(prefab, MapTileType.Stone));
+                break;
+
+            // Buildings
+            case PrefabType.BuildingOutpost:
+                prefab.Components.Add(new TDMesh(prefab, "BuildingOutpost", "BuildingOutpostTexture"));
+                prefab.Components.Add(new TDCuboidCollider(prefab, false, new Vector3(1f, 1f, 2f), Vector3.Zero));
                 break;
         }
 
