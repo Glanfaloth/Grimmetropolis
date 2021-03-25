@@ -7,28 +7,26 @@ public static class TDInputManager
 
     public static List<TDInput> Inputs = new List<TDInput>();
 
-    private static TDKeyboardInput _keyboardInput;
-    private static TDGamePadInput[] _gamePadInputs = new TDGamePadInput[GamePad.MaximumGamePadCount];
-
     public static void Initialize()
     {
-        _keyboardInput = new TDKeyboardInput();
-        Inputs.Add(_keyboardInput);
+        TDKeyboardInput keyboardInput = new TDKeyboardInput();
+        TDGamePadInput firstGamePadInput = new TDGamePadInput(0);
+        TDHybridInput defaultInput = new TDHybridInput(keyboardInput, firstGamePadInput);
 
-        for (int i = 0; i < GamePad.MaximumGamePadCount; i++)
+        Inputs.Add(defaultInput);
+
+        for (int i = 1; i < GamePad.MaximumGamePadCount; i++)
         {
-            _gamePadInputs[i] = new TDGamePadInput(i);
-            Inputs.Add(_gamePadInputs[i]);
+            TDInput inputDevice = new TDGamePadInput(i);
+            Inputs.Add(inputDevice);
         }
     }
 
     public static void Update()
     {
-        _keyboardInput.UpdateDevice();
-
-        foreach (TDGamePadInput gamePadInput in _gamePadInputs)
+        foreach (TDInput inputDevice in Inputs)
         {
-            gamePadInput.UpdateDevice();
+            inputDevice.UpdateDevice();
         }
     }
 }
