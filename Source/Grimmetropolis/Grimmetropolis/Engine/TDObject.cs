@@ -10,7 +10,14 @@ public class TDObject
 
     public TDObject(Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent)
     {
-        Transform = new TDTransform(this, localPosition, localRotation, localScale, parent);
+        Transform = new TDTransform();
+        Transform.Initialize();
+
+        Transform.LocalPosition = localPosition;
+        Transform.LocalRotation = localRotation;
+        Transform.LocalScale = localScale;
+
+        Transform.Parent = parent;
 
         TDSceneManager.ActiveScene.TDObjects.Add(this);
     }
@@ -23,9 +30,20 @@ public class TDObject
         }
     }
 
-    public T GetComponent<T>()
+    public T AddComponent<T>() where T : TDComponent, new()
     {
-        object component = Components.Find(o => o is T);
-        return (T)component;
+        T component = new T()
+        {
+            TDObject = this
+        };
+        Components.Add(component);
+
+        component.Initialize();
+        return component;
+    }
+
+    public T GetComponent<T>() where T : TDComponent
+    {
+        return (T)Components.Find(o => o is T);
     }
 }

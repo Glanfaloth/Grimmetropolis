@@ -4,10 +4,7 @@ public abstract class TDComponent
 {
     public TDObject TDObject;
 
-    public TDComponent(TDObject tdObject)
-    {
-        TDObject = tdObject;
-    }
+    public virtual void Initialize() { }
 
     public virtual void Update(GameTime gameTime) { }
 }

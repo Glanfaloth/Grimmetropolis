@@ -10,10 +10,12 @@ public class TDCuboidCollider : TDCollider
     public Vector3 CuboidCornerLow { get; private set; }
     public Vector3 CuboidCornerHigh { get; private set; }
 
-    public TDCuboidCollider(TDObject tdObject, bool isTrigger, Vector3 size, Vector3 offset) : base(tdObject, isTrigger)
+    public override void Initialize()
     {
-        Size = size;
-        Offset = offset;
+        base.Initialize();
+
+        Size = Vector3.One;
+        Offset = Vector3.Zero;
     }
 
     public override void UpdateCollision()

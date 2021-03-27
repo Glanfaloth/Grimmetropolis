@@ -8,10 +8,12 @@ public enum MapTileType
 
 public class MapTile : TDComponent
 {
-    private MapTileType _type;
+    public MapTileType Type;
 
-    public MapTile(TDObject tdObject, MapTileType type) : base(tdObject)
+    public override void Initialize()
     {
-        _type = type;
+        base.Initialize();
+
+        Type = MapTileType.Ground;
     }
 }

@@ -12,10 +12,12 @@ public abstract class TDCollider : TDComponent
     public CollisionCylinderCylinderEvent collisionCylinderCylinderEvent;
     public CollisionCylidnerCuboidEvent collisionCylinderCuboidEvent;
 
-    public TDCollider(TDObject tdObject, bool isTrigger) : base(tdObject)
+    public override void Initialize()
     {
+        base.Initialize();
+
         IsColliding = false;
-        IsTrigger = isTrigger;
+        IsTrigger = false;
 
         TDSceneManager.ActiveScene.ColliderObjects.Add(this);
     }

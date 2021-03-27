@@ -109,15 +109,13 @@ public class TDTransform : TDComponent
         }
     }
 
-    public TDTransform(TDObject tdObject, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent)
-        : base(tdObject)
+    public override void Initialize()
     {
-        _parent = parent;
-        AddChildToParent();
+        base.Initialize();
 
-        _localPosition = localPosition;
-        _localRotation = localRotation;
-        _localScale = localScale;
+        _localPosition = Vector3.Zero;
+        _localRotation = Quaternion.Identity;
+        _localScale = Vector3.Zero;
         CalculatePosition();
         CalculateRotation();
         CalculateScale();

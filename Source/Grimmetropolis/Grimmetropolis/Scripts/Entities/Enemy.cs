@@ -1,7 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 public class Enemy : Character
 {
-    public Enemy(TDObject tdObject, float lookingAngle) : base(tdObject, lookingAngle) { }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+    }
 
     public override void Update(GameTime gameTime)
     {

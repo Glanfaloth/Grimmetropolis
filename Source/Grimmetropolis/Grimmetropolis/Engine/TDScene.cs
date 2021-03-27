@@ -44,8 +44,8 @@ public class TDScene
 
     public void Draw()
     {
-        CameraObject.UpdateCamera();
-        LightObject.UpdateLight();
+        CameraObject?.UpdateCamera();
+        LightObject?.UpdateLight();
 
         TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(ShadowRender);
         foreach (TDMesh meshObject in MeshObjects)
@@ -56,7 +56,7 @@ public class TDScene
         TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(ImageRender);
         foreach (TDMesh meshObject in MeshObjects)
         {
-            meshObject.Draw();
+            meshObject.DrawModel();
         }
 
         TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(null);

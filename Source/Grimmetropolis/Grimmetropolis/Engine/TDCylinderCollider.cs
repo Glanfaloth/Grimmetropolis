@@ -12,11 +12,13 @@ public class TDCylinderCollider : TDCollider
     public float CenterZLow { get; private set; }
     public float CenterZHigh { get; private set; }
 
-    public TDCylinderCollider(TDObject tdObject, bool isTrigger, float radius, float height, Vector3 offset) : base(tdObject, isTrigger)
+    public override void Initialize()
     {
-        Radius = radius;
-        Height = height;
-        Offset = offset;
+        base.Initialize();
+
+        Radius = .5f;
+        Height = 1f;
+        Offset = Vector3.Zero;
     }
 
     public override void UpdateCollision()

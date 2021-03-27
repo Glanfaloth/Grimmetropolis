@@ -1,16 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 public class Player : Character
 {
-    private TDInput _input;
+    public TDInput Input;
 
-    public Player(TDObject tdObject, float lookingAngle) : base(tdObject, lookingAngle)
+    public override void Initialize()
     {
-        _input = TDInputManager.Inputs[0];
+        base.Initialize();
+
+        Input = null;
     }
 
     public override void Update(GameTime gameTime)
     {
-        Vector2 inputDirection = _input.GetMoveDirection();
+        Vector2 inputDirection = Input?.GetMoveDirection() ?? Vector2.Zero;
         Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
     }
 }

@@ -5,8 +5,11 @@ public class TestComponent : TDComponent
 
     private Vector3 _eulerAngles;
     private float _speedAngles;
-    public TestComponent(TDObject tdObject) : base(tdObject)
+
+    public override void Initialize()
     {
+        base.Initialize();
+
         _eulerAngles = Vector3.Zero;
         _speedAngles = .5f;
     }

@@ -8,16 +8,17 @@ public class GameScene : TDScene
     {
         base.Initialize();
 
-        // TEST SCENE 3
-        PrefabFactory.CreatePrefab(PrefabType.Camera, new Vector3(2f, 0f, 6f), Quaternion.CreateFromYawPitchRoll(-.4f * MathHelper.Pi, 0f, MathHelper.Pi));
-        PrefabFactory.CreatePrefab(PrefabType.Light, new Vector3(4f, 4f, 6f), Quaternion.CreateFromYawPitchRoll(-.2f * MathHelper.Pi, .2f * MathHelper.Pi, -.8f * MathHelper.Pi));
+        PrefabFactory.CreatePrefab(PrefabType.Camera, new Vector3(4f, 0f, 12f), Quaternion.CreateFromYawPitchRoll(-.375f * MathHelper.Pi, 0f, MathHelper.Pi));
+        PrefabFactory.CreatePrefab(PrefabType.Light, new Vector3(8f, 8f, 12f), Quaternion.CreateFromYawPitchRoll(-.2f * MathHelper.Pi, .2f * MathHelper.Pi, -.8f * MathHelper.Pi));
 
         TDObject map = PrefabFactory.CreatePrefab(PrefabType.Empty);
-        map.Components.Add(new Map(map));
+        map.AddComponent<Map>();
         
-        PrefabFactory.CreatePrefab(PrefabType.Player);
-        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(.5f, -3f, 0f), Quaternion.Identity);
+        TDObject player = PrefabFactory.CreatePrefab(PrefabType.Player);
+        player.GetComponent<Player>().Input = TDInputManager.Inputs[0];
 
-        TDObject block = PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost, new Vector3(0f, 4.5f, 0f), Quaternion.Identity);
+        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(.5f, -3f, 0f), Quaternion.Identity);
+        
+        PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost, new Vector3(0f, 4.5f, 0f), Quaternion.Identity);
     }
 }
