@@ -9,7 +9,7 @@ public class Building : TDComponent
         set
         {
             _health = value;
-            if (_health < 0f) TDObject.Destroy();
+            if (_health <= 0f) TDObject?.Destroy();
         }
     }
 

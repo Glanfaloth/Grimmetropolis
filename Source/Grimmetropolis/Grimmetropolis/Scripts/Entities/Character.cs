@@ -11,7 +11,7 @@ public abstract class Character : TDComponent
         set
         {
             _health = value;
-            if (_health < 0f) TDObject.Destroy();
+            if (_health <= 0f) TDObject?.Destroy();
         }
     }
 
@@ -22,11 +22,24 @@ public abstract class Character : TDComponent
 
     public TDCylinderCollider InteractionCollider;
 
+    private float largestIntersection = 0f;
+    private Enemy closestEnemy = null;
+
     public override void Initialize()
     {
         base.Initialize();
 
+        InteractionCollider.collisionCylinderCylinderEvent += GetClosestEnemy;
+
         TDObject.Transform.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Backward, _lookingAngle);
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+
+        largestIntersection = 0f;
+        closestEnemy = null;
     }
 
     protected void Move(Vector2 direction, GameTime gameTime)
@@ -47,7 +60,10 @@ public abstract class Character : TDComponent
 
     protected void Attack()
     {
-
+        if (closestEnemy != null)
+        {
+            closestEnemy.Health -= 1f;
+        }
     }
 
     protected void Build()
@@ -59,6 +75,20 @@ public abstract class Character : TDComponent
             Building building = buildingObject.GetComponent<Building>();
             building.Position = mapTile.Position;
             building.PlaceBuilding();
+        }
+    }
+
+    private void GetClosestEnemy(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2, float intersection)
+    {
+        TDCylinderCollider oppositeCollider = InteractionCollider == cylinder2 ? cylinder1 : cylinder2;
+        Enemy enemy = oppositeCollider.TDObject.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            if (largestIntersection < intersection)
+            {
+                largestIntersection = intersection;
+                closestEnemy = enemy;
+            }            
         }
     }
 }

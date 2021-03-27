@@ -15,10 +15,10 @@ public class Player : Character
         Vector2 inputDirection = Input.GetMoveDirection();
         Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
 
-        if (Input.IsUseItemPressed())
-        {
-            Build();
-        }
+        if (Input.IsSpecialAbilityPressed()) Attack();
+        if (Input.IsUseItemPressed()) Build();
+
+        base.Update(gameTime);
     }
 
     public override void Destroy()
