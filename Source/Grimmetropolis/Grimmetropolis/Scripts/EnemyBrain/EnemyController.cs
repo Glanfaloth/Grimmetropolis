@@ -79,7 +79,7 @@ public class EnemyController : TDComponent
             {
                 _locations[x, y] = new Location();
 
-                MapTile tile = _map.mapTiles[x, y];
+                MapTile tile = _map.MapTiles[x, y];
 
                 if (tile.CanEnemyMoveThrough())
                 {
@@ -105,7 +105,7 @@ public class EnemyController : TDComponent
         switch (movementType)
         {
             case EnemyMove.Type.Run:
-                new RunMove(from, to, cost, tile.Position);
+                new RunMove(from, to, cost, new Vector2(tile.Position.X + .5f, tile.Position.Y + .5f));
                 break;
             case EnemyMove.Type.Attack:
                 // TODO: create attack move

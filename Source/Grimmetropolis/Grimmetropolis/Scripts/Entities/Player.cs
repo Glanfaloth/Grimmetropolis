@@ -12,8 +12,13 @@ public class Player : Character
 
     public override void Update(GameTime gameTime)
     {
-        Vector2 inputDirection = Input?.GetMoveDirection() ?? Vector2.Zero;
+        Vector2 inputDirection = Input.GetMoveDirection();
         Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
+
+        if (Input.IsUseItemPressed())
+        {
+            Build();
+        }
     }
 
     public override void Destroy()

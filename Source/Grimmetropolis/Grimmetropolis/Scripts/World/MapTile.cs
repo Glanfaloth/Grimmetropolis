@@ -11,15 +11,17 @@ public enum MapTileType
 
 public class MapTile : TDComponent
 {
-    public MapTileType Type { get; }
+    public MapTileType Type = MapTileType.Ground;
 
-    public Vector2 Position { get; }
+    public Point Position;
 
-    public MapTile(MapTileType type, Vector2 position)
+    public Building Building;
+
+    /*public MapTile(MapTileType type, Vector2 position)
     {
         Type = type;
         Position = position;
-    }
+    }*/
 
     public bool CanEnemyMoveThrough()
     {
