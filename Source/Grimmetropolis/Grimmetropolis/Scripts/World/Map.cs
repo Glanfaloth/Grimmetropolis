@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-
+using System;
 
 public class Map : TDComponent
 {
@@ -38,11 +38,11 @@ public class Map : TDComponent
             { { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 , 0 , 0 },
               { 0, 0, 0, 2, 2, 0, 1, 1, 0, 0 , 0 , 0 },
               { 0, 1, 0, 2, 2, 1, 1, 0, 0, 0 , 0 , 0 },
-              { 0, 1, 0, 0, 0, 1, 1, 0, 0, 0 , 0 , 0 },
-              { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0 , 0 },
-              { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 , 0 , 0 },
+              { 0, 1, 0, 0, 1, 1, 1, 0, 0, 0 , 0 , 0 },
+              { 0, 1, 1, 1, 1, 0, 0, 1, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 , 0 , 0 },
+              { 0, 1, 1, 1, 0, 0, 0, 1, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 , 0 , 0 },
               { 2, 2, 0, 1, 1, 0, 0, 1, 1, 0 , 0 , 0 },
               { 2, 2, 0, 0, 1, 0, 0, 0, 0, 0 , 0 , 0 } };
 
@@ -95,9 +95,20 @@ public class Map : TDComponent
         }
     }
 
-    public Point GetEnemyTarget()
+    public Point GetEnemyTargetIndex()
     {
         // TODO: improve this to be artifact location
-        return new Point((int)-.5f * Height, (int)-.5f * Width);
+        return new Point(5, 6);
+    }
+
+    internal bool TryGetTileIndex(Vector3 worldLocation, out Point tileIndex)
+    {
+        // TODO: improve this conversion
+        Vector3 corner = new Vector3(-.5f * Width, -.5f * Height, 0);
+        var location = worldLocation - corner;
+
+        tileIndex = new Point((int)location.X, (int)location.Y);
+
+        return (tileIndex.X >= 0 && tileIndex.Y >= 0 && tileIndex.X < Width && tileIndex.Y < Height);
     }
 }

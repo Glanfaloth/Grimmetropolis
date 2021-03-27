@@ -34,11 +34,12 @@ public class GameManager : TDComponent
         // Enemies
         TDObject enemyList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
 
-        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-8f, -4f, 0f), Quaternion.Identity, enemyList.Transform);
-        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(4f, -4f, 0f), Quaternion.Identity, enemyList.Transform);
-        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-6f, 4f, 0f), Quaternion.Identity, enemyList.Transform);
-        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(3f, 6f, 0f), Quaternion.Identity, enemyList.Transform);
-        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-2f, 2f, 0f), Quaternion.Identity, enemyList.Transform);
+        Vector3 offset = new Vector3( .5f, .5f, 0);
+        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-2f, -3f, 0f) + offset, Quaternion.Identity, enemyList.Transform);
+        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(4f, -4f, 0f) + offset, Quaternion.Identity, enemyList.Transform);
+        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-6f, 4f, 0f) + offset, Quaternion.Identity, enemyList.Transform);
+        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(3f, 6f, 0f) + offset, Quaternion.Identity, enemyList.Transform);
+        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-2f, 1f, 0f) + offset, Quaternion.Identity, enemyList.Transform);
     }
 
 }

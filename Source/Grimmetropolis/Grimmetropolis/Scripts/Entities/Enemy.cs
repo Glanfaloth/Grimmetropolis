@@ -24,6 +24,9 @@ public class Enemy : Character
 
         switch (nextMove.MovementType)
         {
+            case EnemyMove.Type.StealArtifact:
+                // TODO: implement win condition
+                break;
             case EnemyMove.Type.Run:
                 MoveToTarget((RunMove)nextMove, gameTime);
                 break;

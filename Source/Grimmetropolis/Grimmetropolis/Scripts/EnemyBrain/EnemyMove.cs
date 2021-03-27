@@ -5,6 +5,7 @@ public abstract class EnemyMove
 {
     public enum Type
     {
+        StealArtifact,
         Run,
         Attack,
     }
@@ -21,7 +22,7 @@ public abstract class EnemyMove
         To = to;
         Cost = cost;
 
-        from.AddEdge(this);
-        to.AddEdge(this);
+        from.AddOutgoingEdge(this);
+        to.AddIncomingEdge(this);
     }
 }
