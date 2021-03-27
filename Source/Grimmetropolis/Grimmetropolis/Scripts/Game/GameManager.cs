@@ -35,7 +35,7 @@ public class GameManager : TDComponent
         TDObject enemyList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
 
         PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-8f, -4f, 0f), Quaternion.Identity, enemyList.Transform);
-        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(3f, -2f, 0f), Quaternion.Identity, enemyList.Transform);
+        PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(4f, -4f, 0f), Quaternion.Identity, enemyList.Transform);
         PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-6f, 4f, 0f), Quaternion.Identity, enemyList.Transform);
         PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(3f, 6f, 0f), Quaternion.Identity, enemyList.Transform);
         PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-2f, 2f, 0f), Quaternion.Identity, enemyList.Transform);

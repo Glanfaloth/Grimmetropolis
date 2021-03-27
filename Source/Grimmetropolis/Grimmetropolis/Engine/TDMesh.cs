@@ -12,7 +12,7 @@ public class TDMesh : TDComponent
         set
         {
             _model = value;
-            SetModelEffect();
+            if (_effect != null) SetModelEffect();
         }
     }
 
@@ -34,8 +34,6 @@ public class TDMesh : TDComponent
     {
         base.Initialize();
 
-        _model = null;
-        Texture = null;
         Effect = TDContentManager.LoadEffect("LightEffect");
 
         TDSceneManager.ActiveScene.MeshObjects.Add(this);
@@ -68,7 +66,7 @@ public class TDMesh : TDComponent
         }
     }
 
-    public void DrawModel()
+    public void Draw()
     {
         foreach (ModelMesh mesh in _model?.Meshes ?? Enumerable.Empty<ModelMesh>())
         {

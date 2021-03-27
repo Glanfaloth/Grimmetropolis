@@ -10,8 +10,7 @@ public class TDObject
     /*private List<TDComponent> _components = new List<TDComponent>();
     public IReadOnlyCollection<TDComponent> Components => _components.AsReadOnly();*/
 
-
-    public TDObject(Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent, bool updateFirst)
+    public TDObject(Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent)
     {
         Transform = new TDTransform()
         {
@@ -26,14 +25,17 @@ public class TDObject
 
         Transform.Parent = parent;
 
-        if (updateFirst)
+        TDSceneManager.ActiveScene.InitializingObjects.Add(this);
+    }
+
+    public void Initialize()
+    {
+        foreach (TDComponent component in Components)
         {
-            TDSceneManager.ActiveScene.UpdateFirstObjects.Add(this);
+            component.Initialize();
         }
-        else
-        {
-            TDSceneManager.ActiveScene.TDObjects.Add(this);
-        }
+
+        TDSceneManager.ActiveScene.TDObjects.Add(this);
     }
 
     public void Update(GameTime gameTime)
@@ -64,7 +66,6 @@ public class TDObject
         };
         Components.Add(component);
 
-        component.Initialize();
         return component;
     }
 
@@ -72,7 +73,6 @@ public class TDObject
     {
         component.TDObject = this;
         Components.Add(component);
-        component.Initialize();
     }
 
     public T GetComponent<T>() where T : TDComponent

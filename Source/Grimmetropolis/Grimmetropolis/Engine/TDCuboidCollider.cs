@@ -4,19 +4,11 @@ using System.Diagnostics;
 
 public class TDCuboidCollider : TDCollider
 {
-    public Vector3 Size;
-    public Vector3 Offset;
+    public Vector3 Size = Vector3.One;
+    public Vector3 Offset = Vector3.Zero;
 
     public Vector3 CuboidCornerLow { get; private set; }
     public Vector3 CuboidCornerHigh { get; private set; }
-
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        Size = Vector3.One;
-        Offset = Vector3.Zero;
-    }
 
     public override void UpdateCollision()
     {

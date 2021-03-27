@@ -25,7 +25,7 @@ public class TDTransform : TDComponent
 
     public Matrix TransformMatrix { get; private set; }
 
-    private Vector3 _localPosition;
+    private Vector3 _localPosition = Vector3.Zero;
     public Vector3 LocalPosition
     {
         get { return _localPosition; }
@@ -39,7 +39,7 @@ public class TDTransform : TDComponent
         }
     }
 
-    private Quaternion _localRotation;
+    private Quaternion _localRotation = Quaternion.Identity;
     public Quaternion LocalRotation
     {
         get { return _localRotation; }
@@ -53,7 +53,7 @@ public class TDTransform : TDComponent
         }
     }
 
-    private Vector3 _localScale;
+    private Vector3 _localScale = Vector3.One;
     public Vector3 LocalScale
     {
         get { return _localScale; }
@@ -109,19 +109,6 @@ public class TDTransform : TDComponent
         }
     }
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        _localPosition = Vector3.Zero;
-        _localRotation = Quaternion.Identity;
-        _localScale = Vector3.Zero;
-        CalculatePosition();
-        CalculateRotation();
-        CalculateScale();
-        CalculateTransform();
-    }
-
     public override void Destroy()
     {
         for (int i = Children.Count - 1; i >= 0; i--)
@@ -130,6 +117,7 @@ public class TDTransform : TDComponent
         }
 
         _parent?.Children.Remove(this);
+        TDObject = null;
     }
 
     private void AddChildToParent()

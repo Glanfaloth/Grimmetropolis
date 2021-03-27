@@ -6,8 +6,7 @@ using System.Collections.Generic;
 public class TDScene
 {
     public List<TDObject> TDObjects = new List<TDObject>();
-    // Used to ensure some objects are updated before others
-    public List<TDObject> UpdateFirstObjects = new List<TDObject>();
+    public List<TDObject> InitializingObjects = new List<TDObject>();
 
     public TDCamera CameraObject;
     public TDLight LightObject;
@@ -26,16 +25,20 @@ public class TDScene
 
     public void Update(GameTime gameTime)
     {
-        foreach (TDObject tdObject in UpdateFirstObjects)
+        // Initialize new TDObjects
+        for (int i = 0; i < InitializingObjects.Count; i++)
         {
-            tdObject.Update(gameTime);
+            InitializingObjects[i].Initialize();
+        }
+        if (InitializingObjects.Count > 0) InitializingObjects.Clear();
+
+        // Update TDObjects
+        for (int i = 0; i < TDObjects.Count; i++)
+        {
+            TDObjects[i].Update(gameTime);
         }
 
-        foreach (TDObject tdObject in TDObjects)
-        {
-            tdObject.Update(gameTime);
-        }
-
+        // Update collisions
         foreach (TDCollider colliderObject in ColliderObjects)
         {
             colliderObject.UpdateCollision();
@@ -51,19 +54,22 @@ public class TDScene
 
     public void Draw()
     {
+        // Update camera and light
         CameraObject?.UpdateCamera();
         LightObject?.UpdateLight();
 
+        // Draw shadow render
         TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(ShadowRender);
         foreach (TDMesh meshObject in MeshObjects)
         {
             meshObject.DrawShadow();
         }
 
+        // Draw final render
         TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(ImageRender);
         foreach (TDMesh meshObject in MeshObjects)
         {
-            meshObject.DrawModel();
+            meshObject.Draw();
         }
 
         TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(null);

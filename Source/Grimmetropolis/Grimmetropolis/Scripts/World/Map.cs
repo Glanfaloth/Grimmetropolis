@@ -39,10 +39,10 @@ public class Map : TDComponent
               { 0, 0, 0, 2, 2, 0, 1, 1, 0, 0 , 0 , 0 },
               { 0, 1, 0, 2, 2, 1, 1, 0, 0, 0 , 0 , 0 },
               { 0, 1, 0, 0, 0, 1, 1, 0, 0, 0 , 0 , 0 },
-              { 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0 , 0 , 0 },
-              { 0, 1, 1, 1, 0, 0, 1, 1, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 1, 0, 0, 1, 1, 0, 0 , 0 , 0 },
+              { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0 , 0 },
+              { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 , 0 , 0 },
               { 2, 2, 0, 1, 1, 0, 0, 1, 1, 0 , 0 , 0 },
               { 2, 2, 0, 0, 1, 0, 0, 0, 0, 0 , 0 , 0 } };
 
@@ -75,14 +75,14 @@ public class Map : TDComponent
         Height = _loadedMap.GetLength(1);
         mapTiles = new MapTile[Width, Height];
 
-        Vector3 center = new Vector3(-.5f * Height, -.5f * Width, 0);
-        Vector3 offcenter = .5f * new Vector3(.5f, .5f, 0f);
+        Vector3 corner = new Vector3(-.5f * Width, -.5f * Height, 0);
+        Vector3 offcenter = new Vector3(.5f, .5f, 0f);
 
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
             {
-                Vector3 position = center + offcenter + new Vector3(x, y, 0f);
+                Vector3 position = TDObject.Transform.LocalPosition + corner + offcenter + new Vector3(x, y, 0f);
                 TDObject mapTileObject = (MapTileType)_loadedMap[x, y] switch
                 {
                     MapTileType.Ground => PrefabFactory.CreatePrefab(PrefabType.MapTileGround, position, Quaternion.Identity, TDObject.Transform),

@@ -5,9 +5,8 @@ public delegate void CollisionCylidnerCuboidEvent(TDCylinderCollider cylinder, T
 
 public abstract class TDCollider : TDComponent
 {
-
-    public bool IsColliding;
-    public bool IsTrigger;
+    public bool IsColliding = false;
+    public bool IsTrigger = false;
 
     public CollisionCylinderCylinderEvent collisionCylinderCylinderEvent;
     public CollisionCylidnerCuboidEvent collisionCylinderCuboidEvent;
@@ -16,13 +15,15 @@ public abstract class TDCollider : TDComponent
     {
         base.Initialize();
 
-        IsColliding = false;
-        IsTrigger = false;
-
         TDSceneManager.ActiveScene.ColliderObjects.Add(this);
     }
 
-    public override void Update(GameTime gameTime) { }
+    public override void Destroy()
+    {
+        base.Destroy();
+
+        TDSceneManager.ActiveScene.ColliderObjects.Remove(this);
+    }
 
     public virtual void UpdateCollision()
     {
@@ -80,11 +81,5 @@ public abstract class TDCollider : TDComponent
                 }
             }
         }
-    }
-    public override void Destroy()
-    {
-        base.Destroy();
-
-        TDSceneManager.ActiveScene.ColliderObjects.Remove(this);
     }
 }

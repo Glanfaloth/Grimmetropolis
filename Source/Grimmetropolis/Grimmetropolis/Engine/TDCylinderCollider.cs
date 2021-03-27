@@ -4,22 +4,13 @@ using System.Diagnostics;
 
 public class TDCylinderCollider : TDCollider
 {
-    public float Radius;
-    public float Height;
-    public Vector3 Offset;
+    public float Radius = .5f;
+    public float Height = 1f;
+    public Vector3 Offset = Vector3.Zero;
 
     public Vector2 CenterXY { get; private set; }
     public float CenterZLow { get; private set; }
     public float CenterZHigh { get; private set; }
-
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        Radius = .5f;
-        Height = 1f;
-        Offset = Vector3.Zero;
-    }
 
     public override void UpdateCollision()
     {

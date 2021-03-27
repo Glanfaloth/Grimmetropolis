@@ -20,9 +20,9 @@ public static class PrefabFactory
 {
     public static EnemyController EnemyController { get; private set; }
 
-    public static TDObject CreatePrefab(PrefabType type, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent, bool updateFirst = false)
+    public static TDObject CreatePrefab(PrefabType type, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent)
     {
-        TDObject prefab = new TDObject(localPosition, localRotation, localScale, parent, updateFirst);
+        TDObject prefab = new TDObject(localPosition, localRotation, localScale, parent);
 
         switch (type)
         {
@@ -124,8 +124,6 @@ public static class PrefabFactory
             // Buildings
             case PrefabType.BuildingOutpost:
                 {
-                    prefab.AddComponent<TDMesh>();
-                    prefab.AddComponent<TDCuboidCollider>();
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
                     mesh.Model = TDContentManager.LoadModel("BuildingOutpost");
@@ -141,7 +139,7 @@ public static class PrefabFactory
 
     public static TDObject CreatePrefab(PrefabType type, bool updateFirst = false)
     {
-        return CreatePrefab(type, Vector3.Zero, Quaternion.Identity, Vector3.One, null, updateFirst);
+        return CreatePrefab(type, Vector3.Zero, Quaternion.Identity, Vector3.One, null);
     }
 
     public static TDObject CreatePrefab(PrefabType type, Vector3 localPosition, Quaternion localRotation)

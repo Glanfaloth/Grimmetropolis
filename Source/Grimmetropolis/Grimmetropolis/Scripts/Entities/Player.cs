@@ -7,8 +7,6 @@ public class Player : Character
     {
         base.Initialize();
 
-        Input = null;
-
         GameManager.Instance.Players.Add(this);
     }
 
@@ -22,6 +20,7 @@ public class Player : Character
     {
         base.Destroy();
 
+        Input = null;
         GameManager.Instance.Players.Remove(this);
     }
 }

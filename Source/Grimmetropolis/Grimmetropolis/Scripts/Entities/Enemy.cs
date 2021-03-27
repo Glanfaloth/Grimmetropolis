@@ -18,6 +18,8 @@ public class Enemy : Character
 
     public override void Update(GameTime gameTime)
     {
+        if (_controller == null) return;
+
         EnemyMove nextMove = _controller.ComputeNextMove(TDObject.Transform.LocalPosition, _moves);
 
         switch (nextMove.MovementType)

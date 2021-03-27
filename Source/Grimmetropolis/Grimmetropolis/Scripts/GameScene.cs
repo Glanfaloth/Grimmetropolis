@@ -13,7 +13,8 @@ public class GameScene : TDScene
         PrefabFactory.CreatePrefab(PrefabType.Light, new Vector3(12f, 12f, 18f), Quaternion.CreateFromYawPitchRoll(-.2f * MathHelper.Pi, .2f * MathHelper.Pi, -.8f * MathHelper.Pi));
 
         PrefabFactory.CreatePrefab(PrefabType.GameManager);
-        
-        PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost, new Vector3(0f, 4.5f, 0f), Quaternion.Identity);
+
+        TDObject building = PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost, new Vector3(0f, 4.5f, 0f), Quaternion.Identity);
+        building.AddComponent<TestSpawner>();
     }
 }
