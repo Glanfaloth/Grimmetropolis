@@ -25,7 +25,7 @@ public class TDObject
 
         Transform.Parent = parent;
 
-        TDSceneManager.ActiveScene.InitializingObjects.Add(this);
+        TDSceneManager.ActiveScene.CreatedObjects.Add(this);
     }
 
     public void Initialize()
@@ -47,6 +47,11 @@ public class TDObject
     }
 
     public void Destroy()
+    {
+        TDSceneManager.ActiveScene.DeletedObjects.Add(this);
+    }
+
+    public void DestroyComponents()
     {
         for (int i = Components.Count - 1; i >= 0; i--)
         {

@@ -6,7 +6,8 @@ using System.Collections.Generic;
 public class TDScene
 {
     public List<TDObject> TDObjects = new List<TDObject>();
-    public List<TDObject> InitializingObjects = new List<TDObject>();
+    public List<TDObject> DeletedObjects = new List<TDObject>();
+    public List<TDObject> CreatedObjects = new List<TDObject>();
 
     public TDCamera CameraObject;
     public TDLight LightObject;
@@ -25,12 +26,19 @@ public class TDScene
 
     public void Update(GameTime gameTime)
     {
-        // Initialize new TDObjects
-        for (int i = 0; i < InitializingObjects.Count; i++)
+        // Delete marked TDObjects
+        foreach (TDObject deletedObject in DeletedObjects)
         {
-            InitializingObjects[i].Initialize();
+            deletedObject.DestroyComponents();
         }
-        if (InitializingObjects.Count > 0) InitializingObjects.Clear();
+        if (DeletedObjects.Count > 0) DeletedObjects.Clear();
+
+        // Initialize newly created TDObjects
+        for (int i = 0; i < CreatedObjects.Count; i++)
+        {
+            CreatedObjects[i].Initialize();
+        }
+        if (CreatedObjects.Count > 0) CreatedObjects.Clear();
 
         // Update TDObjects
         for (int i = 0; i < TDObjects.Count; i++)
