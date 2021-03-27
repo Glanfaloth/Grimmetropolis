@@ -6,13 +6,21 @@ public class TDObject
 {
     public TDTransform Transform;
 
+    // TODO: make this readonly and add method AddComponent that makes sure references are set.
     public List<TDComponent> Components = new List<TDComponent>();
 
-    public TDObject(Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent)
+    public TDObject(Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent, bool updateFirst)
     {
         Transform = new TDTransform(this, localPosition, localRotation, localScale, parent);
 
-        TDSceneManager.ActiveScene.TDObjects.Add(this);
+        if (updateFirst)
+        {
+            TDSceneManager.ActiveScene.UpdateFirstObjects.Add(this);
+        }
+        else
+        {
+            TDSceneManager.ActiveScene.TDObjects.Add(this);
+        }
     }
 
     public void Update(GameTime gameTime)

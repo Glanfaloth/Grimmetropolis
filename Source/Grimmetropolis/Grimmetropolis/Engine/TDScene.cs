@@ -6,6 +6,8 @@ using System.Collections.Generic;
 public class TDScene
 {
     public List<TDObject> TDObjects = new List<TDObject>();
+    // Used to ensure some objects are updated before others
+    public List<TDObject> UpdateFirstObjects = new List<TDObject>();
 
     public TDCamera CameraObject;
     public TDLight LightObject;
@@ -24,6 +26,11 @@ public class TDScene
 
     public void Update(GameTime gameTime)
     {
+        foreach (TDObject tdObject in UpdateFirstObjects)
+        {
+            tdObject.Update(gameTime);
+        }
+
         foreach (TDObject tdObject in TDObjects)
         {
             tdObject.Update(gameTime);
