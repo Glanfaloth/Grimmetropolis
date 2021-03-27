@@ -13,6 +13,8 @@ public class Enemy : Character
 
         _controller = GameManager.Instance.EnemyController;
 
+        Health = 1f;
+
         GameManager.Instance.Enemies.Add(this);
     }
 

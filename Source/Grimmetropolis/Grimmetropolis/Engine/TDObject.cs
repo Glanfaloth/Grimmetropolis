@@ -48,7 +48,7 @@ public class TDObject
 
     public void Destroy()
     {
-        TDSceneManager.ActiveScene.DeletedObjects.Add(this);
+        if (!TDSceneManager.ActiveScene.DeletedObjects.Contains(this)) TDSceneManager.ActiveScene.DeletedObjects.Add(this);
     }
 
     public void DestroyComponents()

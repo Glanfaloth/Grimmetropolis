@@ -36,9 +36,12 @@ public class TestSpawner : TDComponent
         if (_deleteTimer < 0f)
         {
             _deleteTimer += _interval;
-            Enemy enemy = enemies[0];
-            enemies.RemoveAt(0);
-            enemy.TDObject.Destroy();
+            if (enemies.Count > 0)
+            {
+                Enemy enemy = enemies[0];
+                enemies.RemoveAt(0);
+                enemy.TDObject?.Destroy();
+            }
         }
     }
 }
