@@ -4,31 +4,34 @@ using System;
 
 public abstract class Character : TDComponent
 {
-    private float _lookingAngle;
+    public float _health = 3f;
+    public float Health
+    {
+        get => _health;
+        set
+        {
+            _health = value;
+            if (_health < 0f) TDObject.Destroy();
+        }
+    }
 
-    private float _walkSpeed;
-    private float _rotateSpeed;
+    private float _lookingAngle = 0f;
 
-    private float _moveThreshold;
+    private float _walkSpeed = 4f;
+    private float _rotateSpeed = 3f * MathHelper.Pi;
 
-    private TDCylinderCollider interactionCollider;
+    public TDCylinderCollider InteractionCollider;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        _lookingAngle = 0f;
         TDObject.Transform.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Backward, _lookingAngle);
-
-        _walkSpeed = 4f;
-        _rotateSpeed = 3f * MathHelper.Pi;
-
-        _moveThreshold = MathF.Pow(.05f, 2f);
     }
 
     protected void Move(Vector2 direction, GameTime gameTime)
     {
-        if (direction.LengthSquared() > _moveThreshold)
+        if (direction.LengthSquared() > float.Epsilon)
         {
             float targetAngle = MathF.Atan2(direction.Y, direction.X);
             if (targetAngle - _lookingAngle > MathHelper.Pi) _lookingAngle += MathHelper.TwoPi;
@@ -42,5 +45,20 @@ public abstract class Character : TDComponent
         }
     }
 
+    protected void Attack()
+    {
 
+    }
+
+    protected void Build()
+    {
+        MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
+        if (mapTile.Building == null)
+        {
+            TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.Outpost, GameManager.Instance.BuildingTransform);
+            Building building = buildingObject.GetComponent<Building>();
+            building.Position = mapTile.Position;
+            building.PlaceBuilding();
+        }
+    }
 }

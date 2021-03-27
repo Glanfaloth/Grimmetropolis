@@ -14,7 +14,7 @@ public class GameScene : TDScene
 
         PrefabFactory.CreatePrefab(PrefabType.GameManager);
 
-        TDObject building = PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost, new Vector3(0f, 4.5f, 0f), Quaternion.Identity);
+        TDObject building = PrefabFactory.CreatePrefab(PrefabType.Empty);
         building.AddComponent<TestSpawner>();
     }
 }

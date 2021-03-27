@@ -20,7 +20,7 @@ public class Enemy : Character
     {
         if (_controller == null) return;
 
-        EnemyMove nextMove = _controller.ComputeNextMove(TDObject.Transform.LocalPosition, _moves);
+        EnemyMove nextMove = _controller.ComputeNextMove(new Vector2(TDObject.Transform.LocalPosition.X, TDObject.Transform.LocalPosition.Y), _moves);
 
         switch (nextMove.MovementType)
         {

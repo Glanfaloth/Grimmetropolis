@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
+
+using System.Diagnostics;
 
 public enum PrefabType
 {
@@ -13,7 +14,7 @@ public enum PrefabType
     MapTileGround,
     MapTileWater,
     MapTileStone,
-    BuildingOutpost
+    Outpost
 }
 
 public static class PrefabFactory
@@ -59,12 +60,23 @@ public static class PrefabFactory
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
-                    prefab.AddComponent<Player>();
+                    Player player = prefab.AddComponent<Player>();
                     mesh.Model = TDContentManager.LoadModel("PlayerCindarella");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     collider.Radius = .25f;
                     collider.Height = .5f;
                     collider.Offset = .5f * Vector3.Backward;
+
+                    TDObject interactionObject = CreatePrefab(PrefabType.Empty, 1f * Vector3.Right, Quaternion.Identity, prefab.Transform);
+                    TDMesh meshCollider = interactionObject.AddComponent<TDMesh>();
+                    meshCollider.Model = TDContentManager.LoadModel("DefaultCylinder");
+                    meshCollider.Texture = TDContentManager.LoadTexture("DefaultTexture");
+                    TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
+                    interactionCollider.IsTrigger = true;
+                    interactionCollider.Radius = .25f;
+                    interactionCollider.Height = .5f;
+                    interactionCollider.Offset = .5f * Vector3.Backward;
+                    player.InteractionCollider = interactionCollider;
                     break;
                 }
 
@@ -72,12 +84,20 @@ public static class PrefabFactory
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
-                    prefab.AddComponent<Enemy>();
+                    Enemy enemy = prefab.AddComponent<Enemy>();
                     mesh.Model = TDContentManager.LoadModel("EnemyWitch");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     collider.Radius = .25f;
                     collider.Height = .5f;
                     collider.Offset = .5f * Vector3.Backward;
+
+                    TDObject interactionObject = CreatePrefab(PrefabType.Empty, 1f * Vector3.Right, Quaternion.Identity, prefab.Transform);
+                    TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
+                    interactionCollider.IsTrigger = true;
+                    interactionCollider.Radius = .25f;
+                    interactionCollider.Height = .5f;
+                    interactionCollider.Offset = .5f * Vector3.Backward;
+                    enemy.InteractionCollider = interactionCollider;
                     break;
                 }
 
@@ -86,12 +106,12 @@ public static class PrefabFactory
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
+                    MapTile mapTile = prefab.AddComponent<MapTile>();
                     mesh.Model = TDContentManager.LoadModel("MapTileGround");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     collider.Size = Vector3.One;
                     collider.Offset = .5f * Vector3.Forward;
-
-                    prefab.AddComponent(new MapTile(MapTileType.Ground, new Vector2(localPosition.X, localPosition.Y)));
+                    mapTile.Type = MapTileType.Ground;
                     break;
                 }
 
@@ -99,12 +119,12 @@ public static class PrefabFactory
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
+                    MapTile mapTile = prefab.AddComponent<MapTile>();
                     mesh.Model = TDContentManager.LoadModel("MapTileWater");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     collider.Size = new Vector3(1f, 1f, 2f);
                     collider.Offset = Vector3.Zero;
-
-                    prefab.AddComponent(new MapTile(MapTileType.Water, new Vector2(localPosition.X, localPosition.Y)));
+                    mapTile.Type = MapTileType.Water;
                     break;
                 }
 
@@ -112,20 +132,21 @@ public static class PrefabFactory
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
+                    MapTile mapTile = prefab.AddComponent<MapTile>();
                     mesh.Model = TDContentManager.LoadModel("MapTileStone");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     collider.Size = Vector3.One;
                     collider.Offset = .5f * Vector3.Forward;
-
-                    prefab.AddComponent(new MapTile(MapTileType.Stone, new Vector2(localPosition.X, localPosition.Y)));
+                    mapTile.Type = MapTileType.Stone;
                     break;
                 }
 
             // Buildings
-            case PrefabType.BuildingOutpost:
+            case PrefabType.Outpost:
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
+                    prefab.AddComponent<Outpost>();
                     mesh.Model = TDContentManager.LoadModel("BuildingOutpost");
                     mesh.Texture = TDContentManager.LoadTexture("BuildingOutpostTexture");
                     collider.Size = new Vector3(1f, 1f, 2f);

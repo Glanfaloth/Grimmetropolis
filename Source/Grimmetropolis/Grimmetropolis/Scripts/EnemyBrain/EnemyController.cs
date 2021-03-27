@@ -24,19 +24,16 @@ public class EnemyController : TDComponent
         Map = GameManager.Instance?.Map ?? null;
     }
 
-    internal EnemyMove ComputeNextMove(Vector3 localPosition, List<EnemyMove.Type> moves)
+    internal EnemyMove ComputeNextMove(Vector2 localPosition, List<EnemyMove.Type> moves)
     {
         if (_graph != null)
         {
-            Point tileIndex;
-            if (Map.TryGetTileIndex(localPosition, out tileIndex))
-            {
-                return _graph.GetNextMoveFromMapTile(tileIndex);
-            }
+            MapTile tile = Map.GetMapTile(localPosition);
+            return _graph.GetNextMoveFromMapTile(tile);
             // TODO: move to map edge?
         }
 
-        return new RunMove(new Location(), new Location(), 0, Vector2.Zero);
+        return new RunMove(new Location(), new Location(), 0, Vector3.Zero);
     }
 
     internal EnemyMove GetFutureMove(EnemyMove nextMove)

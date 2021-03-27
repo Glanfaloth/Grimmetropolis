@@ -46,11 +46,11 @@ public class MovementGraph
         AddVertex(_outsideTheMap);
     }
 
-    internal EnemyMove GetNextMoveFromMapTile(Point tileIndex)
+    internal EnemyMove GetNextMoveFromMapTile(MapTile tile)
     {
         // TODO: what to do when no move is set
         // TODO: sanitize input
-        return _nextMoves[_locations[tileIndex.X, tileIndex.Y].Index];
+        return _nextMoves[_locations[tile.Position.X, tile.Position.Y].Index];
     }
 
     internal void ComputeShortestPathToMapTile(Point start)
@@ -117,7 +117,7 @@ public class MovementGraph
         {
             for (int y = 0; y < _map.Height; y++)
             {
-                MapTile tile = _map.mapTiles[x, y];
+                MapTile tile = _map.MapTiles[x, y];
 
                 if (tile.CanEnemyMoveThrough())
                 {
@@ -155,7 +155,8 @@ public class MovementGraph
         switch (movementType)
         {
             case EnemyMove.Type.Run:
-                new RunMove(from, to, cost, tile.Position);
+                // TODO: this should be done in a cleaner way
+                new RunMove(from, to, cost, tile.TDObject.Transform.Position);
                 break;
             case EnemyMove.Type.Attack:
                 // TODO: create attack move

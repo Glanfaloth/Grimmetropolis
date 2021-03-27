@@ -27,9 +27,9 @@ public class TDScene
     public void Update(GameTime gameTime)
     {
         // Delete marked TDObjects
-        foreach (TDObject deletedObject in DeletedObjects)
+        for (int i = 0; i < DeletedObjects.Count; i++)
         {
-            deletedObject.DestroyComponents();
+            DeletedObjects[i].DestroyComponents();
         }
         if (DeletedObjects.Count > 0) DeletedObjects.Clear();
 
