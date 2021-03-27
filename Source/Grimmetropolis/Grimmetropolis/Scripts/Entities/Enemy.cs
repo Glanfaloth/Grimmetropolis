@@ -12,6 +12,8 @@ public class Enemy : Character
         base.Initialize();
 
         _controller = GameManager.Instance.EnemyController;
+
+        GameManager.Instance.Enemies.Add(this);
     }
 
     public override void Update(GameTime gameTime)
@@ -29,6 +31,12 @@ public class Enemy : Character
             default:
                 throw new NotSupportedException();
         }
+    }
+    public override void Destroy()
+    {
+        base.Destroy();
+
+        GameManager.Instance.Enemies.Remove(this);
     }
 
     private void AttackTarget(AttackMove nextMove, GameTime gameTime)

@@ -41,7 +41,7 @@ public class EnemyController : TDComponent
     {
         base.Initialize();
 
-        _map = null;
+        Map = GameManager.Instance?.Map ?? null;
     }
 
     internal EnemyMove ComputeNextMove(Vector3 localPosition, List<EnemyMove.Type> moves)

@@ -6,13 +6,18 @@ public class TDObject
 {
     public TDTransform Transform;
 
-    public IReadOnlyCollection<TDComponent> Components => _components.AsReadOnly();
+    public List<TDComponent> Components = new List<TDComponent>();
+    /*private List<TDComponent> _components = new List<TDComponent>();
+    public IReadOnlyCollection<TDComponent> Components => _components.AsReadOnly();*/
 
-    private readonly List<TDComponent> _components = new List<TDComponent>();
 
     public TDObject(Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent, bool updateFirst)
     {
-        Transform = new TDTransform();
+        Transform = new TDTransform()
+        {
+            TDObject = this
+        };
+
         Transform.Initialize();
 
         Transform.LocalPosition = localPosition;
@@ -39,13 +44,25 @@ public class TDObject
         }
     }
 
+    public void Destroy()
+    {
+        for (int i = Components.Count - 1; i >= 0; i--)
+        {
+            Components[i].Destroy();
+        }
+
+        Transform.Destroy();
+
+        TDSceneManager.ActiveScene.TDObjects.Remove(this);
+    }
+
     public T AddComponent<T>() where T : TDComponent, new()
     {
         T component = new T()
         {
             TDObject = this
         };
-        _components.Add(component);
+        Components.Add(component);
 
         component.Initialize();
         return component;
@@ -54,12 +71,12 @@ public class TDObject
     public void AddComponent(TDComponent component)
     {
         component.TDObject = this;
-        _components.Add(component);
+        Components.Add(component);
         component.Initialize();
     }
 
     public T GetComponent<T>() where T : TDComponent
     {
-        return (T)_components.Find(o => o is T);
+        return (T)Components.Find(o => o is T);
     }
 }

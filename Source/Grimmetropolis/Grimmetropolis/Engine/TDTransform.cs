@@ -122,6 +122,16 @@ public class TDTransform : TDComponent
         CalculateTransform();
     }
 
+    public override void Destroy()
+    {
+        for (int i = Children.Count - 1; i >= 0; i--)
+        {
+            Children[i].TDObject.Destroy();
+        }
+
+        _parent?.Children.Remove(this);
+    }
+
     private void AddChildToParent()
     {
         _parent?.Children.Add(this);

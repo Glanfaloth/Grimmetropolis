@@ -22,11 +22,12 @@ public abstract class TDCollider : TDComponent
         TDSceneManager.ActiveScene.ColliderObjects.Add(this);
     }
 
+    public override void Update(GameTime gameTime) { }
+
     public virtual void UpdateCollision()
     {
         IsColliding = false;
     }
-
     public abstract void Collide(TDCollider collider);
 
     protected void CollideCylinderCylinder(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2)
@@ -79,5 +80,11 @@ public abstract class TDCollider : TDComponent
                 }
             }
         }
+    }
+    public override void Destroy()
+    {
+        base.Destroy();
+
+        TDSceneManager.ActiveScene.ColliderObjects.Remove(this);
     }
 }

@@ -96,4 +96,11 @@ public class TDMesh : TDComponent
             mesh.Draw();
         }
     }
+
+    public override void Destroy()
+    {
+        base.Destroy();
+
+        TDSceneManager.ActiveScene.MeshObjects.Remove(this);
+    }
 }

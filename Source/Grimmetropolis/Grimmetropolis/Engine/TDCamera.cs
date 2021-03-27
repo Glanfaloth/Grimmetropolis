@@ -18,8 +18,8 @@ public class TDCamera : TDComponent
         base.Initialize();
 
         FieldOfView = MathHelper.PiOver4;
-        NearPlaneDistance = 2f;
-        FarPlaneDistance = 20f;
+        NearPlaneDistance = 4f;
+        FarPlaneDistance = 40f;
 
         TDSceneManager.ActiveScene.CameraObject = this;
     }
@@ -31,6 +31,13 @@ public class TDCamera : TDComponent
         CalculateViewMatrix();
         CalculateProjectionMatrix();
         CalculateProjectionViewMatrix();
+    }
+
+    public override void Destroy()
+    {
+        base.Destroy();
+
+        TDSceneManager.ActiveScene.CameraObject = null;
     }
 
     private void CalculateCameraTarget()

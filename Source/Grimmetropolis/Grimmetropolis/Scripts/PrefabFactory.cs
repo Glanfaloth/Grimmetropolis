@@ -29,7 +29,7 @@ public static class PrefabFactory
             // Basic prefabs
             case PrefabType.Camera:
                 {
-                    TDCamera camera = prefab.AddComponent<TDCamera>();
+                    prefab.AddComponent<TDCamera>();
                     break;
                 }
 
@@ -59,7 +59,7 @@ public static class PrefabFactory
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
-                    Player player = prefab.AddComponent<Player>();
+                    prefab.AddComponent<Player>();
                     mesh.Model = TDContentManager.LoadModel("PlayerCindarella");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     collider.Radius = .25f;

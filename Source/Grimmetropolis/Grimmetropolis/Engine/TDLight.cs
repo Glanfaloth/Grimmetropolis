@@ -18,8 +18,8 @@ public class TDLight : TDComponent
         base.Initialize();
 
         FieldOfView = MathHelper.PiOver4;
-        NearPlaneDistance = 2f;
-        FarPlaneDistance = 20f;
+        NearPlaneDistance = 4f;
+        FarPlaneDistance = 40f;
 
         TDSceneManager.ActiveScene.LightObject = this;
     }
@@ -32,7 +32,12 @@ public class TDLight : TDComponent
         CalculateProjectionMatrix();
         CalculateProjectionViewMatrix();
     }
+    public override void Destroy()
+    {
+        base.Destroy();
 
+        TDSceneManager.ActiveScene.LightObject = null;
+    }
     private void CalculateLightTarget()
     {
         LightTarget = TDObject.Transform.Position + Vector3.Transform(Vector3.Right, TDObject.Transform.Rotation);

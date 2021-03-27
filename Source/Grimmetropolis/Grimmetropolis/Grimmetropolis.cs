@@ -59,6 +59,7 @@ public class Grimmetropolis : Game
 
         _spriteBatch.Begin(blendState: BlendState.Opaque);
         _spriteBatch.Draw(TDSceneManager.ActiveScene.ImageRender, _targetWindow, Color.White);
+        // _spriteBatch.Draw(TDSceneManager.ActiveScene.ShadowRender, new Rectangle(0, 0, 200, 200), Color.White);
         _spriteBatch.End();
 
         base.Draw(gameTime);
