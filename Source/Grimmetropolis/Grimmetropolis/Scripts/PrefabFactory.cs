@@ -27,54 +27,106 @@ public static class PrefabFactory
         {
             // Basic prefabs
             case PrefabType.Camera:
-                prefab.Components.Add(new TDCamera(prefab, MathHelper.PiOver2, 2f, 20f));
-                break;
+                {
+                    TDCamera camera = prefab.AddComponent<TDCamera>();
+                    break;
+                }
 
             case PrefabType.Light:
-                prefab.Components.Add(new TDLight(prefab, MathHelper.PiOver2, 2f, 20f));
-                break;
+                {
+                    prefab.AddComponent<TDLight>();
+                    break;
+                }
 
             case PrefabType.Default:
-                prefab.Components.Add(new TDMesh(prefab, "DefaultModel", "DefaultTexture"));
-                break;
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    mesh.Model = TDContentManager.LoadModel("DefaultModel");
+                    mesh.Texture = TDContentManager.LoadTexture("DefaultTexture");
+                    break;
+                }
 
             // Characters
             case PrefabType.Player:
-                prefab.Components.Add(new TDMesh(prefab, "PlayerCindarella", "ColorPaletteTexture"));
-                prefab.Components.Add(new TDCylinderCollider(prefab, false, .25f, .5f, .5f * Vector3.Backward));
-                prefab.Components.Add(new Player(prefab, 0f));
-                break;
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
+                    Player player = prefab.AddComponent<Player>();
+                    mesh.Model = TDContentManager.LoadModel("PlayerCindarella");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    collider.Radius = .25f;
+                    collider.Height = .5f;
+                    collider.Offset = .5f * Vector3.Backward;
+                    break;
+                }
 
             case PrefabType.Enemy:
-                prefab.Components.Add(new TDMesh(prefab, "EnemyWitch", "ColorPaletteTexture"));
-                prefab.Components.Add(new TDCylinderCollider(prefab, false, .25f, .5f, .5f * Vector3.Backward));
-                prefab.Components.Add(new Enemy(prefab, 0f, EnemyController));
-                break;
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
+                    mesh.Model = TDContentManager.LoadModel("EnemyWitch");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    collider.Radius = .25f;
+                    collider.Height = .5f;
+                    collider.Offset = .5f * Vector3.Backward;
+
+                    prefab.AddComponent(new Enemy(EnemyController));
+                    break;
+                }
 
             // Map tiles
             case PrefabType.MapTileGround:
-                prefab.Components.Add(new TDMesh(prefab, "MapTileGround", "ColorPaletteTexture"));
-                prefab.Components.Add(new TDCuboidCollider(prefab, false, Vector3.One, .5f * Vector3.Forward));
-                prefab.Components.Add(new MapTile(prefab, MapTileType.Ground, new Vector2(localPosition.X, localPosition.Y)));
-                break;
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
+                    mesh.Model = TDContentManager.LoadModel("MapTileGround");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    collider.Size = Vector3.One;
+                    collider.Offset = .5f * Vector3.Forward;
+
+                    prefab.AddComponent(new MapTile(MapTileType.Ground, new Vector2(localPosition.X, localPosition.Y)));
+                    break;
+                }
 
             case PrefabType.MapTileWater:
-                prefab.Components.Add(new TDMesh(prefab, "MapTileWater", "ColorPaletteTexture"));
-                prefab.Components.Add(new TDCuboidCollider(prefab, false, new Vector3(1f, 1f, 2f), Vector3.Zero));
-                prefab.Components.Add(new MapTile(prefab, MapTileType.Water, new Vector2(localPosition.X, localPosition.Y)));
-                break;
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
+                    mesh.Model = TDContentManager.LoadModel("MapTileWater");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    collider.Size = new Vector3(1f, 1f, 2f);
+                    collider.Offset = Vector3.Zero;
+
+                    prefab.AddComponent(new MapTile(MapTileType.Water, new Vector2(localPosition.X, localPosition.Y)));
+                    break;
+                }
 
             case PrefabType.MapTileStone:
-                prefab.Components.Add(new TDMesh(prefab, "MapTileStone", "ColorPaletteTexture"));
-                prefab.Components.Add(new TDCuboidCollider(prefab, false, Vector3.One, .5f * Vector3.Forward));
-                prefab.Components.Add(new MapTile(prefab, MapTileType.Stone, new Vector2(localPosition.X, localPosition.Y)));
-                break;
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
+                    mesh.Model = TDContentManager.LoadModel("MapTileStone");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    collider.Size = Vector3.One;
+                    collider.Offset = .5f * Vector3.Forward;
+
+                    prefab.AddComponent(new MapTile(MapTileType.Stone, new Vector2(localPosition.X, localPosition.Y)));
+                    break;
+                }
 
             // Buildings
             case PrefabType.BuildingOutpost:
-                prefab.Components.Add(new TDMesh(prefab, "BuildingOutpost", "BuildingOutpostTexture"));
-                prefab.Components.Add(new TDCuboidCollider(prefab, false, new Vector3(1f, 1f, 2f), Vector3.Zero));
-                break;
+                {
+                    prefab.AddComponent<TDMesh>();
+                    prefab.AddComponent<TDCuboidCollider>();
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
+                    mesh.Model = TDContentManager.LoadModel("BuildingOutpost");
+                    mesh.Texture = TDContentManager.LoadTexture("BuildingOutpostTexture");
+                    collider.Size = new Vector3(1f, 1f, 2f);
+                    collider.Offset = Vector3.Backward;
+                    break;
+                }
         }
 
         return prefab;
@@ -103,7 +155,7 @@ public static class PrefabFactory
     public static void InitializeEnemyController(Map mapComponent)
     {
         TDObject enemyAI = CreatePrefab(PrefabType.Empty, updateFirst: true);
-        EnemyController = new EnemyController(enemyAI, mapComponent);
-        enemyAI.Components.Add(EnemyController);
+        EnemyController = new EnemyController(mapComponent);
+        enemyAI.AddComponent(EnemyController);
     }
 }

@@ -8,8 +8,10 @@ public class TestMoveComponent : TDComponent
     private float _speedMovement;
     private TDCollider _collider;
 
-    public TestMoveComponent(TDObject tdObject) : base(tdObject)
+    public override void Initialize()
     {
+        base.Initialize();
+
         _speedMovement = 4f;
         _collider = TDObject.GetComponent<TDCollider>();
         _collider.collisionCylinderCylinderEvent += ReactToCylinderCollision;

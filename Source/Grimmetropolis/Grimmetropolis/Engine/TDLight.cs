@@ -2,8 +2,6 @@
 
 public class TDLight : TDComponent
 {
-    // public static GraphicsDeviceManager Graphics { private get; set; }
-
     public Vector3 LightTarget { get; private set; }
     public Vector3 LightUpTarget { get; private set; }
 
@@ -15,14 +13,13 @@ public class TDLight : TDComponent
     public Matrix ProjectionMatrix { get; private set; }
     public Matrix ViewProjectionMatrix { get; private set; }
 
-    public TDLight(TDObject tdObject, float fieldOfView, float nearPlaneDistance, float farPlaneDistance)
-        : base(tdObject)
+    public override void Initialize()
     {
-        FieldOfView = fieldOfView;
-        NearPlaneDistance = nearPlaneDistance;
-        FarPlaneDistance = farPlaneDistance;
+        base.Initialize();
 
-        UpdateLight();
+        FieldOfView = MathHelper.PiOver4;
+        NearPlaneDistance = 2f;
+        FarPlaneDistance = 20f;
 
         TDSceneManager.ActiveScene.LightObject = this;
     }

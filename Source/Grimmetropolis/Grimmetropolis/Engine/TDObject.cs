@@ -6,12 +6,20 @@ public class TDObject
 {
     public TDTransform Transform;
 
-    // TODO: make this readonly and add method AddComponent that makes sure references are set.
-    public List<TDComponent> Components = new List<TDComponent>();
+    public IReadOnlyCollection<TDComponent> Components => _components.AsReadOnly();
+
+    private readonly List<TDComponent> _components = new List<TDComponent>();
 
     public TDObject(Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent, bool updateFirst)
     {
-        Transform = new TDTransform(this, localPosition, localRotation, localScale, parent);
+        Transform = new TDTransform();
+        Transform.Initialize();
+
+        Transform.LocalPosition = localPosition;
+        Transform.LocalRotation = localRotation;
+        Transform.LocalScale = localScale;
+
+        Transform.Parent = parent;
 
         if (updateFirst)
         {
@@ -31,9 +39,27 @@ public class TDObject
         }
     }
 
-    public T GetComponent<T>()
+    public T AddComponent<T>() where T : TDComponent, new()
     {
-        object component = Components.Find(o => o is T);
-        return (T)component;
+        T component = new T()
+        {
+            TDObject = this
+        };
+        _components.Add(component);
+
+        component.Initialize();
+        return component;
+    }
+
+    public void AddComponent(TDComponent component)
+    {
+        component.TDObject = this;
+        _components.Add(component);
+        component.Initialize();
+    }
+
+    public T GetComponent<T>() where T : TDComponent
+    {
+        return (T)_components.Find(o => o is T);
     }
 }

@@ -1,65 +1,88 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using System.Linq;
+
 public class TDMesh : TDComponent
 {
     private Model _model;
-    private Texture2D _texture;
+    public Model Model
+    {
+        get => _model;
+        set
+        {
+            _model = value;
+            SetModelEffect();
+        }
+    }
+
+    public Texture2D Texture;
+
     private Effect _effect;
 
-    public TDMesh(TDObject tdObject, string model, string texture) : base(tdObject)
+    public Effect Effect
     {
-        _model = TDContentManager.LoadModel(model);
-        _texture = TDContentManager.LoadTexture(texture);
-        _effect = TDContentManager.LoadEffect("LightEffect");
+        get => _effect;
+        set
+        {
+            _effect = value;
+            if (_model != null) SetModelEffect();
+        }
+    }
 
-        ApplyEffect();
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        _model = null;
+        Texture = null;
+        Effect = TDContentManager.LoadEffect("LightEffect");
 
         TDSceneManager.ActiveScene.MeshObjects.Add(this);
     }
 
-    private void ApplyEffect()
+    private void SetModelEffect()
     {
-        foreach (ModelMesh mesh in _model.Meshes)
+        foreach (ModelMesh mesh in _model?.Meshes ?? Enumerable.Empty<ModelMesh>())
         {
             foreach (ModelMeshPart meshPart in mesh.MeshParts)
             {
-                meshPart.Effect = _effect.Clone();
+                meshPart.Effect = Effect.Clone();
             }
         }
     }
 
     public void DrawShadow()
     {
-        foreach (ModelMesh mesh in _model.Meshes)
+        foreach (ModelMesh mesh in _model?.Meshes ?? Enumerable.Empty<ModelMesh>())
         {
             foreach (Effect effect in mesh.Effects)
             {
                 effect.CurrentTechnique = effect.Techniques["ShadowEffect"];
 
                 effect.Parameters["World"].SetValue(TDObject.Transform.TransformMatrix);
-                effect.Parameters["LightViewProjection"].SetValue(TDSceneManager.ActiveScene.LightObject.ViewProjectionMatrix);
+                effect.Parameters["LightViewProjection"].SetValue(TDSceneManager.ActiveScene.LightObject?.ViewProjectionMatrix ?? Matrix.Identity);
             }
 
             mesh.Draw();
         }
     }
 
-    public void Draw()
+    public void DrawModel()
     {
-        foreach (ModelMesh mesh in _model.Meshes)
+        foreach (ModelMesh mesh in _model?.Meshes ?? Enumerable.Empty<ModelMesh>())
         {
             foreach (Effect effect in mesh.Effects)
             {
                 effect.CurrentTechnique = effect.Techniques["LightEffect"];
 
                 effect.Parameters["World"].SetValue(TDObject.Transform.TransformMatrix);
-                effect.Parameters["ViewProjection"].SetValue(TDSceneManager.ActiveScene.CameraObject.ViewProjectionMatrix);
+                effect.Parameters["ViewProjection"].SetValue(TDSceneManager.ActiveScene.CameraObject?.ViewProjectionMatrix ?? Matrix.Identity);
 
-                effect.Parameters["Texture"].SetValue(_texture);
+                effect.Parameters["Texture"].SetValue(Texture);
 
-                effect.Parameters["LightPosition"].SetValue(TDSceneManager.ActiveScene.LightObject.TDObject.Transform.Position);
-                effect.Parameters["LightViewProjection"].SetValue(TDSceneManager.ActiveScene.LightObject.ViewProjectionMatrix);
+                effect.Parameters["LightPosition"].SetValue(TDSceneManager.ActiveScene.LightObject?.TDObject.Transform.Position ?? Vector3.Zero);
+                effect.Parameters["LightViewProjection"].SetValue(TDSceneManager.ActiveScene.LightObject?.ViewProjectionMatrix ?? Matrix.Identity);
 
                 effect.Parameters["AmbientIntensity"].SetValue(.2f);
                 effect.Parameters["AmbientColor"].SetValue(Vector3.One);

@@ -11,13 +11,13 @@ public enum MapTileType
 
 public class MapTile : TDComponent
 {
-    private MapTileType _type;
+    public MapTileType Type { get; }
 
     public Vector2 Position { get; }
 
-    public MapTile(TDObject tdObject, MapTileType type, Vector2 position) : base(tdObject)
+    public MapTile(MapTileType type, Vector2 position)
     {
-        _type = type;
+        Type = type;
         Position = position;
     }
 
@@ -25,7 +25,7 @@ public class MapTile : TDComponent
     {
         // TODO: how do we check for buildings?
 
-        switch (_type)
+        switch (Type)
         {
             case MapTileType.Ground:
                 return true;

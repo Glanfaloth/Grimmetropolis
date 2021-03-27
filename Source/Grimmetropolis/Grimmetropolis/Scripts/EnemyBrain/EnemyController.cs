@@ -14,7 +14,7 @@ public class EnemyController : TDComponent
     // TODO: this doesn't support different action types of the enemies for now.
     private readonly EnemyMove[,] _nextMove;
 
-    public EnemyController(TDObject tdObject, Map mapComponent) : base(tdObject)
+    public EnemyController(Map mapComponent)
     {
         // TODO: add behaviour after artifact is stolen
         _map = mapComponent;

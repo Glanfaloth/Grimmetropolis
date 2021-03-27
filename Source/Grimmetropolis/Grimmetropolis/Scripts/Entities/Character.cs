@@ -11,15 +11,17 @@ public abstract class Character : TDComponent
 
     private float _moveThreshold;
 
-    public Character(TDObject tdObject, float lookingAngle) : base(tdObject)
+    public override void Initialize()
     {
-        _lookingAngle = lookingAngle;
+        base.Initialize();
+
+        _lookingAngle = 0f;
         TDObject.Transform.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Backward, _lookingAngle);
 
         _walkSpeed = 4f;
-        _rotateSpeed = MathHelper.TwoPi;
+        _rotateSpeed = 3f * MathHelper.Pi;
 
-        _moveThreshold = MathF.Pow(0.05f, 2f);
+        _moveThreshold = MathF.Pow(.05f, 2f);
     }
 
     protected void Move(Vector2 direction, GameTime gameTime)

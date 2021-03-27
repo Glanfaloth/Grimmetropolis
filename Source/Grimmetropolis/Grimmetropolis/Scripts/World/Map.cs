@@ -7,15 +7,17 @@ public class Map : TDComponent
     public int Width { get; private set; }
     public int Height { get; private set; }
 
-    public MapTile[,] mapTiles;
+    public MapTile[,] mapTiles { get; private set; }
 
-    private int[,] loadedMap;
+    private int[,] _loadedMap;
 
     //public string mapPath = "Content/Maps/testmap.txt";
 
-    public Map(TDObject tdObject) : base(tdObject)
+    public override void Initialize()
     {
-        //loadedMap = new int [,]
+        base.Initialize();
+
+        //_loadedMap = new int [,]
         //    { { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 , 0 , 0 },
         //      { 0, 0, 0, 2, 2, 0, 1, 1, 0, 0 , 0 , 0 },
         //      { 0, 0, 0, 2, 2, 1, 1, 0, 0, 0 , 0 , 0 },
@@ -28,7 +30,7 @@ public class Map : TDComponent
         //      { 2, 2, 0, 0, 0, 0, 0, 1, 1, 0 , 0 , 0 } };
 
         // pathing test map
-        loadedMap = new int[,]
+        _loadedMap = new int[,]
             { { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 , 0 , 0 },
               { 0, 0, 0, 2, 2, 0, 1, 1, 0, 0 , 0 , 0 },
               { 0, 1, 0, 2, 2, 1, 1, 0, 0, 0 , 0 , 0 },
@@ -42,6 +44,7 @@ public class Map : TDComponent
 
         //using (Stream fileStream = TitleContainer.OpenStream("Content/Maps/testmap.txt"))
         //    LoadTiles(fileStream);
+
         LoadMap();
     }
 
@@ -62,8 +65,8 @@ public class Map : TDComponent
         //    }
         //}
         //height = lines.Count;
-        Width = loadedMap.GetLength(0);
-        Height = loadedMap.GetLength(1);
+        Width = _loadedMap.GetLength(0);
+        Height = _loadedMap.GetLength(1);
         mapTiles = new MapTile[Width, Height];
 
         Vector3 center = new Vector3(-.5f * Height, -.5f * Width, 0);
@@ -74,7 +77,7 @@ public class Map : TDComponent
             for (int y = 0; y < Height; y++)
             {
                 Vector3 position = center + offcenter + new Vector3(x, y, 0f);
-                TDObject mapTileObject = (MapTileType)loadedMap[x, y] switch
+                TDObject mapTileObject = (MapTileType)_loadedMap[x, y] switch
                 {
                     MapTileType.Ground => PrefabFactory.CreatePrefab(PrefabType.MapTileGround, position, Quaternion.Identity, TDObject.Transform),
                     MapTileType.Water => PrefabFactory.CreatePrefab(PrefabType.MapTileWater, position, Quaternion.Identity, TDObject.Transform),
