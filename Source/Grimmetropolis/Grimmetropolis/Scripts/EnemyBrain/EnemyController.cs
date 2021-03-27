@@ -4,23 +4,44 @@ using System.Collections.Generic;
 
 public class EnemyController : TDComponent
 {
-    private readonly Map _map;
+    private Map _map;
+    public Map Map
+    {
+        get => _map;
+        set
+        {
+            _map = value;
 
-    private readonly Location[,] _locations;
+            if (_map != null)
+            {
+                _locations = new Location[_map.Width, _map.Height];
+                _nextMove = new EnemyMove[_map.Width, _map.Height];
+            }
+        }
+    }
+
+    private Location[,] _locations;
     private Location _outsideTheMap;
 
     private readonly float SQRT2 = (float)Math.Sqrt(2);
 
     // TODO: this doesn't support different action types of the enemies for now.
-    private readonly EnemyMove[,] _nextMove;
+    private EnemyMove[,] _nextMove;
 
-    public EnemyController(Map mapComponent)
+    /*public EnemyController(Map mapComponent)
     {
         // TODO: add behaviour after artifact is stolen
         _map = mapComponent;
 
         _locations = new Location[_map.Width, _map.Height];
         _nextMove = new EnemyMove[_map.Width, _map.Height];
+    }*/
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        _map = null;
     }
 
     internal EnemyMove ComputeNextMove(Vector3 localPosition, List<EnemyMove.Type> moves)

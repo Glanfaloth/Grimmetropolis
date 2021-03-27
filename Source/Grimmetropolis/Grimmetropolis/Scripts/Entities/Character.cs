@@ -11,6 +11,8 @@ public abstract class Character : TDComponent
 
     private float _moveThreshold;
 
+    private TDCylinderCollider interactionCollider;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -39,4 +41,6 @@ public abstract class Character : TDComponent
             TDObject.Transform.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Backward, _lookingAngle);
         }
     }
+
+
 }

@@ -4,17 +4,14 @@ using System.Collections.Generic;
 
 public class Enemy : Character
 {
-    private readonly EnemyController _controller;
+    private EnemyController _controller;
     private readonly List<EnemyMove.Type> _moves = new List<EnemyMove.Type>() { EnemyMove.Type.Run };
-
-    public Enemy(EnemyController controller)
-    {
-        _controller = controller;
-    }
 
     public override void Initialize()
     {
         base.Initialize();
+
+        _controller = GameManager.Instance.EnemyController;
     }
 
     public override void Update(GameTime gameTime)

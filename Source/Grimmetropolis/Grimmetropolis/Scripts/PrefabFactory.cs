@@ -7,6 +7,7 @@ public enum PrefabType
     Camera,
     Light,
     Default,
+    GameManager,
     Player,
     Enemy,
     MapTileGround,
@@ -46,6 +47,13 @@ public static class PrefabFactory
                     break;
                 }
 
+            // GameManager
+            case PrefabType.GameManager:
+                {
+                    prefab.AddComponent<GameManager>();
+                    break;
+                }
+
             // Characters
             case PrefabType.Player:
                 {
@@ -64,13 +72,12 @@ public static class PrefabFactory
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
+                    prefab.AddComponent<Enemy>();
                     mesh.Model = TDContentManager.LoadModel("EnemyWitch");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     collider.Radius = .25f;
                     collider.Height = .5f;
                     collider.Offset = .5f * Vector3.Backward;
-
-                    prefab.AddComponent(new Enemy(EnemyController));
                     break;
                 }
 
@@ -152,10 +159,10 @@ public static class PrefabFactory
         return CreatePrefab(type, localPosition, localRotation, Vector3.One, parent);
     }
 
-    public static void InitializeEnemyController(Map mapComponent)
+    /*public static void InitializeEnemyController(Map mapComponent)
     {
         TDObject enemyAI = CreatePrefab(PrefabType.Empty, updateFirst: true);
         EnemyController = new EnemyController(mapComponent);
         enemyAI.AddComponent(EnemyController);
-    }
+    }*/
 }
