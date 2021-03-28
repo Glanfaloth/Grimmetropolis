@@ -8,14 +8,20 @@ public enum PrefabType
     Camera,
     Light,
     Default,
+
     GameManager,
+
     Player,
     Enemy,
+
     MapTileGround,
     MapTileWater,
-    MapTileStone,
+
     Castle,
-    Outpost
+    Outpost,
+
+    Wood,
+    Stone
 }
 
 public static class PrefabFactory
@@ -130,19 +136,6 @@ public static class PrefabFactory
                     break;
                 }
 
-            case PrefabType.MapTileStone:
-                {
-                    TDMesh mesh = prefab.AddComponent<TDMesh>();
-                    TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
-                    MapTile mapTile = prefab.AddComponent<MapTile>();
-                    mesh.Model = TDContentManager.LoadModel("MapTileStone");
-                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
-                    collider.Size = Vector3.One;
-                    collider.Offset = .5f * Vector3.Forward;
-                    mapTile.Type = MapTileType.Stone;
-                    break;
-                }
-
             // Buildings
             case PrefabType.Castle:
                 {
@@ -165,6 +158,33 @@ public static class PrefabFactory
                     mesh.Texture = TDContentManager.LoadTexture("BuildingOutpostTexture");
                     collider.Size = new Vector3(1f, 1f, 2f);
                     collider.Offset = Vector3.Backward;
+                    break;
+                }
+
+            // Resources
+            case PrefabType.Wood:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
+                    Resource resource = prefab.AddComponent<Resource>();
+                    mesh.Model = TDContentManager.LoadModel("ResourceWood");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    collider.Size = Vector3.One;
+                    collider.Offset = .5f * Vector3.Backward;
+                    resource.Type = ResourceType.Wood;
+                    break;
+                }
+
+            case PrefabType.Stone:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
+                    Resource resource = prefab.AddComponent<Resource>();
+                    mesh.Model = TDContentManager.LoadModel("ResourceStone");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    collider.Size = Vector3.One;
+                    collider.Offset = .5f * Vector3.Backward;
+                    resource.Type = ResourceType.Stone;
                     break;
                 }
         }

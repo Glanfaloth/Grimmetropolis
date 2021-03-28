@@ -5,8 +5,7 @@ using System;
 public enum MapTileType
 {
     Ground,
-    Water,
-    Stone
+    Water
 }
 
 public class MapTile : TDComponent
@@ -15,6 +14,7 @@ public class MapTile : TDComponent
 
     public Point Position;
 
+    public Resource Resource;
     public Building Building;
 
     public bool IsPassable = true;
@@ -32,6 +32,11 @@ public class MapTile : TDComponent
         if (Building != null)
         {
             return Building.IsPassable;
+        }
+
+        if (Resource != null)
+        {
+            return Resource.IsPassable;
         }
 
         return IsPassable;

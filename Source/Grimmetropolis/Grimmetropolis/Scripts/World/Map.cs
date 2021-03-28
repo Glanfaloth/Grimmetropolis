@@ -22,32 +22,32 @@ public class Map : TDComponent
 
         /*_loadedMap = new int [,]
             { { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 2, 2, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+              { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+              { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
               { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
               { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
               { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
               { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
               { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-              { 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-              { 2, 2, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-              { 2, 2, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-              { 2, 2, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-              { 2, 2, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-              { 2, 2, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 } };*/
+              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+              { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
+              { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
+              { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
+              { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
+              { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 } };*/
 
         // pathing test map
         _loadedMap = new int[,]
             { { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 , 0 , 0 },
-              { 0, 0, 0, 2, 2, 0, 1, 1, 0, 0 , 0 , 0 },
-              { 0, 1, 0, 2, 2, 1, 1, 0, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0 , 0 , 0 },
+              { 0, 1, 0, 0, 0, 1, 1, 0, 0, 0 , 0 , 0 },
               { 0, 1, 0, 0, 1, 1, 1, 0, 0, 0 , 0 , 0 },
               { 0, 1, 1, 1, 1, 0, 0, 1, 0, 0 , 0 , 0 },
               { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 , 0 , 0 },
               { 0, 1, 1, 1, 0, 0, 0, 1, 0, 0 , 0 , 0 },
               { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 , 0 , 0 },
-              { 2, 2, 0, 1, 1, 0, 0, 1, 1, 0 , 0 , 0 },
-              { 2, 2, 0, 0, 1, 0, 0, 0, 0, 0 , 0 , 0 } };
+              { 0, 0, 0, 1, 1, 0, 0, 1, 1, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 , 0 , 0 } };
 
         //using (Stream fileStream = TitleContainer.OpenStream("Content/Maps/testmap.txt"))
         //    LoadTiles(fileStream);
@@ -90,8 +90,7 @@ public class Map : TDComponent
                 {
                     MapTileType.Ground => PrefabFactory.CreatePrefab(PrefabType.MapTileGround, position, Quaternion.Identity, TDObject.Transform),
                     MapTileType.Water => PrefabFactory.CreatePrefab(PrefabType.MapTileWater, position, Quaternion.Identity, TDObject.Transform),
-                    MapTileType.Stone => PrefabFactory.CreatePrefab(PrefabType.MapTileStone, position, Quaternion.Identity, TDObject.Transform),
-                    _ => PrefabFactory.CreatePrefab(PrefabType.MapTileGround, position, Quaternion.Identity, TDObject.Transform),
+                    _ => PrefabFactory.CreatePrefab(PrefabType.MapTileGround, position, Quaternion.Identity, TDObject.Transform)
                 };
                 MapTile mapTile = mapTileObject.GetComponent<MapTile>();
                 mapTile.Position = new Point(x, y);

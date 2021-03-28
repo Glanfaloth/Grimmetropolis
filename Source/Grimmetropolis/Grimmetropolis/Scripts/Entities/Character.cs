@@ -22,14 +22,19 @@ public abstract class Character : TDComponent
 
     public TDCylinderCollider InteractionCollider;
 
-    private float largestIntersection = 0f;
+    private float intersectionEnemy = 0f;
+    private float intersectionBuilding = 0f;
+    private float intersectionResource = 0f;
     private Enemy closestEnemy = null;
+    private Building closestBuilding = null;
+    private Resource closestResource = null;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        InteractionCollider.collisionCylinderCylinderEvent += GetClosestEnemy;
+        InteractionCollider.collisionCylinderCylinderEvent += GetClosestCylinder;
+        InteractionCollider.collisionCylinderCuboidEvent += GetClosestCuboid;
 
         TDObject.Transform.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Backward, _lookingAngle);
     }
@@ -38,8 +43,12 @@ public abstract class Character : TDComponent
     {
         base.Update(gameTime);
 
-        largestIntersection = 0f;
+        intersectionEnemy = 0f;
+        intersectionBuilding = 0f;
+        intersectionResource = 0f;
         closestEnemy = null;
+        closestBuilding = null;
+        closestResource = null;
     }
 
     protected void Move(Vector2 direction, GameTime gameTime)
@@ -58,18 +67,26 @@ public abstract class Character : TDComponent
         }
     }
 
-    protected void Attack()
+    protected void Interact()
     {
         if (closestEnemy != null)
         {
             closestEnemy.Health -= 1f;
+        }
+        else if (closestBuilding != null)
+        {
+            closestBuilding.Health -= 1f;
+        }
+        else if (closestResource != null)
+        {
+            closestResource.GetResources();
         }
     }
 
     protected void Build()
     {
         MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        if (mapTile.Type == MapTileType.Ground && mapTile.Building == null)
+        if (mapTile.Type == MapTileType.Ground && mapTile.Building == null && mapTile.Resource == null)
         {
             TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.Outpost, GameManager.Instance.BuildingTransform);
             Building building = buildingObject.GetComponent<Building>();
@@ -78,17 +95,38 @@ public abstract class Character : TDComponent
     }
 
     // TODO: adapt this for player and enemy
-    private void GetClosestEnemy(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2, float intersection)
+    private void GetClosestCylinder(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2, float intersection)
     {
         TDCylinderCollider oppositeCollider = InteractionCollider == cylinder2 ? cylinder1 : cylinder2;
         Enemy enemy = oppositeCollider.TDObject.GetComponent<Enemy>();
         if (enemy != null)
         {
-            if (largestIntersection < intersection)
+            if (intersectionEnemy < intersection)
             {
-                largestIntersection = intersection;
+                intersectionEnemy = intersection;
                 closestEnemy = enemy;
             }            
+        }
+    }
+    private void GetClosestCuboid(TDCylinderCollider cylinder, TDCuboidCollider cuboid, Vector2 closest, float intersection)
+    {
+        Building building = cuboid.TDObject.GetComponent<Building>();
+        if (building != null)
+        {
+            if (intersectionBuilding < intersection)
+            {
+                intersectionBuilding = intersection;
+                closestBuilding = building;
+            }
+        }
+        Resource resource = cuboid.TDObject.GetComponent<Resource>();
+        if (resource != null)
+        {
+            if (intersectionResource < intersection)
+            {
+                intersectionResource = intersection;
+                closestResource = resource;
+            }
         }
     }
 }

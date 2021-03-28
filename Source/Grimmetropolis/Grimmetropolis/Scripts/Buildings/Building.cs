@@ -28,9 +28,15 @@ public class Building : TDComponent
 
     public bool IsPassable = false;
 
+    public float WoodCost = 1f;
+    public float StoneCost = 0f;
+
     public override void Initialize()
     {
         base.Initialize();
+
+        GameManager.Instance.WoodResource -= WoodCost;
+        GameManager.Instance.StoneResource -= StoneCost;
 
         SetTransform();
         PlaceBuilding();

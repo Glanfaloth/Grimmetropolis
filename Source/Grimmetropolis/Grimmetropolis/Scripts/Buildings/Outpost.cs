@@ -4,9 +4,9 @@ public class Outpost : Building
 {
     public override void Initialize()
     {
-        base.Initialize();
+        WoodCost = 1f;
+        StoneCost = 1f;
 
-        Size.X = 3;
-        Size.Y = 3;
+        base.Initialize();
     }
 }

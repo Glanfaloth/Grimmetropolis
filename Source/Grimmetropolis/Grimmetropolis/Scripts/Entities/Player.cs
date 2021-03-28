@@ -15,7 +15,7 @@ public class Player : Character
         Vector2 inputDirection = Input.GetMoveDirection();
         Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
 
-        if (Input.IsSpecialAbilityPressed()) Attack();
+        if (Input.IsSpecialAbilityPressed()) Interact();
         if (Input.IsUseItemPressed()) Build();
 
         base.Update(gameTime);

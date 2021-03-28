@@ -11,10 +11,15 @@ public class GameManager : TDComponent
     public List<Player> Players = new List<Player>();
     public List<Enemy> Enemies = new List<Enemy>();
     public List<Building> Buildings = new List<Building>();
+    public List<Resource> Resources = new List<Resource>();
 
     public TDTransform PlayerTransform;
     public TDTransform EnemyTransform;
     public TDTransform BuildingTransform;
+    public TDTransform ResourceTransform;
+
+    public float WoodResource = 0f;
+    public float StoneResource = 0f;
 
     public override void Initialize()
     {
@@ -55,6 +60,27 @@ public class GameManager : TDComponent
         TDObject castleObject = PrefabFactory.CreatePrefab(PrefabType.Castle, BuildingTransform);
         Castle castle = castleObject.GetComponent<Castle>();
         castle.Position = new Point(3, 8);
+
+        // Resources
+        TDObject resourceList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
+        ResourceTransform = resourceList.Transform;
+
+        TDObject resourceWoodObject0 = PrefabFactory.CreatePrefab(PrefabType.Wood, ResourceTransform);
+        Resource resourceWood0 = resourceWoodObject0.GetComponent<Resource>();
+        resourceWood0.Position = new Point(6, 4);
+        TDObject resourceWoodObject1 = PrefabFactory.CreatePrefab(PrefabType.Wood, ResourceTransform);
+        Resource resourceWood1 = resourceWoodObject1.GetComponent<Resource>();
+        resourceWood1.Position = new Point(7, 4);
+        TDObject resourceWoodObject2 = PrefabFactory.CreatePrefab(PrefabType.Wood, ResourceTransform);
+        Resource resourceWood2 = resourceWoodObject2.GetComponent<Resource>();
+        resourceWood2.Position = new Point(6, 5);
+        TDObject resourceWoodObject3 = PrefabFactory.CreatePrefab(PrefabType.Wood, ResourceTransform);
+        Resource resourceWood3 = resourceWoodObject3.GetComponent<Resource>();
+        resourceWood3.Position = new Point(7, 5);
+
+        TDObject resourceStoneObject = PrefabFactory.CreatePrefab(PrefabType.Stone, ResourceTransform);
+        Resource resourceStone = resourceStoneObject.GetComponent<Resource>();
+        resourceStone.Position = new Point(7, 10);
     }
 
 }
