@@ -16,7 +16,7 @@ public class TestSpawner : TDComponent
 
         _interval = 4f;
         _spawnTimer = _interval;
-        _deleteTimer = 1.5f * _interval;
+        _deleteTimer = 5f * _interval;
     }
 
     public override void Update(GameTime gameTime)

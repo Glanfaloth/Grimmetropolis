@@ -3,10 +3,18 @@ using System.Collections.Generic;
 
 public class Location
 {
-    private readonly List<EnemyMove> edges = new List<EnemyMove>();
+    // for now make directed graph
+    public List<EnemyMove> OutEdges { get; } = new List<EnemyMove>();
+    public List<EnemyMove> InEdges { get; } = new List<EnemyMove>();
+    public int Index { get; internal set; }
 
-    public void AddEdge(EnemyMove edge)
+    internal void AddOutgoingEdge(EnemyMove edge)
     {
-        edges.Add(edge);
+        OutEdges.Add(edge);
+    }
+
+    internal void AddIncomingEdge(EnemyMove edge)
+    {
+        InEdges.Add(edge);
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-
 using System;
-using System.Diagnostics;
 
 public class Map : TDComponent
 {
@@ -43,11 +41,11 @@ public class Map : TDComponent
             { { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 , 0 , 0 },
               { 0, 0, 0, 2, 2, 0, 1, 1, 0, 0 , 0 , 0 },
               { 0, 1, 0, 2, 2, 1, 1, 0, 0, 0 , 0 , 0 },
-              { 0, 1, 0, 0, 0, 1, 1, 0, 0, 0 , 0 , 0 },
-              { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0 , 0 },
-              { 0, 1, 1, 1, 0, 0, 0, 0, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 , 0 , 0 },
+              { 0, 1, 0, 0, 1, 1, 1, 0, 0, 0 , 0 , 0 },
+              { 0, 1, 1, 1, 1, 0, 0, 1, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 , 0 , 0 },
+              { 0, 1, 1, 1, 0, 0, 0, 1, 0, 0 , 0 , 0 },
+              { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 , 0 , 0 },
               { 2, 2, 0, 1, 1, 0, 0, 1, 1, 0 , 0 , 0 },
               { 2, 2, 0, 0, 1, 0, 0, 0, 0, 0 , 0 , 0 } };
 
@@ -108,10 +106,20 @@ public class Map : TDComponent
         int y = Math.Clamp((int)(position.Y - TDObject.Transform.Position.Y - Corner.Y), 0, Height - 1);
         return MapTiles[x, y];
     }
-
-    public Point GetEnemyTarget()
+    
+    public Point GetEnemyTargetIndex()
     {
         // TODO: improve this to be artifact location
-        return new Point((int)-.5f * Height, (int)-.5f * Width);
+        return new Point(5, 6);
     }
+
+    //internal bool TryGetTileIndex(Vector3 worldLocation, out Point tileIndex)
+    //{
+    //    // TODO: improve this conversion
+    //    var location = worldLocation - Corner;
+
+    //    tileIndex = new Point((int)location.X, (int)location.Y);
+
+    //    return (tileIndex.X >= 0 && tileIndex.Y >= 0 && tileIndex.X < Width && tileIndex.Y < Height);
+    //}
 }
