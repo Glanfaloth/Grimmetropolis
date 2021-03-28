@@ -41,6 +41,7 @@ public abstract class TDCollider : TDComponent
             if (intersection > 0f)
             {
                 collisionCylinderCylinderEvent?.Invoke(cylinder1, cylinder2, intersection);
+                cylinder2.collisionCylinderCylinderEvent?.Invoke(cylinder1, cylinder2, intersection);
 
                 if (cylinder1.IsTrigger || cylinder2.IsTrigger)
                 {
@@ -72,6 +73,7 @@ public abstract class TDCollider : TDComponent
             if (intersection > 0f)
             {
                 collisionCylinderCuboidEvent?.Invoke(cylinder, cuboid, closest, intersection);
+                cuboid.collisionCylinderCuboidEvent?.Invoke(cylinder, cuboid, closest, intersection);
 
                 if (cylinder.IsTrigger || cuboid.IsTrigger)
                 {

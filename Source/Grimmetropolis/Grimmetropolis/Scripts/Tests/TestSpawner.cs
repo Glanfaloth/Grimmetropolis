@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class TestSpawner : TDComponent
 {
-    private float _interval;
-    private float _spawnTimer;
-    private float _deleteTimer;
+    private float _interval = .5f;
+    private float _spawnTimer = 0f;
+    private float _deleteTimer = 0f;
 
     private List<Enemy> enemies = new List<Enemy>();
 
@@ -14,9 +14,8 @@ public class TestSpawner : TDComponent
     {
         base.Initialize();
 
-        _interval = 4f;
         _spawnTimer = _interval;
-        _deleteTimer = 5f * _interval;
+        _deleteTimer = 100f * _interval;
     }
 
     public override void Update(GameTime gameTime)
@@ -29,8 +28,11 @@ public class TestSpawner : TDComponent
         if (_spawnTimer < 0f)
         {
             _spawnTimer += _interval;
-            TDObject enemyObject = PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-8f, 0f, 0f), Quaternion.Identity);
-            enemies.Add(enemyObject.GetComponent<Enemy>());
+            if (enemies.Count < 100)
+            {
+                TDObject enemyObject = PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-8f, 0f, 0f), Quaternion.Identity);
+                enemies.Add(enemyObject.GetComponent<Enemy>());
+            }
         }
 
         if (_deleteTimer < 0f)

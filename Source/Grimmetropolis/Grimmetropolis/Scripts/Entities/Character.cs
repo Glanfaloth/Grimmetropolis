@@ -22,12 +22,12 @@ public abstract class Character : TDComponent
 
     public TDCylinderCollider InteractionCollider;
 
-    private float intersectionEnemy = 0f;
-    private float intersectionBuilding = 0f;
-    private float intersectionResource = 0f;
-    private Enemy closestEnemy = null;
-    private Building closestBuilding = null;
-    private Resource closestResource = null;
+    private float _intersectionEnemy = 0f;
+    private float _intersectionBuilding = 0f;
+    private float _intersectionResource = 0f;
+    private Enemy _closestEnemy = null;
+    private Building _closestBuilding = null;
+    private Resource _closestResource = null;
 
     public override void Initialize()
     {
@@ -43,12 +43,20 @@ public abstract class Character : TDComponent
     {
         base.Update(gameTime);
 
-        intersectionEnemy = 0f;
-        intersectionBuilding = 0f;
-        intersectionResource = 0f;
-        closestEnemy = null;
-        closestBuilding = null;
-        closestResource = null;
+        _intersectionEnemy = 0f;
+        _intersectionBuilding = 0f;
+        _intersectionResource = 0f;
+        _closestEnemy = null;
+        _closestBuilding = null;
+        _closestResource = null;
+    }
+
+    public override void Destroy()
+    {
+        InteractionCollider.collisionCylinderCylinderEvent -= GetClosestCylinder;
+        InteractionCollider.collisionCylinderCuboidEvent -= GetClosestCuboid;
+
+        base.Destroy();
     }
 
     protected void Move(Vector2 direction, GameTime gameTime)
@@ -69,17 +77,17 @@ public abstract class Character : TDComponent
 
     protected void Interact()
     {
-        if (closestEnemy != null)
+        if (_closestEnemy != null)
         {
-            closestEnemy.Health -= 1f;
+            _closestEnemy.Health -= 1f;
         }
-        else if (closestBuilding != null)
+        else if (_closestBuilding != null)
         {
-            closestBuilding.Health -= 1f;
+            _closestBuilding.Health -= 1f;
         }
-        else if (closestResource != null)
+        else if (_closestResource != null)
         {
-            closestResource.GetResources();
+            _closestResource.GetResources();
         }
     }
 
@@ -101,31 +109,32 @@ public abstract class Character : TDComponent
         Enemy enemy = oppositeCollider.TDObject.GetComponent<Enemy>();
         if (enemy != null)
         {
-            if (intersectionEnemy < intersection)
+            if (_intersectionEnemy < intersection)
             {
-                intersectionEnemy = intersection;
-                closestEnemy = enemy;
+                _intersectionEnemy = intersection;
+                _closestEnemy = enemy;
             }            
         }
     }
+
     private void GetClosestCuboid(TDCylinderCollider cylinder, TDCuboidCollider cuboid, Vector2 closest, float intersection)
     {
         Building building = cuboid.TDObject.GetComponent<Building>();
         if (building != null)
         {
-            if (intersectionBuilding < intersection)
+            if (_intersectionBuilding < intersection)
             {
-                intersectionBuilding = intersection;
-                closestBuilding = building;
+                _intersectionBuilding = intersection;
+                _closestBuilding = building;
             }
         }
         Resource resource = cuboid.TDObject.GetComponent<Resource>();
         if (resource != null)
         {
-            if (intersectionResource < intersection)
+            if (_intersectionResource < intersection)
             {
-                intersectionResource = intersection;
-                closestResource = resource;
+                _intersectionResource = intersection;
+                _closestResource = resource;
             }
         }
     }

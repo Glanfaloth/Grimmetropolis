@@ -153,11 +153,19 @@ public static class PrefabFactory
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
-                    prefab.AddComponent<Outpost>();
+                    Outpost outpost = prefab.AddComponent<Outpost>();
                     mesh.Model = TDContentManager.LoadModel("BuildingOutpost");
                     mesh.Texture = TDContentManager.LoadTexture("BuildingOutpostTexture");
                     collider.Size = new Vector3(1f, 1f, 2f);
                     collider.Offset = Vector3.Backward;
+
+                    TDObject shootingObject = CreatePrefab(PrefabType.Empty, prefab.Transform);
+                    TDCylinderCollider shootingRange = shootingObject.AddComponent<TDCylinderCollider>();
+                    shootingRange.IsTrigger = true;
+                    shootingRange.Radius = 3f;
+                    shootingRange.Height = 1f;
+                    shootingRange.Offset = Vector3.Zero;
+                    outpost.ShootingRange = shootingRange;
                     break;
                 }
 
@@ -192,7 +200,7 @@ public static class PrefabFactory
         return prefab;
     }
 
-    public static TDObject CreatePrefab(PrefabType type, bool updateFirst = false)
+    public static TDObject CreatePrefab(PrefabType type)
     {
         return CreatePrefab(type, Vector3.Zero, Quaternion.Identity, Vector3.One, null);
     }
