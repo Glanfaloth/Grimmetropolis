@@ -50,6 +50,10 @@ public class GameManager : TDComponent
         // Buildings
         TDObject buildingList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         BuildingTransform = buildingList.Transform;
+
+        TDObject castleObject = PrefabFactory.CreatePrefab(PrefabType.Castle, BuildingTransform);
+        Castle castle = castleObject.GetComponent<Castle>();
+        castle.Position = new Point(3, 8);
     }
 
 }

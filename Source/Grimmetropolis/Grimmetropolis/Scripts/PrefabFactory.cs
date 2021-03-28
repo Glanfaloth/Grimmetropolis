@@ -14,6 +14,7 @@ public enum PrefabType
     MapTileGround,
     MapTileWater,
     MapTileStone,
+    Castle,
     Outpost
 }
 
@@ -68,9 +69,9 @@ public static class PrefabFactory
                     collider.Offset = .5f * Vector3.Backward;
 
                     TDObject interactionObject = CreatePrefab(PrefabType.Empty, 1f * Vector3.Right, Quaternion.Identity, prefab.Transform);
-                    TDMesh meshCollider = interactionObject.AddComponent<TDMesh>();
-                    meshCollider.Model = TDContentManager.LoadModel("DefaultCylinder");
-                    meshCollider.Texture = TDContentManager.LoadTexture("DefaultTexture");
+                    // TDMesh meshCollider = interactionObject.AddComponent<TDMesh>();
+                    // meshCollider.Model = TDContentManager.LoadModel("DefaultCylinder");
+                    // meshCollider.Texture = TDContentManager.LoadTexture("DefaultTexture");
                     TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
                     interactionCollider.IsTrigger = true;
                     interactionCollider.Radius = .25f;
@@ -125,6 +126,7 @@ public static class PrefabFactory
                     collider.Size = new Vector3(1f, 1f, 2f);
                     collider.Offset = Vector3.Zero;
                     mapTile.Type = MapTileType.Water;
+                    mapTile.IsPassable = false;
                     break;
                 }
 
@@ -142,6 +144,18 @@ public static class PrefabFactory
                 }
 
             // Buildings
+            case PrefabType.Castle:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
+                    prefab.AddComponent<Castle>();
+                    mesh.Model = TDContentManager.LoadModel("BuildingCastle");
+                    mesh.Texture = TDContentManager.LoadTexture("BuildingCastleTexture");
+                    collider.Size = new Vector3(3f, 3f, 2f);
+                    collider.Offset = Vector3.Backward;
+                    break;
+                }
+
             case PrefabType.Outpost:
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();

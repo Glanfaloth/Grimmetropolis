@@ -17,6 +17,8 @@ public class MapTile : TDComponent
 
     public Building Building;
 
+    public bool IsPassable = true;
+
     /*public MapTile(MapTileType type, Vector2 position)
     {
         Type = type;
@@ -27,16 +29,11 @@ public class MapTile : TDComponent
     {
         // TODO: how do we check for buildings?
 
-        switch (Type)
+        if (Building != null)
         {
-            case MapTileType.Ground:
-                return true;
-            case MapTileType.Water:
-                return false;
-            case MapTileType.Stone:
-                return true;
-            default:
-                throw new NotSupportedException();
+            return Building.IsPassable;
         }
+
+        return IsPassable;
     }
 }

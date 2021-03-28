@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using System.Diagnostics;
+
 public delegate void CollisionCylinderCylinderEvent(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2, float intersection);
 public delegate void CollisionCylidnerCuboidEvent(TDCylinderCollider cylinder, TDCuboidCollider cuboid, Vector2 closest, float intersection);
 
@@ -47,7 +49,10 @@ public abstract class TDCollider : TDComponent
                 }
                 else
                 {
-                    Vector3 direction = new Vector3(.5f * intersection * Vector2.Normalize(cylinder1.CenterXY - cylinder2.CenterXY), 0f);
+                    Vector2 collidingDirection = Vector2.Normalize(cylinder1.CenterXY - cylinder2.CenterXY);
+                    if (float.IsNaN(collidingDirection.X)) collidingDirection = new Vector2(1f, 0f);
+
+                    Vector3 direction = new Vector3(.5f * intersection * collidingDirection, 0f);
 
                     cylinder1.TDObject.Transform.LocalPosition += direction;
                     cylinder2.TDObject.Transform.LocalPosition -= direction;
@@ -75,8 +80,10 @@ public abstract class TDCollider : TDComponent
                 }
                 else
                 {
-                    Vector3 direction = new Vector3(intersection * Vector2.Normalize(cylinder.CenterXY - closest), 0f);
+                    Vector2 collidingDirection = Vector2.Normalize(cylinder.CenterXY - closest);
+                    if (float.IsNaN(collidingDirection.X)) collidingDirection = new Vector2(1f, 0f);
 
+                    Vector3 direction = new Vector3(intersection * collidingDirection, 0f);
                     cylinder.TDObject.Transform.LocalPosition += direction;
                 }
             }

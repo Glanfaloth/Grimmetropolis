@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using System.Diagnostics;
-
 public class TDCuboidCollider : TDCollider
 {
     public Vector3 Size = Vector3.One;

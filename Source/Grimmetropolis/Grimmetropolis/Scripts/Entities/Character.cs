@@ -69,15 +69,15 @@ public abstract class Character : TDComponent
     protected void Build()
     {
         MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        if (mapTile.Building == null)
+        if (mapTile.Type == MapTileType.Ground && mapTile.Building == null)
         {
             TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.Outpost, GameManager.Instance.BuildingTransform);
             Building building = buildingObject.GetComponent<Building>();
             building.Position = mapTile.Position;
-            building.PlaceBuilding();
         }
     }
 
+    // TODO: adapt this for player and enemy
     private void GetClosestEnemy(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2, float intersection)
     {
         TDCylinderCollider oppositeCollider = InteractionCollider == cylinder2 ? cylinder1 : cylinder2;

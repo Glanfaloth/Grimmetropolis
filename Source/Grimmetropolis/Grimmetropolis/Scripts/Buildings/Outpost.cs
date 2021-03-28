@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-public class Castle : Building
+public class Outpost : Building
 {
     public override void Initialize()
     {

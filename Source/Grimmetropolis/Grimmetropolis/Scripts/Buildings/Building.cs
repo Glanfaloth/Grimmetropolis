@@ -20,17 +20,20 @@ public class Building : TDComponent
         set
         {
             _position = value;
-            SetTransform();
+            // SetTransform();
         }
     }
 
     public Point Size = new Point(1, 1);
+
+    public bool IsPassable = false;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SetTransform();
+        PlaceBuilding();
 
         GameManager.Instance.Buildings.Add(this);
     }
@@ -45,10 +48,11 @@ public class Building : TDComponent
 
     private void SetTransform()
     {
-        TDObject.Transform.Position = GameManager.Instance.Map.MapTiles[Position.X, Position.Y].TDObject.Transform.Position;
+        Vector3 position = GameManager.Instance.Map.MapTiles[Position.X, Position.Y].TDObject.Transform.Position + new Vector3(Size.X / 2, Size.Y / 2, 0f);
+        TDObject.Transform.Position = position;
     }
 
-    public void PlaceBuilding()
+    private void PlaceBuilding()
     {
         for (int x = Position.X; x < Position.X + Size.X; x++)
         {
