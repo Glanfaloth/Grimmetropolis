@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public class Enemy : Character
 {
@@ -26,6 +27,9 @@ public class Enemy : Character
 
         switch (nextMove.MovementType)
         {
+            case EnemyMove.Type.None:
+                Debug.WriteLine("ERROR: no valid move found for enemy");
+                break;
             case EnemyMove.Type.StealArtifact:
                 // TODO: implement win condition
                 break;

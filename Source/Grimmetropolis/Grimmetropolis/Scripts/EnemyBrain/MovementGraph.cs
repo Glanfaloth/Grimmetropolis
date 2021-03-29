@@ -50,7 +50,7 @@ public class MovementGraph
     {
         // TODO: what to do when no move is set
         // TODO: sanitize input
-        return _nextMoves[_locations[tile.Position.X, tile.Position.Y].Index];
+        return _nextMoves[_locations[tile.Position.X, tile.Position.Y].Index] ?? EnemyMove.NONE;
     }
 
     internal void ComputeShortestPathToMapTile(Point start)
