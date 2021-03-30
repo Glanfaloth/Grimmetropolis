@@ -133,20 +133,29 @@ public class MovementGraph
                     // TODO: those might not work in all case, for example this one:
                     // 1, 0
                     // 0, 1
-                    AddEdge(x - 1, y - 1, to, tile, EnemyMove.Type.Run, SQRT2);
-                    AddEdge(x - 1, y + 1, to, tile, EnemyMove.Type.Run, SQRT2);
-                    AddEdge(x + 1, y - 1, to, tile, EnemyMove.Type.Run, SQRT2);
-                    AddEdge(x + 1, y + 1, to, tile, EnemyMove.Type.Run, SQRT2);
+                    bool topFree = IsTilePassable(x, y - 1);
+                    bool botFree = IsTilePassable(x, y + 1);
+                    bool leftFree = IsTilePassable(x - 1, y);
+                    bool rightFree = IsTilePassable(x + 1, y);
+                    if(leftFree && topFree) AddEdge(x - 1, y - 1, to, tile, EnemyMove.Type.Run, SQRT2);
+                    if(leftFree && botFree) AddEdge(x - 1, y + 1, to, tile, EnemyMove.Type.Run, SQRT2);
+                    if(rightFree && topFree) AddEdge(x + 1, y - 1, to, tile, EnemyMove.Type.Run, SQRT2);
+                    if(rightFree && botFree) AddEdge(x + 1, y + 1, to, tile, EnemyMove.Type.Run, SQRT2);
                 }
                 // TODO: add other edge types
             }
         }
     }
 
+    private bool IsTilePassable(int x, int y)
+    {
+        return _map.IsInBounds(x, y) && _map.MapTiles[x, y].CanEnemyMoveThrough();
+    }
+
     private void AddEdge(int xFrom, int yFrom, Location to, MapTile tile, EnemyMove.Type movementType, float cost)
     {
         Location from = _outsideTheMap;
-        if (xFrom >= 0 && yFrom >= 0 && xFrom < _map.Width && yFrom < _map.Height)
+        if (_map.IsInBounds(xFrom, yFrom))
         {
             from = _locations[xFrom, yFrom];
         }

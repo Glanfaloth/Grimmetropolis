@@ -27,8 +27,6 @@ public class MapTile : TDComponent
 
     public bool CanEnemyMoveThrough()
     {
-        // TODO: how do we check for buildings?
-
         if (Building != null)
         {
             return Building.IsPassable;
