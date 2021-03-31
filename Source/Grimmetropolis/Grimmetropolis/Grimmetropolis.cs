@@ -21,6 +21,7 @@ public class Grimmetropolis : Game
         base.Initialize();
         _graphics.PreferredBackBufferWidth = 1280;
         _graphics.PreferredBackBufferHeight = 720;
+        // _graphics.PreferMultiSampling = true;
         _graphics.ApplyChanges();
 
         _targetWindow = new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
