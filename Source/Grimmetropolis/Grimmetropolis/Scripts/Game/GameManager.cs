@@ -7,19 +7,16 @@ public class GameManager : TDComponent
     public static GameManager Instance;
 
     public Map Map;
+    public ResourcePile ResourcePool;
+
     public EnemyController EnemyController;
     public List<Player> Players = new List<Player>();
     public List<Enemy> Enemies = new List<Enemy>();
-    public List<Building> Buildings = new List<Building>();
-    public List<Resource> Resources = new List<Resource>();
+    public List<Structure> Structures = new List<Structure>();
 
     public TDTransform PlayerTransform;
     public TDTransform EnemyTransform;
-    public TDTransform BuildingTransform;
-    public TDTransform ResourceTransform;
-
-    public float WoodResource = 0f;
-    public float StoneResource = 0f;
+    public TDTransform StructureTransform;
 
     public override void Initialize()
     {
@@ -30,6 +27,9 @@ public class GameManager : TDComponent
         // Map
         TDObject mapObject = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         Map = mapObject.AddComponent<Map>();
+
+        // ResourcePool
+        ResourcePool = new ResourcePile();
 
         // EnemyBrain
         TDObject enemyAI = PrefabFactory.CreatePrefab(PrefabType.Empty);
@@ -53,33 +53,28 @@ public class GameManager : TDComponent
         PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(3f, 6f, 0f) + offset, Quaternion.Identity, enemyList.Transform);
         PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-2f, 1f, 0f) + offset, Quaternion.Identity, enemyList.Transform);
 
-        // Buildings
-        TDObject buildingList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
-        BuildingTransform = buildingList.Transform;
+        // Structures
+        TDObject structureList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
+        StructureTransform = structureList.Transform;
 
-        TDObject castleObject = PrefabFactory.CreatePrefab(PrefabType.Castle, BuildingTransform);
+        TDObject castleObject = PrefabFactory.CreatePrefab(PrefabType.Castle, StructureTransform);
         Castle castle = castleObject.GetComponent<Castle>();
         castle.Position = new Point(3, 8);
 
-        // Resources
-        TDObject resourceList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
-        ResourceTransform = resourceList.Transform;
-
-        TDObject resourceWoodObject0 = PrefabFactory.CreatePrefab(PrefabType.Wood, ResourceTransform);
-        Resource resourceWood0 = resourceWoodObject0.GetComponent<Resource>();
+        TDObject resourceWoodObject0 = PrefabFactory.CreatePrefab(PrefabType.Wood, StructureTransform);
+        ResourceDeposit resourceWood0 = resourceWoodObject0.GetComponent<ResourceDeposit>();
         resourceWood0.Position = new Point(6, 4);
-        TDObject resourceWoodObject1 = PrefabFactory.CreatePrefab(PrefabType.Wood, ResourceTransform);
-        Resource resourceWood1 = resourceWoodObject1.GetComponent<Resource>();
+        TDObject resourceWoodObject1 = PrefabFactory.CreatePrefab(PrefabType.Wood, StructureTransform);
+        ResourceDeposit resourceWood1 = resourceWoodObject1.GetComponent<ResourceDeposit>();
         resourceWood1.Position = new Point(7, 4);
-        TDObject resourceWoodObject2 = PrefabFactory.CreatePrefab(PrefabType.Wood, ResourceTransform);
-        Resource resourceWood2 = resourceWoodObject2.GetComponent<Resource>();
+        TDObject resourceWoodObject2 = PrefabFactory.CreatePrefab(PrefabType.Wood, StructureTransform);
+        ResourceDeposit resourceWood2 = resourceWoodObject2.GetComponent<ResourceDeposit>();
         resourceWood2.Position = new Point(6, 5);
-        TDObject resourceWoodObject3 = PrefabFactory.CreatePrefab(PrefabType.Wood, ResourceTransform);
-        Resource resourceWood3 = resourceWoodObject3.GetComponent<Resource>();
+        TDObject resourceWoodObject3 = PrefabFactory.CreatePrefab(PrefabType.Wood, StructureTransform);
+        ResourceDeposit resourceWood3 = resourceWoodObject3.GetComponent<ResourceDeposit>();
         resourceWood3.Position = new Point(7, 5);
-
-        TDObject resourceStoneObject = PrefabFactory.CreatePrefab(PrefabType.Stone, ResourceTransform);
-        Resource resourceStone = resourceStoneObject.GetComponent<Resource>();
+        TDObject resourceStoneObject = PrefabFactory.CreatePrefab(PrefabType.Stone, StructureTransform);
+        ResourceDeposit resourceStone = resourceStoneObject.GetComponent<ResourceDeposit>();
         resourceStone.Position = new Point(7, 10);
     }
 

@@ -27,7 +27,7 @@ public abstract class Character : TDComponent
     private float _intersectionResource = 0f;
     private Enemy _closestEnemy = null;
     private Building _closestBuilding = null;
-    private Resource _closestResource = null;
+    private ResourceDeposit _closestResource = null;
 
     public override void Initialize()
     {
@@ -94,9 +94,9 @@ public abstract class Character : TDComponent
     protected void Build()
     {
         MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        if (mapTile.Type == MapTileType.Ground && mapTile.Building == null && mapTile.Resource == null)
+        if (mapTile.Type == MapTileType.Ground && mapTile.Structure == null)
         {
-            TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.Outpost, GameManager.Instance.BuildingTransform);
+            TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.Outpost, GameManager.Instance.StructureTransform);
             Building building = buildingObject.GetComponent<Building>();
             building.Position = mapTile.Position;
         }
@@ -128,7 +128,7 @@ public abstract class Character : TDComponent
                 _closestBuilding = building;
             }
         }
-        Resource resource = cuboid.TDObject.GetComponent<Resource>();
+        ResourceDeposit resource = cuboid.TDObject.GetComponent<ResourceDeposit>();
         if (resource != null)
         {
             if (_intersectionResource < intersection)

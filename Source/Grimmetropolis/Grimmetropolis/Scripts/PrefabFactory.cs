@@ -174,12 +174,12 @@ public static class PrefabFactory
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
-                    Resource resource = prefab.AddComponent<Resource>();
+                    ResourceDeposit resource = prefab.AddComponent<ResourceDeposit>();
                     mesh.Model = TDContentManager.LoadModel("ResourceWood");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     collider.Size = Vector3.One;
                     collider.Offset = .5f * Vector3.Backward;
-                    resource.Type = ResourceType.Wood;
+                    resource.Type = ResourceDepositType.Wood;
                     break;
                 }
 
@@ -187,12 +187,12 @@ public static class PrefabFactory
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
-                    Resource resource = prefab.AddComponent<Resource>();
+                    ResourceDeposit resource = prefab.AddComponent<ResourceDeposit>();
                     mesh.Model = TDContentManager.LoadModel("ResourceStone");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     collider.Size = Vector3.One;
                     collider.Offset = .5f * Vector3.Backward;
-                    resource.Type = ResourceType.Stone;
+                    resource.Type = ResourceDepositType.Stone;
                     break;
                 }
         }

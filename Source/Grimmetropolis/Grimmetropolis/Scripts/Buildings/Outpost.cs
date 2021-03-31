@@ -12,8 +12,7 @@ public class Outpost : Building
 
     public override void Initialize()
     {
-        WoodCost = 1f;
-        StoneCost = 1f;
+        ResourceCost = new ResourcePile(1f, 1f);
 
         ShootingRange.collisionCylinderCylinderEvent += GetClosestCylinder;
 

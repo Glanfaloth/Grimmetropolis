@@ -4,10 +4,10 @@ using System;
 public class Map : TDComponent
 {
 
+    public MapTile[,] MapTiles { get; private set; }
     public int Width { get; private set; }
     public int Height { get; private set; }
 
-    public MapTile[,] MapTiles { get; private set; }
 
     private int[,] _loadedMap;
 
@@ -74,8 +74,10 @@ public class Map : TDComponent
         //    }
         //}
         //height = lines.Count;
+
         Width = _loadedMap.GetLength(0);
         Height = _loadedMap.GetLength(1);
+
         MapTiles = new MapTile[Width, Height];
 
         Corner = new Vector3(-.5f * Width, -.5f * Height, 0);
@@ -92,6 +94,7 @@ public class Map : TDComponent
                     MapTileType.Water => PrefabFactory.CreatePrefab(PrefabType.MapTileWater, position, Quaternion.Identity, TDObject.Transform),
                     _ => PrefabFactory.CreatePrefab(PrefabType.MapTileGround, position, Quaternion.Identity, TDObject.Transform)
                 };
+
                 MapTile mapTile = mapTileObject.GetComponent<MapTile>();
                 mapTile.Position = new Point(x, y);
                 MapTiles[x, y] = mapTile;
@@ -103,6 +106,7 @@ public class Map : TDComponent
     {
         int x = Math.Clamp((int)(position.X - TDObject.Transform.Position.X - Corner.X), 0, Width - 1);
         int y = Math.Clamp((int)(position.Y - TDObject.Transform.Position.Y - Corner.Y), 0, Height - 1);
+
         return MapTiles[x, y];
     }
     

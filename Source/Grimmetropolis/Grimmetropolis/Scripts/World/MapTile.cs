@@ -10,31 +10,18 @@ public enum MapTileType
 
 public class MapTile : TDComponent
 {
+    public Point Position = Point.Zero;
     public MapTileType Type = MapTileType.Ground;
-
-    public Point Position;
-
-    public Resource Resource;
-    public Building Building;
 
     public bool IsPassable = true;
 
-    /*public MapTile(MapTileType type, Vector2 position)
-    {
-        Type = type;
-        Position = position;
-    }*/
+    public Structure Structure = null;
 
     public bool CanEnemyMoveThrough()
     {
-        if (Building != null)
+        if (Structure != null)
         {
-            return Building.IsPassable;
-        }
-
-        if (Resource != null)
-        {
-            return Resource.IsPassable;
+            return Structure.IsPassable;
         }
 
         return IsPassable;
