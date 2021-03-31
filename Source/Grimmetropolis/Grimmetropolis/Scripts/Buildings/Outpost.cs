@@ -2,6 +2,8 @@
 
 public class Outpost : Building
 {
+    public static new ResourcePile ResourceCost = new ResourcePile(1f, 1f);
+
     public TDCylinderCollider ShootingRange = null;
 
     private float _intersectionEnemy = 0f;

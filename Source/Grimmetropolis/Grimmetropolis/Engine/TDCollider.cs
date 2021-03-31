@@ -5,7 +5,6 @@ public delegate void CollisionEvent(TDCollider collider1, TDCollider collider2, 
 public abstract class TDCollider : TDComponent
 {
     public bool IsTrigger = false;
-
     public CollisionEvent collisionEvent;
 
     public override void Initialize()

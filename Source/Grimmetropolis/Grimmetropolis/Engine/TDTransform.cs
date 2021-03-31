@@ -8,8 +8,7 @@ public class TDTransform : TDComponent
 
     public TDTransform Parent
     {
-        get { return _parent; }
-
+        get => _parent;
         set
         {
             _parent = value;
@@ -28,7 +27,7 @@ public class TDTransform : TDComponent
     private Vector3 _localPosition = Vector3.Zero;
     public Vector3 LocalPosition
     {
-        get { return _localPosition; }
+        get => _localPosition;
         set
         {
             _localPosition = value;
@@ -42,7 +41,7 @@ public class TDTransform : TDComponent
     private Quaternion _localRotation = Quaternion.Identity;
     public Quaternion LocalRotation
     {
-        get { return _localRotation; }
+        get => _localRotation;
         set
         {
             _localRotation = value;
@@ -56,7 +55,7 @@ public class TDTransform : TDComponent
     private Vector3 _localScale = Vector3.One;
     public Vector3 LocalScale
     {
-        get { return _localScale; }
+        get => _localScale;
         set
         {
             _localScale = value;
@@ -70,7 +69,7 @@ public class TDTransform : TDComponent
     private Vector3 _position;
     public Vector3 Position
     {
-        get { return _position; }
+        get => _position;
         set
         {
             _position = value;
@@ -84,7 +83,7 @@ public class TDTransform : TDComponent
     private Quaternion _rotation;
     public Quaternion Rotation
     {
-        get { return _rotation; }
+        get => _rotation;
         set
         {
             _rotation = value;
@@ -98,7 +97,7 @@ public class TDTransform : TDComponent
     private Vector3 _scale;
     public Vector3 Scale
     {
-        get { return _scale; }
+        get => _scale;
         set
         {
             _scale = value;

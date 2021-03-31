@@ -11,4 +11,9 @@ public class Castle : Building
 
         base.Initialize();
     }
+
+    public override void Destroy()
+    {
+        base.Destroy();
+    }
 }

@@ -2,6 +2,8 @@
 
 public class Building : Structure
 {
+    public static ResourcePile ResourceCost = new ResourcePile();
+
     private float _health = 3f;
     public float Health
     {
@@ -12,6 +14,4 @@ public class Building : Structure
             if (_health <= 0f) TDObject?.Destroy();
         }
     }
-
-    public ResourcePile ResourceCost = new ResourcePile();
 }

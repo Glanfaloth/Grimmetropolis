@@ -7,8 +7,6 @@ public class TDObject
     public TDTransform Transform;
 
     public List<TDComponent> Components = new List<TDComponent>();
-    /*private List<TDComponent> _components = new List<TDComponent>();
-    public IReadOnlyCollection<TDComponent> Components => _components.AsReadOnly();*/
 
     public TDObject(Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent)
     {

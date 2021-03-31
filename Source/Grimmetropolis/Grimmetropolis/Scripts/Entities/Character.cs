@@ -4,7 +4,11 @@ using System;
 
 public abstract class Character : TDComponent
 {
-    public float _health = 3f;
+    private float _lookingAngle = 0f;
+    private float _walkSpeed = 4f;
+    private float _rotateSpeed = 3f * MathHelper.Pi;
+
+    private float _health = 3f;
     public float Health
     {
         get => _health;
@@ -15,16 +19,11 @@ public abstract class Character : TDComponent
         }
     }
 
-    private float _lookingAngle = 0f;
-
-    private float _walkSpeed = 4f;
-    private float _rotateSpeed = 3f * MathHelper.Pi;
-
     public TDCylinderCollider InteractionCollider;
 
     private float _intersectionEnemy = 0f;
-    private float _intersectionStructure = 0f;
     private Enemy _closestEnemy = null;
+    private float _intersectionStructure = 0f;
     private Structure _closestStructure = null;
 
     public override void Initialize()

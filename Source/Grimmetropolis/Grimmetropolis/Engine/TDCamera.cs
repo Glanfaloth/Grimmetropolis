@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 public class TDCamera : TDComponent
-{ 
+{
     public Vector3 CameraTarget { get; private set; }
     public Vector3 CameraUpVector { get; private set; }
 
