@@ -14,8 +14,7 @@ public class TestMoveComponent : TDComponent
 
         _speedMovement = 4f;
         _collider = TDObject.GetComponent<TDCollider>();
-        _collider.collisionCylinderCylinderEvent += ReactToCylinderCollision;
-        _collider.collisionCylinderCuboidEvent += ReactToCuboidCollision;
+        _collider.collisionEvent += ReactToCollider;
     }
 
     public override void Update(GameTime gameTime)
@@ -37,13 +36,18 @@ public class TestMoveComponent : TDComponent
         TDObject.Transform.LocalPosition += movement;
     }
 
-    public void ReactToCylinderCollision(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2, float intersection)
+    private void ReactToCollider(TDCollider collider1, TDCollider collider2, float intersection)
     {
-        Debug.WriteLine("I hit a cylinder.");
-    }
+        TDCollider oppositeCollider = _collider == collider2 ? collider1 : collider2;
 
-    public void ReactToCuboidCollision(TDCylinderCollider cylinder, TDCuboidCollider cuboid, Vector2 closest, float intersection)
-    {
-        Debug.WriteLine("I hit a cube.");
+        switch (oppositeCollider)
+        {
+            case TDCylinderCollider cylinder:
+                Debug.WriteLine("I hit a cylinder.");
+                break;
+            case TDCuboidCollider cuboid:
+                Debug.WriteLine("I hit a cube.");
+                break;
+        }
     }
 }

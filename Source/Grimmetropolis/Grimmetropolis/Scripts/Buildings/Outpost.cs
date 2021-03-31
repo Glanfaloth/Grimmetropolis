@@ -14,7 +14,7 @@ public class Outpost : Building
     {
         ResourceCost = new ResourcePile(1f, 1f);
 
-        ShootingRange.collisionCylinderCylinderEvent += GetClosestCylinder;
+        ShootingRange.collisionEvent += GetClosestCollider;
 
         base.Initialize();
     }
@@ -37,14 +37,14 @@ public class Outpost : Building
 
     public override void Destroy()
     {
-        ShootingRange.collisionCylinderCylinderEvent -= GetClosestCylinder;
+        ShootingRange.collisionEvent -= GetClosestCollider;
 
         base.Destroy();
     }
 
-    private void GetClosestCylinder(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2, float intersection)
+    private void GetClosestCollider(TDCollider collider1, TDCollider collider2, float intersection)
     {
-        TDCylinderCollider oppositeCollider = ShootingRange == cylinder2 ? cylinder1 : cylinder2;
+        TDCollider oppositeCollider = ShootingRange == collider2 ? collider1 : collider2;
         Enemy enemy = oppositeCollider.TDObject.GetComponent<Enemy>();
         if (enemy != null)
         {

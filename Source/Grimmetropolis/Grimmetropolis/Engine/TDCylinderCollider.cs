@@ -12,25 +12,24 @@ public class TDCylinderCollider : TDCollider
     public float CenterZLow { get; private set; }
     public float CenterZHigh { get; private set; }
 
-    public override void UpdateCollision()
+    public override void UpdateColliderGeometry()
     {
-        base.UpdateCollision();
-
         Vector3 Center = TDObject.Transform.Position + Offset;
         CenterXY = new Vector2(Center.X, Center.Y);
         CenterZLow = Center.Z - .5f * TDObject.Transform.Scale.Z * Height;
         CenterZHigh = CenterZLow + TDObject.Transform.Scale.Z * Height;
     }
 
-    public override void Collide(TDCollider collider)
+    public override void UpdateCollision(TDCollider collider)
     {
-        if (collider is TDCuboidCollider cuboidCollider)
+        switch (collider)
         {
-            CollideCylinderCuboid(this, cuboidCollider);
-        }
-        else if (collider is TDCylinderCollider cylinderCollider)
-        {
-            CollideCylinderCylinder(this, cylinderCollider);
+            case TDCylinderCollider cylinder:
+                CollideCylinderCylinder(this, cylinder);
+                break;
+            case TDCuboidCollider cuboid:
+                CollideCylinderCuboid(this, cuboid);
+                break;
         }
     }
 }

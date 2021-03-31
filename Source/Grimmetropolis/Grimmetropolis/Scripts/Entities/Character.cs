@@ -23,18 +23,15 @@ public abstract class Character : TDComponent
     public TDCylinderCollider InteractionCollider;
 
     private float _intersectionEnemy = 0f;
-    private float _intersectionBuilding = 0f;
-    private float _intersectionResource = 0f;
+    private float _intersectionStructure = 0f;
     private Enemy _closestEnemy = null;
-    private Building _closestBuilding = null;
-    private ResourceDeposit _closestResource = null;
+    private Structure _closestStructure = null;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        InteractionCollider.collisionCylinderCylinderEvent += GetClosestCylinder;
-        InteractionCollider.collisionCylinderCuboidEvent += GetClosestCuboid;
+        InteractionCollider.collisionEvent += GetClosestCollider;
 
         TDObject.Transform.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Backward, _lookingAngle);
     }
@@ -44,17 +41,14 @@ public abstract class Character : TDComponent
         base.Update(gameTime);
 
         _intersectionEnemy = 0f;
-        _intersectionBuilding = 0f;
-        _intersectionResource = 0f;
+        _intersectionStructure = 0f;
         _closestEnemy = null;
-        _closestBuilding = null;
-        _closestResource = null;
+        _closestStructure = null;
     }
 
     public override void Destroy()
     {
-        InteractionCollider.collisionCylinderCylinderEvent -= GetClosestCylinder;
-        InteractionCollider.collisionCylinderCuboidEvent -= GetClosestCuboid;
+        InteractionCollider.collisionEvent -= GetClosestCollider;
 
         base.Destroy();
     }
@@ -81,13 +75,17 @@ public abstract class Character : TDComponent
         {
             _closestEnemy.Health -= 1f;
         }
-        else if (_closestBuilding != null)
+        else if (_closestStructure != null)
         {
-            _closestBuilding.Health -= 1f;
-        }
-        else if (_closestResource != null)
-        {
-            _closestResource.GetResources();
+            switch (_closestStructure)
+            {
+                case Building building:
+                    building.Health -= 1f;
+                    break;
+                case ResourceDeposit resourceDeposit:
+                    resourceDeposit.GetResources();
+                    break;
+            }
         }
     }
 
@@ -102,10 +100,9 @@ public abstract class Character : TDComponent
         }
     }
 
-    // TODO: adapt this for player and enemy
-    private void GetClosestCylinder(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2, float intersection)
+    private void GetClosestCollider(TDCollider collider1, TDCollider collider2, float intersection)
     {
-        TDCylinderCollider oppositeCollider = InteractionCollider == cylinder2 ? cylinder1 : cylinder2;
+        TDCollider oppositeCollider = InteractionCollider == collider2 ? collider1 : collider2;
         Enemy enemy = oppositeCollider.TDObject.GetComponent<Enemy>();
         if (enemy != null)
         {
@@ -113,28 +110,18 @@ public abstract class Character : TDComponent
             {
                 _intersectionEnemy = intersection;
                 _closestEnemy = enemy;
-            }            
-        }
-    }
-
-    private void GetClosestCuboid(TDCylinderCollider cylinder, TDCuboidCollider cuboid, Vector2 closest, float intersection)
-    {
-        Building building = cuboid.TDObject.GetComponent<Building>();
-        if (building != null)
-        {
-            if (_intersectionBuilding < intersection)
-            {
-                _intersectionBuilding = intersection;
-                _closestBuilding = building;
             }
         }
-        ResourceDeposit resource = cuboid.TDObject.GetComponent<ResourceDeposit>();
-        if (resource != null)
+        else
         {
-            if (_intersectionResource < intersection)
+            Structure structure = oppositeCollider.TDObject.GetComponent<Structure>();
+            if (structure != null)
             {
-                _intersectionResource = intersection;
-                _closestResource = resource;
+                if (_intersectionStructure < intersection)
+                {
+                    _intersectionStructure = intersection;
+                    _closestStructure = structure;
+                }
             }
         }
     }

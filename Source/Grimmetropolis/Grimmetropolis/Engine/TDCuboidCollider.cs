@@ -8,19 +8,19 @@ public class TDCuboidCollider : TDCollider
     public Vector3 CuboidCornerLow { get; private set; }
     public Vector3 CuboidCornerHigh { get; private set; }
 
-    public override void UpdateCollision()
+    public override void UpdateColliderGeometry()
     {
-        base.UpdateCollision();
-
         CuboidCornerLow = TDObject.Transform.Position - .5f * Vector3.Multiply(TDObject.Transform.Scale, Size) + Offset;
         CuboidCornerHigh = CuboidCornerLow + Vector3.Multiply(TDObject.Transform.Scale, Size);
     }
 
-    public override void Collide(TDCollider collider)
+    public override void UpdateCollision(TDCollider collider)
     {
-        if (collider is TDCylinderCollider cylinderCollider)
+        switch (collider)
         {
-            CollideCylinderCuboid(cylinderCollider, this);
+            case TDCylinderCollider cylinder:
+                CollideCylinderCuboid(cylinder, this);
+                break;
         }
     }
 }

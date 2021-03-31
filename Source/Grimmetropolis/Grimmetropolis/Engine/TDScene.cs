@@ -49,13 +49,13 @@ public class TDScene
         // Update collisions
         foreach (TDCollider colliderObject in ColliderObjects)
         {
-            colliderObject.UpdateCollision();
+            colliderObject.UpdateColliderGeometry();
         }
         for (int i = 0; i < ColliderObjects.Count; i++)
         {
             for (int j = i + 1; j < ColliderObjects.Count; j++)
             {
-                ColliderObjects[i].Collide(ColliderObjects[j]);
+                ColliderObjects[i].UpdateCollision(ColliderObjects[j]);
             }
         }
     }

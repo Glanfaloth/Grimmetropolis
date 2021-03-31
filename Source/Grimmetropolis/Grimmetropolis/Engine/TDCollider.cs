@@ -1,17 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 
-using System.Diagnostics;
-
-public delegate void CollisionCylinderCylinderEvent(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2, float intersection);
-public delegate void CollisionCylidnerCuboidEvent(TDCylinderCollider cylinder, TDCuboidCollider cuboid, Vector2 closest, float intersection);
+public delegate void CollisionEvent(TDCollider collider1, TDCollider collider2, float intersection);
 
 public abstract class TDCollider : TDComponent
 {
-    public bool IsColliding = false;
     public bool IsTrigger = false;
 
-    public CollisionCylinderCylinderEvent collisionCylinderCylinderEvent;
-    public CollisionCylidnerCuboidEvent collisionCylinderCuboidEvent;
+    public CollisionEvent collisionEvent;
 
     public override void Initialize()
     {
@@ -27,11 +22,9 @@ public abstract class TDCollider : TDComponent
         TDSceneManager.ActiveScene.ColliderObjects.Remove(this);
     }
 
-    public virtual void UpdateCollision()
-    {
-        IsColliding = false;
-    }
-    public abstract void Collide(TDCollider collider);
+    public abstract void UpdateColliderGeometry();
+
+    public abstract void UpdateCollision(TDCollider collider);
 
     protected void CollideCylinderCylinder(TDCylinderCollider cylinder1, TDCylinderCollider cylinder2)
     {
@@ -40,15 +33,10 @@ public abstract class TDCollider : TDComponent
             float intersection = cylinder1.Radius + cylinder2.Radius - Vector2.Distance(cylinder1.CenterXY, cylinder2.CenterXY);
             if (intersection > 0f)
             {
-                collisionCylinderCylinderEvent?.Invoke(cylinder1, cylinder2, intersection);
-                cylinder2.collisionCylinderCylinderEvent?.Invoke(cylinder1, cylinder2, intersection);
+                cylinder1.collisionEvent?.Invoke(cylinder1, cylinder2, intersection);
+                cylinder2.collisionEvent?.Invoke(cylinder1, cylinder2, intersection);
 
-                if (cylinder1.IsTrigger || cylinder2.IsTrigger)
-                {
-                    cylinder1.IsColliding = true;
-                    cylinder2.IsColliding = true;
-                }
-                else
+                if (!cylinder1.IsTrigger && !cylinder2.IsTrigger)
                 {
                     Vector2 collidingDirection = Vector2.Normalize(cylinder1.CenterXY - cylinder2.CenterXY);
                     if (float.IsNaN(collidingDirection.X)) collidingDirection = new Vector2(1f, 0f);
@@ -72,15 +60,10 @@ public abstract class TDCollider : TDComponent
             float intersection = cylinder.Radius - Vector2.Distance(closest, cylinder.CenterXY);
             if (intersection > 0f)
             {
-                collisionCylinderCuboidEvent?.Invoke(cylinder, cuboid, closest, intersection);
-                cuboid.collisionCylinderCuboidEvent?.Invoke(cylinder, cuboid, closest, intersection);
+                cylinder.collisionEvent?.Invoke(cylinder, cuboid, intersection);
+                cuboid.collisionEvent?.Invoke(cylinder, cuboid, intersection);
 
-                if (cylinder.IsTrigger || cuboid.IsTrigger)
-                {
-                    cylinder.IsColliding = true;
-                    cuboid.IsColliding = true;
-                }
-                else
+                if (!cylinder.IsTrigger && !cuboid.IsTrigger)
                 {
                     Vector2 collidingDirection = Vector2.Normalize(cylinder.CenterXY - closest);
                     if (float.IsNaN(collidingDirection.X)) collidingDirection = new Vector2(1f, 0f);
