@@ -9,6 +9,10 @@ public class Castle : Building
 
         Health = 9f;
 
+        // TODO: remove this work around
+        // this needs to be passable since the ai tries to go to the castle location, otherwise no path will be found
+        IsPassable = true;
+
         base.Initialize();
     }
 

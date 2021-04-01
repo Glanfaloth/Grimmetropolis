@@ -1,5 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 public class Map : TDComponent
 {
@@ -12,45 +16,64 @@ public class Map : TDComponent
     private int[,] _loadedMap;
 
     public Vector3 Corner { get; private set; }
-    public Vector3 Offcenter { get; private set; }
+    public Vector3 Offcenter { get; }
+    // TODO: change this to artifact location
+    public Point EnemyTarget { get; set; }
 
-    //public string mapPath = "Content/Maps/testmap.txt";
+    public Map()
+    {
+        Offcenter = new Vector3(.5f, .5f, 0f);
+    }
+
+    public List<MapDTO.EntityToSpawn> LoadFromFile(string fileName)
+    {
+        var result = new List<MapDTO.EntityToSpawn>();
+        string jsonString = File.ReadAllText(fileName);
+        JsonSerializerOptions options = new JsonSerializerOptions
+        {
+            Converters =
+            {
+                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+            }
+        };
+        MapDTO mapDTO = JsonSerializer.Deserialize<MapDTO>(jsonString, options);
+
+        Width = mapDTO.Map.Length;
+        Height = mapDTO.Map[0].Length;
+        Corner = new Vector3(-.5f * Width, -.5f * Height, 0);
+
+        _loadedMap = new int[Width, Height];
+
+        for (int x = 0; x < Width; x++)
+        {
+            if (mapDTO.Map[x].Length != Height)
+            {
+                throw new ArgumentException("Map isn't rectangular");
+            }
+
+            for (int y = 0; y < Height; y++)
+            {
+                MapDTO.LegendItem entry = mapDTO.Legend[mapDTO.Map[x][y].ToString()];
+                _loadedMap[x, y] = (int)entry.TileType;
+
+                if (entry.SpawnedEntity != MapDTO.EntityType.None)
+                {
+                    result.Add(new MapDTO.EntityToSpawn(new Point(x, y), entry.SpawnedEntity));
+                }
+            }
+        }
+
+        return result;
+    }
 
     public override void Initialize()
     {
         base.Initialize();
 
-        /*_loadedMap = new int [,]
-            { { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-              { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 } };*/
-
-        // pathing test map
-        _loadedMap = new int[,]
-            { { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 , 0 , 0 },
-              { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0 , 0 , 0 },
-              { 0, 1, 0, 0, 0, 1, 1, 0, 0, 0 , 0 , 0 },
-              { 0, 1, 0, 0, 1, 1, 1, 0, 0, 0 , 0 , 0 },
-              { 0, 1, 1, 1, 1, 0, 0, 1, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 , 0 , 0 },
-              { 0, 1, 1, 1, 0, 0, 0, 1, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 , 0 , 0 },
-              { 0, 0, 0, 1, 1, 0, 0, 1, 1, 0 , 0 , 0 },
-              { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 , 0 , 0 } };
-
-        //using (Stream fileStream = TitleContainer.OpenStream("Content/Maps/testmap.txt"))
-        //    LoadTiles(fileStream);
+        if (_loadedMap == null)
+        {
+            throw new ArgumentException("No map was loaded");
+        }
 
         LoadMap();
     }
@@ -58,30 +81,9 @@ public class Map : TDComponent
     public override void Update(GameTime gameTime) { }
 
     // load map tiles
-    public void LoadMap()
+    private void LoadMap()
     {
-        //List<string> lines = new List<string>();
-        //using (StreamReader reader = new StreamReader(fileStream))
-        //{
-        //    string line = reader.ReadLine();
-        //    width = line.Length;
-        //    while (line != null)
-        //    {
-        //        lines.Add(line);
-        //        if (line.Length != width)
-        //            throw new Exception(String.Format("The length of line {0} is different from all preceeding lines.", lines.Count));
-        //        line = reader.ReadLine();
-        //    }
-        //}
-        //height = lines.Count;
-
-        Width = _loadedMap.GetLength(0);
-        Height = _loadedMap.GetLength(1);
-
         MapTiles = new MapTile[Width, Height];
-
-        Corner = new Vector3(-.5f * Width, -.5f * Height, 0);
-        Offcenter = new Vector3(.5f, .5f, 0f);
 
         for (int x = 0; x < Width; x++)
         {
@@ -109,12 +111,7 @@ public class Map : TDComponent
 
         return MapTiles[x, y];
     }
-    
-    public Point GetEnemyTargetIndex()
-    {
-        // TODO: improve this to be artifact location
-        return new Point(5, 6);
-    }
+
     public bool IsInBounds(int x, int y)
     {
         return x >= 0 && y >= 0 && x < Width && y < Height;

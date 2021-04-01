@@ -1,0 +1,41 @@
+{
+  "Legend": {
+    "0": {
+      "TileType": "ground",
+      "SpawnedEntity": "none"
+    },
+    "1": {
+      "TileType": "water",
+      "SpawnedEntity": "none"
+    },
+
+    "W": {
+      "TileType": "ground",
+      "SpawnedEntity": "woodResource"
+    },
+    "S": {
+      "TileType": "ground",
+      "SpawnedEntity": "stoneResource"
+    },
+    "C": {
+      "TileType": "ground",
+      "SpawnedEntity": "Castle"
+    },
+    "E": {
+      "TileType": "ground",
+      "SpawnedEntity": "enemy"
+    }
+  },
+  "Map": [ 
+    "0000000110E0",
+    "000000110000",
+    "011001100000",
+    "01E01110C000",
+    "011110010000",
+    "000000010000",
+    "0111WW010000",
+    "0001WW0100S0",
+    "000110011000",
+    "00E01000000E" 
+  ]
+}

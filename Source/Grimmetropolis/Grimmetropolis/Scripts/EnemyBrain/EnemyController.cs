@@ -48,7 +48,7 @@ public class EnemyController : TDComponent
         base.Update(gameTime);
 
         _graph = MovementGraph.BuildGraphFromMap(Map);
-        Point start = Map.GetEnemyTargetIndex();
+        Point start = Map.EnemyTarget;
         _graph.ComputeShortestPathToMapTile(start);
     }
 }
