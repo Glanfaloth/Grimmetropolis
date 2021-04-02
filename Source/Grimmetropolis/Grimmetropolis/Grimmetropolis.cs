@@ -11,7 +11,6 @@ public class Grimmetropolis : Game
     {
         _graphics = new GraphicsDeviceManager(this);
         _graphics.GraphicsProfile = GraphicsProfile.HiDef;
-        _graphics.ApplyChanges();
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
@@ -19,8 +18,9 @@ public class Grimmetropolis : Game
     protected override void Initialize()
     {
         base.Initialize();
-        _graphics.PreferredBackBufferWidth = 1280;
-        _graphics.PreferredBackBufferHeight = 720;
+        _graphics.IsFullScreen = true;
+        _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+        _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
         _graphics.PreferMultiSampling = true;
         _graphics.ApplyChanges();
 
@@ -57,7 +57,7 @@ public class Grimmetropolis : Game
         TDSceneManager.ActiveScene.Draw();
 
         _spriteBatch.Begin(blendState: BlendState.Opaque);
-        // _spriteBatch.Draw(TDSceneManager.ActiveScene.ShadowRender, new Rectangle(0, 0, 200, 200), Color.White);
+        // _spriteBatch.Draw(TDSceneManager.ActiveScene.ShadowRender, new Rectangle(0, 0, 400, 400), Color.White);
         _spriteBatch.End();
 
         base.Draw(gameTime);

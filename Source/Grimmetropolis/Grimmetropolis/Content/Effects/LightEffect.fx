@@ -3,8 +3,8 @@
 	#define VS_SHADERMODEL vs_3_0
 	#define PS_SHADERMODEL ps_3_0
 #else
-	#define VS_SHADERMODEL vs_4_0_level_9_1
-	#define PS_SHADERMODEL ps_4_0_level_9_1
+	#define VS_SHADERMODEL vs_4_0
+	#define PS_SHADERMODEL ps_4_0
 #endif
 
 float4x4 World;
@@ -80,18 +80,17 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	float2 projectedShadowCoords = float2(.5, -.5) * positionFromLight.xy + .5;
 
 	float shadowFactor = 0;
-	float2 shiftedProjectedShadowCoords;
-	float depthFromShadow;
-	for (int x = -1; x <= 1; x++)
+	float depthFromShadow, x, y;
+
+	for (x = -1.5; x <= 1.5; x++)
 	{
-		for (int y = -1; y <= 1; y++)
+		for (y = -1.5; y <= 1.5; y++)
 		{
-			shiftedProjectedShadowCoords = projectedShadowCoords + float2(x, y) * InvertedShadowSize;
-			depthFromShadow = tex2D(ShadowSampler, shiftedProjectedShadowCoords).x;
+			depthFromShadow = tex2D(ShadowSampler, projectedShadowCoords + float2(x, y) * InvertedShadowSize).x;
 			shadowFactor += (positionFromLight.z > depthFromShadow);
 		}
 	}
-	shadowFactor /= 9;
+	shadowFactor /= 16;
 
 	float normalIntensity = (1 - shadowFactor) * saturate(dot(-input.LightDirection, input.Normal));
 

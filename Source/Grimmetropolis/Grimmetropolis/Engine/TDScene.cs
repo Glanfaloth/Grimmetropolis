@@ -19,6 +19,7 @@ public class TDScene
 
     public virtual void Initialize()
     {
+        // TODO: improve shader to reduce shadow render size
         ShadowRender = new RenderTarget2D(TDSceneManager.Graphics.GraphicsDevice, 4096, 4096, true, SurfaceFormat.Single, DepthFormat.Depth24);
         InvertedShadowSize = new Vector2(1f / ShadowRender.Width, 1f / ShadowRender.Height);
     }
