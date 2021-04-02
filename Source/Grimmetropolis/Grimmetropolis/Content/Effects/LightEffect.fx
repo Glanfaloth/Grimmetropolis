@@ -40,6 +40,7 @@ sampler ShadowSampler = sampler_state
 	AddressU = clamp;
 	AddressV = clamp;
 };
+float2 InvertedShadowSize;
 
 // Light effect
 struct VertexShaderInput
@@ -74,20 +75,25 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
-	float2 projectedShadowCoords;
-	projectedShadowCoords.x = .5 * input.PositionFromLight.x / input.PositionFromLight.w + .5;
-	projectedShadowCoords.y = -.5 * input.PositionFromLight.y / input.PositionFromLight.w + .5;
+	float3 positionFromLight = input.PositionFromLight.xyz / input.PositionFromLight.w;
+	positionFromLight.z -= 1e-3;
+	float2 projectedShadowCoords = float2(.5, -.5) * positionFromLight.xy + .5;
 
-	bool inShadow = false;
-	if ((saturate(projectedShadowCoords.x) == projectedShadowCoords.x) && (saturate(projectedShadowCoords.y) == projectedShadowCoords.y))
+	float shadowFactor = 0;
+	float2 shiftedProjectedShadowCoords;
+	float depthFromShadow;
+	for (int x = -1; x <= 1; x++)
 	{
-		float depthFromShadow = tex2D(ShadowSampler, projectedShadowCoords).x;
-		float depth = input.PositionFromLight.z / input.PositionFromLight.w;
-
-		inShadow = depth - 1e-3 > depthFromShadow;
+		for (int y = -1; y <= 1; y++)
+		{
+			shiftedProjectedShadowCoords = projectedShadowCoords + float2(x, y) * InvertedShadowSize;
+			depthFromShadow = tex2D(ShadowSampler, shiftedProjectedShadowCoords).x;
+			shadowFactor += (positionFromLight.z > depthFromShadow);
+		}
 	}
+	shadowFactor /= 9;
 
-	float normalIntensity = !inShadow * saturate(dot(-input.LightDirection, input.Normal));
+	float normalIntensity = (1 - shadowFactor) * saturate(dot(-input.LightDirection, input.Normal));
 
 	float4 ambient = AmbientIntensity * AmbientColor;
 	float4 diffuse = DiffuseIntensity * normalIntensity * DiffuseColor;

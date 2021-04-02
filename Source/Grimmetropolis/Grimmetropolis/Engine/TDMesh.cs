@@ -89,6 +89,7 @@ public class TDMesh : TDComponent
                 effect.Parameters["DiffuseColor"].SetValue(Vector3.One);
 
                 effect.Parameters["Shadow"].SetValue(TDSceneManager.ActiveScene.ShadowRender);
+                effect.Parameters["InvertedShadowSize"].SetValue(TDSceneManager.ActiveScene.InvertedShadowSize);
             }
 
             mesh.Draw();

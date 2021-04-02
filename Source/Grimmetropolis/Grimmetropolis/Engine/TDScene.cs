@@ -15,13 +15,12 @@ public class TDScene
     public List<TDCollider> ColliderObjects = new List<TDCollider>();
 
     public RenderTarget2D ShadowRender;
-    public RenderTarget2D ImageRender;
+    public Vector2 InvertedShadowSize;
 
     public virtual void Initialize()
     {
-        ShadowRender = new RenderTarget2D(TDSceneManager.Graphics.GraphicsDevice, 2048, 2048, true, SurfaceFormat.Single, DepthFormat.Depth24);
-        ImageRender = new RenderTarget2D(TDSceneManager.Graphics.GraphicsDevice, 2 * TDSceneManager.Graphics.GraphicsDevice.Viewport.Width,
-            2 * TDSceneManager.Graphics.GraphicsDevice.Viewport.Height, true, SurfaceFormat.Color, DepthFormat.Depth24);
+        ShadowRender = new RenderTarget2D(TDSceneManager.Graphics.GraphicsDevice, 4096, 4096, true, SurfaceFormat.Single, DepthFormat.Depth24);
+        InvertedShadowSize = new Vector2(1f / ShadowRender.Width, 1f / ShadowRender.Height);
     }
 
     public void Update(GameTime gameTime)
@@ -72,14 +71,13 @@ public class TDScene
         {
             meshObject.DrawShadow();
         }
+        TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(null);
 
         // Draw final render
-        TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(ImageRender);
         foreach (TDMesh meshObject in MeshObjects)
         {
             meshObject.Draw();
         }
 
-        TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(null);
     }
 }

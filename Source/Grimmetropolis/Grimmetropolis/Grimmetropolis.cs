@@ -7,11 +7,11 @@ public class Grimmetropolis : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    private Rectangle _targetWindow;
-
     public Grimmetropolis()
     {
         _graphics = new GraphicsDeviceManager(this);
+        _graphics.GraphicsProfile = GraphicsProfile.HiDef;
+        _graphics.ApplyChanges();
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
@@ -21,10 +21,8 @@ public class Grimmetropolis : Game
         base.Initialize();
         _graphics.PreferredBackBufferWidth = 1280;
         _graphics.PreferredBackBufferHeight = 720;
-        // _graphics.PreferMultiSampling = true;
+        _graphics.PreferMultiSampling = true;
         _graphics.ApplyChanges();
-
-        _targetWindow = new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
         Window.Title = "Grimmetropolis";
 
@@ -59,7 +57,6 @@ public class Grimmetropolis : Game
         TDSceneManager.ActiveScene.Draw();
 
         _spriteBatch.Begin(blendState: BlendState.Opaque);
-        _spriteBatch.Draw(TDSceneManager.ActiveScene.ImageRender, _targetWindow, Color.White);
         // _spriteBatch.Draw(TDSceneManager.ActiveScene.ShadowRender, new Rectangle(0, 0, 200, 200), Color.White);
         _spriteBatch.End();
 
