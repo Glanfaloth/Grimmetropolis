@@ -12,7 +12,7 @@ public class ResourceDeposit : Structure
 {
     public ResourceDepositType Type = ResourceDepositType.Wood;
 
-    public void GetResources()
+    public void HarvestResource()
     {
         switch (Type)
         {

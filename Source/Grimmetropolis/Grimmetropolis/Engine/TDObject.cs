@@ -58,7 +58,8 @@ public class TDObject
 
         Transform.Destroy();
 
-        TDSceneManager.ActiveScene.TDObjects.Remove(this);
+        if (TDSceneManager.ActiveScene.TDObjects.Contains(this)) TDSceneManager.ActiveScene.TDObjects.Remove(this);
+        else TDSceneManager.ActiveScene.CreatedObjects.Remove(this);
     }
 
     public T AddComponent<T>() where T : TDComponent, new()

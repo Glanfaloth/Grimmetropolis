@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -42,17 +43,57 @@ public class Enemy : Character
             default:
                 throw new NotSupportedException();
         }
+
+        base.Update(gameTime);
     }
+
     public override void Destroy()
     {
         base.Destroy();
 
         GameManager.Instance.Enemies.Remove(this);
     }
+    private void Interact()
+    {
+        float closestPlayerDistance = float.MaxValue;
+        float closestBuildingDistance = float.MaxValue;
+        Player closestPlayer = null;
+        Building closestBuilding = null;
+        foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
+        {
+            if (colliderEntry.Item1 is TDCylinderCollider && closestPlayerDistance > colliderEntry.Item2)
+            {
+                Player player = colliderEntry.Item1.TDObject?.GetComponent<Player>();
+                if (player != null)
+                {
+                    closestPlayerDistance = colliderEntry.Item2;
+                    closestPlayer = player;
+                }
+            }
+            else if (colliderEntry.Item1 is TDCuboidCollider && closestBuildingDistance > colliderEntry.Item2)
+            {
+                Building structure = colliderEntry.Item1.TDObject?.GetComponent<Building>();
+                if (structure != null)
+                {
+                    closestBuildingDistance = colliderEntry.Item2;
+                    closestBuilding = structure;
+                }
+            }
+        }
+
+        if (closestPlayer != null)
+        {
+            closestPlayer.Health -= 1f;
+        }
+        else if (closestBuilding != null)
+        {
+            closestBuilding.Health -= 1f;
+        }
+    }
 
     private void AttackTarget(AttackMove nextMove, GameTime gameTime)
     {
-        throw new NotImplementedException();
+        Interact();
     }
 
     private void MoveToTarget(RunMove runMove, GameTime gameTime)

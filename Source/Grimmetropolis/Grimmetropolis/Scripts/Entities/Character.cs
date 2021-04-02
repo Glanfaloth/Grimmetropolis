@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using System;
+using System.Collections.Generic;
 
 public abstract class Character : TDComponent
 {
@@ -20,11 +21,7 @@ public abstract class Character : TDComponent
     }
 
     public TDCylinderCollider InteractionCollider;
-
-    private float _intersectionEnemy = 0f;
-    private Enemy _closestEnemy = null;
-    private float _intersectionStructure = 0f;
-    private Structure _closestStructure = null;
+    protected List<Tuple<TDCollider, float>> _colliderList = new List<Tuple<TDCollider, float>> ();
 
     public override void Initialize()
     {
@@ -39,10 +36,7 @@ public abstract class Character : TDComponent
     {
         base.Update(gameTime);
 
-        _intersectionEnemy = 0f;
-        _intersectionStructure = 0f;
-        _closestEnemy = null;
-        _closestStructure = null;
+        _colliderList.Clear();
     }
 
     public override void Destroy()
@@ -68,26 +62,6 @@ public abstract class Character : TDComponent
         }
     }
 
-    protected void Interact()
-    {
-        if (_closestEnemy != null)
-        {
-            _closestEnemy.Health -= 1f;
-        }
-        else if (_closestStructure != null)
-        {
-            switch (_closestStructure)
-            {
-                case Building building:
-                    building.Health -= 1f;
-                    break;
-                case ResourceDeposit resourceDeposit:
-                    resourceDeposit.GetResources();
-                    break;
-            }
-        }
-    }
-
     protected void Build()
     {
         MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
@@ -102,26 +76,6 @@ public abstract class Character : TDComponent
     private void GetClosestCollider(TDCollider collider1, TDCollider collider2, float intersection)
     {
         TDCollider oppositeCollider = InteractionCollider == collider2 ? collider1 : collider2;
-        Enemy enemy = oppositeCollider.TDObject.GetComponent<Enemy>();
-        if (enemy != null)
-        {
-            if (_intersectionEnemy < intersection)
-            {
-                _intersectionEnemy = intersection;
-                _closestEnemy = enemy;
-            }
-        }
-        else
-        {
-            Structure structure = oppositeCollider.TDObject.GetComponent<Structure>();
-            if (structure != null)
-            {
-                if (_intersectionStructure < intersection)
-                {
-                    _intersectionStructure = intersection;
-                    _closestStructure = structure;
-                }
-            }
-        }
+        _colliderList.Add(new Tuple<TDCollider, float>(oppositeCollider, intersection));
     }
 }
