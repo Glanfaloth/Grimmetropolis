@@ -7,20 +7,6 @@ public abstract class TDCollider : TDComponent
     public bool IsTrigger = false;
     public CollisionEvent collisionEvent;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        TDSceneManager.ActiveScene.ColliderObjects.Add(this);
-    }
-
-    public override void Destroy()
-    {
-        base.Destroy();
-
-        TDSceneManager.ActiveScene.ColliderObjects.Remove(this);
-    }
-
     public abstract void UpdateColliderGeometry();
 
     public abstract void UpdateCollision(TDCollider collider);

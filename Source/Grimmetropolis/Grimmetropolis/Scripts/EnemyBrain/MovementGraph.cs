@@ -119,7 +119,7 @@ public class MovementGraph
             {
                 MapTile tile = _map.MapTiles[x, y];
 
-                if (tile.CanEnemyMoveThrough())
+                if (tile.CheckPassability())
                 {
                     Location to = _locations[x, y];
 
@@ -149,7 +149,7 @@ public class MovementGraph
 
     private bool IsTilePassable(int x, int y)
     {
-        return _map.IsInBounds(x, y) && _map.MapTiles[x, y].CanEnemyMoveThrough();
+        return _map.IsInBounds(x, y) && _map.MapTiles[x, y].CheckPassability();
     }
 
     private void AddEdge(int xFrom, int yFrom, Location to, MapTile tile, EnemyMove.Type movementType, float cost)

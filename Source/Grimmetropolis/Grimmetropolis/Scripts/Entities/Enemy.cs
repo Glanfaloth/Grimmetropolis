@@ -72,11 +72,10 @@ public class Enemy : Character
             }
             else if (colliderEntry.Item1 is TDCuboidCollider && closestBuildingDistance > colliderEntry.Item2)
             {
-                Building structure = colliderEntry.Item1.TDObject?.GetComponent<Building>();
-                if (structure != null)
+                if (colliderEntry.Item1.TDObject?.GetComponent<MapTile>().Structure is Building building)
                 {
                     closestBuildingDistance = colliderEntry.Item2;
-                    closestBuilding = structure;
+                    closestBuilding = building;
                 }
             }
         }

@@ -116,9 +116,8 @@ public static class PrefabFactory
                     MapTile mapTile = prefab.AddComponent<MapTile>();
                     mesh.Model = TDContentManager.LoadModel("MapTileGround");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
-                    collider.Size = Vector3.One;
-                    collider.Offset = .5f * Vector3.Forward;
                     mapTile.Type = MapTileType.Ground;
+                    mapTile.collider = collider;
                     break;
                 }
 
@@ -129,10 +128,8 @@ public static class PrefabFactory
                     MapTile mapTile = prefab.AddComponent<MapTile>();
                     mesh.Model = TDContentManager.LoadModel("MapTileWater");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
-                    collider.Size = new Vector3(1f, 1f, 2f);
-                    collider.Offset = Vector3.Zero;
                     mapTile.Type = MapTileType.Water;
-                    mapTile.IsPassable = false;
+                    mapTile.collider = collider;
                     break;
                 }
 
@@ -140,24 +137,18 @@ public static class PrefabFactory
             case PrefabType.Castle:
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
-                    TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
                     prefab.AddComponent<Castle>();
                     mesh.Model = TDContentManager.LoadModel("BuildingCastle");
                     mesh.Texture = TDContentManager.LoadTexture("BuildingCastleTexture");
-                    collider.Size = new Vector3(3f, 3f, 2f);
-                    collider.Offset = Vector3.Backward;
                     break;
                 }
 
             case PrefabType.Outpost:
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
-                    TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
                     Outpost outpost = prefab.AddComponent<Outpost>();
                     mesh.Model = TDContentManager.LoadModel("BuildingOutpost");
                     mesh.Texture = TDContentManager.LoadTexture("BuildingOutpostTexture");
-                    collider.Size = new Vector3(1f, 1f, 2f);
-                    collider.Offset = Vector3.Backward;
 
                     TDObject shootingObject = CreatePrefab(PrefabType.Empty, prefab.Transform);
                     TDCylinderCollider shootingRange = shootingObject.AddComponent<TDCylinderCollider>();
@@ -173,12 +164,9 @@ public static class PrefabFactory
             case PrefabType.Wood:
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
-                    TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
                     ResourceDeposit resource = prefab.AddComponent<ResourceDeposit>();
                     mesh.Model = TDContentManager.LoadModel("ResourceWood");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
-                    collider.Size = Vector3.One;
-                    collider.Offset = .5f * Vector3.Backward;
                     resource.Type = ResourceDepositType.Wood;
                     break;
                 }
@@ -186,12 +174,9 @@ public static class PrefabFactory
             case PrefabType.Stone:
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
-                    TDCuboidCollider collider = prefab.AddComponent<TDCuboidCollider>();
                     ResourceDeposit resource = prefab.AddComponent<ResourceDeposit>();
                     mesh.Model = TDContentManager.LoadModel("ResourceStone");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
-                    collider.Size = Vector3.One;
-                    collider.Offset = .5f * Vector3.Backward;
                     resource.Type = ResourceDepositType.Stone;
                     break;
                 }

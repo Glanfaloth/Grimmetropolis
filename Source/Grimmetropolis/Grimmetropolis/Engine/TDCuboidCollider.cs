@@ -2,11 +2,38 @@
 
 public class TDCuboidCollider : TDCollider
 {
-    public Vector3 Size = Vector3.One;
-    public Vector3 Offset = Vector3.Zero;
+
+    private Vector3 _size;
+    public Vector3 Size
+    {
+        get => _size;
+        set
+        {
+            _size = value;
+            UpdateColliderGeometry();
+        }
+    }
+
+    private Vector3 _offset;
+    public Vector3 Offset
+    {
+        get => _offset;
+        set
+        {
+            _offset = value;
+            UpdateColliderGeometry();
+        }
+    }
 
     public Vector3 CuboidCornerLow { get; private set; }
     public Vector3 CuboidCornerHigh { get; private set; }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        UpdateColliderGeometry();
+    }
 
     public override void UpdateColliderGeometry()
     {

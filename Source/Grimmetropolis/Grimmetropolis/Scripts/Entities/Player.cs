@@ -52,7 +52,7 @@ public class Player : Character
             }
             else if (colliderEntry.Item1 is TDCuboidCollider && closestStructureDistance > colliderEntry.Item2)
             {
-                Structure structure = colliderEntry.Item1.TDObject?.GetComponent<Structure>();
+                Structure structure = colliderEntry.Item1.TDObject?.GetComponent<MapTile>().Structure;
                 if (structure != null)
                 {
                     closestStructureDistance = colliderEntry.Item2;

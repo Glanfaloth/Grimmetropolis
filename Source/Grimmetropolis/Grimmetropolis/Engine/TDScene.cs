@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using System;
 using System.Collections.Generic;
 
 public class TDScene
@@ -12,19 +13,20 @@ public class TDScene
     public TDCamera CameraObject;
     public TDLight LightObject;
     public List<TDMesh> MeshObjects = new List<TDMesh>();
-    public List<TDCollider> ColliderObjects = new List<TDCollider>();
+
+    public List<TDCylinderCollider> CylinderColliderObjects = new List<TDCylinderCollider>();
+    public TDCuboidCollider[,] CuboidColliderObjects = new TDCuboidCollider[0, 0];
 
     public RenderTarget2D ShadowRender;
     public Vector2 InvertedShadowSize;
 
     public virtual void Initialize()
     {
-        // TODO: improve shader to reduce shadow render size
         ShadowRender = new RenderTarget2D(TDSceneManager.Graphics.GraphicsDevice, 4096, 4096, true, SurfaceFormat.Single, DepthFormat.Depth24);
         InvertedShadowSize = new Vector2(1f / ShadowRender.Width, 1f / ShadowRender.Height);
     }
 
-    public void Update(GameTime gameTime)
+    public virtual void Update(GameTime gameTime)
     {
         // Delete marked TDObjects
         for (int i = 0; i < DeletedObjects.Count; i++)
@@ -46,16 +48,16 @@ public class TDScene
             TDObjects[i].Update(gameTime);
         }
 
-        // Update collisions
-        foreach (TDCollider colliderObject in ColliderObjects)
+        // Update cylinder collisions
+        foreach(TDCylinderCollider cylinder in CylinderColliderObjects)
         {
-            colliderObject.UpdateColliderGeometry();
+            cylinder.UpdateColliderGeometry();
         }
-        for (int i = 0; i < ColliderObjects.Count; i++)
+        for (int i = 0; i < CylinderColliderObjects.Count; i++)
         {
-            for (int j = i + 1; j < ColliderObjects.Count; j++)
+            for (int j = i + 1; j < CylinderColliderObjects.Count; j++)
             {
-                ColliderObjects[i].UpdateCollision(ColliderObjects[j]);
+                CylinderColliderObjects[i].UpdateCollision(CylinderColliderObjects[j]);
             }
         }
     }

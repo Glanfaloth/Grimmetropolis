@@ -11,6 +11,21 @@ public class TDCylinderCollider : TDCollider
     public Vector2 CenterXY { get; private set; }
     public float CenterZLow { get; private set; }
     public float CenterZHigh { get; private set; }
+    public Point MapPosition { get; private set; }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        TDSceneManager.ActiveScene.CylinderColliderObjects.Add(this);
+    }
+
+    public override void Destroy()
+    {
+        base.Destroy();
+
+        TDSceneManager.ActiveScene.CylinderColliderObjects.Remove(this);
+    }
 
     public override void UpdateColliderGeometry()
     {
@@ -18,6 +33,7 @@ public class TDCylinderCollider : TDCollider
         CenterXY = new Vector2(Center.X, Center.Y);
         CenterZLow = Center.Z - .5f * TDObject.Transform.Scale.Z * Height;
         CenterZHigh = CenterZLow + TDObject.Transform.Scale.Z * Height;
+        MapPosition = GameManager.Instance.Map.GetMapTile(CenterXY).Position;
     }
 
     public override void UpdateCollision(TDCollider collider)

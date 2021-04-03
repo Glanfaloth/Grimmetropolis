@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,14 +17,9 @@ public class Map : TDComponent
     private int[,] _loadedMap;
 
     public Vector3 Corner { get; private set; }
-    public Vector3 Offcenter { get; }
+    public Vector3 Offcenter { get; } = new Vector3(.5f, .5f, 0f);
     // TODO: change this to artifact location
     public Point EnemyTarget { get; set; }
-
-    public Map()
-    {
-        Offcenter = new Vector3(.5f, .5f, 0f);
-    }
 
     public List<MapDTO.EntityToSpawn> LoadFromFile(string fileName)
     {
@@ -42,6 +38,7 @@ public class Map : TDComponent
         Height = mapDTO.Map[0].Length;
         Corner = new Vector3(-.5f * Width, -.5f * Height, 0);
 
+        TDSceneManager.ActiveScene.CuboidColliderObjects = new TDCuboidCollider[Width, Height];
         _loadedMap = new int[Width, Height];
 
         for (int x = 0; x < Width; x++)
@@ -78,7 +75,18 @@ public class Map : TDComponent
         LoadMap();
     }
 
-    public override void Update(GameTime gameTime) { }
+    public override void Destroy()
+    {
+        base.Destroy();
+
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                TDSceneManager.ActiveScene.CuboidColliderObjects[x, y] = null;
+            }
+        }
+    }
 
     // load map tiles
     private void LoadMap()
@@ -99,7 +107,9 @@ public class Map : TDComponent
 
                 MapTile mapTile = mapTileObject.GetComponent<MapTile>();
                 mapTile.Position = new Point(x, y);
+
                 MapTiles[x, y] = mapTile;
+                TDSceneManager.ActiveScene.CuboidColliderObjects[x, y] = mapTile.collider;
             }
         }
     }
@@ -116,14 +126,4 @@ public class Map : TDComponent
     {
         return x >= 0 && y >= 0 && x < Width && y < Height;
     }
-
-    //internal bool TryGetTileIndex(Vector3 worldLocation, out Point tileIndex)
-    //{
-    //    // TODO: improve this conversion
-    //    var location = worldLocation - Corner;
-
-    //    tileIndex = new Point((int)location.X, (int)location.Y);
-
-    //    return (tileIndex.X >= 0 && tileIndex.Y >= 0 && tileIndex.X < Width && tileIndex.Y < Height);
-    //}
 }
