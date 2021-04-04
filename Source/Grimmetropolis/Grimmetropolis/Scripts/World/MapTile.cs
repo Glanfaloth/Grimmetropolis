@@ -14,7 +14,6 @@ public class MapTile : TDComponent
     private static readonly float EDGE_COST_DIAGONAL = (float)Math.Sqrt(2);
     private const float EDGE_COST_ATTACK = 0.5f;
 
-
     public Point Position = Point.Zero;
     public MapTileType Type = MapTileType.Ground;
 
@@ -22,23 +21,20 @@ public class MapTile : TDComponent
 
     public bool IsPassable { get => CheckPassability(); }
 
-    public Location TileVertex { get; } = new Location();
-    public Location StructureVertex { get; } = new Location();
     private Structure _structure = null;
-
     public Structure Structure
     {
         get => _structure;
         set
         {
-            if (_structure != value)
-            {
-                _structure = value;
-                AdjustCollider();
-                UpdateGraph();
-            }
+            _structure = value;
+            AdjustCollider();
+            UpdateGraph();
         }
     }
+
+    public Location TileVertex { get; } = new Location();
+    public Location StructureVertex { get; } = new Location();
 
     public Map Map { get; internal set; }
 

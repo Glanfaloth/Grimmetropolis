@@ -32,19 +32,19 @@ public class TDScene
 
     public virtual void Update(GameTime gameTime)
     {
-        // Delete marked TDObjects
-        for (int i = 0; i < DeletedObjects.Count; i++)
-        {
-            DeletedObjects[i].DestroyComponents();
-        }
-        if (DeletedObjects.Count > 0) DeletedObjects.Clear();
-
         // Initialize newly created TDObjects
         for (int i = 0; i < CreatedObjects.Count; i++)
         {
             CreatedObjects[i].Initialize();
         }
         if (CreatedObjects.Count > 0) CreatedObjects.Clear();
+
+        // Delete marked TDObjects
+        for (int i = 0; i < DeletedObjects.Count; i++)
+        {
+            DeletedObjects[i].DestroyComponents();
+        }
+        if (DeletedObjects.Count > 0) DeletedObjects.Clear();
 
         // Update TDObjects
         for (int i = 0; i < TDObjects.Count; i++)

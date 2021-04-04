@@ -3,6 +3,7 @@
 public class Outpost : Building
 {
     public static new ResourcePile ResourceCost = new ResourcePile(1f, 1f);
+    public override ResourcePile GetResourceCost() => ResourceCost;
 
     public TDCylinderCollider ShootingRange = null;
 

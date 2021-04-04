@@ -3,6 +3,7 @@
 public class Building : Structure
 {
     public static ResourcePile ResourceCost = new ResourcePile();
+    public virtual ResourcePile GetResourceCost() => ResourceCost;
 
     public override bool CanBeAttacked => true;
 

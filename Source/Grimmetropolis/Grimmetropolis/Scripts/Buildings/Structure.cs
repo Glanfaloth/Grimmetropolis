@@ -15,7 +15,7 @@ public class Structure : TDComponent
         base.Initialize();
 
         SetMapTransform();
-        PlaceStructure(this);
+        PlaceStructure(this, null);
 
         GameManager.Instance.Structures.Add(this);
     }
@@ -24,7 +24,7 @@ public class Structure : TDComponent
     {
         base.Destroy();
 
-        PlaceStructure(null);
+        PlaceStructure(null, this);
         GameManager.Instance.Structures.Remove(this);
     }
 
@@ -34,7 +34,7 @@ public class Structure : TDComponent
         TDObject.Transform.Position = position;
     }
 
-    private void PlaceStructure(Structure structure)
+    private void PlaceStructure(Structure structure, Structure previousStructure)
     {
         int xHigh = Math.Clamp(Position.X + Size.X, 0, GameManager.Instance.Map.Width);
         int yHigh = Math.Clamp(Position.Y + Size.Y, 0, GameManager.Instance.Map.Height);
@@ -43,7 +43,16 @@ public class Structure : TDComponent
         {
             for (int y = Position.Y; y < yHigh; y++)
             {
-                GameManager.Instance.Map.MapTiles[x, y].Structure = structure;
+                if (GameManager.Instance.Map.MapTiles[x, y].Structure == previousStructure)
+                {
+                    GameManager.Instance.Map.MapTiles[x, y].Structure = structure;
+                }
+                else if (structure != null)
+                {
+                    TDObject.Destroy();
+                    if (structure is Building building) GameManager.Instance.ResourcePool -= building.GetResourceCost();
+                    return;
+                }
             }
         }
     }
