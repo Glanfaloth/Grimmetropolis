@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-using System.Diagnostics;
+using System;
 
 public enum PrefabType
 {
@@ -21,7 +21,9 @@ public enum PrefabType
     Outpost,
 
     Wood,
-    Stone
+    Stone,
+
+    Empty2D
 }
 
 public static class PrefabFactory
@@ -180,6 +182,19 @@ public static class PrefabFactory
                     resource.Type = ResourceDepositType.Stone;
                     break;
                 }
+
+            // UI
+            case PrefabType.Empty2D:
+                {
+                    prefab.RectTransform = new TDRectTransform
+                    {
+                        Parent = prefab.Transform.Parent?.TDObject.RectTransform,
+                        LocalPosition = new Vector2(localPosition.X, localPosition.Y),
+                        LocalRotation = 2f * MathF.Asin(localRotation.Z),
+                        LocalScale = new Vector2(localScale.X, localScale.Y)
+                    };
+                    break;
+                }
         }
 
         return prefab;
@@ -204,11 +219,4 @@ public static class PrefabFactory
     {
         return CreatePrefab(type, localPosition, localRotation, Vector3.One, parent);
     }
-
-    /*public static void InitializeEnemyController(Map mapComponent)
-    {
-        TDObject enemyAI = CreatePrefab(PrefabType.Empty, updateFirst: true);
-        EnemyController = new EnemyController(mapComponent);
-        enemyAI.AddComponent(EnemyController);
-    }*/
 }

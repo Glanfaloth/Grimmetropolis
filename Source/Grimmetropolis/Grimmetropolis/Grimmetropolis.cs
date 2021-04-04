@@ -35,6 +35,7 @@ public class Grimmetropolis : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         TDSceneManager.Graphics = _graphics;
+        TDSceneManager.SpriteBatch = _spriteBatch;
         TDContentManager.Content = Content;
     }
 
@@ -55,10 +56,6 @@ public class Grimmetropolis : Game
         GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
         TDSceneManager.ActiveScene.Draw();
-
-        _spriteBatch.Begin(blendState: BlendState.Opaque);
-        // _spriteBatch.Draw(TDSceneManager.ActiveScene.ShadowRender, new Rectangle(0, 0, 400, 400), Color.White);
-        _spriteBatch.End();
 
         base.Draw(gameTime);
     }

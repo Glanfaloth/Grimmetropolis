@@ -15,8 +15,21 @@ public class GameScene : TDScene
 
         PrefabFactory.CreatePrefab(PrefabType.GameManager);
 
-        TDObject building = PrefabFactory.CreatePrefab(PrefabType.Empty);
-        building.AddComponent<TestSpawner>();
+        TDObject testSpawner = PrefabFactory.CreatePrefab(PrefabType.Empty);
+        testSpawner.AddComponent<TestSpawner>();
+
+        TDObject testImage = PrefabFactory.CreatePrefab(PrefabType.Empty2D, new Vector3(10f, 10f, 0f), Quaternion.CreateFromAxisAngle(Vector3.Backward, .1f), new Vector3(.5f, .5f, 1f), null);
+        TDSprite spriteComponent = testImage.AddComponent<TDSprite>();
+        spriteComponent.Texture = TDContentManager.LoadTexture("DefaultTexture");
+        spriteComponent.Color = Color.White;
+        testImage.RectTransform.Scale = .4f * Vector2.One;
+
+        TDObject testImage0 = PrefabFactory.CreatePrefab(PrefabType.Empty2D, testImage.Transform);
+        TDSprite spriteComponent0 = testImage0.AddComponent<TDSprite>();
+        spriteComponent0.Texture = TDContentManager.LoadTexture("DefaultTexture");
+        spriteComponent0.Color = Color.White;
+        testImage0.RectTransform.LocalScale = .5f * Vector2.One;
+        testImage0.RectTransform.Rotation = 0f;
     }
 
     public override void Update(GameTime gameTime)

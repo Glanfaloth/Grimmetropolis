@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class TDObject
 {
     public TDTransform Transform;
+    public TDRectTransform RectTransform = null;
 
     public List<TDComponent> Components = new List<TDComponent>();
 

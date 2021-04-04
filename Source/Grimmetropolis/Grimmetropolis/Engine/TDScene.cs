@@ -20,6 +20,8 @@ public class TDScene
     public RenderTarget2D ShadowRender;
     public Vector2 InvertedShadowSize;
 
+    public List<TDSprite> SpriteObjects = new List<TDSprite>();
+
     public virtual void Initialize()
     {
         ShadowRender = new RenderTarget2D(TDSceneManager.Graphics.GraphicsDevice, 4096, 4096, true, SurfaceFormat.Single, DepthFormat.Depth24);
@@ -76,11 +78,18 @@ public class TDScene
         }
         TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(null);
 
-        // Draw final render
+        // Draw render
         foreach (TDMesh meshObject in MeshObjects)
         {
             meshObject.Draw();
         }
 
+        // Draw sprites
+        TDSceneManager.SpriteBatch.Begin(blendState: BlendState.Opaque);
+        foreach (TDSprite spriteObject in SpriteObjects)
+        {
+            spriteObject.Draw();
+        }
+        TDSceneManager.SpriteBatch.End();
     }
 }
