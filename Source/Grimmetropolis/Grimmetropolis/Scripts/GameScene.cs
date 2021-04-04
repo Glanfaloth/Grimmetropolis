@@ -15,9 +15,6 @@ public class GameScene : TDScene
 
         PrefabFactory.CreatePrefab(PrefabType.GameManager);
 
-        TDObject testSpawner = PrefabFactory.CreatePrefab(PrefabType.Empty);
-        testSpawner.AddComponent<TestSpawner>();
-
         TDObject testImage = PrefabFactory.CreatePrefab(PrefabType.Empty2D, new Vector3(10f, 10f, 0f), Quaternion.CreateFromAxisAngle(Vector3.Backward, .1f), new Vector3(.5f, .5f, 1f), null);
         TDSprite spriteComponent = testImage.AddComponent<TDSprite>();
         spriteComponent.Texture = TDContentManager.LoadTexture("DefaultTexture");

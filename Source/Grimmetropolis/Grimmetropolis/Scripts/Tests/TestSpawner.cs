@@ -4,11 +4,15 @@ using System.Collections.Generic;
 
 public class TestSpawner : TDComponent
 {
+    private int _spawnLocationIndex = -1;
+
     private float _interval = .5f;
     private float _spawnTimer = 0f;
     private float _deleteTimer = 0f;
 
     private List<Enemy> enemies = new List<Enemy>();
+
+    public List<Point> SpawnLocations { get; } = new List<Point>();
 
     public override void Initialize()
     {
@@ -30,7 +34,11 @@ public class TestSpawner : TDComponent
             _spawnTimer += _interval;
             if (enemies.Count < 100)
             {
-                TDObject enemyObject = PrefabFactory.CreatePrefab(PrefabType.Enemy, new Vector3(-8f, 0f, 0f), Quaternion.Identity);
+                _spawnLocationIndex = (_spawnLocationIndex + 1) % SpawnLocations.Count;
+
+                Map map = GameManager.Instance.Map;
+                Vector3 position = map.Corner + SpawnLocations[_spawnLocationIndex].ToVector3() + map.Offcenter;
+                TDObject enemyObject = PrefabFactory.CreatePrefab(PrefabType.Enemy, position, Quaternion.Identity);
                 enemies.Add(enemyObject.GetComponent<Enemy>());
             }
         }

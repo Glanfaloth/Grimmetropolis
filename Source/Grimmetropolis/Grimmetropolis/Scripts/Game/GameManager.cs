@@ -37,6 +37,11 @@ public class GameManager : TDComponent
         TDObject enemyAI = PrefabFactory.CreatePrefab(PrefabType.Empty);
         EnemyController = enemyAI.AddComponent<EnemyController>();
 
+        // Spawner
+        // TODO: replace test spawner with real spawner
+        TDObject testSpawner = PrefabFactory.CreatePrefab(PrefabType.Empty);
+        var spawner = testSpawner.AddComponent<TestSpawner>();
+
         // Players
         TDObject playerList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         PlayerTransform = playerList.Transform;
@@ -77,13 +82,27 @@ public class GameManager : TDComponent
                     }
                     break;
                 case MapDTO.EntityType.Enemy:
-                    PrefabFactory.CreatePrefab(PrefabType.Enemy, Map.Corner + new Vector3(entityToSpawn.Position.X, entityToSpawn.Position.Y, 0) + Map.Offcenter,
+                    PrefabFactory.CreatePrefab(PrefabType.Enemy, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
                         Quaternion.Identity, enemyList.Transform);
+                    break;
+                case MapDTO.EntityType.Outpost:
+                    {
+                        TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.Outpost, StructureTransform);
+                        newEntity.GetComponent<Outpost>().Position = entityToSpawn.Position;
+                    }
+                    break;
+                case MapDTO.EntityType.EnemySpawnPoint:
+                    spawner.SpawnLocations.Add(entityToSpawn.Position);
                     break;
                 case MapDTO.EntityType.None:
                 default:
                     throw new NotSupportedException();
             }
+        }
+
+        if (spawner.SpawnLocations.Count == 0)
+        {
+            spawner.SpawnLocations.Add(Point.Zero);
         }
 
         //TDObject castleObject = PrefabFactory.CreatePrefab(PrefabType.Castle, StructureTransform);

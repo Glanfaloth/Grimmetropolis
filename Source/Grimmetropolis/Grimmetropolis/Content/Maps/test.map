@@ -24,10 +24,18 @@
     "E": {
       "TileType": "ground",
       "SpawnedEntity": "enemy"
-    }
+    },
+    "O": {
+      "TileType": "ground",
+      "SpawnedEntity": "outpost"
+    },
+    "*": {
+      "TileType": "ground",
+      "SpawnedEntity": "enemySpawnPoint"
+    },
   },
   "Map": [ 
-    "       11 E ",
+    "*      11 EO",
     "      11    ",
     " 11  11     ",
     " 1E 111 C   ",
@@ -36,6 +44,6 @@
     " 111WW 1    ",
     "   1WW 1  S ",
     "   11  11   ",
-    "  E 1      E" 
+    "* E 1      E" 
   ]
 }

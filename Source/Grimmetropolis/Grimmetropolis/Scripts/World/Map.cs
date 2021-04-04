@@ -27,6 +27,7 @@ public class Map : TDComponent
         string jsonString = File.ReadAllText(fileName);
         JsonSerializerOptions options = new JsonSerializerOptions
         {
+            AllowTrailingCommas = true,
             Converters =
             {
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)

@@ -17,6 +17,8 @@ public class MapDTO
         StoneResource,
         Castle,
         Enemy,
+        Outpost,
+        EnemySpawnPoint,
     }
 
     public Dictionary<string, LegendItem> Legend { get; set; } = new Dictionary<string, LegendItem>();
