@@ -23,7 +23,8 @@ public enum PrefabType
     Wood,
     Stone,
 
-    Empty2D
+    EmptyUI,
+    EmptyUI3D
 }
 
 public static class PrefabFactory
@@ -184,7 +185,7 @@ public static class PrefabFactory
                 }
 
             // UI
-            case PrefabType.Empty2D:
+            case PrefabType.EmptyUI:
                 {
                     prefab.RectTransform = new TDRectTransform
                     {
@@ -192,6 +193,15 @@ public static class PrefabFactory
                         LocalPosition = new Vector2(localPosition.X, localPosition.Y),
                         LocalRotation = 2f * MathF.Asin(localRotation.Z),
                         LocalScale = new Vector2(localScale.X, localScale.Y)
+                    };
+                    break;
+                }
+
+            case PrefabType.EmptyUI3D:
+                {
+                    prefab.RectTransform = new TDRectTransform
+                    {
+                        Parent3D = prefab.Transform.Parent
                     };
                     break;
                 }

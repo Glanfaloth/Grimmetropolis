@@ -15,18 +15,34 @@ public class GameScene : TDScene
 
         PrefabFactory.CreatePrefab(PrefabType.GameManager);
 
-        TDObject testImage = PrefabFactory.CreatePrefab(PrefabType.Empty2D, new Vector3(10f, 10f, 0f), Quaternion.CreateFromAxisAngle(Vector3.Backward, .1f), new Vector3(.5f, .5f, 1f), null);
+        TDObject testImage = PrefabFactory.CreatePrefab(PrefabType.EmptyUI, new Vector3(10f, 10f, 0f), Quaternion.CreateFromAxisAngle(Vector3.Backward, .1f), new Vector3(.5f, .5f, 1f), null);
         TDSprite spriteComponent = testImage.AddComponent<TDSprite>();
         spriteComponent.Texture = TDContentManager.LoadTexture("DefaultTexture");
         spriteComponent.Color = Color.White;
+        spriteComponent.Depth = .1f;
         testImage.RectTransform.Scale = .4f * Vector2.One;
 
-        TDObject testImage0 = PrefabFactory.CreatePrefab(PrefabType.Empty2D, testImage.Transform);
+        TDObject testImage0 = PrefabFactory.CreatePrefab(PrefabType.EmptyUI, testImage.Transform);
         TDSprite spriteComponent0 = testImage0.AddComponent<TDSprite>();
         spriteComponent0.Texture = TDContentManager.LoadTexture("DefaultTexture");
         spriteComponent0.Color = Color.White;
+        spriteComponent0.Depth = 0;
         testImage0.RectTransform.LocalScale = .5f * Vector2.One;
         testImage0.RectTransform.Rotation = 0f;
+
+        TDObject player1 = PrefabFactory.CreatePrefab(PrefabType.Player);
+        Player playerComponent = player1.GetComponent<Player>();
+        playerComponent.Input = TDInputManager.DefaultInput;
+
+        TDObject testImage1 = PrefabFactory.CreatePrefab(PrefabType.EmptyUI3D, player1.Transform);
+        TDText textComponent1 = testImage1.AddComponent<TDText>();
+        textComponent1.SpriteFont = TDContentManager.LoadSpriteFont("Montserrat");
+        textComponent1.Text = "Player oder so...";
+        textComponent1.Color = Color.White;
+        textComponent1.Depth = 1f;
+        testImage1.RectTransform.Offset = 4f * Vector3.Backward;
+        testImage1.RectTransform.Origin = new Vector2(.5f * textComponent1.Width, textComponent1.Height);
+        // testImage1.RectTransform.LocalScale = 1f * Vector2.One;
     }
 
     public override void Update(GameTime gameTime)

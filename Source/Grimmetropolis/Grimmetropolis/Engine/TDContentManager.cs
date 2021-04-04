@@ -10,6 +10,7 @@ public static class TDContentManager
     private static Dictionary<string, Model> _loadedModels = new Dictionary<string, Model>();
     private static Dictionary<string, Texture2D> _loadedTextures = new Dictionary<string, Texture2D>();
     private static Dictionary<string, Effect> _loadedEffects = new Dictionary<string, Effect>();
+    private static Dictionary<string, SpriteFont> _loadedSpriteFonts = new Dictionary<string, SpriteFont>();
 
     public static Model LoadModel(string name)
     {
@@ -48,5 +49,18 @@ public static class TDContentManager
         }
 
         return _loadedEffects[name];
+    }
+
+    public static SpriteFont LoadSpriteFont(string name)
+    {
+        if (!_loadedEffects.ContainsKey(name))
+        {
+            SpriteFont effect = Content.Load<SpriteFont>(@"Fonts\" + name);
+            _loadedSpriteFonts.Add(name, effect);
+
+            return effect;
+        }
+
+        return _loadedSpriteFonts[name];
     }
 }
