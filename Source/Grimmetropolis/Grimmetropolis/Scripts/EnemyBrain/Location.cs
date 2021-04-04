@@ -17,4 +17,21 @@ public class Location
     {
         InEdges.Add(edge);
     }
+
+    internal void ClearIncomingEdges()
+    {
+        foreach (EnemyMove edge in InEdges)
+        {
+            edge.From.OutEdges.Remove(edge);
+        }
+        InEdges.Clear();
+    }
+    internal void ClearOutgoingEdges()
+    {
+        foreach (EnemyMove edge in OutEdges)
+        {
+            edge.To.InEdges.Remove(edge);
+        }
+        OutEdges.Clear();
+    }
 }

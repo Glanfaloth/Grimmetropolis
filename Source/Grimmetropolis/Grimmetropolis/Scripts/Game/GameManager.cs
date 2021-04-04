@@ -28,6 +28,7 @@ public class GameManager : TDComponent
         TDObject mapObject = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         Map = mapObject.AddComponent<Map>();
         // TODO: maybe use Content.Load functionalitiy of mgcb
+        // WARNING: testEmpty128 is laggy.
         List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/testAvoidOutpost.map");
 
         // ResourcePool

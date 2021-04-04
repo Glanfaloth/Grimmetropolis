@@ -8,20 +8,14 @@ public class EnemyController : TDComponent
 
     public Map Map { get; set; }
 
-    /*public EnemyController(Map mapComponent)
-    {
-        // TODO: add behaviour after artifact is stolen
-        _map = mapComponent;
-
-        _locations = new Location[_map.Width, _map.Height];
-        _nextMove = new EnemyMove[_map.Width, _map.Height];
-    }*/
+    // TODO: add behaviour after artifact is stolen
 
     public override void Initialize()
     {
         base.Initialize();
 
-        Map = GameManager.Instance?.Map ?? null;
+        Map = GameManager.Instance.Map;
+        _graph = MovementGraph.BuildGraphFromMap(Map);
     }
 
     internal EnemyMove ComputeNextMove(Vector2 localPosition, List<EnemyMove.Type> moves)
@@ -47,7 +41,6 @@ public class EnemyController : TDComponent
         // TODO: do we need to rebuild the graph every cycle?
         base.Update(gameTime);
 
-        _graph = MovementGraph.BuildGraphFromMap(Map);
         Point start = Map.EnemyTarget;
         _graph.ComputeShortestPathToMapTile(start);
     }

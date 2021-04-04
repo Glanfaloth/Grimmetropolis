@@ -108,6 +108,7 @@ public class Map : TDComponent
 
                 MapTile mapTile = mapTileObject.GetComponent<MapTile>();
                 mapTile.Position = new Point(x, y);
+                mapTile.Map = this;
 
                 MapTiles[x, y] = mapTile;
                 TDSceneManager.ActiveScene.CuboidColliderObjects[x, y] = mapTile.collider;
