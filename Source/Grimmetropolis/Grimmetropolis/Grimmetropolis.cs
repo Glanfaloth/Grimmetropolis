@@ -52,9 +52,6 @@ public class Grimmetropolis : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
-        GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-
         TDSceneManager.ActiveScene.Draw();
 
         base.Draw(gameTime);

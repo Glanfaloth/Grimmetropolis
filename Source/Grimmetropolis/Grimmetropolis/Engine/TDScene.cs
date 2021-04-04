@@ -20,8 +20,9 @@ public class TDScene
     public RenderTarget2D ShadowRender;
     public Vector2 InvertedShadowSize;
 
-    public List<TDSprite> SpriteObjects = new List<TDSprite>();
     public List<TDRectTransform> UI3DObjects = new List<TDRectTransform>();
+    public List<TDSprite> SpriteObjects = new List<TDSprite>();
+    public List<TDText> TextObjects = new List<TDText>();
 
     public virtual void Initialize()
     {
@@ -67,6 +68,10 @@ public class TDScene
 
     public void Draw()
     {
+        TDSceneManager.Graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
+        TDSceneManager.Graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+        TDSceneManager.Graphics.GraphicsDevice.BlendState = BlendState.Opaque;
+
         // Update camera and light
         CameraObject?.UpdateCamera();
         LightObject?.UpdateLight();
@@ -91,11 +96,15 @@ public class TDScene
             meshObject.Draw();
         }
 
-        // Draw sprites
-        TDSceneManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.Opaque);
+        // Draw sprites and strings
+        TDSceneManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
         foreach (TDSprite spriteObject in SpriteObjects)
         {
             spriteObject.Draw();
+        }
+        foreach (TDText textObject in TextObjects)
+        {
+            textObject.Draw();
         }
         TDSceneManager.SpriteBatch.End();
     }

@@ -67,7 +67,7 @@ public class TDTransform : TDComponent
         }
     }
 
-    private Vector3 _position;
+    private Vector3 _position = Vector3.Zero;
     public Vector3 Position
     {
         get => _position;
@@ -81,7 +81,7 @@ public class TDTransform : TDComponent
         }
     }
 
-    private Quaternion _rotation;
+    private Quaternion _rotation = Quaternion.Identity;
     public Quaternion Rotation
     {
         get => _rotation;
@@ -95,7 +95,7 @@ public class TDTransform : TDComponent
         }
     }
 
-    private Vector3 _scale;
+    private Vector3 _scale = Vector3.One;
     public Vector3 Scale
     {
         get => _scale;

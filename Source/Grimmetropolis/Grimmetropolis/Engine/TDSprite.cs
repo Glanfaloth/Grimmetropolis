@@ -6,9 +6,7 @@ using System;
 public class TDSprite : TDComponent
 {
     public Texture2D Texture;
-
     public Color Color = Color.White;
-
     public float Depth = 0f;
 
     public override void Initialize()

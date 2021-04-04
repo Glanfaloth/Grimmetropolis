@@ -82,7 +82,7 @@ public class TDRectTransform : TDComponent
         }
     }
 
-    private Vector2 _position;
+    private Vector2 _position = Vector2.Zero;
     public Vector2 Position
     {
         get => _position;
@@ -96,7 +96,7 @@ public class TDRectTransform : TDComponent
         }
     }
 
-    private float _rotation;
+    private float _rotation = 0f;
     public float Rotation
     {
         get => -_rotation;
@@ -110,7 +110,7 @@ public class TDRectTransform : TDComponent
         }
     }
 
-    private Vector2 _scale;
+    private Vector2 _scale = Vector2.One;
     public Vector2 Scale
     {
         get => _scale;

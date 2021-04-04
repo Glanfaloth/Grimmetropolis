@@ -38,13 +38,14 @@ public class GameScene : TDScene
         playerComponent.Input = TDInputManager.DefaultInput;
 
         TDObject testImage1 = PrefabFactory.CreatePrefab(PrefabType.EmptyUI3D, player1.Transform);
-        TDSprite spriteComponent1 = testImage1.AddComponent<TDSprite>();
-        spriteComponent1.Texture = TDContentManager.LoadTexture("DefaultTexture");
-        spriteComponent1.Color = Color.White;
-        spriteComponent1.Depth = 1f;
+        TDText textComponent1 = testImage1.AddComponent<TDText>();
+        textComponent1.SpriteFont = TDContentManager.LoadSpriteFont("Montserrat");
+        textComponent1.Text = "Player oder so...";
+        textComponent1.Color = Color.White;
+        textComponent1.Depth = 1f;
         testImage1.RectTransform.Offset = 4f * Vector3.Backward;
-        testImage1.RectTransform.Origin = new Vector2(.5f * spriteComponent1.Texture.Width, spriteComponent1.Texture.Height);
-        testImage1.RectTransform.LocalScale = .1f * Vector2.One;
+        testImage1.RectTransform.Origin = new Vector2(.5f * textComponent1.Width, textComponent1.Height);
+        // testImage1.RectTransform.LocalScale = 1f * Vector2.One;
     }
 
     public override void Update(GameTime gameTime)
