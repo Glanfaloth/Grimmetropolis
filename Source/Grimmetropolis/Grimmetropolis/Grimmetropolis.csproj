@@ -21,6 +21,12 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Content\Maps\testAttackOutpost.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Maps\testAvoidOutpost.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Maps\test.map">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -28,7 +28,7 @@ public class GameManager : TDComponent
         TDObject mapObject = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         Map = mapObject.AddComponent<Map>();
         // TODO: maybe use Content.Load functionalitiy of mgcb
-        List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/test.map");
+        List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/testAvoidOutpost.map");
 
         // ResourcePool
         ResourcePool = new ResourcePile();
