@@ -102,6 +102,9 @@ public static class PrefabFactory
                     collider.Offset = .5f * Vector3.Backward;
 
                     TDObject interactionObject = CreatePrefab(PrefabType.Empty, 1f * Vector3.Right, Quaternion.Identity, prefab.Transform);
+                    // TDMesh meshCollider = interactionObject.AddComponent<TDMesh>();
+                    // meshCollider.Model = TDContentManager.LoadModel("DefaultCylinder");
+                    // meshCollider.Texture = TDContentManager.LoadTexture("DefaultTexture");
                     TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
                     interactionCollider.IsTrigger = true;
                     interactionCollider.Radius = .25f;

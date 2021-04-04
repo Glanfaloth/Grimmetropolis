@@ -18,11 +18,11 @@ public class TDObject
 
         Transform.Initialize();
 
+        Transform.Parent = parent;
+
         Transform.LocalPosition = localPosition;
         Transform.LocalRotation = localRotation;
         Transform.LocalScale = localScale;
-
-        Transform.Parent = parent;
 
         TDSceneManager.ActiveScene.CreatedObjects.Add(this);
     }
