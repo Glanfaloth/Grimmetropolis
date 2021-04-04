@@ -4,6 +4,24 @@ using System.Collections.Generic;
 
 public class TDRectTransform : TDComponent
 {
+    private TDTransform _parent3D;
+    public TDTransform Parent3D
+    {
+        get => _parent3D;
+        set
+        {
+            _parent3D = value;
+            if (value != null)
+            {
+                if (!TDSceneManager.ActiveScene.UI3DObjects.Contains(this)) TDSceneManager.ActiveScene.UI3DObjects.Add(this);
+            }
+            else
+            {
+                TDSceneManager.ActiveScene.UI3DObjects.Remove(this);
+            }
+        }
+    }
+
     private TDRectTransform _parent;
     public TDRectTransform Parent
     {
@@ -20,6 +38,7 @@ public class TDRectTransform : TDComponent
     public Matrix TransformMatrix { get; private set; }
 
     public Vector2 Origin = Vector2.Zero;
+    public Vector3 Offset = Vector3.Zero;
 
     private Vector2 _localPosition = Vector2.Zero;
     public Vector2 LocalPosition
@@ -105,11 +124,9 @@ public class TDRectTransform : TDComponent
         }
     }
 
-    public override void Initialize()
+    public void UpdatePosition()
     {
-        base.Initialize();
-
-        _parent = TDObject.Transform.Parent?.TDObject.RectTransform;
+        CalculatePositionFromParent3D();
     }
 
     public override void Destroy()
@@ -120,6 +137,7 @@ public class TDRectTransform : TDComponent
         }
 
         _parent?.Children.Remove(this);
+        Parent3D?.ChildrenUI.Remove(this);
         TDObject = null;
     }
 
@@ -135,12 +153,12 @@ public class TDRectTransform : TDComponent
 
     private void CalculateLocalRotation()
     {
-        _localRotation = Parent == null ? _localRotation : _localRotation + _parent.Rotation;
+        _localRotation = Parent == null ? _rotation : _rotation + _parent.Rotation;
     }
 
     private void CalculateLocalScale()
     {
-        _localScale = _parent == null ? _localScale : Vector2.Divide(_localScale, _parent.Scale);
+        _localScale = _parent == null ? _scale : Vector2.Divide(_scale, _parent.Scale);
     }
 
     private void CalculatePosition()
@@ -196,5 +214,16 @@ public class TDRectTransform : TDComponent
 
             child.CalculateChildrenScaleTransform();
         }
+    }
+
+    private void CalculatePositionFromParent3D()
+    {
+        Vector4 canvasPosition = Vector4.Transform(new Vector4(Parent3D.Position, 1f) + Vector4.Transform(new Vector4(Offset, 1f),
+            Parent3D.TransformMatrix), TDSceneManager.ActiveScene.CameraObject?.ViewProjectionMatrix ?? Matrix.Identity);
+        _localPosition = new Vector2(.5f * TDSceneManager.Graphics.PreferredBackBufferWidth * (1f + canvasPosition.X / canvasPosition.W),
+            .5f * TDSceneManager.Graphics.PreferredBackBufferHeight * (1f - canvasPosition.Y / canvasPosition.W));
+        _position = _localPosition;
+
+        CalculateChildrenPositionTransform();
     }
 }

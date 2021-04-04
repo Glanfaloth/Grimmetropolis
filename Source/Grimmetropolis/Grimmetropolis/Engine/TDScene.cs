@@ -21,6 +21,7 @@ public class TDScene
     public Vector2 InvertedShadowSize;
 
     public List<TDSprite> SpriteObjects = new List<TDSprite>();
+    public List<TDRectTransform> UI3DObjects = new List<TDRectTransform>();
 
     public virtual void Initialize()
     {
@@ -70,6 +71,12 @@ public class TDScene
         CameraObject?.UpdateCamera();
         LightObject?.UpdateLight();
 
+        // Update UI3D objects
+        foreach (TDRectTransform ui3DObject in UI3DObjects)
+        {
+            ui3DObject.UpdatePosition();
+        }
+
         // Draw shadow render
         TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(ShadowRender);
         foreach (TDMesh meshObject in MeshObjects)
@@ -85,7 +92,7 @@ public class TDScene
         }
 
         // Draw sprites
-        TDSceneManager.SpriteBatch.Begin(blendState: BlendState.Opaque);
+        TDSceneManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.Opaque);
         foreach (TDSprite spriteObject in SpriteObjects)
         {
             spriteObject.Draw();

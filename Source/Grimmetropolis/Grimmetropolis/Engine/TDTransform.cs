@@ -21,6 +21,7 @@ public class TDTransform : TDComponent
     }
 
     public List<TDTransform> Children = new List<TDTransform>();
+    public List<TDRectTransform> ChildrenUI = new List<TDRectTransform>();
 
     public Matrix TransformMatrix { get; private set; }
 
@@ -115,6 +116,11 @@ public class TDTransform : TDComponent
             Children[i].TDObject.Destroy();
         }
 
+        for (int i = ChildrenUI.Count - 1; i >= 0; i--)
+        {
+            ChildrenUI[i].TDObject.Destroy();
+        }
+
         _parent?.Children.Remove(this);
         TDObject = null;
     }
@@ -131,12 +137,12 @@ public class TDTransform : TDComponent
 
     private void CalculateLocalRotation()
     {
-        _localRotation = Parent == null ? _localRotation : _localRotation * Quaternion.Inverse(_parent.Rotation);
+        _localRotation = Parent == null ? _rotation : _rotation * Quaternion.Inverse(_parent.Rotation);
     }
 
     private void CalculateLocalScale()
     {
-        _localScale = _parent == null ? _localScale : Vector3.Divide(_localScale, _parent.Scale);
+        _localScale = _parent == null ? _scale : Vector3.Divide(_scale, _parent.Scale);
     }
 
     private void CalculatePosition()

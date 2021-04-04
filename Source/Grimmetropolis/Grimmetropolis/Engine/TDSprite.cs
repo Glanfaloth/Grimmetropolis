@@ -1,11 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using System;
+
 public class TDSprite : TDComponent
 {
     public Texture2D Texture;
 
-    public Color Color;
+    public Color Color = Color.White;
+
+    public float Depth = 0f;
 
     public override void Initialize()
     {
@@ -24,6 +28,6 @@ public class TDSprite : TDComponent
     public void Draw()
     {
         TDSceneManager.SpriteBatch.Draw(Texture, TDObject.RectTransform.Position, null, Color,TDObject.RectTransform.Rotation,
-            TDObject.RectTransform.Origin, TDObject.RectTransform.Scale, SpriteEffects.None, 0f);
+            TDObject.RectTransform.Origin, TDObject.RectTransform.Scale, SpriteEffects.None, Depth);
     }
 }
