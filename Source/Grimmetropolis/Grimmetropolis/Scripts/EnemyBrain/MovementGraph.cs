@@ -47,6 +47,7 @@ public class MovementGraph
 
     internal void ComputeShortestPathToMapTile(Point start)
     {
+        // TODO: this is currently a bottleneck
         // TODO: Ideally, this should be a priorityqueue, however support will only be added in .NET 6.
         // src: https://github.com/dotnet/runtime/issues/43957
         // measure if this is a bottleneck
