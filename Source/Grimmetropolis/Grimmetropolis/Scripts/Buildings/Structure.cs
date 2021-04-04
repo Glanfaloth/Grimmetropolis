@@ -8,6 +8,7 @@ public class Structure : TDComponent
     public Point Size = new Point(1, 1);
 
     public bool IsPassable = false;
+    public virtual bool CanBeAttacked => false;
 
     public override void Initialize()
     {

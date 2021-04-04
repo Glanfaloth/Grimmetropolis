@@ -4,6 +4,8 @@ public class Building : Structure
 {
     public static ResourcePile ResourceCost = new ResourcePile();
 
+    public override bool CanBeAttacked => true;
+
     private float _health = 3f;
     public float Health
     {

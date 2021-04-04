@@ -10,8 +10,9 @@ public enum MapTileType
 
 public class MapTile : TDComponent
 {
-    private static readonly float EDGE_COST_DIRECT = 1;
+    private const float EDGE_COST_DIRECT = 1;
     private static readonly float EDGE_COST_DIAGONAL = (float)Math.Sqrt(2);
+    private const float EDGE_COST_ATTACK = 0.5f;
 
 
     public Point Position = Point.Zero;
@@ -84,10 +85,11 @@ public class MapTile : TDComponent
         TileVertex.ClearIncomingEdges();
         StructureVertex.ClearIncomingEdges();
 
+        int x = Position.X;
+        int y = Position.Y;
+
         if (CheckPassability())
         {
-            int x = Position.X;
-            int y = Position.Y;
 
             // direct neighbours
             AddIncomingEdge(x - 1, y, EnemyMove.Type.Run, EDGE_COST_DIRECT);
@@ -104,6 +106,14 @@ public class MapTile : TDComponent
             if (leftFree && botFree) AddIncomingEdge(x - 1, y + 1, EnemyMove.Type.Run, EDGE_COST_DIAGONAL);
             if (rightFree && topFree) AddIncomingEdge(x + 1, y - 1, EnemyMove.Type.Run, EDGE_COST_DIAGONAL);
             if (rightFree && botFree) AddIncomingEdge(x + 1, y + 1, EnemyMove.Type.Run, EDGE_COST_DIAGONAL);
+        }
+        else if (CanTileBeAttacked())
+        {
+            AddIncomingEdge(x - 1, y, EnemyMove.Type.Attack, EDGE_COST_ATTACK);
+            AddIncomingEdge(x + 1, y, EnemyMove.Type.Attack, EDGE_COST_ATTACK);
+            AddIncomingEdge(x, y - 1, EnemyMove.Type.Attack, EDGE_COST_ATTACK);
+            AddIncomingEdge(x, y + 1, EnemyMove.Type.Attack, EDGE_COST_ATTACK);
+            new RunMove(StructureVertex, TileVertex, EDGE_COST_DIRECT, TDObject.Transform.Position);
         }
         // TODO: add other edge types
     }
@@ -124,6 +134,7 @@ public class MapTile : TDComponent
                 break;
             case EnemyMove.Type.Attack:
                 // TODO: create attack move
+                new AttackMove(from, StructureVertex, cost, Structure);
                 break;
             default:
                 break;
@@ -148,5 +159,10 @@ public class MapTile : TDComponent
             MapTileType.Water => false,
             _ => true
         };
+    }
+
+    public bool CanTileBeAttacked()
+    {
+        return Structure?.CanBeAttacked ?? false;
     }
 }
