@@ -42,7 +42,37 @@ public class GameScene : TDScene
         textComponent1.Depth = 1f;
         testImage1.RectTransform.Offset = 4f * Vector3.Backward;
         testImage1.RectTransform.Origin = new Vector2(.5f * textComponent1.Width, textComponent1.Height);
-        // testImage1.RectTransform.LocalScale = 1f * Vector2.One;
+
+        testImage1.RunAction(4f, (p) =>
+        {
+            float r = MathF.Sin(MathHelper.TwoPi * p);
+            float g = MathF.Sin(2f * MathHelper.TwoPi * p);
+            float b = MathF.Sin(4f * MathHelper.TwoPi * p);
+            textComponent1.Color = new Color(r, g, b);
+        }, true);
+
+        TDObject testCube = PrefabFactory.CreatePrefab(PrefabType.Default, 3f * Vector3.Left);
+        testCube.RunAction(1f, (p) =>
+        {
+            float tp = 1f - MathF.Pow(2f * (p - .5f), 2f);
+            testCube.Transform.LocalScale = Vector3.Lerp(Vector3.One, 1.1f * Vector3.One, tp);
+
+        }, true);
+
+        testCube.RunAction(2f, (p) =>
+        {
+            Vector3 localPosition = testCube.Transform.LocalPosition;
+            localPosition.Z = 2f * p;
+            testCube.Transform.LocalPosition = localPosition;
+        }, () =>
+        {
+            testCube.RunAction(6f, (p) =>
+            {
+                Vector3 localPosition = testCube.Transform.LocalPosition;
+                localPosition.Y = MathF.Sin(MathHelper.TwoPi * p);
+                testCube.Transform.LocalPosition = localPosition;
+            }, 2f, true);
+        }, 4f);        
     }
 
     public override void Update(GameTime gameTime)

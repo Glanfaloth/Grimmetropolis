@@ -42,14 +42,20 @@ public class TDScene
         // Delete marked TDObjects
         for (int i = 0; i < DeletedObjects.Count; i++)
         {
-            DeletedObjects[i].DestroyComponents();
+            DeletedObjects[i].DestroyAttachedObjects();
         }
         if (DeletedObjects.Count > 0) DeletedObjects.Clear();
+
+        // Update TDActions
+        for (int i = 0; i < TDObjects.Count; i++)
+        {
+            TDObjects[i].UpdateActions(gameTime);
+        }
 
         // Update TDObjects
         for (int i = 0; i < TDObjects.Count; i++)
         {
-            TDObjects[i].Update(gameTime);
+            TDObjects[i].UpdateComponents(gameTime);
         }
 
         // Update cylinder collisions

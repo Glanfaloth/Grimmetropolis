@@ -31,7 +31,7 @@ public static class PrefabFactory
 {
     public static EnemyController EnemyController { get; private set; }
 
-    public static TDObject CreatePrefab(PrefabType type, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent)
+    public static TDObject CreatePrefab(PrefabType type, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, TDTransform parent = null)
     {
         TDObject prefab = new TDObject(localPosition, localRotation, localScale, parent);
 
@@ -213,22 +213,17 @@ public static class PrefabFactory
         return prefab;
     }
 
-    public static TDObject CreatePrefab(PrefabType type)
-    {
-        return CreatePrefab(type, Vector3.Zero, Quaternion.Identity, Vector3.One, null);
-    }
-
-    public static TDObject CreatePrefab(PrefabType type, Vector3 localPosition, Quaternion localRotation)
-    {
-        return CreatePrefab(type, localPosition, localRotation, Vector3.One, null);
-    }
-
-    public static TDObject CreatePrefab(PrefabType type, TDTransform parent)
+    public static TDObject CreatePrefab(PrefabType type, TDTransform parent = null)
     {
         return CreatePrefab(type, Vector3.Zero, Quaternion.Identity, Vector3.One, parent);
     }
 
-    public static TDObject CreatePrefab(PrefabType type, Vector3 localPosition, Quaternion localRotation, TDTransform parent)
+    public static TDObject CreatePrefab(PrefabType type, Vector3 localPosition, TDTransform parent = null)
+    {
+        return CreatePrefab(type, localPosition, Quaternion.Identity, Vector3.One, parent);
+    }
+
+    public static TDObject CreatePrefab(PrefabType type, Vector3 localPosition, Quaternion localRotation, TDTransform parent = null)
     {
         return CreatePrefab(type, localPosition, localRotation, Vector3.One, parent);
     }

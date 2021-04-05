@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using System;
+using System.Diagnostics;
 
 public class Structure : TDComponent
 {
@@ -50,7 +51,10 @@ public class Structure : TDComponent
                 else if (structure != null)
                 {
                     TDObject.Destroy();
-                    if (structure is Building building) GameManager.Instance.ResourcePool -= building.GetResourceCost();
+                    if (structure is Building building)
+                    {
+                        GameManager.Instance.ResourcePool += building.GetResourceCost();
+                    }
                     return;
                 }
             }

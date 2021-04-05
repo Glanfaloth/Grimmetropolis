@@ -65,8 +65,9 @@ public abstract class Character : TDComponent
     protected void Build()
     {
         MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        if (mapTile.Type == MapTileType.Ground && mapTile.Structure == null)
+        if (mapTile.Type == MapTileType.Ground && mapTile.Structure == null && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, Outpost.ResourceCost))
         {
+            GameManager.Instance.ResourcePool -= Outpost.ResourceCost;
             TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.Outpost, GameManager.Instance.StructureTransform);
             Building building = buildingObject.GetComponent<Building>();
             building.Position = mapTile.Position;
