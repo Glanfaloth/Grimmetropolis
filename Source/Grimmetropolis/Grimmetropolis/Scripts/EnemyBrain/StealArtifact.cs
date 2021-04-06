@@ -6,7 +6,9 @@ class StealArtifact : EnemyMove
 {
     public override Type MovementType => Type.StealArtifact;
 
-    public StealArtifact(Location from, Location to, float cost) : base(from, to, cost)
+    public override float Cost => 0;
+
+    public StealArtifact(Location from, Location to) : base(from, to)
     {
     }
 }

@@ -128,4 +128,29 @@ public class Map : TDComponent
     {
         return x >= 0 && y >= 0 && x < Width && y < Height;
     }
+
+    internal List<MapTile> GetNearbyTiles(Point position, int manhattanDistance)
+    {
+        int x = position.X;
+        int y = position.Y;
+        List<MapTile> result = new List<MapTile>();
+
+        for (int distance = 0; distance <= manhattanDistance; distance++)
+        {
+            for (int dx = -distance; dx <= distance; dx++)
+            {
+                int dy = distance - Math.Abs(dx);
+
+                if (IsInBounds(x + dx, y + dy)) result.Add(MapTiles[x + dx, y + dy]);
+
+                if (dy != 0)
+                {
+                    dy = -dy;
+                    if (IsInBounds(x + dx, y + dy)) result.Add(MapTiles[x + dx, y + dy]);
+                }
+            }
+        }
+
+        return result;
+    }
 }

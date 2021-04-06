@@ -97,7 +97,7 @@ public class Enemy : Character
 
     private void MoveToTarget(RunMove runMove, GameTime gameTime)
     {
-        Vector2 direction = runMove.Destination - new Vector2(TDObject.Transform.LocalPosition.X, TDObject.Transform.LocalPosition.Y);
+        Vector2 direction = runMove.Destination.TDObject.Transform.LocalPosition.GetXY() - TDObject.Transform.LocalPosition.GetXY();
         if (direction.LengthSquared() > 1f) direction.Normalize();
         Move(direction, gameTime);
     }

@@ -3,12 +3,25 @@ using System;
 
 internal class RunMove : EnemyMove
 {
+    private const float OUTPOST_SCALE_FACTOR = 0.5f;
+
+    private readonly float _distanceCost;
 
     public override Type MovementType => Type.Run;
 
-    public Vector2 Destination { get; }
-    public RunMove(Location from, Location to, float cost, Vector3 destination) : base(from, to, cost)
+    public MapTile Destination { get; }
+
+    public override float Cost
     {
-        Destination = new Vector2(destination.X, destination.Y);
+        get
+        {
+            return _distanceCost * (1 + Destination.NearbyOutposts * OUTPOST_SCALE_FACTOR);
+        }
+    }
+
+    public RunMove(Location from, Location to, float distanceCost, MapTile destination) : base(from, to)
+    {
+        Destination = destination;
+        _distanceCost = distanceCost;
     }
 }

@@ -20,14 +20,8 @@ public class EnemyController : TDComponent
 
     internal EnemyMove ComputeNextMove(Vector2 localPosition, List<EnemyMove.Type> moves)
     {
-        if (_graph != null)
-        {
-            MapTile tile = Map.GetMapTile(localPosition);
-            return _graph.GetNextMoveFromMapTile(tile);
-            // TODO: move to map edge?
-        }
-
-        return new RunMove(new Location(), new Location(), 0, Vector3.Zero);
+        MapTile tile = Map.GetMapTile(localPosition);
+        return _graph.GetNextMoveFromMapTile(tile);
     }
 
     internal EnemyMove GetFutureMove(EnemyMove nextMove)

@@ -29,7 +29,7 @@ public class GameManager : TDComponent
         Map = mapObject.AddComponent<Map>();
         // TODO: maybe use Content.Load functionalitiy of mgcb
         // WARNING: testEmpty128 is laggy.
-        List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/testAttackOutpost.map");
+        List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/testAvoidOutpost.map");
 
         // ResourcePool
         ResourcePool = new ResourcePile();

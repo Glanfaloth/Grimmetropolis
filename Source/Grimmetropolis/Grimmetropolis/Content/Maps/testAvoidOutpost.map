@@ -42,9 +42,9 @@
     "EEEEEEEEE1             1    ",
     "1111EEE11111111111111       ",
     "EEEEEEEEE1             1    ",
+    "EEEEEEEEE1             1   S",
+    "*EEEEEEEEE             1   S",
     "EEEEEEEEE1             1    ",
-    "*EEEEEEEEE             1    ",
-    "EEEEEEEEE1             1    ",
-    "EEEEEEEEE1             1    " 
+    "EEEEEEEEE1             1WWWW" 
   ]
 }

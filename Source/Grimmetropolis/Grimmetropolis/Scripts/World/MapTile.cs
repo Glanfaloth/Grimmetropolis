@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 
 public enum MapTileType
 {
@@ -27,9 +28,20 @@ public class MapTile : TDComponent
         get => _structure;
         set
         {
+            UpdateOutpostCount(_structure, value);
             _structure = value;
             AdjustCollider();
             UpdateGraph();
+        }
+    }
+
+    private int _nearbyOutposts = 0;
+    public int NearbyOutposts
+    {
+        get => _nearbyOutposts;
+        set
+        {
+            _nearbyOutposts = (value > 0) ? value : 0;
         }
     }
 
@@ -109,9 +121,34 @@ public class MapTile : TDComponent
             AddIncomingEdge(x + 1, y, EnemyMove.Type.Attack, EDGE_COST_ATTACK);
             AddIncomingEdge(x, y - 1, EnemyMove.Type.Attack, EDGE_COST_ATTACK);
             AddIncomingEdge(x, y + 1, EnemyMove.Type.Attack, EDGE_COST_ATTACK);
-            new RunMove(StructureVertex, TileVertex, EDGE_COST_DIRECT, TDObject.Transform.Position);
+            new RunMove(StructureVertex, TileVertex, EDGE_COST_DIRECT, this);
         }
         // TODO: add other edge types
+    }
+
+    private const int TOWER_RANGE = 3;
+
+    private void UpdateOutpostCount(Structure oldStructure, Structure newStructure)
+    {
+        bool destroyedOutpost = oldStructure is Outpost;
+        bool buildOutpost = newStructure is Outpost;
+
+        List<MapTile> nearbyTiles = Map.GetNearbyTiles(Position, TOWER_RANGE);
+
+        if (buildOutpost && !destroyedOutpost)
+        {
+            foreach (MapTile tile in nearbyTiles)
+            {
+                tile.NearbyOutposts++;
+            }
+        }
+        else if (destroyedOutpost)
+        {
+            foreach (MapTile tile in nearbyTiles)
+            {
+                tile.NearbyOutposts--;
+            }
+        }
     }
 
     private void AddIncomingEdge(int xFrom, int yFrom, EnemyMove.Type movementType, float cost)
@@ -126,7 +163,7 @@ public class MapTile : TDComponent
         {
             case EnemyMove.Type.Run:
                 // TODO: this should be done in a cleaner way
-                new RunMove(from, TileVertex, cost, TDObject.Transform.Position);
+                new RunMove(from, TileVertex, cost, this);
                 break;
             case EnemyMove.Type.Attack:
                 // TODO: create attack move

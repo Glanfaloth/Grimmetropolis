@@ -4,7 +4,7 @@ using System;
 public abstract class EnemyMove
 {
     private static Location _noLocation = new Location();
-    public static EnemyMove NONE { get; } = new NoMove(_noLocation, _noLocation, 0);
+    public static EnemyMove NONE { get; } = new NoMove(_noLocation, _noLocation);
 
     public enum Type
     {
@@ -18,13 +18,12 @@ public abstract class EnemyMove
 
     public Location From { get; }
     public Location To { get; }
-    public float Cost { get; }
+    public abstract float Cost { get; }
 
-    protected EnemyMove(Location from, Location to, float cost)
+    protected EnemyMove(Location from, Location to)
     {
         From = from;
         To = to;
-        Cost = cost;
 
         from.AddOutgoingEdge(this);
         to.AddIncomingEdge(this);
@@ -35,7 +34,9 @@ public abstract class EnemyMove
 
         public override Type MovementType => Type.None;
 
-        internal NoMove(Location from, Location to, float cost) : base(from, to, cost)
+        public override float Cost => 0;
+
+        internal NoMove(Location from, Location to) : base(from, to)
         {
         }
     }

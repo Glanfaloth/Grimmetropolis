@@ -55,7 +55,7 @@ public class MovementGraph
         Location startLocation = _map.MapTiles[start.X, start.Y].TileVertex;
         var pq = new SortedSet<QueueEntry>(new QueueEntryComparer())
         {
-            new QueueEntry(0f, startLocation, new StealArtifact(startLocation, startLocation, 0)),
+            new QueueEntry(0f, startLocation, new StealArtifact(startLocation, startLocation)),
         };
 
 
