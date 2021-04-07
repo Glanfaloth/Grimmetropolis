@@ -28,14 +28,14 @@ public static class Config
     public const float CASTLE_HEALTH = 9f;
 
     public const float OUTPOST_HEALTH = 3f;
-    public const float OUTPOST_WOOD_COST = 1f;
-    public const float OUTPOST_STONE_COST = 1f;
+    public const int OUTPOST_WOOD_COST = 1;
+    public const int OUTPOST_STONE_COST = 1;
     public const float OUTPOST_SHOOTING_RANGE = 3f;
     public const float OUTPOST_SHOOTING_RATE = .5f;
     public const float OUTPOST_SHOOTING_DAMAGE = 1f;
 
-    public const float RESOURCE_WOOD_GATHER_BASE_RATE = 1f;
-    public const float RESOURCE_STONE_GATHER_BASE_RATE = 1f;
+    public const int RESOURCE_WOOD_GATHER_BASE_RATE = 1;
+    public const int RESOURCE_STONE_GATHER_BASE_RATE = 1;
 
     #endregion
 
