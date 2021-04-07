@@ -5,12 +5,15 @@ using System.Collections.Generic;
 
 public abstract class Character : TDComponent
 {
+    protected abstract float WalkSpeed { get; }
+    protected abstract float RotateSpeed { get; }
+    public abstract float BaseHealth { get; }
+
     // TODO: those should be different for enemies
     private float _lookingAngle = 0f;
-    private float _walkSpeed = Config.PLAYER_WALK_SPEED;
-    private float _rotateSpeed = Config.PLAYER_ROTATE_SPEED;
 
-    private float _health = Config.PLAYER_HEALTH;
+    // health will be set during Initialize
+    private float _health = -1;
     public float Health
     {
         get => _health;
@@ -27,6 +30,8 @@ public abstract class Character : TDComponent
     public override void Initialize()
     {
         base.Initialize();
+
+        Health = BaseHealth;
 
         InteractionCollider.collisionEvent += GetClosestCollider;
 
@@ -56,10 +61,10 @@ public abstract class Character : TDComponent
             if (targetAngle - _lookingAngle > MathHelper.Pi) _lookingAngle += MathHelper.TwoPi;
             else if (_lookingAngle - targetAngle > MathHelper.Pi) _lookingAngle -= MathHelper.TwoPi;
 
-            if (targetAngle > _lookingAngle) _lookingAngle = MathHelper.Min(_lookingAngle + _rotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, targetAngle);
-            else if (targetAngle < _lookingAngle) _lookingAngle = MathHelper.Max(_lookingAngle - _rotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, targetAngle);
+            if (targetAngle > _lookingAngle) _lookingAngle = MathHelper.Min(_lookingAngle + RotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, targetAngle);
+            else if (targetAngle < _lookingAngle) _lookingAngle = MathHelper.Max(_lookingAngle - RotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, targetAngle);
 
-            TDObject.Transform.LocalPosition += _walkSpeed * new Vector3(direction, 0f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            TDObject.Transform.LocalPosition += WalkSpeed * new Vector3(direction, 0f) * (float)gameTime.ElapsedGameTime.TotalSeconds;
             TDObject.Transform.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Backward, _lookingAngle);
         }
     }

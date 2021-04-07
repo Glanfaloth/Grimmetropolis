@@ -6,6 +6,12 @@ public class Player : Character
 {
     public TDInput Input;
 
+    protected override float WalkSpeed => Config.PLAYER_WALK_SPEED;
+
+    protected override float RotateSpeed => Config.PLAYER_ROTATE_SPEED;
+
+    public override float BaseHealth => Config.PLAYER_HEALTH;
+
     public override void Initialize()
     {
         base.Initialize();
