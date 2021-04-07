@@ -15,7 +15,7 @@ public class Enemy : Character
 
         _controller = GameManager.Instance.EnemyController;
 
-        Health = 1f;
+        Health = Config.ENEMY_WITCH_STATS.HEALTH;
 
         GameManager.Instance.Enemies.Add(this);
     }
@@ -82,11 +82,11 @@ public class Enemy : Character
 
         if (closestPlayer != null)
         {
-            closestPlayer.Health -= 1f;
+            closestPlayer.Health -= Config.ENEMY_WITCH_STATS.DAMAGE_AGAINST_PLAYER;
         }
         else if (closestBuilding != null)
         {
-            closestBuilding.Health -= 1f;
+            closestBuilding.Health -= Config.ENEMY_WITCH_STATS.DAMAGE_AGAINST_BUILDINGS;
         }
     }
 

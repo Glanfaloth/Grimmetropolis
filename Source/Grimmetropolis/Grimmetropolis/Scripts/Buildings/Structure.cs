@@ -3,7 +3,7 @@
 using System;
 using System.Diagnostics;
 
-public class Structure : TDComponent
+public abstract class Structure : TDComponent
 {
     public Point Position = Point.Zero;
     public Point Size = new Point(1, 1);
@@ -37,6 +37,7 @@ public class Structure : TDComponent
 
     private void PlaceStructure(Structure structure, Structure previousStructure)
     {
+        // TODO: doesn't this allow to place buildings partly outside the map?
         int xHigh = Math.Clamp(Position.X + Size.X, 0, GameManager.Instance.Map.Width);
         int yHigh = Math.Clamp(Position.Y + Size.Y, 0, GameManager.Instance.Map.Height);
 
@@ -53,6 +54,7 @@ public class Structure : TDComponent
                     TDObject.Destroy();
                     if (structure is Building building)
                     {
+                        // TODO: double check if this is correct.
                         GameManager.Instance.ResourcePool += building.GetResourceCost();
                     }
                     return;

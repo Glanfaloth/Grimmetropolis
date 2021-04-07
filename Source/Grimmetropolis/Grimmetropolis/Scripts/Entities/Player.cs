@@ -63,7 +63,7 @@ public class Player : Character
 
         if (closestEnemy != null)
         {
-            closestEnemy.Health -= 1f;
+            closestEnemy.Health -= Config.PLAYER_DAMAGE;
         }
         else if (closestStructure != null)
         {
@@ -75,7 +75,7 @@ public class Player : Character
             // TODO: Left here for testing usage
             if (closestStructure is Building closestBuilding)
             {
-                closestBuilding.Health -= 1f;
+                closestBuilding.Health -= Config.PLAYER_DAMAGE;
             }
         }
     }

@@ -2,7 +2,7 @@
 
 public class Outpost : Building
 {
-    public static new ResourcePile ResourceCost = new ResourcePile(1f, 1f);
+    public static new ResourcePile ResourceCost = new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST);
     public override ResourcePile GetResourceCost() => ResourceCost;
 
     public TDCylinderCollider ShootingRange = null;
@@ -11,14 +11,14 @@ public class Outpost : Building
     private Enemy _closestEnemy = null;
 
     private float _cooldown = 0f;
-    private float _interval = .5f;
+    private float _interval = Config.OUTPOST_SHOOTING_RATE;
 
     public override void Initialize()
     {
-        ResourceCost = new ResourcePile(1f, 1f);
+        Health = Config.OUTPOST_HEALTH;
 
         ShootingRange.IsTrigger = true;
-        ShootingRange.Radius = 3f;
+        ShootingRange.Radius = Config.OUTPOST_SHOOTING_RANGE;
         ShootingRange.Height = 1f;
         ShootingRange.Offset = Vector3.Zero;
         ShootingRange.collisionEvent += GetClosestCollider;
@@ -34,7 +34,7 @@ public class Outpost : Building
 
         if (_closestEnemy != null && _cooldown <= 0f)
         {
-            _closestEnemy.Health -= 1f;
+            _closestEnemy.Health -= Config.OUTPOST_SHOOTING_DAMAGE;
             _cooldown = _interval;
         }
 

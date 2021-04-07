@@ -5,11 +5,12 @@ using System.Collections.Generic;
 
 public abstract class Character : TDComponent
 {
+    // TODO: those should be different for enemies
     private float _lookingAngle = 0f;
-    private float _walkSpeed = 4f;
-    private float _rotateSpeed = 3f * MathHelper.Pi;
+    private float _walkSpeed = Config.PLAYER_WALK_SPEED;
+    private float _rotateSpeed = Config.PLAYER_ROTATE_SPEED;
 
-    private float _health = 3f;
+    private float _health = Config.PLAYER_HEALTH;
     public float Health
     {
         get => _health;
@@ -48,6 +49,7 @@ public abstract class Character : TDComponent
 
     protected void Move(Vector2 direction, GameTime gameTime)
     {
+        // TODO: EPSILON should probably be larger
         if (direction.LengthSquared() > float.Epsilon)
         {
             float targetAngle = MathF.Atan2(direction.Y, direction.X);

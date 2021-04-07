@@ -11,10 +11,6 @@ public enum MapTileType
 
 public class MapTile : TDComponent
 {
-    private const float EDGE_COST_DIRECT = 1;
-    private static readonly float EDGE_COST_DIAGONAL = (float)Math.Sqrt(2);
-    private const float EDGE_COST_ATTACK = 0.5f;
-
     public Point Position = Point.Zero;
     public MapTileType Type = MapTileType.Ground;
 
@@ -100,40 +96,38 @@ public class MapTile : TDComponent
         {
 
             // direct neighbours
-            AddIncomingEdge(x - 1, y, EnemyMove.Type.Run, EDGE_COST_DIRECT);
-            AddIncomingEdge(x + 1, y, EnemyMove.Type.Run, EDGE_COST_DIRECT);
-            AddIncomingEdge(x, y - 1, EnemyMove.Type.Run, EDGE_COST_DIRECT);
-            AddIncomingEdge(x, y + 1, EnemyMove.Type.Run, EDGE_COST_DIRECT);
+            AddIncomingEdge(x - 1, y, EnemyMove.Type.Run, Config.RUN_MOVE_DIRECT_BASE_COST);
+            AddIncomingEdge(x + 1, y, EnemyMove.Type.Run, Config.RUN_MOVE_DIRECT_BASE_COST);
+            AddIncomingEdge(x, y - 1, EnemyMove.Type.Run, Config.RUN_MOVE_DIRECT_BASE_COST);
+            AddIncomingEdge(x, y + 1, EnemyMove.Type.Run, Config.RUN_MOVE_DIRECT_BASE_COST);
 
             // diagonal neighbours
             bool topFree = IsTilePassable(x, y - 1);
             bool botFree = IsTilePassable(x, y + 1);
             bool leftFree = IsTilePassable(x - 1, y);
             bool rightFree = IsTilePassable(x + 1, y);
-            if (leftFree && topFree) AddIncomingEdge(x - 1, y - 1, EnemyMove.Type.Run, EDGE_COST_DIAGONAL);
-            if (leftFree && botFree) AddIncomingEdge(x - 1, y + 1, EnemyMove.Type.Run, EDGE_COST_DIAGONAL);
-            if (rightFree && topFree) AddIncomingEdge(x + 1, y - 1, EnemyMove.Type.Run, EDGE_COST_DIAGONAL);
-            if (rightFree && botFree) AddIncomingEdge(x + 1, y + 1, EnemyMove.Type.Run, EDGE_COST_DIAGONAL);
+            if (leftFree && topFree) AddIncomingEdge(x - 1, y - 1, EnemyMove.Type.Run, Config.RUN_MOVE_DIAGONAL_BASE_COST);
+            if (leftFree && botFree) AddIncomingEdge(x - 1, y + 1, EnemyMove.Type.Run, Config.RUN_MOVE_DIAGONAL_BASE_COST);
+            if (rightFree && topFree) AddIncomingEdge(x + 1, y - 1, EnemyMove.Type.Run, Config.RUN_MOVE_DIAGONAL_BASE_COST);
+            if (rightFree && botFree) AddIncomingEdge(x + 1, y + 1, EnemyMove.Type.Run, Config.RUN_MOVE_DIAGONAL_BASE_COST);
         }
         else if (CanTileBeAttacked())
         {
-            AddIncomingEdge(x - 1, y, EnemyMove.Type.Attack, EDGE_COST_ATTACK);
-            AddIncomingEdge(x + 1, y, EnemyMove.Type.Attack, EDGE_COST_ATTACK);
-            AddIncomingEdge(x, y - 1, EnemyMove.Type.Attack, EDGE_COST_ATTACK);
-            AddIncomingEdge(x, y + 1, EnemyMove.Type.Attack, EDGE_COST_ATTACK);
-            new RunMove(StructureVertex, TileVertex, EDGE_COST_DIRECT, this);
+            AddIncomingEdge(x - 1, y, EnemyMove.Type.Attack, Config.ATTACK_MOVE_COST);
+            AddIncomingEdge(x + 1, y, EnemyMove.Type.Attack, Config.ATTACK_MOVE_COST);
+            AddIncomingEdge(x, y - 1, EnemyMove.Type.Attack, Config.ATTACK_MOVE_COST);
+            AddIncomingEdge(x, y + 1, EnemyMove.Type.Attack, Config.ATTACK_MOVE_COST);
+            new RunMove(StructureVertex, TileVertex, Config.RUN_MOVE_DIRECT_BASE_COST, this);
         }
         // TODO: add other edge types
     }
-
-    private const int TOWER_RANGE = 3;
 
     private void UpdateOutpostCount(Structure oldStructure, Structure newStructure)
     {
         bool destroyedOutpost = oldStructure is Outpost;
         bool buildOutpost = newStructure is Outpost;
 
-        List<MapTile> nearbyTiles = Map.GetNearbyTiles(Position, TOWER_RANGE);
+        List<MapTile> nearbyTiles = Map.GetNearbyTiles(Position, Config.ENEMY_OUTPOST_AVOIDANCE_RANGE);
 
         if (buildOutpost && !destroyedOutpost)
         {

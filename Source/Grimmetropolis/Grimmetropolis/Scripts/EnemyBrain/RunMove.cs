@@ -3,8 +3,6 @@ using System;
 
 internal class RunMove : EnemyMove
 {
-    private const float OUTPOST_SCALE_FACTOR = 0.5f;
-
     private readonly float _distanceCost;
 
     public override Type MovementType => Type.Run;
@@ -15,7 +13,7 @@ internal class RunMove : EnemyMove
     {
         get
         {
-            return _distanceCost * (1 + Destination.NearbyOutposts * OUTPOST_SCALE_FACTOR);
+            return _distanceCost * (1 + Destination.NearbyOutposts * Config.RUN_MOVE_OUTPOST_COUNT_SCALE_FACTOR);
         }
     }
 
