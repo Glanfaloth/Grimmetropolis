@@ -7,7 +7,16 @@ public class GameManager : TDComponent
     public static GameManager Instance;
 
     public Map Map;
-    public ResourcePile ResourcePool;
+    private ResourcePile _resourcePool;
+    public ResourcePile ResourcePool
+    {
+        get => _resourcePool;
+        set
+        {
+            _resourcePool = value;
+            UIManager.Instance?.ResourceDisplay.UpdateDisplay();
+        }
+    }
 
     public EnemyController EnemyController;
     public List<Player> Players = new List<Player>();
@@ -17,6 +26,7 @@ public class GameManager : TDComponent
     public TDTransform PlayerTransform;
     public TDTransform EnemyTransform;
     public TDTransform StructureTransform;
+
 
     public override void Initialize()
     {

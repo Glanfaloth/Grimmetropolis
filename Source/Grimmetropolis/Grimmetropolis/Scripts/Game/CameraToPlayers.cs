@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using System.Diagnostics;
-
 public class CameraToPlayers : TDComponent
 {
 
@@ -27,7 +25,6 @@ public class CameraToPlayers : TDComponent
         }
         centerPlayer /= GameManager.Instance.Players.Count;
 
-        Debug.WriteLine(maxPosition - minPosition);
         float distance = MathHelper.Max(.08f * (maxPosition.X - minPosition.X), .06f * (maxPosition.Y - minPosition.Y));
 
         TDObject.Transform.Position = centerPlayer + MathHelper.Max(distance, 1f) * _defaultOffset;

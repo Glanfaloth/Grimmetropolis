@@ -14,6 +14,7 @@ public class GameScene : TDScene
         PrefabFactory.CreatePrefab(PrefabType.Light, new Vector3(12f, 12f, 18f), Quaternion.CreateFromYawPitchRoll(-.2f * MathHelper.Pi, .2f * MathHelper.Pi, -.8f * MathHelper.Pi));
 
         PrefabFactory.CreatePrefab(PrefabType.GameManager);
+        PrefabFactory.CreatePrefab(PrefabType.UIManager);
 
         /*TDObject testImage = PrefabFactory.CreatePrefab(PrefabType.EmptyUI, new Vector3(10f, 10f, 0f), Quaternion.CreateFromAxisAngle(Vector3.Backward, .1f), new Vector3(.5f, .5f, 1f), null);
         TDSprite spriteComponent = testImage.AddComponent<TDSprite>();

@@ -23,8 +23,12 @@ public enum PrefabType
     Wood,
     Stone,
 
+    UIManager,
+
     EmptyUI,
-    EmptyUI3D
+    EmptyUI3D,
+
+    ResourceDisplay
 }
 
 public static class PrefabFactory
@@ -185,6 +189,12 @@ public static class PrefabFactory
                 }
 
             // UI
+            case PrefabType.UIManager:
+                {
+                    prefab.AddComponent<UIManager>();
+                    break;
+                }
+
             case PrefabType.EmptyUI:
                 {
                     prefab.RectTransform = new TDRectTransform
@@ -203,6 +213,21 @@ public static class PrefabFactory
                     {
                         Parent3D = prefab.Transform.Parent
                     };
+                    break;
+                }
+
+            case PrefabType.ResourceDisplay:
+                {
+                    prefab.RectTransform = new TDRectTransform
+                    {
+                        Parent = prefab.Transform.Parent?.TDObject.RectTransform,
+                        LocalPosition = new Vector2(localPosition.X, localPosition.Y),
+                        LocalRotation = 2f * MathF.Asin(localRotation.Z),
+                        LocalScale = new Vector2(localScale.X, localScale.Y)
+                    };
+                    TDText text = prefab.AddComponent<TDText>();
+                    ResourceDisplay resourceDisplay = prefab.AddComponent<ResourceDisplay>();
+                    resourceDisplay.TextUI = text;
                     break;
                 }
         }
