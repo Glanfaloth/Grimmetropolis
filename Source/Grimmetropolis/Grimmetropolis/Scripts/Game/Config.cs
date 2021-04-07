@@ -32,7 +32,9 @@ public static class Config
     public const int OUTPOST_STONE_COST = 1;
     public const float OUTPOST_SHOOTING_RANGE = 3f;
     public const float OUTPOST_SHOOTING_RATE = .5f;
-    public const float OUTPOST_SHOOTING_DAMAGE = 1f;
+
+    public const float OUTPOST_ARROW_DAMAGE = 1f;
+    public const float OUTPOST_ARROW_SPEED = 6f;
 
     public const int RESOURCE_WOOD_GATHER_BASE_RATE = 1;
     public const int RESOURCE_STONE_GATHER_BASE_RATE = 1;

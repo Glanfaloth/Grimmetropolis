@@ -34,7 +34,7 @@ public class Outpost : Building
 
         if (_closestEnemy != null && _cooldown <= 0f)
         {
-            _closestEnemy.Health -= Config.OUTPOST_SHOOTING_DAMAGE;
+            ShootArrow();
             _cooldown = _interval;
         }
 
@@ -61,5 +61,17 @@ public class Outpost : Building
                 _closestEnemy = enemy;
             }
         }
+    }
+
+    private void ShootArrow()
+    {
+        TDObject arrowObject = PrefabFactory.CreatePrefab(PrefabType.Arrow, TDObject.Transform);
+        Projectile arrow = arrowObject.GetComponent<Projectile>();
+        arrow.StartPosition = TDObject.Transform.Position + 2f * Vector3.Backward;
+        // TODO: why is tdObject sometimes null?
+        arrow.TargetPosition = _closestEnemy.TDObject?.Transform.Position + .5f * Vector3.Backward ?? Vector3.Zero;
+        arrow.TargetCharacter = _closestEnemy;
+        arrow.Damage = Config.OUTPOST_ARROW_DAMAGE;
+        arrow.Speed = Config.OUTPOST_ARROW_SPEED;
     }
 }

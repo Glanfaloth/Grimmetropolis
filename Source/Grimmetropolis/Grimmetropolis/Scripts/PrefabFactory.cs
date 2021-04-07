@@ -23,6 +23,8 @@ public enum PrefabType
     Wood,
     Stone,
 
+    Arrow,
+
     UIManager,
 
     EmptyUI,
@@ -188,6 +190,16 @@ public static class PrefabFactory
                     break;
                 }
 
+            // Projectiles
+            case PrefabType.Arrow:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    prefab.AddComponent<Projectile>();
+                    mesh.Model = TDContentManager.LoadModel("ProjectileArrow");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    break;
+                }
+
             // UI
             case PrefabType.UIManager:
                 {
@@ -197,13 +209,7 @@ public static class PrefabFactory
 
             case PrefabType.EmptyUI:
                 {
-                    prefab.RectTransform = new TDRectTransform
-                    {
-                        Parent = prefab.Transform.Parent?.TDObject.RectTransform,
-                        LocalPosition = new Vector2(localPosition.X, localPosition.Y),
-                        LocalRotation = 2f * MathF.Asin(localRotation.Z),
-                        LocalScale = new Vector2(localScale.X, localScale.Y)
-                    };
+                    CreateRectTransform(prefab, localPosition, localRotation, localScale);
                     break;
                 }
 
@@ -218,13 +224,7 @@ public static class PrefabFactory
 
             case PrefabType.ResourceDisplay:
                 {
-                    prefab.RectTransform = new TDRectTransform
-                    {
-                        Parent = prefab.Transform.Parent?.TDObject.RectTransform,
-                        LocalPosition = new Vector2(localPosition.X, localPosition.Y),
-                        LocalRotation = 2f * MathF.Asin(localRotation.Z),
-                        LocalScale = new Vector2(localScale.X, localScale.Y)
-                    };
+                    CreateRectTransform(prefab, localPosition, localRotation, localScale);
                     TDText text = prefab.AddComponent<TDText>();
                     ResourceDisplay resourceDisplay = prefab.AddComponent<ResourceDisplay>();
                     resourceDisplay.TextUI = text;
@@ -248,5 +248,16 @@ public static class PrefabFactory
     public static TDObject CreatePrefab(PrefabType type, Vector3 localPosition, Quaternion localRotation, TDTransform parent = null)
     {
         return CreatePrefab(type, localPosition, localRotation, Vector3.One, parent);
+    }
+
+    public static void CreateRectTransform(TDObject prefab, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
+    {
+        prefab.RectTransform = new TDRectTransform
+        {
+            Parent = prefab.Transform.Parent?.TDObject.RectTransform,
+            LocalPosition = new Vector2(localPosition.X, localPosition.Y),
+            LocalRotation = 2f * MathF.Asin(localRotation.Z),
+            LocalScale = new Vector2(localScale.X, localScale.Y)
+        };
     }
 }
