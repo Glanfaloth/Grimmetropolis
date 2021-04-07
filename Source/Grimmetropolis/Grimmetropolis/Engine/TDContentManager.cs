@@ -53,7 +53,7 @@ public static class TDContentManager
 
     public static SpriteFont LoadSpriteFont(string name)
     {
-        if (!_loadedEffects.ContainsKey(name))
+        if (!_loadedSpriteFonts.ContainsKey(name))
         {
             SpriteFont effect = Content.Load<SpriteFont>(@"Fonts\" + name);
             _loadedSpriteFonts.Add(name, effect);
