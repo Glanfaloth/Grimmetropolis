@@ -7,7 +7,7 @@ public class TDCamera : TDComponent
 
     public float FieldOfView = MathHelper.PiOver4;
     public float NearPlaneDistance = 4f;
-    public float FarPlaneDistance = 40f;
+    public float FarPlaneDistance = 100f;
 
     public Matrix ViewMatrix { get; private set; }
     public Matrix ProjectionMatrix { get; private set; }

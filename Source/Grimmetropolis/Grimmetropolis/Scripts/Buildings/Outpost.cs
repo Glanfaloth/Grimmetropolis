@@ -17,6 +17,10 @@ public class Outpost : Building
     {
         ResourceCost = new ResourcePile(1f, 1f);
 
+        ShootingRange.IsTrigger = true;
+        ShootingRange.Radius = 3f;
+        ShootingRange.Height = 1f;
+        ShootingRange.Offset = Vector3.Zero;
         ShootingRange.collisionEvent += GetClosestCollider;
 
         base.Initialize();

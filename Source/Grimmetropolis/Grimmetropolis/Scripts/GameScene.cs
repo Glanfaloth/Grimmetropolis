@@ -10,12 +10,12 @@ public class GameScene : TDScene
     {
         base.Initialize();
 
-        PrefabFactory.CreatePrefab(PrefabType.Camera, new Vector3(6f, 0f, 18f), Quaternion.CreateFromYawPitchRoll(-.375f * MathHelper.Pi, 0f, MathHelper.Pi));
+        PrefabFactory.CreatePrefab(PrefabType.Camera, new Vector3(8f, 0f, 18f), Quaternion.CreateFromYawPitchRoll(-.375f * MathHelper.Pi, 0f, MathHelper.Pi));
         PrefabFactory.CreatePrefab(PrefabType.Light, new Vector3(12f, 12f, 18f), Quaternion.CreateFromYawPitchRoll(-.2f * MathHelper.Pi, .2f * MathHelper.Pi, -.8f * MathHelper.Pi));
 
         PrefabFactory.CreatePrefab(PrefabType.GameManager);
 
-        TDObject testImage = PrefabFactory.CreatePrefab(PrefabType.EmptyUI, new Vector3(10f, 10f, 0f), Quaternion.CreateFromAxisAngle(Vector3.Backward, .1f), new Vector3(.5f, .5f, 1f), null);
+        /*TDObject testImage = PrefabFactory.CreatePrefab(PrefabType.EmptyUI, new Vector3(10f, 10f, 0f), Quaternion.CreateFromAxisAngle(Vector3.Backward, .1f), new Vector3(.5f, .5f, 1f), null);
         TDSprite spriteComponent = testImage.AddComponent<TDSprite>();
         spriteComponent.Texture = TDContentManager.LoadTexture("DefaultTexture");
         spriteComponent.Color = Color.White;
@@ -72,7 +72,7 @@ public class GameScene : TDScene
                 localPosition.Y = MathF.Sin(MathHelper.TwoPi * p);
                 testCube.Transform.LocalPosition = localPosition;
             }, 2f, true);
-        }, 4f);        
+        }, 4f);*/    
     }
 
     public override void Update(GameTime gameTime)

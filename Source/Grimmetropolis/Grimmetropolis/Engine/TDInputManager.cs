@@ -15,7 +15,7 @@ public static class TDInputManager
 
         TDInput firstGamePadInput = new TDGamePadInput(0);
 
-        for (int i = 1; i < GamePad.MaximumGamePadCount; i++)
+        for (int i = 0; i < GamePad.MaximumGamePadCount; i++)
         {
             TDInput inputDevice = new TDGamePadInput(i);
             Inputs.Add(inputDevice);

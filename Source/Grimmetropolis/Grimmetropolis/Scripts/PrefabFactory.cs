@@ -41,6 +41,7 @@ public static class PrefabFactory
             case PrefabType.Camera:
                 {
                     prefab.AddComponent<TDCamera>();
+                    prefab.AddComponent<CameraToPlayers>();
                     break;
                 }
 
@@ -158,10 +159,6 @@ public static class PrefabFactory
 
                     TDObject shootingObject = CreatePrefab(PrefabType.Empty, prefab.Transform);
                     TDCylinderCollider shootingRange = shootingObject.AddComponent<TDCylinderCollider>();
-                    shootingRange.IsTrigger = true;
-                    shootingRange.Radius = 3f;
-                    shootingRange.Height = 1f;
-                    shootingRange.Offset = Vector3.Zero;
                     outpost.ShootingRange = shootingRange;
                     break;
                 }
