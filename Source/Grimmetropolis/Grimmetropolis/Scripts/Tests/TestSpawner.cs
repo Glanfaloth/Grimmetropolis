@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class TestSpawner : TDComponent
 {
     private int _spawnLocationIndex = -1;
+    private int _spawnTypeIndex = 0;
 
     private float _interval = .5f;
     private float _spawnTimer = 0f;
@@ -35,10 +36,23 @@ public class TestSpawner : TDComponent
             if (enemies.Count < 100)
             {
                 _spawnLocationIndex = (_spawnLocationIndex + 1) % SpawnLocations.Count;
+                _spawnTypeIndex++;
 
                 Map map = GameManager.Instance.Map;
                 Vector3 position = map.Corner + SpawnLocations[_spawnLocationIndex].ToVector3() + map.Offcenter;
-                TDObject enemyObject = PrefabFactory.CreatePrefab(PrefabType.Enemy, position, Quaternion.Identity);
+                TDObject enemyObject;
+                if (_spawnTypeIndex % 10 == 0)
+                {
+                    enemyObject = PrefabFactory.CreateEnemyPrefab<EnemyCatapult>(Config.ENEMY_CATAPULT_STATS, position, Quaternion.Identity);
+                }
+                else if (_spawnTypeIndex % 3 == 0)
+                {
+                    enemyObject = PrefabFactory.CreateEnemyPrefab<EnemyWitch>(Config.ENEMY_WITCH_STATS, position, Quaternion.Identity);
+                }
+                else
+                {
+                    enemyObject = PrefabFactory.CreateEnemyPrefab<EnemyKnight>(Config.ENEMY_KNIGHTS_STATS, position, Quaternion.Identity);
+                }
                 enemies.Add(enemyObject.GetComponent<Enemy>());
             }
         }

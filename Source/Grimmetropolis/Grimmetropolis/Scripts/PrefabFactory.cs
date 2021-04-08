@@ -12,7 +12,7 @@ public enum PrefabType
     GameManager,
 
     Player,
-    Enemy,
+    // Enemy,
 
     MapTileGround,
     MapTileWater,
@@ -97,29 +97,29 @@ public static class PrefabFactory
                     break;
                 }
 
-            case PrefabType.Enemy:
-                {
-                    TDMesh mesh = prefab.AddComponent<TDMesh>();
-                    TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
-                    Enemy enemy = prefab.AddComponent<Enemy>();
-                    mesh.Model = TDContentManager.LoadModel("EnemyWitch");
-                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
-                    collider.Radius = .25f;
-                    collider.Height = .5f;
-                    collider.Offset = .5f * Vector3.Backward;
+            //case PrefabType.Enemy:
+            //    {
+            //        TDMesh mesh = prefab.AddComponent<TDMesh>();
+            //        TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
+            //        Enemy enemy = prefab.AddComponent<Enemy>();
+            //        mesh.Model = TDContentManager.LoadModel("EnemyCatapult");
+            //        mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+            //        collider.Radius = .25f;
+            //        collider.Height = .5f;
+            //        collider.Offset = .5f * Vector3.Backward;
 
-                    TDObject interactionObject = CreatePrefab(PrefabType.Empty, 1f * Vector3.Right, Quaternion.Identity, prefab.Transform);
-                    // TDMesh meshCollider = interactionObject.AddComponent<TDMesh>();
-                    // meshCollider.Model = TDContentManager.LoadModel("DefaultCylinder");
-                    // meshCollider.Texture = TDContentManager.LoadTexture("DefaultTexture");
-                    TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
-                    interactionCollider.IsTrigger = true;
-                    interactionCollider.Radius = .25f;
-                    interactionCollider.Height = .5f;
-                    interactionCollider.Offset = .5f * Vector3.Backward;
-                    enemy.InteractionCollider = interactionCollider;
-                    break;
-                }
+            //        TDObject interactionObject = CreatePrefab(PrefabType.Empty, 1f * Vector3.Right, Quaternion.Identity, prefab.Transform);
+            //        // TDMesh meshCollider = interactionObject.AddComponent<TDMesh>();
+            //        // meshCollider.Model = TDContentManager.LoadModel("DefaultCylinder");
+            //        // meshCollider.Texture = TDContentManager.LoadTexture("DefaultTexture");
+            //        TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
+            //        interactionCollider.IsTrigger = true;
+            //        interactionCollider.Radius = .25f;
+            //        interactionCollider.Height = .5f;
+            //        interactionCollider.Offset = .5f * Vector3.Backward;
+            //        enemy.InteractionCollider = interactionCollider;
+            //        break;
+            //    }
 
             // Map tiles
             case PrefabType.MapTileGround:
@@ -234,6 +234,32 @@ public static class PrefabFactory
                 }
         }
 
+        return prefab;
+    }
+
+    internal static TDObject CreateEnemyPrefab<T>(Config.EnemyStats stats, Vector3 localPosition, Quaternion localRotation, TDTransform parent = null) where T : Enemy, new()
+    {
+        TDObject prefab = CreatePrefab(PrefabType.Empty, localPosition, localRotation, parent);
+        TDMesh mesh = prefab.AddComponent<TDMesh>();
+        TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
+        T enemy = prefab.AddComponent<T>();
+        enemy.SetBaseStats(stats);
+        mesh.Model = TDContentManager.LoadModel(enemy.MeshName);
+        mesh.Texture = TDContentManager.LoadTexture(enemy.TextureName);
+        collider.Radius = .25f;
+        collider.Height = .5f;
+        collider.Offset = .5f * Vector3.Backward;
+
+        TDObject interactionObject = CreatePrefab(PrefabType.Empty, 1f * Vector3.Right, Quaternion.Identity, prefab.Transform);
+        // TDMesh meshCollider = interactionObject.AddComponent<TDMesh>();
+        // meshCollider.Model = TDContentManager.LoadModel("DefaultCylinder");
+        // meshCollider.Texture = TDContentManager.LoadTexture("DefaultTexture");
+        TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
+        interactionCollider.IsTrigger = true;
+        interactionCollider.Radius = enemy.AttackRange;
+        interactionCollider.Height = .5f;
+        interactionCollider.Offset = .5f * Vector3.Backward;
+        enemy.InteractionCollider = interactionCollider;
         return prefab;
     }
 

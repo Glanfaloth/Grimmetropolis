@@ -23,7 +23,15 @@
     },
     "E": {
       "TileType": "ground",
-      "SpawnedEntity": "enemy"
+      "SpawnedEntity": "enemyKnight"
+    },
+    "e": {
+      "TileType": "ground",
+      "SpawnedEntity": "enemyWitch"
+    },
+    "F": {
+      "TileType": "ground",
+      "SpawnedEntity": "enemyCatapult"
     },
     "O": {
       "TileType": "ground",
@@ -35,15 +43,15 @@
     },
   },
   "Map": [ 
-    "*      11 EO",
+    "*      11 FO",
     "      11    ",
     " 11  11     ",
-    " 1E 111 C   ",
+    " 1e 111 C   ",
     " 1111  1    ",
     "       1    ",
     " 111WW 1    ",
     "   1WW 1  S ",
     "   11  11   ",
-    "* E 1      E" 
+    "* e 1      E" 
   ]
 }

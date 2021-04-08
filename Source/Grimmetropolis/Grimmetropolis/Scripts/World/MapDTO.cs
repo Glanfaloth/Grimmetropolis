@@ -16,7 +16,9 @@ public class MapDTO
         WoodResource,
         StoneResource,
         Castle,
-        Enemy,
+        EnemyWitch,
+        EnemyKnight,
+        EnemyCatapult,
         Outpost,
         EnemySpawnPoint,
     }

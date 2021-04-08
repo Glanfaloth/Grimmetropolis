@@ -23,7 +23,7 @@
     },
     "E": {
       "TileType": "ground",
-      "SpawnedEntity": "enemy"
+      "SpawnedEntity": "enemyKnight"
     },
     "O": {
       "TileType": "ground",

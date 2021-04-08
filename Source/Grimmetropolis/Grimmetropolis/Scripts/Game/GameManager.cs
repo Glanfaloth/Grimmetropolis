@@ -77,45 +77,7 @@ public class GameManager : TDComponent
 
         foreach (var entityToSpawn in entitiesToSpawn)
         {
-            switch (entityToSpawn.Type)
-            {
-                case MapDTO.EntityType.WoodResource:
-                    {
-                        TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.Wood, StructureTransform);
-                        newEntity.GetComponent<ResourceDeposit>().Position = entityToSpawn.Position;
-                    }
-                    break;
-                case MapDTO.EntityType.StoneResource:
-                    {
-                        TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.Stone, StructureTransform);
-                        newEntity.GetComponent<ResourceDeposit>().Position = entityToSpawn.Position;
-                    }
-                    break;
-                case MapDTO.EntityType.Castle:
-                    {
-                        // TODO: do we need to check there is only one?
-                        TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.Castle, StructureTransform);
-                        newEntity.GetComponent<Castle>().Position = entityToSpawn.Position;
-                        Map.EnemyTarget = entityToSpawn.Position;
-                    }
-                    break;
-                case MapDTO.EntityType.Enemy:
-                    PrefabFactory.CreatePrefab(PrefabType.Enemy, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
-                        Quaternion.Identity, enemyList.Transform);
-                    break;
-                case MapDTO.EntityType.Outpost:
-                    {
-                        TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.Outpost, StructureTransform);
-                        newEntity.GetComponent<Outpost>().Position = entityToSpawn.Position;
-                    }
-                    break;
-                case MapDTO.EntityType.EnemySpawnPoint:
-                    spawner.SpawnLocations.Add(entityToSpawn.Position);
-                    break;
-                case MapDTO.EntityType.None:
-                default:
-                    throw new NotSupportedException();
-            }
+            SpawnEntity(spawner, enemyList, entityToSpawn);
         }
 
         if (spawner.SpawnLocations.Count == 0)
@@ -144,4 +106,54 @@ public class GameManager : TDComponent
         //resourceStone.Position = new Point(7, 10);
     }
 
+    private void SpawnEntity(TestSpawner spawner, TDObject enemyList, MapDTO.EntityToSpawn entityToSpawn)
+    {
+        switch (entityToSpawn.Type)
+        {
+            case MapDTO.EntityType.WoodResource:
+                {
+                    TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.Wood, StructureTransform);
+                    newEntity.GetComponent<ResourceDeposit>().Position = entityToSpawn.Position;
+                }
+                break;
+            case MapDTO.EntityType.StoneResource:
+                {
+                    TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.Stone, StructureTransform);
+                    newEntity.GetComponent<ResourceDeposit>().Position = entityToSpawn.Position;
+                }
+                break;
+            case MapDTO.EntityType.Castle:
+                {
+                    // TODO: do we need to check there is only one?
+                    TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.Castle, StructureTransform);
+                    newEntity.GetComponent<Castle>().Position = entityToSpawn.Position;
+                    Map.EnemyTarget = entityToSpawn.Position;
+                }
+                break;
+            case MapDTO.EntityType.EnemyWitch:
+                PrefabFactory.CreateEnemyPrefab<EnemyWitch>(Config.ENEMY_WITCH_STATS, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
+                    Quaternion.Identity, enemyList.Transform);
+                break;
+            case MapDTO.EntityType.EnemyKnight:
+                PrefabFactory.CreateEnemyPrefab<EnemyKnight>(Config.ENEMY_KNIGHTS_STATS, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
+                    Quaternion.Identity, enemyList.Transform);
+                break;
+            case MapDTO.EntityType.EnemyCatapult:
+                PrefabFactory.CreateEnemyPrefab<EnemyCatapult>(Config.ENEMY_CATAPULT_STATS, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
+                    Quaternion.Identity, enemyList.Transform);
+                break;
+            case MapDTO.EntityType.Outpost:
+                {
+                    TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.Outpost, StructureTransform);
+                    newEntity.GetComponent<Outpost>().Position = entityToSpawn.Position;
+                }
+                break;
+            case MapDTO.EntityType.EnemySpawnPoint:
+                spawner.SpawnLocations.Add(entityToSpawn.Position);
+                break;
+            case MapDTO.EntityType.None:
+            default:
+                throw new NotSupportedException();
+        }
+    }
 }
