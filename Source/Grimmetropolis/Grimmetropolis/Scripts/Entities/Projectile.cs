@@ -46,16 +46,17 @@ public class Projectile : TDComponent
         TDObject.Transform.Position = StartPosition;
 
         CalculateValues();
-        _elevationAngle = -MathF.Atan2(_direction.Z, _direction.GetXY().Length());
+        Vector3 directionXY = new Vector3(_direction.GetXY(), 0f);
+        _elevationAngle = MathHelper.PiOver4; // MathF.Acos(Vector3.Dot(Vector3.Normalize(_direction), Vector3.Normalize(directionXY)));
 
-        TDObject.Transform.Rotation = Quaternion.CreateFromYawPitchRoll(0f, _elevationAngle, _azimuthAngle);
+        UpdateRotation();
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
 
-        if (_state == ProjectileState.Moving) UpdatePosition(gameTime);
+        if (_state == ProjectileState.Moving) UpdateTransform(gameTime);
         else if (_state == ProjectileState.Stuck)
         {
             _lifeTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -67,12 +68,17 @@ public class Projectile : TDComponent
     }
 
 
-    private void UpdatePosition(GameTime gameTime)
+    private void UpdateTransform(GameTime gameTime)
     {
         CalculateValues();
 
         TDObject.Transform.Position += Speed * _direction / _distance * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        TDObject.Transform.Rotation = Quaternion.CreateFromYawPitchRoll(0f, _elevationAngle, _azimuthAngle);
+        UpdateRotation();
+    }
+
+    private void UpdateRotation()
+    {
+        TDObject.Transform.Rotation = Quaternion.CreateFromAxisAngle(Vector3.Backward, _azimuthAngle) * Quaternion.CreateFromAxisAngle(Vector3.Up, _elevationAngle);
     }
 
     private void CalculateValues()

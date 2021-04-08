@@ -18,13 +18,15 @@ public abstract class Enemy : Character
     public abstract String MeshName { get; }
     public virtual String TextureName => "ColorPaletteTexture";
 
-    protected override float WalkSpeed => _walkSpeed;
+    public override float WalkSpeed => _walkSpeed;
 
     protected override float RotateSpeed => _rotateSpeed;
 
     public override float BaseHealth => _baseHealth;
 
     public float AttackRange => _attackRange;
+
+    public override Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
 
     public void SetBaseStats(Config.EnemyStats stats)
     {
