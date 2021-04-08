@@ -130,8 +130,16 @@ public class GameManager : TDComponent
                     Map.EnemyTarget = entityToSpawn.Position;
                 }
                 break;
-            case MapDTO.EntityType.Enemy:
+            case MapDTO.EntityType.EnemyWitch:
                 PrefabFactory.CreateEnemyPrefab<EnemyWitch>(Config.ENEMY_WITCH_STATS, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
+                    Quaternion.Identity, enemyList.Transform);
+                break;
+            case MapDTO.EntityType.EnemyKnight:
+                PrefabFactory.CreateEnemyPrefab<EnemyKnight>(Config.ENEMY_KNIGHTS_STATS, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
+                    Quaternion.Identity, enemyList.Transform);
+                break;
+            case MapDTO.EntityType.EnemyCatapult:
+                PrefabFactory.CreateEnemyPrefab<EnemyCatapult>(Config.ENEMY_CATAPULT_STATS, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
                     Quaternion.Identity, enemyList.Transform);
                 break;
             case MapDTO.EntityType.Outpost:
