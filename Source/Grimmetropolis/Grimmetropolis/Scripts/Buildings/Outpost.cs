@@ -2,8 +2,7 @@
 
 public class Outpost : Building
 {
-    public static new ResourcePile ResourceCost = new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST);
-    public override ResourcePile GetResourceCost() => ResourceCost;
+    public override ResourcePile GetResourceCost() => new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST);
 
     public TDCylinderCollider ShootingRange = null;
 
@@ -65,13 +64,9 @@ public class Outpost : Building
 
     private void ShootArrow()
     {
-        TDObject arrowObject = PrefabFactory.CreatePrefab(PrefabType.Arrow, TDObject.Transform);
+        TDObject arrowObject = PrefabFactory.CreatePrefab(PrefabType.Arrow);
         Projectile arrow = arrowObject.GetComponent<Projectile>();
-        arrow.StartPosition = TDObject.Transform.Position + 2f * Vector3.Backward;
-        // TODO: why is tdObject sometimes null?
-        arrow.TargetPosition = _closestEnemy.TDObject?.Transform.Position + .5f * Vector3.Backward ?? Vector3.Zero;
+        arrow.StartPosition = TDObject.Transform.Position + 2.25f * Vector3.Backward;
         arrow.TargetCharacter = _closestEnemy;
-        arrow.Damage = Config.OUTPOST_ARROW_DAMAGE;
-        arrow.Speed = Config.OUTPOST_ARROW_SPEED;
     }
 }

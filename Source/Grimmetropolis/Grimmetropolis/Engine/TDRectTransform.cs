@@ -28,6 +28,8 @@ public class TDRectTransform : TDComponent
         get => _parent;
         set
         {
+            _parent?.Children.Remove(this);
+
             _parent = value;
             AddChildToParent();
         }

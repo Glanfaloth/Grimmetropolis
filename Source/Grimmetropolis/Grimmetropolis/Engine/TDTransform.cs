@@ -11,6 +11,8 @@ public class TDTransform : TDComponent
         get => _parent;
         set
         {
+            _parent?.Children.Remove(this);
+
             _parent = value;
             AddChildToParent();
 

@@ -194,9 +194,11 @@ public static class PrefabFactory
             case PrefabType.Arrow:
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
-                    prefab.AddComponent<Projectile>();
+                    TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
+                    Projectile projectile = prefab.AddComponent<Projectile>();
                     mesh.Model = TDContentManager.LoadModel("ProjectileArrow");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    projectile.Collider = collider;
                     break;
                 }
 

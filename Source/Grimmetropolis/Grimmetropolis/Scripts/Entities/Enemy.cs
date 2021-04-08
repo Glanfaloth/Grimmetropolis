@@ -9,11 +9,13 @@ public class Enemy : Character
     private EnemyController _controller;
     private readonly List<EnemyMove.Type> _moves = new List<EnemyMove.Type>() { EnemyMove.Type.Run };
 
-    protected override float WalkSpeed => Config.ENEMY_WITCH_STATS.WALK_SPEED;
+    public override float WalkSpeed => Config.ENEMY_WITCH_STATS.WALK_SPEED;
 
     protected override float RotateSpeed => Config.ENEMY_WITCH_STATS.ROTATE_SPEED;
 
     public override float BaseHealth => Config.ENEMY_WITCH_STATS.HEALTH;
+
+    public override Vector3 OffsetTarget => .5f * Vector3.Backward;
 
     public override void Initialize()
     {
@@ -48,7 +50,7 @@ public class Enemy : Character
                 throw new NotSupportedException();
         }
 
-        base.Update(gameTime);
+    base.Update(gameTime);
     }
 
     public override void Destroy()

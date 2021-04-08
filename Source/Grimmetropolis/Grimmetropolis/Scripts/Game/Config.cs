@@ -34,7 +34,7 @@ public static class Config
     public const float OUTPOST_SHOOTING_RATE = .5f;
 
     public const float OUTPOST_ARROW_DAMAGE = 1f;
-    public const float OUTPOST_ARROW_SPEED = 6f;
+    public const float OUTPOST_ARROW_SPEED = 8f;
 
     public const int RESOURCE_WOOD_GATHER_BASE_RATE = 1;
     public const int RESOURCE_STONE_GATHER_BASE_RATE = 1;
@@ -49,8 +49,8 @@ public static class Config
     public const float PLAYER_HEALTH = 3f;
     public const float PLAYER_DAMAGE = 1f;
 
-    public static readonly EnemyStats ENEMY_WITCH_STATS = new EnemyStats(4f, 3f * MathHelper.Pi, 1f, 1f, 1f);
-    public static readonly EnemyStats ENEMY_KNIGHTS_STATS = new EnemyStats(4f, 3f * MathHelper.Pi, 1f, 1f, 1f);
+    public static readonly EnemyStats ENEMY_WITCH_STATS = new EnemyStats(4f, 3f * MathHelper.Pi, 5f, 1f, 1f);
+    public static readonly EnemyStats ENEMY_KNIGHTS_STATS = new EnemyStats(4f, 3f * MathHelper.Pi, 5f, 1f, 1f);
 
     #endregion
 
