@@ -49,8 +49,9 @@ public static class Config
     public const float PLAYER_HEALTH = 3f;
     public const float PLAYER_DAMAGE = 1f;
 
-    public static readonly EnemyStats ENEMY_WITCH_STATS = new EnemyStats(4f, 3f * MathHelper.Pi, 1f, 1f, 1f);
-    public static readonly EnemyStats ENEMY_KNIGHTS_STATS = new EnemyStats(4f, 3f * MathHelper.Pi, 1f, 1f, 1f);
+    public static readonly EnemyStats ENEMY_CATAPULT_STATS = new EnemyStats(1f, 1f * MathHelper.Pi, 5f, 1f, 2f, 4f);
+    public static readonly EnemyStats ENEMY_WITCH_STATS = new EnemyStats(3f, 3f * MathHelper.Pi, 1f, 1f, 1f, 2f);
+    public static readonly EnemyStats ENEMY_KNIGHTS_STATS = new EnemyStats(3f, 3f * MathHelper.Pi, 3f, 1f, 1f, .25f);
 
     #endregion
 
@@ -61,14 +62,16 @@ public static class Config
         public readonly float HEALTH;
         public readonly float DAMAGE_AGAINST_PLAYER;
         public readonly float DAMAGE_AGAINST_BUILDINGS;
+        public readonly float ATTACK_RANGE;
 
-        public EnemyStats(float walkSpeed, float rotateSpeed, float health, float damageAgainstPlayer, float damageAgainstBuilding)
+        public EnemyStats(float walkSpeed, float rotateSpeed, float health, float damageAgainstPlayer, float damageAgainstBuilding, float attackRange)
         {
             WALK_SPEED = walkSpeed;
             ROTATE_SPEED = rotateSpeed;
             HEALTH = health;
             DAMAGE_AGAINST_PLAYER = damageAgainstPlayer;
             DAMAGE_AGAINST_BUILDINGS = damageAgainstBuilding;
+            ATTACK_RANGE = attackRange;
         }
     }
 }

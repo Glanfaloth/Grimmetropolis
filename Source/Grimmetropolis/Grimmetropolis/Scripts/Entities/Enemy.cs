@@ -4,16 +4,37 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-public class Enemy : Character
+public abstract class Enemy : Character
 {
     private EnemyController _controller;
+    private float _walkSpeed;
+    private float _rotateSpeed;
+    private float _baseHealth;
+    private float _damageAgainstPlayers;
+    private float _damageAgainstBuildings;
+    private float _attackRange;
     private readonly List<EnemyMove.Type> _moves = new List<EnemyMove.Type>() { EnemyMove.Type.Run };
 
-    protected override float WalkSpeed => Config.ENEMY_WITCH_STATS.WALK_SPEED;
+    public abstract String MeshName { get; }
+    public virtual String TextureName => "ColorPaletteTexture";
 
-    protected override float RotateSpeed => Config.ENEMY_WITCH_STATS.ROTATE_SPEED;
+    protected override float WalkSpeed => _walkSpeed;
 
-    public override float BaseHealth => Config.ENEMY_WITCH_STATS.HEALTH;
+    protected override float RotateSpeed => _rotateSpeed;
+
+    public override float BaseHealth => _baseHealth;
+
+    public float AttackRange => _attackRange;
+
+    public void SetBaseStats(Config.EnemyStats stats)
+    {
+        _walkSpeed = stats.WALK_SPEED;
+        _rotateSpeed = stats.ROTATE_SPEED;
+        _baseHealth = stats.HEALTH;
+        _damageAgainstPlayers = stats.DAMAGE_AGAINST_PLAYER;
+        _damageAgainstBuildings = stats.DAMAGE_AGAINST_BUILDINGS;
+        _attackRange = stats.ATTACK_RANGE;
+    }
 
     public override void Initialize()
     {
@@ -86,11 +107,11 @@ public class Enemy : Character
 
         if (closestPlayer != null)
         {
-            closestPlayer.Health -= Config.ENEMY_WITCH_STATS.DAMAGE_AGAINST_PLAYER;
+            closestPlayer.Health -= _damageAgainstPlayers;
         }
         else if (closestBuilding != null)
         {
-            closestBuilding.Health -= Config.ENEMY_WITCH_STATS.DAMAGE_AGAINST_BUILDINGS;
+            closestBuilding.Health -= _damageAgainstBuildings;
         }
     }
 
