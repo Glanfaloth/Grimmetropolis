@@ -158,11 +158,9 @@ public class MapTile : TDComponent
         switch (movementType)
         {
             case EnemyMove.Type.Run:
-                // TODO: this should be done in a cleaner way
                 new RunMove(from, TileVertex, cost, this);
                 break;
             case EnemyMove.Type.Attack:
-                // TODO: create attack move
                 new AttackMove(from, StructureVertex, cost, Structure);
                 break;
             default:

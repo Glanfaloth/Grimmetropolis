@@ -32,7 +32,6 @@ public class EnemyController : TDComponent
     public override void Update(GameTime gameTime)
     {
         // TODO: add monster spawning
-        // TODO: do we need to rebuild the graph every cycle?
         base.Update(gameTime);
 
         Point start = Map.EnemyTarget;
