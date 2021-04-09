@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+
+using static TDPriorityQueue<Location, EnemyMove>;
 using QueueEntry = System.Tuple<float, Location, EnemyMove>;
 
 public class MovementGraph
@@ -53,18 +55,23 @@ public class MovementGraph
         // measure if this is a bottleneck
         ResetPaths();
         Location startLocation = _map.MapTiles[start.X, start.Y].TileVertex;
-        var pq = new SortedSet<QueueEntry>(new QueueEntryComparer())
-        {
-            new QueueEntry(0f, startLocation, new StealArtifact(startLocation, startLocation)),
-        };
+        //var pq = new SortedSet<QueueEntry>(new QueueEntryComparer())
+        //{
+        //    new QueueEntry(0f, startLocation, new StealArtifact(startLocation, startLocation)),
+        //};
+
+        var pq = new TDPriorityQueue<Location, EnemyMove>();
+        pq.Insert(0f, startLocation, new StealArtifact(startLocation, startLocation));
 
 
         // for now we use a very badly implemented djikstra
-        while (pq.Count > 0)
+        while (!pq.IsEmpty())
         {
-            var tuple = pq.Min;
-            (float distance, Location v, EnemyMove e) = tuple;
-            pq.Remove(tuple);
+            Handle h = pq.ExtractMin();
+
+            float distance = h.Cost;
+            Location v = h.Key;
+            EnemyMove e = h.Value;
 
             if (!_visited[v.Index])
             {
@@ -76,7 +83,7 @@ public class MovementGraph
                 {
                     if (!_visited[inEdge.From.Index])
                     {
-                        pq.Add(new QueueEntry(distance + inEdge.Cost, inEdge.From, inEdge));
+                        pq.Insert(distance + inEdge.Cost, inEdge.From, inEdge);
                     }
                 }
             }

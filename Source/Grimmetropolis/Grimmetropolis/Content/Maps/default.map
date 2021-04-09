@@ -1,0 +1,79 @@
+{
+  "Legend": {
+    " ": {
+      "TileType": "ground",
+      "SpawnedEntity": "none"
+    },
+    "1": {
+      "TileType": "water",
+      "SpawnedEntity": "none"
+    },
+
+    "W": {
+      "TileType": "ground",
+      "SpawnedEntity": "woodResource"
+    },
+    "S": {
+      "TileType": "ground",
+      "SpawnedEntity": "stoneResource"
+    },
+    "C": {
+      "TileType": "ground",
+      "SpawnedEntity": "Castle"
+    },
+    "E": {
+      "TileType": "ground",
+      "SpawnedEntity": "enemyKnight"
+    },
+    "e": {
+      "TileType": "ground",
+      "SpawnedEntity": "enemyWitch"
+    },
+    "F": {
+      "TileType": "ground",
+      "SpawnedEntity": "enemyCatapult"
+    },
+    "O": {
+      "TileType": "ground",
+      "SpawnedEntity": "outpost"
+    },
+    "*": {
+      "TileType": "ground",
+      "SpawnedEntity": "enemySpawnPoint"
+    },
+  },
+  "Map": [ 
+    "*                 111                      1   *",
+    "          WW     111                       1    ",
+    "                111       WW               1    ",
+    "           S    11                         1    ",
+    "                11          S             11    ",
+    "               11111                     11     ",
+    "              111WW11                 1111      ",
+    "    S        111    11            11111         ",
+    "            111      11                  SS     ",
+    "      11111111        11                        ",
+    "   1111111111          11                       ",
+    "   1111E                11                      ",
+    "   11             W S    11   WW                ",
+    "                          11  WW            SS  ",
+    "                          11                    ",
+    " W        11          C   11                    ",
+    "         1111             11                    ",
+    "          11               11                   ",
+    "                            11      S           ",
+    "                             11                 ",
+    "                              11                ",
+    "        S             W        11               ",
+    "                                11       W      ",
+    "        S    S                   11             ",
+    "                                  11            ",
+    "   S     11                        11           ",
+    "          11111                                 ",
+    "              11        W            W          ",
+    "               11111                            ",
+    "      W            111                          ",
+    "             S       111111                     ",
+    "*                         11111                *",
+  ]
+}
