@@ -26,8 +26,12 @@ public abstract class Character : TDComponent
         }
     }
 
+    public Item[] Items = new Item[3];
+
     public TDCylinderCollider InteractionCollider;
     protected List<Tuple<TDCollider, float>> _colliderList = new List<Tuple<TDCollider, float>> ();
+
+    // TODO: add shooting range collider
 
     public override void Initialize()
     {
@@ -74,12 +78,22 @@ public abstract class Character : TDComponent
     protected void Build()
     {
         MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        if (mapTile.Type == MapTileType.Ground && mapTile.Structure == null && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST)))
+        if (mapTile.Type == MapTileType.Ground && mapTile.Structure == null && mapTile.Item == null && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST)))
         {
             GameManager.Instance.ResourcePool -= new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST);
-            TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.Outpost, GameManager.Instance.StructureTransform);
+            TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost, GameManager.Instance.StructureTransform);
             Building building = buildingObject.GetComponent<Building>();
             building.Position = mapTile.Position;
+        }
+    }
+
+    protected void TakeDrop()
+    {
+        MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
+        if (mapTile.Type == MapTileType.Ground && mapTile.Structure == null)
+        {
+            if (Items[0] != null && mapTile.Item == null) Items[0].Drop();
+            else if (Items[0] == null && mapTile.Item != null) mapTile.Item.TakeItem(this);
         }
     }
 

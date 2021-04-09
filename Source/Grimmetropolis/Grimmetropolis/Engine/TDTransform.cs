@@ -139,7 +139,7 @@ public class TDTransform : TDComponent
 
     private void CalculateLocalRotation()
     {
-        _localRotation = Parent == null ? _rotation : _rotation * Quaternion.Inverse(_parent.Rotation);
+        _localRotation = Parent == null ? _rotation : Quaternion.Inverse(_parent.Rotation) * _rotation;
     }
 
     private void CalculateLocalScale()
@@ -154,7 +154,7 @@ public class TDTransform : TDComponent
 
     private void CalculateRotation()
     {
-        _rotation = _parent == null ? _localRotation : _localRotation * _parent.Rotation;
+        _rotation = _parent == null ? _localRotation : _parent.Rotation * _localRotation;
     }
 
     private void CalculateScale()

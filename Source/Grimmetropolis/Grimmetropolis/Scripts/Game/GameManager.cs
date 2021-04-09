@@ -22,11 +22,12 @@ public class GameManager : TDComponent
     public List<Player> Players = new List<Player>();
     public List<Enemy> Enemies = new List<Enemy>();
     public List<Structure> Structures = new List<Structure>();
+    public List<Item> Items = new List<Item>();
 
     public TDTransform PlayerTransform;
     public TDTransform EnemyTransform;
     public TDTransform StructureTransform;
-
+    public TDTransform ItemTransform;
 
     public override void Initialize()
     {
@@ -85,6 +86,14 @@ public class GameManager : TDComponent
             spawner.SpawnLocations.Add(Point.Zero);
         }
 
+        // Items
+        TDObject itemList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
+        ItemTransform = itemList.Transform;
+
+        TDObject pickaxeObject = PrefabFactory.CreatePrefab(PrefabType.ToolPickaxe, ItemTransform);
+        ToolPickaxe pickaxe = pickaxeObject.GetComponent<ToolPickaxe>();
+        pickaxe.Character = playerObject1.GetComponent<Player>();
+
         //TDObject castleObject = PrefabFactory.CreatePrefab(PrefabType.Castle, StructureTransform);
         //Castle castle = castleObject.GetComponent<Castle>();
         //castle.Position = new Point(3, 8);
@@ -112,20 +121,20 @@ public class GameManager : TDComponent
         {
             case MapDTO.EntityType.WoodResource:
                 {
-                    TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.Wood, StructureTransform);
+                    TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.ResourceWood, StructureTransform);
                     newEntity.GetComponent<ResourceDeposit>().Position = entityToSpawn.Position;
                 }
                 break;
             case MapDTO.EntityType.StoneResource:
                 {
-                    TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.Stone, StructureTransform);
+                    TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.ResourceStone, StructureTransform);
                     newEntity.GetComponent<ResourceDeposit>().Position = entityToSpawn.Position;
                 }
                 break;
             case MapDTO.EntityType.Castle:
                 {
                     // TODO: do we need to check there is only one?
-                    TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.Castle, StructureTransform);
+                    TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.BuildingCastle, StructureTransform);
                     newEntity.GetComponent<Castle>().Position = entityToSpawn.Position;
                     Map.EnemyTarget = entityToSpawn.Position;
                 }
@@ -144,7 +153,7 @@ public class GameManager : TDComponent
                 break;
             case MapDTO.EntityType.Outpost:
                 {
-                    TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.Outpost, StructureTransform);
+                    TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost, StructureTransform);
                     newEntity.GetComponent<Outpost>().Position = entityToSpawn.Position;
                 }
                 break;

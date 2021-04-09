@@ -29,6 +29,7 @@ public class Player : Character
 
         if (Input.IsSpecialAbilityPressed()) Interact();
         if (Input.IsUseItemPressed()) Build();
+        if (Input.IsSwapItemPressed()) TakeDrop();
 
         base.Update(gameTime);
     }

@@ -47,7 +47,7 @@ public class Projectile : TDComponent
 
         CalculateValues();
         Vector3 directionXY = new Vector3(_direction.GetXY(), 0f);
-        _elevationAngle = MathHelper.PiOver4; // MathF.Acos(Vector3.Dot(Vector3.Normalize(_direction), Vector3.Normalize(directionXY)));
+        _elevationAngle = MathF.Acos(Vector3.Dot(Vector3.Normalize(_direction), Vector3.Normalize(directionXY)));
 
         UpdateRotation();
     }

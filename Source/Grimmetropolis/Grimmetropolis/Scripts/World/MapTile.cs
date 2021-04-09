@@ -31,6 +31,8 @@ public class MapTile : TDComponent
         }
     }
 
+    public Item Item = null;
+
     private int _nearbyOutposts = 0;
     public int NearbyOutposts
     {

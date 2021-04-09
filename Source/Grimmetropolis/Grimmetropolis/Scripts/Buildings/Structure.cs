@@ -38,6 +38,7 @@ public abstract class Structure : TDComponent
     private void PlaceStructure(Structure structure, Structure previousStructure)
     {
         // TODO: doesn't this allow to place buildings partly outside the map?
+        // -> Yep, can be problematic. For now, don't place buildings partially outside of the map.
         int xHigh = Math.Clamp(Position.X + Size.X, 0, GameManager.Instance.Map.Width);
         int yHigh = Math.Clamp(Position.Y + Size.Y, 0, GameManager.Instance.Map.Height);
 
@@ -55,6 +56,7 @@ public abstract class Structure : TDComponent
                     if (structure is Building building)
                     {
                         // TODO: double check if this is correct.
+                        // -> This is necessary if two people try to construct a building at the exact same location and time. Then, the construction of one building is canceled.
                         GameManager.Instance.ResourcePool += building.GetResourceCost();
                     }
                     return;
