@@ -18,10 +18,10 @@ public class EnemyController : TDComponent
         _graph = MovementGraph.BuildGraphFromMap(Map);
     }
 
-    internal EnemyMove ComputeNextMove(Vector2 localPosition, List<EnemyMove.Type> moves)
+    internal EnemyMove ComputeNextMove(Vector2 localPosition, EnemyMove.Type actions, float attackRange)
     {
         MapTile tile = Map.GetMapTile(localPosition);
-        return _graph.GetNextMoveFromMapTile(tile);
+        return _graph.GetNextMoveFromMapTile(tile, actions, attackRange);
     }
 
     internal EnemyMove GetFutureMove(EnemyMove nextMove)

@@ -11,82 +11,56 @@ public class MovementGraph
     {
         MovementGraph result = new MovementGraph(map);
         result.AddMapVertices();
-        result.ResetPaths();
         return result;
     }
 
     private readonly Map _map;
+    private readonly List<Location> _vertices = new List<Location>();
+    private readonly Dictionary<Tuple<EnemyMove.Type, int>, PathComputation> _paths = new Dictionary<Tuple<EnemyMove.Type, int>, PathComputation>();
 
-    private readonly List<Location> vertices = new List<Location>();
+    private Location _startLocation;
 
-    // TODO: this doesn't support different action types of the enemies for now.
-    private EnemyMove[] _nextMoves;
-    private bool[] _visited;
-    private Handle[] _handles;
+    public int VerticesCount => _vertices.Count;
+
 
     private MovementGraph(Map map)
     {
         _map = map;
     }
 
-    internal EnemyMove GetNextMoveFromMapTile(MapTile tile)
+    internal EnemyMove GetNextMoveFromMapTile(MapTile tile, EnemyMove.Type actions, float attackRange)
     {
-        // TODO: what to do when no move is set
-        // TODO: sanitize input
-        return _nextMoves[tile.TileVertex.Index] ?? EnemyMove.NONE;
+        int pathAttackRange = (int)attackRange;
+        if ((actions & EnemyMove.Type.RangedAttack) != EnemyMove.Type.RangedAttack)
+        {
+            pathAttackRange = 0;
+        }
+
+        var key = new Tuple<EnemyMove.Type, int>(actions, pathAttackRange);
+        if (!_paths.ContainsKey(key))
+        {
+            PathComputation path = new PathComputation(this, actions, pathAttackRange);
+            _paths[key] = path;
+            path.ComputeShortestPathToMapTile(_startLocation);
+        }
+
+        return _paths[key].GetNextMoveFromMapTile(tile);
     }
 
     internal void ComputeShortestPathToMapTile(Point start)
     {
-        // TODO: this is currently a bottleneck
-        ResetPaths();
-        Location startLocation = _map.MapTiles[start.X, start.Y].TileVertex;
+        _startLocation = _map.MapTiles[start.X, start.Y].TileVertex;
 
-        var pq = new TDPriorityQueue<EnemyMove>();
-        pq.Insert(0f, new StealArtifact(startLocation));
-
-
-        // for now we use a very badly implemented djikstra
-        while (!pq.IsEmpty())
+        foreach (var path in _paths.Values)
         {
-            Handle h = pq.ExtractMin();
-
-            float distance = h.Cost;
-            Location v = h.Value.From;
-            EnemyMove e = h.Value;
-
-            if (!_visited[v.Index])
-            {
-                _visited[v.Index] = true;
-                _nextMoves[v.Index] = e;
-
-                // we traverse graph in reverse, since we compute all path to target
-                foreach (EnemyMove inEdge in v.InEdges)
-                {
-                    int u = inEdge.From.Index;
-                    if (!_visited[u])
-                    {
-                        float futureCost = distance + inEdge.Cost;
-                        // _handles[u] = pq.Insert(futureCost, inEdge);
-                        if (_handles[u] == null)
-                        {
-                            _handles[u] = pq.Insert(futureCost, inEdge);
-                        }
-                        else if (_handles[u].Cost > futureCost)
-                        {
-                            pq.DecreaseCost(_handles[u], futureCost, inEdge);
-                        }
-                    }
-                }
-            }
+            path.ComputeShortestPathToMapTile(_startLocation);
         }
-        // TODO: 
     }
 
     private void AddVertex(Location location)
     {
-        location.Index = vertices.Count;
-        vertices.Add(location);
+        location.Index = _vertices.Count;
+        _vertices.Add(location);
     }
 
     private void AddMapVertices()
@@ -99,13 +73,6 @@ public class MovementGraph
                 AddVertex(_map.MapTiles[x, y].StructureVertex);
             }
         }
-    }
-
-    private void ResetPaths()
-    {
-        _nextMoves = new EnemyMove[vertices.Count];
-        _visited = new bool[vertices.Count];
-        _handles = new Handle[vertices.Count];
     }
 }
 

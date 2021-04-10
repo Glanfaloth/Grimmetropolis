@@ -14,7 +14,8 @@ public abstract class Enemy : Character
     private float _damageAgainstBuildings;
     private float _attackRange;
     private float _attackDuration;
-    private readonly List<EnemyMove.Type> _moves = new List<EnemyMove.Type>() { EnemyMove.Type.Run };
+
+    protected abstract EnemyMove.Type Actions { get; }
 
     public abstract String MeshName { get; }
     public virtual String TextureName => "ColorPaletteTexture";
@@ -54,7 +55,7 @@ public abstract class Enemy : Character
     {
         if (_controller == null) return;
 
-        EnemyMove nextMove = _controller.ComputeNextMove(new Vector2(TDObject.Transform.LocalPosition.X, TDObject.Transform.LocalPosition.Y), _moves);
+        EnemyMove nextMove = _controller.ComputeNextMove(TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange);
 
         switch (nextMove.MovementType)
         {
@@ -69,6 +70,9 @@ public abstract class Enemy : Character
                 break;
             case EnemyMove.Type.Attack:
                 AttackTarget((AttackMove)nextMove, gameTime);
+                break;
+            case EnemyMove.Type.RangedAttack:
+                RangedAttackTarget((RangedAttackMove)nextMove, gameTime);
                 break;
             default:
                 throw new NotSupportedException();
@@ -133,6 +137,12 @@ public abstract class Enemy : Character
 
     private void AttackTarget(AttackMove nextMove, GameTime gameTime)
     {
+        Interact(gameTime);
+    }
+
+    private void RangedAttackTarget(RangedAttackMove nextMove, GameTime gameTime)
+    {
+        // TODO: add projectile
         Interact(gameTime);
     }
 

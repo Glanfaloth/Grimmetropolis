@@ -6,12 +6,14 @@ public abstract class EnemyMove
     private static Location _noLocation = new Location();
     public static EnemyMove NONE { get; } = new NoMove(_noLocation);
 
+    [Flags]
     public enum Type
     {
-        None,
-        StealArtifact,
-        Run,
-        Attack,
+        None            = 0x00,
+        StealArtifact   = 0x01,
+        Run             = 0x02,
+        Attack          = 0x04,
+        RangedAttack    = 0x08,
     }
 
     public abstract Type MovementType { get; }
@@ -33,6 +35,11 @@ public abstract class EnemyMove
 
         from.AddOutgoingEdge(this);
         to.AddIncomingEdge(this);
+    }
+
+    public virtual bool IsMoveAllowed(Type actions, float attackRange)
+    {
+        return (actions & MovementType) == MovementType;
     }
 
     private class NoMove : EnemyMove
