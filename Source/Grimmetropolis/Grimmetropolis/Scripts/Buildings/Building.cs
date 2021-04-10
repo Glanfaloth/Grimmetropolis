@@ -15,7 +15,11 @@ public abstract class Building : Structure
         set
         {
             _health = value;
-            _healthBar?.SetHealthBar(_health);
+            if (_healthBar != null)
+            {
+                _healthBar.CurrentProgress = _health;
+                _healthBar.Show();
+            }
             if (_health <= 0f) TDObject?.Destroy();
         }
     }

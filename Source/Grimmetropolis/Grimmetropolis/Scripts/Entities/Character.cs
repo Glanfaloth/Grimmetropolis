@@ -22,7 +22,11 @@ public abstract class Character : TDComponent
         set
         {
             _health = value;
-            _healthBar?.SetHealthBar(_health);
+            if (_healthBar != null)
+            {
+                _healthBar.CurrentProgress = _health;
+                _healthBar.Show();
+            }
             if (_health <= 0f) TDObject?.Destroy();
         }
     }
@@ -35,6 +39,8 @@ public abstract class Character : TDComponent
     // TODO: add shooting range collider
 
     private HealthBar _healthBar = null;
+    protected ProgressBar ProgressBar = null;
+    protected bool IsShowingCooldown = false;
 
     private float _cooldown = 0f;
     public float Cooldown
@@ -43,6 +49,11 @@ public abstract class Character : TDComponent
         set
         {
             _cooldown = value;
+            if (ProgressBar != null && IsShowingCooldown)
+            {
+                ProgressBar.CurrentProgress = _cooldown;
+                ProgressBar.SetProgressBar();
+            }
         }
     }
 
@@ -53,6 +64,11 @@ public abstract class Character : TDComponent
         set
         {
             _progress = value;
+            if (ProgressBar != null && !IsShowingCooldown)
+            {
+                ProgressBar.CurrentProgress = _progress;
+                ProgressBar.SetProgressBar();
+            }
         }
     }
 
@@ -63,10 +79,16 @@ public abstract class Character : TDComponent
         Health = BaseHealth;
 
         TDObject healthBarObject = PrefabFactory.CreatePrefab(PrefabType.HealthBar, TDObject.Transform);
-        healthBarObject.RectTransform.Offset = 2f * Vector3.Backward;
+        healthBarObject.RectTransform.Offset = 2.5f * Vector3.Backward;
         _healthBar = healthBarObject.GetComponent<HealthBar>();
         _healthBar.CurrentProgress = Health;
         _healthBar.MaxProgress = BaseHealth;
+
+        TDObject progessBarObject = PrefabFactory.CreatePrefab(PrefabType.ProgressBar, TDObject.Transform);
+        progessBarObject.RectTransform.Offset = 2f * Vector3.Backward;
+        ProgressBar = progessBarObject.GetComponent<ProgressBar>();
+        ProgressBar.CurrentProgress = Progress;
+        ProgressBar.MaxProgress = 1f;
 
         InteractionCollider.collisionEvent += GetClosestCollider;
 
@@ -77,7 +99,16 @@ public abstract class Character : TDComponent
     {
         base.Update(gameTime);
 
-        _cooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+        Cooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+        if (Cooldown <= 0f)
+        {
+            if (IsShowingCooldown)
+            {
+                IsShowingCooldown = false;
+                ProgressBar.Hide();
+            }
+        }
 
         _colliderList.Clear();
     }
