@@ -5,6 +5,8 @@ public class Item : TDComponent
     public Point Position = Point.Zero;
     public Character Character = null;
 
+    public TDMesh Mesh;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -52,5 +54,9 @@ public class Item : TDComponent
         }
 
         // TODO: in case two players place their item at the exact same time: cancel on drop off of item.
+    }
+    public void Highlight(bool highlight)
+    {
+        Mesh.Highlight(highlight);
     }
 }

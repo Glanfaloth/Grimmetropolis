@@ -207,5 +207,8 @@ public class MapTile : TDComponent
     public void Highlight(bool highlight)
     {
         Mesh.Highlight(highlight);
+
+        Structure?.Highlight(highlight);
+        Item?.Highlight(highlight);
     }
 }

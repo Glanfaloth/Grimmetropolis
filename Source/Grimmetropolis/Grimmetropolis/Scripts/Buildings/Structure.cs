@@ -11,6 +11,8 @@ public abstract class Structure : TDComponent
     public bool IsPassable = false;
     public virtual bool CanBeAttacked => false;
 
+    public TDMesh Mesh;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -63,5 +65,10 @@ public abstract class Structure : TDComponent
                 }
             }
         }
+    }
+
+    public void Highlight(bool highlight)
+    {
+        Mesh.Highlight(highlight);
     }
 }

@@ -32,9 +32,7 @@ public class Player : Character
         Vector2 inputDirection = Input.GetMoveDirection();
         Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
 
-        _collidingMapTile?.Highlight(false);
-        _collidingMapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        _collidingMapTile.Highlight(true);
+        HighlightMapTile();
 
         if (Input.IsSpecialAbilityPressed()) Interact(gameTime);
         else ResetProgressBarForProgress();
@@ -143,5 +141,12 @@ public class Player : Character
         ProgressBar.MaxProgress = Config.PLAYER_ATTACK_DURATION;
         ProgressBar.SetProgressBar();
         ProgressBar.Show();
+    }
+
+    private void HighlightMapTile()
+    {
+        _collidingMapTile?.Highlight(false);
+        _collidingMapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
+        _collidingMapTile.Highlight(true);
     }
 }

@@ -158,9 +158,10 @@ public static class PrefabFactory
             case PrefabType.BuildingCastle:
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
-                    prefab.AddComponent<Castle>();
+                    Castle castle = prefab.AddComponent<Castle>();
                     mesh.Model = TDContentManager.LoadModel("BuildingCastle");
                     mesh.Texture = TDContentManager.LoadTexture("BuildingCastleTexture");
+                    castle.Mesh = mesh;
                     break;
                 }
 
@@ -174,6 +175,7 @@ public static class PrefabFactory
                     TDObject shootingObject = CreatePrefab(PrefabType.Empty, prefab.Transform);
                     TDCylinderCollider shootingRange = shootingObject.AddComponent<TDCylinderCollider>();
                     outpost.ShootingRange = shootingRange;
+                    outpost.Mesh = mesh;
                     break;
                 }
 
@@ -185,6 +187,7 @@ public static class PrefabFactory
                     mesh.Model = TDContentManager.LoadModel("ResourceWood");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     resource.Type = ResourceDepositType.Wood;
+                    resource.Mesh = mesh;
                     break;
                 }
 
@@ -195,24 +198,27 @@ public static class PrefabFactory
                     mesh.Model = TDContentManager.LoadModel("ResourceStone");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     resource.Type = ResourceDepositType.Stone;
+                    resource.Mesh = mesh;
                     break;
                 }
 
             case PrefabType.ToolAxe:
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
-                    prefab.AddComponent<ToolAxe>();
+                    ToolAxe axe = prefab.AddComponent<ToolAxe>();
                     mesh.Model = TDContentManager.LoadModel("ToolAxe");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    axe.Mesh = mesh;
                     break;
                 }
 
             case PrefabType.ToolPickaxe:
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
-                    prefab.AddComponent<ToolPickaxe>();
+                    ToolPickaxe pickaxe = prefab.AddComponent<ToolPickaxe>();
                     mesh.Model = TDContentManager.LoadModel("ToolPickaxe");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    pickaxe.Mesh = mesh;
                     break;
                 }
 
