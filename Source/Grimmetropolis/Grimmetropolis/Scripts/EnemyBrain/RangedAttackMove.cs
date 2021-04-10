@@ -6,16 +6,20 @@ class RangedAttackMove : EnemyMove
 {
     private readonly float _attackRange;
 
+    private readonly float _baseCost;
+    private readonly float _rangeFactor;
+
     public override Type MovementType => Type.RangedAttack;
 
-    public Structure Target { get; }
-    public override float Cost { get; }
+    public Building Target { get; }
+    public override float Cost => _baseCost + _attackRange * _rangeFactor;
 
-    public RangedAttackMove(Location from, Location to, float cost, Structure target, float attackRange) : base(from, to)
+    public RangedAttackMove(Location from, Location to, Building target, float attackRange, float baseCost, float rangeFactor) : base(from, to)
     {
-        _attackRange = attackRange;
-        Cost = cost;
         Target = target;
+        _attackRange = attackRange;
+        _baseCost = baseCost;
+        _rangeFactor = rangeFactor;
     }
 
     public override bool IsMoveAllowed(Type actions, float attackRange)

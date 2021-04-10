@@ -321,13 +321,6 @@ public static class PrefabFactory
         interactionCollider.Offset = .5f * Vector3.Backward;
         enemy.InteractionCollider = interactionCollider;
 
-        if (stats.ATTACK_RANGE > .25f)
-        {
-            TDObject shootingObject = CreatePrefab(PrefabType.Empty, prefab.Transform);
-            TDCylinderCollider shootingRange = shootingObject.AddComponent<TDCylinderCollider>();
-            enemy.ShootingRange = shootingRange;
-        }
-
         return prefab;
     }
 

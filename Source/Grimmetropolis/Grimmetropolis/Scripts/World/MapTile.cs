@@ -113,13 +113,22 @@ public class MapTile : TDComponent
             if (rightFree && topFree) AddIncomingEdge(x + 1, y - 1, EnemyMove.Type.Run, Config.RUN_MOVE_DIAGONAL_BASE_COST);
             if (rightFree && botFree) AddIncomingEdge(x + 1, y + 1, EnemyMove.Type.Run, Config.RUN_MOVE_DIAGONAL_BASE_COST);
         }
-        else if (CanTileBeAttacked())
+        else if (CanTileBeAttacked() && Structure is Building building)
         {
             AddIncomingEdge(x - 1, y, EnemyMove.Type.Attack, Config.ATTACK_MOVE_COST);
             AddIncomingEdge(x + 1, y, EnemyMove.Type.Attack, Config.ATTACK_MOVE_COST);
             AddIncomingEdge(x, y - 1, EnemyMove.Type.Attack, Config.ATTACK_MOVE_COST);
             AddIncomingEdge(x, y + 1, EnemyMove.Type.Attack, Config.ATTACK_MOVE_COST);
             new RunMove(StructureVertex, TileVertex, Config.RUN_MOVE_DIRECT_BASE_COST, this);
+
+            List<MapTile> nearbyTiles = Map.GetNearbyTilesEuclidean(Position, Config.MAX_RANGED_ATTACK);
+
+            foreach (var tile in nearbyTiles)
+            {
+                Point delta = tile.Position - Position;
+                float range = MathF.Sqrt(delta.X * delta.X + delta.Y * delta.Y);
+                new RangedAttackMove(tile.TileVertex, StructureVertex, building, range, Config.RANGED_ATTACK_MOVE_BASE_COST, Config.RANGED_ATTACK_MOVE_FACTOR);
+            }
         }
         // TODO: add other edge types
     }
@@ -129,7 +138,7 @@ public class MapTile : TDComponent
         bool destroyedOutpost = oldStructure is Outpost;
         bool buildOutpost = newStructure is Outpost;
 
-        List<MapTile> nearbyTiles = Map.GetNearbyTiles(Position, Config.ENEMY_OUTPOST_AVOIDANCE_RANGE);
+        List<MapTile> nearbyTiles = Map.GetNearbyTilesManhattan(Position, Config.ENEMY_OUTPOST_AVOIDANCE_RANGE);
 
         if (buildOutpost && !destroyedOutpost)
         {
@@ -161,10 +170,10 @@ public class MapTile : TDComponent
                 new RunMove(from, TileVertex, cost, this);
                 break;
             case EnemyMove.Type.Attack:
-                new AttackMove(from, StructureVertex, cost, Structure);
+                new AttackMove(from, StructureVertex, cost, (Building)Structure);
                 break;
             default:
-                break;
+                throw new NotSupportedException();
         }
     }
 

@@ -13,6 +13,7 @@ public abstract class Enemy : Character
     private float _damageAgainstPlayers;
     private float _damageAgainstBuildings;
     private float _attackRange;
+    private float _attackRangeSquared;
     private float _attackDuration;
 
     protected abstract EnemyMove.Type Actions { get; }
@@ -30,7 +31,6 @@ public abstract class Enemy : Character
     public float AttackDuration => _attackDuration;
 
     public override Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
-    public TDCylinderCollider ShootingRange;
 
     public void SetBaseStats(Config.EnemyStats stats)
     {
@@ -40,6 +40,7 @@ public abstract class Enemy : Character
         _damageAgainstPlayers = stats.DAMAGE_AGAINST_PLAYER;
         _damageAgainstBuildings = stats.DAMAGE_AGAINST_BUILDINGS;
         _attackRange = stats.ATTACK_RANGE;
+        _attackRangeSquared = _attackRange * _attackRange;
         _attackDuration = stats.ATTACK_DURATION;
     }
 
@@ -48,15 +49,6 @@ public abstract class Enemy : Character
         base.Initialize();
 
         _controller = GameManager.Instance.EnemyController;
-
-        if (ShootingRange != null)
-        {
-            ShootingRange.IsTrigger = true;
-            ShootingRange.Radius = _attackRange;
-            ShootingRange.Height = 1f;
-            ShootingRange.Offset = Vector3.Zero;
-            ShootingRange.collisionEvent += OnCollisionShootingRange;
-        }
 
         GameManager.Instance.Enemies.Add(this);
     }
@@ -95,10 +87,6 @@ public abstract class Enemy : Character
     {
         base.Destroy();
 
-        if (ShootingRange != null)
-        {
-            ShootingRange.collisionEvent -= OnCollisionShootingRange;
-        }
         GameManager.Instance.Enemies.Remove(this);
     }
     protected override void Interact(GameTime gameTime)
@@ -151,13 +139,29 @@ public abstract class Enemy : Character
 
     private void AttackTarget(AttackMove nextMove, GameTime gameTime)
     {
+        // TODO: this doesn't seem to work when diagonal
         Interact(gameTime);
     }
 
     private void RangedAttackTarget(RangedAttackMove nextMove, GameTime gameTime)
     {
-        // TODO: add projectile
-        Interact(gameTime);
+        Vector2 toTarget = nextMove.Target.TDObject.Transform.LocalPosition.GetXY() - TDObject.Transform.LocalPosition.GetXY();
+        if (toTarget.LengthSquared() > _attackRangeSquared-1f)
+        {
+            if (toTarget.LengthSquared() > 1f) toTarget.Normalize();
+            Move(toTarget, gameTime);
+        }
+        else
+        {
+            // TODO: add projectile
+            if (Cooldown <= 0f)
+            {
+                nextMove.Target.Health -= _damageAgainstBuildings;
+                Cooldown = _attackDuration;
+
+                SetProgressBarForAttack();
+            }
+        }
     }
 
     private void MoveToTarget(RunMove runMove, GameTime gameTime)
@@ -175,12 +179,5 @@ public abstract class Enemy : Character
         ProgressBar.MaxProgress = _attackDuration;
         ProgressBar.SetProgressBar();
         ProgressBar.Show();
-    }
-
-    private void OnCollisionShootingRange(TDCollider collider1, TDCollider collider2, float intersection)
-    {
-        // TODO: maybe use a different list for shooting range only
-        TDCollider oppositeCollider = ShootingRange == collider2 ? collider1 : collider2;
-        _colliderList.Add(new Tuple<TDCollider, float>(oppositeCollider, intersection));
     }
 }

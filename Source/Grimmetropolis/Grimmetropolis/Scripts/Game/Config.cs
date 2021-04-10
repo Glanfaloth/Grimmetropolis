@@ -12,10 +12,15 @@ public static class Config
     public const float RUN_MOVE_OUTPOST_COUNT_SCALE_FACTOR = 0.5f;
     // RUN_MOVE_OUTPOST_COUNT_SCALE_FACTOR = linear
     public const float ATTACK_MOVE_COST = 0.5f;
+    public const float RANGED_ATTACK_MOVE_BASE_COST = .25f;
+    public const float RANGED_ATTACK_MOVE_FACTOR = 0f;
 
 
     public const int ENEMY_OUTPOST_AVOIDANCE_RANGE = 3;
     // ENEMY_OUTPOST_AVOIDANCE_RANGE_FUNCTION = manhattan distance
+
+    // TODO: find if there is a better way to do this
+    public const int MAX_RANGED_ATTACK = 10;
 
     #endregion
 

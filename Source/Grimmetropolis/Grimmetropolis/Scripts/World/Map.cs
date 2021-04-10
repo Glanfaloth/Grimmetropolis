@@ -129,7 +129,29 @@ public class Map : TDComponent
         return x >= 0 && y >= 0 && x < Width && y < Height;
     }
 
-    internal List<MapTile> GetNearbyTiles(Point position, int manhattanDistance)
+    internal List<MapTile> GetNearbyTilesEuclidean(Point position, int maxDistance)
+    {
+        int x = position.X;
+        int y = position.Y;
+        List<MapTile> result = new List<MapTile>();
+
+        int maxDistanceSquared = maxDistance * maxDistance;
+
+        for (int dx = -maxDistance; dx <= maxDistance; dx++)
+        {
+            for (int dy = -maxDistance; dy <= maxDistance; dy++)
+            {
+                if (IsInBounds(x + dx, y + dy) && (dx * dx + dy * dy) <= maxDistanceSquared)
+                {
+                    result.Add(MapTiles[x + dx, y + dy]);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    internal List<MapTile> GetNearbyTilesManhattan(Point position, int manhattanDistance)
     {
         int x = position.X;
         int y = position.Y;
