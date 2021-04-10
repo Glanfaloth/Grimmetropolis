@@ -3,22 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-using static TDPriorityQueue<Location, EnemyMove>;
-using QueueEntry = System.Tuple<float, Location, EnemyMove>;
+using static TDPriorityQueue<EnemyMove>;
 
 public class MovementGraph
 {
-    private class QueueEntryComparer : IComparer<QueueEntry>
-    {
-        public int Compare([AllowNull] QueueEntry x, [AllowNull] QueueEntry y)
-        {
-            int result = x.Item1.CompareTo(y.Item1);
-            return result == 0 
-                ? x.Item2.Index.CompareTo(y.Item2.Index) 
-                : result;
-        }
-    }
-
     internal static MovementGraph BuildGraphFromMap(Map map)
     {
         MovementGraph result = new MovementGraph(map);
@@ -34,6 +22,7 @@ public class MovementGraph
     // TODO: this doesn't support different action types of the enemies for now.
     private EnemyMove[] _nextMoves;
     private bool[] _visited;
+    private Handle[] _handles;
 
     private MovementGraph(Map map)
     {
@@ -50,18 +39,11 @@ public class MovementGraph
     internal void ComputeShortestPathToMapTile(Point start)
     {
         // TODO: this is currently a bottleneck
-        // TODO: Ideally, this should be a priorityqueue, however support will only be added in .NET 6.
-        // src: https://github.com/dotnet/runtime/issues/43957
-        // measure if this is a bottleneck
         ResetPaths();
         Location startLocation = _map.MapTiles[start.X, start.Y].TileVertex;
-        //var pq = new SortedSet<QueueEntry>(new QueueEntryComparer())
-        //{
-        //    new QueueEntry(0f, startLocation, new StealArtifact(startLocation, startLocation)),
-        //};
 
-        var pq = new TDPriorityQueue<Location, EnemyMove>();
-        pq.Insert(0f, startLocation, new StealArtifact(startLocation, startLocation));
+        var pq = new TDPriorityQueue<EnemyMove>();
+        pq.Insert(0f, new StealArtifact(startLocation));
 
 
         // for now we use a very badly implemented djikstra
@@ -70,7 +52,7 @@ public class MovementGraph
             Handle h = pq.ExtractMin();
 
             float distance = h.Cost;
-            Location v = h.Key;
+            Location v = h.Value.From;
             EnemyMove e = h.Value;
 
             if (!_visited[v.Index])
@@ -81,9 +63,19 @@ public class MovementGraph
                 // we traverse graph in reverse, since we compute all path to target
                 foreach (EnemyMove inEdge in v.InEdges)
                 {
-                    if (!_visited[inEdge.From.Index])
+                    int u = inEdge.From.Index;
+                    if (!_visited[u])
                     {
-                        pq.Insert(distance + inEdge.Cost, inEdge.From, inEdge);
+                        float futureCost = distance + inEdge.Cost;
+                        // _handles[u] = pq.Insert(futureCost, inEdge);
+                        if (_handles[u] == null)
+                        {
+                            _handles[u] = pq.Insert(futureCost, inEdge);
+                        }
+                        else if (_handles[u].Cost > futureCost)
+                        {
+                            pq.DecreaseCost(_handles[u], futureCost, inEdge);
+                        }
                     }
                 }
             }
@@ -113,6 +105,7 @@ public class MovementGraph
     {
         _nextMoves = new EnemyMove[vertices.Count];
         _visited = new bool[vertices.Count];
+        _handles = new Handle[vertices.Count];
     }
 }
 

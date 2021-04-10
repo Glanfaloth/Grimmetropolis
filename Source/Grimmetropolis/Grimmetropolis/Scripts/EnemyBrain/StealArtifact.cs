@@ -8,7 +8,7 @@ class StealArtifact : EnemyMove
 
     public override float Cost => 0;
 
-    public StealArtifact(Location from, Location to) : base(from, to)
+    public StealArtifact(Location location) : base(location)
     {
     }
 }

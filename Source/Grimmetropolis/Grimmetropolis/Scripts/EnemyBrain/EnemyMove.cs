@@ -4,7 +4,7 @@ using System;
 public abstract class EnemyMove
 {
     private static Location _noLocation = new Location();
-    public static EnemyMove NONE { get; } = new NoMove(_noLocation, _noLocation);
+    public static EnemyMove NONE { get; } = new NoMove(_noLocation);
 
     public enum Type
     {
@@ -19,6 +19,12 @@ public abstract class EnemyMove
     public Location From { get; }
     public Location To { get; }
     public abstract float Cost { get; }
+
+    protected EnemyMove(Location location)
+    {
+        From = location;
+        To = location;
+    }
 
     protected EnemyMove(Location from, Location to)
     {
@@ -36,7 +42,7 @@ public abstract class EnemyMove
 
         public override float Cost => 0;
 
-        internal NoMove(Location from, Location to) : base(from, to)
+        internal NoMove(Location location) : base(location)
         {
         }
     }

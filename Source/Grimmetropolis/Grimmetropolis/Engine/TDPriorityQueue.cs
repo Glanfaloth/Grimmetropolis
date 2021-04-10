@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-class TDPriorityQueue<TKey, TValue>
+class TDPriorityQueue<TValue>
 {
     private List<Handle> _heap = new List<Handle>();
 
@@ -25,9 +25,9 @@ class TDPriorityQueue<TKey, TValue>
         return result;
     }
 
-    public Handle Insert(float cost, TKey key, TValue value)
+    public Handle Insert(float cost, TValue value)
     {
-        Handle newHandle = new Handle(cost, key, value, _heap.Count);
+        Handle newHandle = new Handle(cost, value, _heap.Count);
 
         _heap.Add(newHandle);
         SiftUp(newHandle._index);
@@ -35,9 +35,11 @@ class TDPriorityQueue<TKey, TValue>
         return newHandle;
     }
 
-    public Handle UdpateItem(Handle handle, TValue value, float newCost)
+    public void DecreaseCost(Handle handle, float newCost, TValue value)
     {
-        throw new NotImplementedException();
+        handle.Cost = newCost;
+        handle.Value = value;
+        SiftUp(handle._index);
     }
 
     private void Swap(int a, int b)
@@ -85,15 +87,13 @@ class TDPriorityQueue<TKey, TValue>
     public class Handle
     {
         public float Cost { get; internal set; }
-        public TKey Key { get; internal set; }
         public TValue Value { get; internal set; }
 
         internal int _index;
 
-        public Handle(float cost, TKey key, TValue value, int index)
+        public Handle(float cost, TValue value, int index)
         {
             Cost = cost;
-            Key = key;
             Value = value;
             _index = index;
         }
