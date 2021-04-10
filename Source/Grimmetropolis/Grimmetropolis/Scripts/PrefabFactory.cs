@@ -99,6 +99,7 @@ public static class PrefabFactory
                     interactionCollider.Height = .5f;
                     interactionCollider.Offset = .5f * Vector3.Backward;
                     player.InteractionCollider = interactionCollider;
+                    player.Mesh = mesh;
                     break;
                 }
 
@@ -136,6 +137,7 @@ public static class PrefabFactory
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     mapTile.Type = MapTileType.Ground;
                     mapTile.collider = collider;
+                    mapTile.Mesh = mesh;
                     break;
                 }
 
@@ -148,6 +150,7 @@ public static class PrefabFactory
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     mapTile.Type = MapTileType.Water;
                     mapTile.collider = collider;
+                    mapTile.Mesh = mesh;
                     break;
                 }
 
@@ -320,6 +323,7 @@ public static class PrefabFactory
         interactionCollider.Height = .5f;
         interactionCollider.Offset = .5f * Vector3.Backward;
         enemy.InteractionCollider = interactionCollider;
+        enemy.Mesh = mesh;
 
         return prefab;
     }

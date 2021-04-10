@@ -18,6 +18,8 @@ public class Player : Character
     private ResourceDeposit _lastClosestResourceDeposit = null;
     private bool _needsToShowHarvestProgress = false;
 
+    private MapTile _collidingMapTile = null;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -29,6 +31,10 @@ public class Player : Character
     {
         Vector2 inputDirection = Input.GetMoveDirection();
         Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
+
+        _collidingMapTile?.Highlight(false);
+        _collidingMapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
+        _collidingMapTile.Highlight(true);
 
         if (Input.IsSpecialAbilityPressed()) Interact(gameTime);
         else ResetProgressBarForProgress();
@@ -53,8 +59,8 @@ public class Player : Character
 
         float closestEnemyDistance = float.MaxValue;
         float closestStructureDistance = float.MaxValue;
-        Enemy closestEnemy = null;
-        Structure closestStructure = null;
+        Enemy _closestEnemy = null;
+        Structure _closestStructure = null;
         foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
         {
             if (colliderEntry.Item1 is TDCylinderCollider && closestEnemyDistance > colliderEntry.Item2)
@@ -63,7 +69,7 @@ public class Player : Character
                 if (enemy != null)
                 {
                     closestEnemyDistance = colliderEntry.Item2;
-                    closestEnemy = enemy;
+                    _closestEnemy = enemy;
                 }
             }
             else if (colliderEntry.Item1 is TDCuboidCollider && closestStructureDistance > colliderEntry.Item2)
@@ -72,23 +78,23 @@ public class Player : Character
                 if (structure != null)
                 {
                     closestStructureDistance = colliderEntry.Item2;
-                    closestStructure = structure;
+                    _closestStructure = structure;
                 }
             }
         }
         
-        if (closestEnemy != null && Cooldown <= 0f)
+        if (_closestEnemy != null && Cooldown <= 0f)
         {
-            closestEnemy.Health -= Config.PLAYER_DAMAGE;
+            _closestEnemy.Health -= Config.PLAYER_DAMAGE;
             Cooldown = Config.PLAYER_ATTACK_DURATION;
 
             ResetProgressBarForProgress();
             SetProgressBarForAttack();
 
         }
-        else if (closestStructure != null)
+        else if (_closestStructure != null)
         {
-            if (Cooldown <= 0f && closestStructure is Building closestBuilding)
+            if (Cooldown <= 0f && _closestStructure is Building closestBuilding)
             {
                 closestBuilding.Health -= Config.PLAYER_DAMAGE;
                 Cooldown = Config.PLAYER_ATTACK_DURATION;
@@ -96,7 +102,7 @@ public class Player : Character
                 ResetProgressBarForProgress();
                 SetProgressBarForAttack();
             }
-            else if (closestStructure is ResourceDeposit closestResourceDeposit)
+            else if (_closestStructure is ResourceDeposit closestResourceDeposit)
             {
                 if (closestResourceDeposit != _lastClosestResourceDeposit)
                 {

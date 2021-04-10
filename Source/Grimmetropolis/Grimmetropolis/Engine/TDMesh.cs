@@ -30,6 +30,8 @@ public class TDMesh : TDComponent
         }
     }
 
+    private float _highlightFactor = 1f;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -83,7 +85,7 @@ public class TDMesh : TDComponent
                 effect.Parameters["LightViewProjection"].SetValue(TDSceneManager.ActiveScene.LightObject?.ViewProjectionMatrix ?? Matrix.Identity);
 
                 effect.Parameters["AmbientIntensity"].SetValue(.2f);
-                effect.Parameters["AmbientColor"].SetValue(Vector3.One);
+                effect.Parameters["AmbientColor"].SetValue(_highlightFactor * Vector3.One);
 
                 effect.Parameters["DiffuseIntensity"].SetValue(.8f);
                 effect.Parameters["DiffuseColor"].SetValue(Vector3.One);
@@ -94,6 +96,11 @@ public class TDMesh : TDComponent
 
             mesh.Draw();
         }
+    }
+
+    public void Highlight(bool highlight)
+    {
+        _highlightFactor = highlight ? 2f : 1f;
     }
 
     public override void Destroy()

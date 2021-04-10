@@ -14,6 +14,8 @@ public abstract class Character : TDComponent, ITDTarget
     public float LookingAngle = 0f;
     public float CurrentWalkSpeed = 0f;
 
+    public TDMesh Mesh;
+
     // health will be set during Initialize
     private float _health = -1;
     public float Health
@@ -167,5 +169,10 @@ public abstract class Character : TDComponent, ITDTarget
     {
         TDCollider oppositeCollider = InteractionCollider == collider2 ? collider1 : collider2;
         _colliderList.Add(new Tuple<TDCollider, float>(oppositeCollider, intersection));
+    }
+
+    public void Highlight(bool highlight)
+    {
+        Mesh.Highlight(highlight);
     }
 }

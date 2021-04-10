@@ -31,6 +31,8 @@ public class MapTile : TDComponent
         }
     }
 
+    public TDMesh Mesh;
+
     public Item Item = null;
 
     private int _nearbyOutposts = 0;
@@ -200,5 +202,10 @@ public class MapTile : TDComponent
     public bool CanTileBeAttacked()
     {
         return Structure?.CanBeAttacked ?? false;
+    }
+
+    public void Highlight(bool highlight)
+    {
+        Mesh.Highlight(highlight);
     }
 }
