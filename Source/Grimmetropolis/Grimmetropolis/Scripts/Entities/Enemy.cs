@@ -185,7 +185,6 @@ public abstract class Enemy : Character
 
         ProgressBar.CurrentProgress = Cooldown;
         ProgressBar.MaxProgress = _attackDuration;
-        ProgressBar.SetProgressBar();
         ProgressBar.Show();
     }
 }

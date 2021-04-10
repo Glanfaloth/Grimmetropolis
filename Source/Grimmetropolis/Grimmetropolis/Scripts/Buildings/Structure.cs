@@ -67,7 +67,7 @@ public abstract class Structure : TDComponent
         }
     }
 
-    public void Highlight(bool highlight)
+    public virtual void Highlight(bool highlight)
     {
         Mesh.Highlight(highlight);
     }

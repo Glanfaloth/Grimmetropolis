@@ -40,4 +40,10 @@ public abstract class Building : Structure, ITDTarget
 
         base.Initialize();
     }
+    public override void Highlight(bool highlight)
+    {
+        Mesh.Highlight(highlight);
+        if (highlight) _healthBar.QuickShow();
+        else _healthBar.QuickHide();
+    }
 }

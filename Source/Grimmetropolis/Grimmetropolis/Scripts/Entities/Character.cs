@@ -54,7 +54,7 @@ public abstract class Character : TDComponent, ITDTarget
             if (ProgressBar != null && IsShowingCooldown)
             {
                 ProgressBar.CurrentProgress = _cooldown;
-                ProgressBar.SetProgressBar();
+                ProgressBar.Show();
             }
         }
     }
@@ -69,7 +69,7 @@ public abstract class Character : TDComponent, ITDTarget
             if (ProgressBar != null && !IsShowingCooldown)
             {
                 ProgressBar.CurrentProgress = _progress;
-                ProgressBar.SetProgressBar();
+                ProgressBar.Show();
             }
         }
     }
@@ -174,5 +174,7 @@ public abstract class Character : TDComponent, ITDTarget
     public void Highlight(bool highlight)
     {
         Mesh.Highlight(highlight);
+        if (highlight) _healthBar.QuickShow();
+        else _healthBar.QuickHide();
     }
 }

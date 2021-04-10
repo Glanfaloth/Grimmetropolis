@@ -26,7 +26,7 @@ public class ProgressBar : TDComponent
         if (_requiresHide) Hide();
     }
 
-    public void Show()
+    public virtual void Show()
     {
         SetProgressBar();
 
@@ -38,7 +38,7 @@ public class ProgressBar : TDComponent
         _isShowing = true;
     }
 
-    public void Hide()
+    public virtual void Hide()
     {
         if (!_isShowing) return;
 
@@ -53,7 +53,7 @@ public class ProgressBar : TDComponent
         else _requiresHide = true;
     }
 
-    public virtual void SetProgressBar()
+    protected virtual void SetProgressBar()
     {
         Foreground.TDObject.RectTransform.Scale = new Vector2(CurrentProgress / MaxProgress, 1f);
     }

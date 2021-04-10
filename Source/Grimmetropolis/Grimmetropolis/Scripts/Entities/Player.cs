@@ -130,7 +130,6 @@ public class Player : Character
 
         ProgressBar.CurrentProgress = Cooldown;
         ProgressBar.MaxProgress = Config.PLAYER_ATTACK_DURATION;
-        ProgressBar.SetProgressBar();
         ProgressBar.Show();
     }
 

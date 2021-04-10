@@ -7,6 +7,8 @@ public class HealthBar : ProgressBar
     private float _revealTime = 3f;
     private float _time = 0f;
 
+    private bool _quickShow = false;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -23,11 +25,38 @@ public class HealthBar : ProgressBar
         if (_time <= 0f) Hide();
     }
 
-    public override void SetProgressBar()
+    public override void Show()
+    {
+        _time = _revealTime;
+
+        base.Show();
+    }
+
+    public void QuickShow()
+    {
+        _quickShow = true;
+
+        base.Show();
+    }
+
+    public override void Hide()
+    {
+        if (_quickShow) return;
+
+        base.Hide();
+    }
+
+    public void QuickHide()
+    {
+        _quickShow = false;
+        if (_time > 0f) return;
+
+        base.Hide();
+    }
+
+    protected override void SetProgressBar()
     {
         base.SetProgressBar();
-
-        _time = _revealTime;
 
         float proportion = CurrentProgress / MaxProgress;
 
