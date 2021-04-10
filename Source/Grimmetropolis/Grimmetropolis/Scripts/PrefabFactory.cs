@@ -33,7 +33,8 @@ public enum PrefabType
     EmptyUI,
     EmptyUI3D,
 
-    ResourceDisplay
+    ResourceDisplay,
+    HealthBar
 }
 
 public static class PrefabFactory
@@ -232,25 +233,42 @@ public static class PrefabFactory
 
             case PrefabType.EmptyUI:
                 {
-                    CreateRectTransform(prefab, localPosition, localRotation, localScale);
+                    CreateEmptyUI(prefab, localPosition, localRotation, localScale);
                     break;
                 }
 
             case PrefabType.EmptyUI3D:
                 {
-                    prefab.RectTransform = new TDRectTransform
-                    {
-                        Parent3D = prefab.Transform.Parent
-                    };
+                    CreateEmptyUI3D(prefab, localPosition, localRotation, localScale);
                     break;
                 }
 
             case PrefabType.ResourceDisplay:
                 {
-                    CreateRectTransform(prefab, localPosition, localRotation, localScale);
+                    CreateEmptyUI(prefab, localPosition, localRotation, localScale);
                     TDText text = prefab.AddComponent<TDText>();
                     ResourceDisplay resourceDisplay = prefab.AddComponent<ResourceDisplay>();
                     resourceDisplay.TextUI = text;
+                    break;
+                }
+
+            case PrefabType.HealthBar:
+                {
+                    CreateEmptyUI3D(prefab, localPosition, localRotation, localScale);
+                    TDSprite background = prefab.AddComponent<TDSprite>();
+                    HealthBar healthBar = prefab.AddComponent<HealthBar>();
+                    background.Texture = TDContentManager.LoadTexture("UIBar");
+                    background.Color = Color.Black;
+                    background.Depth = 1f;
+                    prefab.RectTransform.Origin = new Vector2(.5f * background.Texture.Width, background.Texture.Height);
+
+                    TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
+                    foreground.Texture = TDContentManager.LoadTexture("UIBar");
+                    foreground.Depth = .1f;
+                    healthBar.Background = background;
+                    healthBar.Foreground = foreground;
+                    foregroundObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin;
                     break;
                 }
         }
@@ -299,14 +317,24 @@ public static class PrefabFactory
         return CreatePrefab(type, localPosition, localRotation, Vector3.One, parent);
     }
 
-    public static void CreateRectTransform(TDObject prefab, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
+    public static void CreateEmptyUI(TDObject prefab, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
     {
         prefab.RectTransform = new TDRectTransform
         {
+            TDObject = prefab,
             Parent = prefab.Transform.Parent?.TDObject.RectTransform,
             LocalPosition = new Vector2(localPosition.X, localPosition.Y),
             LocalRotation = 2f * MathF.Asin(localRotation.Z),
             LocalScale = new Vector2(localScale.X, localScale.Y)
+        };
+    }
+
+    public static void CreateEmptyUI3D(TDObject prefab, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
+    {
+        prefab.RectTransform = new TDRectTransform
+        {
+            TDObject = prefab,
+            Parent3D = prefab.Transform.Parent
         };
     }
 }

@@ -18,8 +18,6 @@ public class TDObject
             TDObject = this
         };
 
-        Transform.Initialize();
-
         Transform.Parent = parent;
 
         Transform.LocalPosition = localPosition;

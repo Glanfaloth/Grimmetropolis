@@ -14,6 +14,7 @@ public class Outpost : Building
 
     public override void Initialize()
     {
+        BaseHealth = Config.OUTPOST_HEALTH;
         Health = Config.OUTPOST_HEALTH;
 
         ShootingRange.IsTrigger = true;

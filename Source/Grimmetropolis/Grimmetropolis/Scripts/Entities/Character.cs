@@ -22,6 +22,7 @@ public abstract class Character : TDComponent
         set
         {
             _health = value;
+            _healthBar?.SetHealthBar(_health);
             if (_health <= 0f) TDObject?.Destroy();
         }
     }
@@ -33,11 +34,19 @@ public abstract class Character : TDComponent
 
     // TODO: add shooting range collider
 
+    private HealthBar _healthBar = null;
+
     public override void Initialize()
     {
         base.Initialize();
 
         Health = BaseHealth;
+
+        TDObject healthBarObject = PrefabFactory.CreatePrefab(PrefabType.HealthBar, TDObject.Transform);
+        healthBarObject.RectTransform.Offset = 2f * Vector3.Backward;
+        _healthBar = healthBarObject.GetComponent<HealthBar>();
+        _healthBar.Health = Health;
+        _healthBar.BaseHealth = BaseHealth;
 
         InteractionCollider.collisionEvent += GetClosestCollider;
 

@@ -226,6 +226,8 @@ public class TDRectTransform : TDComponent
             .5f * TDSceneManager.Graphics.PreferredBackBufferHeight * (1f - canvasPosition.Y / canvasPosition.W));
         _position = _localPosition;
 
+        CalculateTransform();
+
         CalculateChildrenPositionTransform();
     }
 }

@@ -2,11 +2,13 @@
 
 public class Castle : Building
 {
+
     public override void Initialize()
     {
         Size.X = Config.CASTLE_SIZE_X;
         Size.Y = Config.CASTLE_SIZE_Y;
 
+        BaseHealth = Config.CASTLE_HEALTH;
         Health = Config.CASTLE_HEALTH;
 
         // TODO: remove this work around
