@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-public abstract class Building : Structure
+public abstract class Building : Structure, ITDTarget
 {
     public abstract ResourcePile GetResourceCost();
 
@@ -23,6 +23,10 @@ public abstract class Building : Structure
             if (_health <= 0f) TDObject?.Destroy();
         }
     }
+
+    public Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
+
+    TDObject ITDTarget.TDObject => TDObject;
 
     private HealthBar _healthBar;
 

@@ -12,12 +12,12 @@ public enum ProjectileState
 public class Projectile : TDComponent
 {
     public Vector3 StartPosition = Vector3.Zero;
-    public Character TargetCharacter = null;
+    public ITDTarget TargetCharacter = null;
 
     public TDCylinderCollider Collider;
 
-    public float Speed = Config.OUTPOST_ARROW_SPEED;
-    public float Damage = Config.OUTPOST_ARROW_DAMAGE;
+    public float Speed = 0;
+    public float Damage = 0;
 
     private Vector3 _direction = Vector3.Zero;
     private float _distance = 0f;
@@ -97,12 +97,13 @@ public class Projectile : TDComponent
         {
             TDCollider oppositeCollider = Collider == collider2 ? collider1 : collider2;
 
+            // TODO: enemies can shoot themselfes and other enemies
             Enemy enemy = oppositeCollider.TDObject.GetComponent<Enemy>();
             if (enemy != null)
             {
                 _state = ProjectileState.Stuck;
                 TDObject.Transform.Parent = enemy.TDObject.Transform;
-                enemy.Health -= Config.OUTPOST_ARROW_DAMAGE;
+                enemy.Health -= Damage;
             }
             else
             {
@@ -112,6 +113,12 @@ public class Projectile : TDComponent
                 {
                     TDObject.Transform.Parent = mapTile.TDObject.Transform;
                     _state = ProjectileState.Stuck;
+                }
+                else if (mapTile != null && mapTile.Structure == TargetCharacter && mapTile.Structure is Building building)
+                {
+                    _state = ProjectileState.Stuck;
+                    TDObject.Transform.Parent = building.TDObject.Transform;
+                    building.Health -= Damage;
                 }
             }
         }

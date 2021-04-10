@@ -11,6 +11,8 @@ public class Outpost : Building
 
     private float _cooldown = 0f;
     private float _interval = Config.OUTPOST_SHOOTING_RATE;
+    private float _arrowSpeed = Config.OUTPOST_ARROW_SPEED;
+    private float _arrowDamage = Config.OUTPOST_ARROW_DAMAGE;
 
     public override void Initialize()
     {
@@ -69,5 +71,7 @@ public class Outpost : Building
         Projectile arrow = arrowObject.GetComponent<Projectile>();
         arrow.StartPosition = TDObject.Transform.Position + 2.25f * Vector3.Backward;
         arrow.TargetCharacter = _closestEnemy;
+        arrow.Damage = _arrowDamage;
+        arrow.Speed = _arrowSpeed;
     }
 }

@@ -153,10 +153,18 @@ public abstract class Enemy : Character
         }
         else
         {
-            // TODO: add projectile
             if (Cooldown <= 0f)
             {
-                nextMove.Target.Health -= _damageAgainstBuildings;
+                // nextMove.Target.Health -= _damageAgainstBuildings;
+                TDObject arrowObject = PrefabFactory.CreatePrefab(PrefabType.Arrow);
+                Projectile arrow = arrowObject.GetComponent<Projectile>();
+
+                //TODO: if shot from enemy height, enemy hits itself ...
+                arrow.StartPosition = TDObject.Transform.Position + 1.25f * Vector3.Backward;
+                arrow.TargetCharacter = nextMove.Target;
+                arrow.Damage = _damageAgainstBuildings;
+                arrow.Speed = Config.ENEMY_PROJECTILE_SPEED;
+
                 Cooldown = _attackDuration;
 
                 SetProgressBarForAttack();

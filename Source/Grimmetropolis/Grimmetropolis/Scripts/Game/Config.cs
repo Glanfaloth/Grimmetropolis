@@ -58,6 +58,8 @@ public static class Config
     public const float PLAYER_DAMAGE = 1f;
     public const float PLAYER_ATTACK_DURATION = 1f;
 
+    public const float ENEMY_PROJECTILE_SPEED = 6f;
+
     public static readonly EnemyStats ENEMY_CATAPULT_STATS = new EnemyStats(1f, 1f * MathHelper.Pi, 5f, 1f, 2f, 4f, 8f);
     public static readonly EnemyStats ENEMY_WITCH_STATS = new EnemyStats(3f, 3f * MathHelper.Pi, 1f, 1f, 1f, 2f, 4f);
     public static readonly EnemyStats ENEMY_KNIGHTS_STATS = new EnemyStats(3f, 3f * MathHelper.Pi, 3f, 1f, 1f, .25f, 2f);
