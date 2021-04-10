@@ -11,7 +11,7 @@ public class CameraToPlayers : TDComponent
     {
         base.Update(gameTime);
 
-        if (GameManager.Instance == null) return;
+        if (GameManager.Instance == null || GameManager.Instance.Players.Count <= 0) return;
 
         Vector3 centerPlayer = GameManager.Instance.Players[0].TDObject.Transform.Position;
         Vector3 minPosition = GameManager.Instance.Players[0].TDObject.Transform.Position;

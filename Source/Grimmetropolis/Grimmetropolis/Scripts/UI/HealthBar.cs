@@ -11,7 +11,7 @@ public class HealthBar : ProgressBar
     {
         base.Initialize();
 
-        SetHealthBar(CurrentProgress);
+        _time = 0f;
     }
 
     public override void Update(GameTime gameTime)
@@ -23,14 +23,13 @@ public class HealthBar : ProgressBar
         if (_time <= 0f) Hide();
     }
 
-    public void SetHealthBar(float health)
+    public override void SetProgressBar()
     {
+        base.SetProgressBar();
+
         _time = _revealTime;
 
-        CurrentProgress = health;
         float proportion = CurrentProgress / MaxProgress;
-
-        Show();
 
         if (proportion < .25f) Foreground.Color = Color.Red;
         else if (proportion < .5f) Foreground.Color = Color.Yellow;

@@ -16,6 +16,7 @@ public class Player : Character
     public override Vector3 OffsetTarget => .5f * Vector3.Backward;
 
     private ResourceDeposit _lastClosestResourceDeposit = null;
+    private bool _needsToShowHarvestProgress = false;
 
     public override void Initialize()
     {
@@ -30,7 +31,7 @@ public class Player : Character
         Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
 
         if (Input.IsSpecialAbilityPressed()) Interact(gameTime);
-        else _lastClosestResourceDeposit = null;
+        else ResetProgressBarForProgress();
         if (Input.IsUseItemPressed()) Build();
         if (Input.IsSwapItemPressed()) TakeDrop();
 
@@ -81,7 +82,9 @@ public class Player : Character
             closestEnemy.Health -= Config.PLAYER_DAMAGE;
             Cooldown = Config.PLAYER_ATTACK_DURATION;
 
-            _lastClosestResourceDeposit = null;
+            ResetProgressBarForProgress();
+            SetProgressBarForAttack();
+
         }
         else if (closestStructure != null)
         {
@@ -90,14 +93,24 @@ public class Player : Character
                 closestBuilding.Health -= Config.PLAYER_DAMAGE;
                 Cooldown = Config.PLAYER_ATTACK_DURATION;
 
-                _lastClosestResourceDeposit = null;
+                ResetProgressBarForProgress();
+                SetProgressBarForAttack();
             }
             else if (closestStructure is ResourceDeposit closestResourceDeposit)
             {
                 if (closestResourceDeposit != _lastClosestResourceDeposit)
                 {
+                    _needsToShowHarvestProgress = true;
                     _lastClosestResourceDeposit = closestResourceDeposit;
                     Progress = 0f;
+                }
+
+                if (!IsShowingCooldown && _needsToShowHarvestProgress)
+                {
+                    _needsToShowHarvestProgress = false;
+
+                    ProgressBar.MaxProgress = _lastClosestResourceDeposit.HarvestTime;
+                    ProgressBar.Show();
                 }
 
                 Progress += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -107,7 +120,22 @@ public class Player : Character
                     Progress -= _lastClosestResourceDeposit.HarvestTime;
                 }
             }
-
         }
+        else ResetProgressBarForProgress();
+    }
+
+    private void ResetProgressBarForProgress()
+    {
+        _lastClosestResourceDeposit = null;
+        if (!IsShowingCooldown) ProgressBar.Hide();
+    }
+    private void SetProgressBarForAttack()
+    {
+        IsShowingCooldown = true;
+
+        ProgressBar.CurrentProgress = Cooldown;
+        ProgressBar.MaxProgress = Config.PLAYER_ATTACK_DURATION;
+        ProgressBar.SetProgressBar();
+        ProgressBar.Show();
     }
 }

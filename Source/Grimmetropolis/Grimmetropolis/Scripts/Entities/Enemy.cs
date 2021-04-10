@@ -118,11 +118,15 @@ public abstract class Enemy : Character
             {
                 closestPlayer.Health -= _damageAgainstPlayers;
                 Cooldown = _attackDuration;
+
+                SetProgressBarForAttack();
             }
             else if (closestBuilding != null)
             {
                 closestBuilding.Health -= _damageAgainstBuildings;
                 Cooldown = _attackDuration;
+
+                SetProgressBarForAttack();
             }
         }
     }
@@ -137,5 +141,15 @@ public abstract class Enemy : Character
         Vector2 direction = runMove.Destination.TDObject.Transform.LocalPosition.GetXY() - TDObject.Transform.LocalPosition.GetXY();
         if (direction.LengthSquared() > 1f) direction.Normalize();
         Move(direction, gameTime);
+    }
+
+    private void SetProgressBarForAttack()
+    {
+        IsShowingCooldown = true;
+
+        ProgressBar.CurrentProgress = Cooldown;
+        ProgressBar.MaxProgress = _attackDuration;
+        ProgressBar.SetProgressBar();
+        ProgressBar.Show();
     }
 }
