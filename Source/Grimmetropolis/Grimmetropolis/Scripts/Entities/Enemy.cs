@@ -30,6 +30,7 @@ public abstract class Enemy : Character
     public float AttackDuration => _attackDuration;
 
     public override Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
+    public TDCylinderCollider ShootingRange;
 
     public void SetBaseStats(Config.EnemyStats stats)
     {
@@ -47,6 +48,15 @@ public abstract class Enemy : Character
         base.Initialize();
 
         _controller = GameManager.Instance.EnemyController;
+
+        if (ShootingRange != null)
+        {
+            ShootingRange.IsTrigger = true;
+            ShootingRange.Radius = _attackRange;
+            ShootingRange.Height = 1f;
+            ShootingRange.Offset = Vector3.Zero;
+            ShootingRange.collisionEvent += OnCollisionShootingRange;
+        }
 
         GameManager.Instance.Enemies.Add(this);
     }
@@ -85,6 +95,10 @@ public abstract class Enemy : Character
     {
         base.Destroy();
 
+        if (ShootingRange != null)
+        {
+            ShootingRange.collisionEvent -= OnCollisionShootingRange;
+        }
         GameManager.Instance.Enemies.Remove(this);
     }
     protected override void Interact(GameTime gameTime)
@@ -161,5 +175,12 @@ public abstract class Enemy : Character
         ProgressBar.MaxProgress = _attackDuration;
         ProgressBar.SetProgressBar();
         ProgressBar.Show();
+    }
+
+    private void OnCollisionShootingRange(TDCollider collider1, TDCollider collider2, float intersection)
+    {
+        // TODO: maybe use a different list for shooting range only
+        TDCollider oppositeCollider = ShootingRange == collider2 ? collider1 : collider2;
+        _colliderList.Add(new Tuple<TDCollider, float>(oppositeCollider, intersection));
     }
 }

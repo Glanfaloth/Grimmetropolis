@@ -316,11 +316,18 @@ public static class PrefabFactory
         // meshCollider.Texture = TDContentManager.LoadTexture("DefaultTexture");
         TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
         interactionCollider.IsTrigger = true;
-        // TODO: The interactionCollider is not responsable for ranged attacks!
-        interactionCollider.Radius = enemy.AttackRange;
+        interactionCollider.Radius = .25f;
         interactionCollider.Height = .5f;
         interactionCollider.Offset = .5f * Vector3.Backward;
         enemy.InteractionCollider = interactionCollider;
+
+        if (stats.ATTACK_RANGE > .25f)
+        {
+            TDObject shootingObject = CreatePrefab(PrefabType.Empty, prefab.Transform);
+            TDCylinderCollider shootingRange = shootingObject.AddComponent<TDCylinderCollider>();
+            enemy.ShootingRange = shootingRange;
+        }
+
         return prefab;
     }
 
