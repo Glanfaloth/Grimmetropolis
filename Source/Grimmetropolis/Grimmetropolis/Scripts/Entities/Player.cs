@@ -18,6 +18,7 @@ public class Player : Character
     private ResourceDeposit _lastClosestResourceDeposit = null;
     private bool _needsToShowHarvestProgress = false;
 
+    private Enemy _closestEnemy = null;
     private MapTile _collidingMapTile = null;
 
     public override void Initialize()
@@ -32,6 +33,7 @@ public class Player : Character
         Vector2 inputDirection = Input.GetMoveDirection();
         Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
 
+        HighlightClosestCharacter();
         HighlightMapTile();
 
         if (Input.IsSpecialAbilityPressed()) Interact(gameTime);
@@ -55,22 +57,11 @@ public class Player : Character
     {
         base.Interact(gameTime);
 
-        float closestEnemyDistance = float.MaxValue;
         float closestStructureDistance = float.MaxValue;
-        Enemy _closestEnemy = null;
         Structure _closestStructure = null;
         foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
         {
-            if (colliderEntry.Item1 is TDCylinderCollider && closestEnemyDistance > colliderEntry.Item2)
-            {
-                Enemy enemy = colliderEntry.Item1.TDObject?.GetComponent<Enemy>();
-                if (enemy != null)
-                {
-                    closestEnemyDistance = colliderEntry.Item2;
-                    _closestEnemy = enemy;
-                }
-            }
-            else if (colliderEntry.Item1 is TDCuboidCollider && closestStructureDistance > colliderEntry.Item2)
+            if (colliderEntry.Item1 is TDCuboidCollider && closestStructureDistance > colliderEntry.Item2)
             {
                 Structure structure = colliderEntry.Item1.TDObject?.GetComponent<MapTile>().Structure;
                 if (structure != null)
@@ -141,6 +132,28 @@ public class Player : Character
         ProgressBar.MaxProgress = Config.PLAYER_ATTACK_DURATION;
         ProgressBar.SetProgressBar();
         ProgressBar.Show();
+    }
+
+    private void HighlightClosestCharacter()
+    {
+        _closestEnemy?.Highlight(false);
+
+        float closestEnemyDistance = float.MaxValue;
+        _closestEnemy = null;
+
+        foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
+        {
+            if (colliderEntry.Item1 is TDCylinderCollider && closestEnemyDistance > colliderEntry.Item2)
+            {
+                Enemy enemy = colliderEntry.Item1.TDObject?.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    closestEnemyDistance = colliderEntry.Item2;
+                    _closestEnemy = enemy;
+                }
+            }
+        }
+        _closestEnemy?.Highlight(true);
     }
 
     private void HighlightMapTile()
