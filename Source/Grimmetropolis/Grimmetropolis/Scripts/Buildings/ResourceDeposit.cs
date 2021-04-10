@@ -8,9 +8,23 @@ public enum ResourceDepositType
     Stone
 }
 
+
 public class ResourceDeposit : Structure
 {
     public ResourceDepositType Type = ResourceDepositType.Wood;
+    public float HarvestTime = 1f;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        HarvestTime = Type switch
+        {
+            ResourceDepositType.Wood => Config.RESOURCE_WOOD_GATHER_DURATION,
+            ResourceDepositType.Stone => Config.RESOURCE_STONE_GATHER_DURATION,
+            _ => 1f
+        };
+    }
 
     public void HarvestResource()
     {

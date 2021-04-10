@@ -34,7 +34,8 @@ public enum PrefabType
     EmptyUI3D,
 
     ResourceDisplay,
-    HealthBar
+    HealthBar,
+    ProgressBar
 }
 
 public static class PrefabFactory
@@ -271,6 +272,26 @@ public static class PrefabFactory
                     foregroundObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin;
                     break;
                 }
+
+            case PrefabType.ProgressBar:
+                {
+                    CreateEmptyUI3D(prefab, localPosition, localRotation, localScale);
+                    TDSprite background = prefab.AddComponent<TDSprite>();
+                    ProgressBar progressBar = prefab.AddComponent<ProgressBar>();
+                    background.Texture = TDContentManager.LoadTexture("UIBar");
+                    background.Color = Color.Black;
+                    background.Depth = 1f;
+                    prefab.RectTransform.Origin = new Vector2(.5f * background.Texture.Width, background.Texture.Height);
+
+                    TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
+                    foreground.Texture = TDContentManager.LoadTexture("UIBar");
+                    foreground.Depth = .1f;
+                    progressBar.Background = background;
+                    progressBar.Foreground = foreground;
+                    foregroundObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin;
+                    break;
+                }
         }
 
         return prefab;
@@ -295,6 +316,7 @@ public static class PrefabFactory
         // meshCollider.Texture = TDContentManager.LoadTexture("DefaultTexture");
         TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
         interactionCollider.IsTrigger = true;
+        // TODO: The interactionCollider is not responsable for ranged attacks!
         interactionCollider.Radius = enemy.AttackRange;
         interactionCollider.Height = .5f;
         interactionCollider.Offset = .5f * Vector3.Backward;

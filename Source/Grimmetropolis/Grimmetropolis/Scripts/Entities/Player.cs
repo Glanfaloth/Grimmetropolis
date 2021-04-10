@@ -15,6 +15,8 @@ public class Player : Character
 
     public override Vector3 OffsetTarget => .5f * Vector3.Backward;
 
+    private ResourceDeposit _lastClosestResourceDeposit = null;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -27,7 +29,8 @@ public class Player : Character
         Vector2 inputDirection = Input.GetMoveDirection();
         Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
 
-        if (Input.IsSpecialAbilityPressed()) Interact();
+        if (Input.IsSpecialAbilityPressed()) Interact(gameTime);
+        else _lastClosestResourceDeposit = null;
         if (Input.IsUseItemPressed()) Build();
         if (Input.IsSwapItemPressed()) TakeDrop();
 
@@ -43,8 +46,10 @@ public class Player : Character
     }
 
 
-    private void Interact()
+    protected override void Interact(GameTime gameTime)
     {
+        base.Interact(gameTime);
+
         float closestEnemyDistance = float.MaxValue;
         float closestStructureDistance = float.MaxValue;
         Enemy closestEnemy = null;
@@ -70,23 +75,39 @@ public class Player : Character
                 }
             }
         }
-
-        if (closestEnemy != null)
+        
+        if (closestEnemy != null && Cooldown <= 0f)
         {
             closestEnemy.Health -= Config.PLAYER_DAMAGE;
+            Cooldown = Config.PLAYER_ATTACK_DURATION;
+
+            _lastClosestResourceDeposit = null;
         }
         else if (closestStructure != null)
         {
-            if (closestStructure is ResourceDeposit closestResourceDeposit)
-            {
-                closestResourceDeposit.HarvestResource();
-            }
-
-            // TODO: Left here for testing usage
-            if (closestStructure is Building closestBuilding)
+            if (Cooldown <= 0f && closestStructure is Building closestBuilding)
             {
                 closestBuilding.Health -= Config.PLAYER_DAMAGE;
+                Cooldown = Config.PLAYER_ATTACK_DURATION;
+
+                _lastClosestResourceDeposit = null;
             }
+            else if (closestStructure is ResourceDeposit closestResourceDeposit)
+            {
+                if (closestResourceDeposit != _lastClosestResourceDeposit)
+                {
+                    _lastClosestResourceDeposit = closestResourceDeposit;
+                    Progress = 0f;
+                }
+
+                Progress += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (Progress >= _lastClosestResourceDeposit.HarvestTime)
+                {
+                    _lastClosestResourceDeposit.HarvestResource();
+                    Progress -= _lastClosestResourceDeposit.HarvestTime;
+                }
+            }
+
         }
     }
 }

@@ -36,6 +36,26 @@ public abstract class Character : TDComponent
 
     private HealthBar _healthBar = null;
 
+    private float _cooldown = 0f;
+    public float Cooldown
+    {
+        get => _cooldown;
+        set
+        {
+            _cooldown = value;
+        }
+    }
+
+    private float _progress = 0f;
+    public float Progress
+    {
+        get => _progress;
+        set
+        {
+            _progress = value;
+        }
+    }
+
     public override void Initialize()
     {
         base.Initialize();
@@ -56,6 +76,8 @@ public abstract class Character : TDComponent
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
+
+        _cooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         _colliderList.Clear();
     }
@@ -95,6 +117,8 @@ public abstract class Character : TDComponent
             building.Position = mapTile.Position;
         }
     }
+
+    protected virtual void Interact(GameTime gameTime) { }
 
     protected void TakeDrop()
     {

@@ -13,6 +13,7 @@ public abstract class Enemy : Character
     private float _damageAgainstPlayers;
     private float _damageAgainstBuildings;
     private float _attackRange;
+    private float _attackDuration;
     private readonly List<EnemyMove.Type> _moves = new List<EnemyMove.Type>() { EnemyMove.Type.Run };
 
     public abstract String MeshName { get; }
@@ -25,6 +26,7 @@ public abstract class Enemy : Character
     public override float BaseHealth => _baseHealth;
 
     public float AttackRange => _attackRange;
+    public float AttackDuration => _attackDuration;
 
     public override Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
 
@@ -36,6 +38,7 @@ public abstract class Enemy : Character
         _damageAgainstPlayers = stats.DAMAGE_AGAINST_PLAYER;
         _damageAgainstBuildings = stats.DAMAGE_AGAINST_BUILDINGS;
         _attackRange = stats.ATTACK_RANGE;
+        _attackDuration = stats.ATTACK_DURATION;
     }
 
     public override void Initialize()
@@ -80,8 +83,10 @@ public abstract class Enemy : Character
 
         GameManager.Instance.Enemies.Remove(this);
     }
-    private void Interact()
+    protected override void Interact(GameTime gameTime)
     {
+        base.Interact(gameTime);
+
         float closestPlayerDistance = float.MaxValue;
         float closestBuildingDistance = float.MaxValue;
         Player closestPlayer = null;
@@ -107,19 +112,24 @@ public abstract class Enemy : Character
             }
         }
 
-        if (closestPlayer != null)
+        if (Cooldown <= 0f)
         {
-            closestPlayer.Health -= _damageAgainstPlayers;
-        }
-        else if (closestBuilding != null)
-        {
-            closestBuilding.Health -= _damageAgainstBuildings;
+            if (closestPlayer != null)
+            {
+                closestPlayer.Health -= _damageAgainstPlayers;
+                Cooldown = _attackDuration;
+            }
+            else if (closestBuilding != null)
+            {
+                closestBuilding.Health -= _damageAgainstBuildings;
+                Cooldown = _attackDuration;
+            }
         }
     }
 
     private void AttackTarget(AttackMove nextMove, GameTime gameTime)
     {
-        Interact();
+        Interact(gameTime);
     }
 
     private void MoveToTarget(RunMove runMove, GameTime gameTime)

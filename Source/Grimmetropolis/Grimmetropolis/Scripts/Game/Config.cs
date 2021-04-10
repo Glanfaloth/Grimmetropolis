@@ -39,6 +39,9 @@ public static class Config
     public const int RESOURCE_WOOD_GATHER_BASE_RATE = 1;
     public const int RESOURCE_STONE_GATHER_BASE_RATE = 1;
 
+    public const float RESOURCE_WOOD_GATHER_DURATION = .25f;
+    public const float RESOURCE_STONE_GATHER_DURATION = .25f;
+
     #endregion
 
     #region Entities
@@ -48,10 +51,11 @@ public static class Config
     public const float PLAYER_ROTATE_SPEED = 3f * MathHelper.Pi;
     public const float PLAYER_HEALTH = 3f;
     public const float PLAYER_DAMAGE = 1f;
+    public const float PLAYER_ATTACK_DURATION = 1f;
 
-    public static readonly EnemyStats ENEMY_CATAPULT_STATS = new EnemyStats(1f, 1f * MathHelper.Pi, 5f, 1f, 2f, 4f);
-    public static readonly EnemyStats ENEMY_WITCH_STATS = new EnemyStats(3f, 3f * MathHelper.Pi, 1f, 1f, 1f, 2f);
-    public static readonly EnemyStats ENEMY_KNIGHTS_STATS = new EnemyStats(3f, 3f * MathHelper.Pi, 3f, 1f, 1f, .25f);
+    public static readonly EnemyStats ENEMY_CATAPULT_STATS = new EnemyStats(1f, 1f * MathHelper.Pi, 5f, 1f, 2f, 4f, 8f);
+    public static readonly EnemyStats ENEMY_WITCH_STATS = new EnemyStats(3f, 3f * MathHelper.Pi, 1f, 1f, 1f, 2f, 4f);
+    public static readonly EnemyStats ENEMY_KNIGHTS_STATS = new EnemyStats(3f, 3f * MathHelper.Pi, 3f, 1f, 1f, .25f, 2f);
 
     #endregion
 
@@ -63,8 +67,9 @@ public static class Config
         public readonly float DAMAGE_AGAINST_PLAYER;
         public readonly float DAMAGE_AGAINST_BUILDINGS;
         public readonly float ATTACK_RANGE;
+        public readonly float ATTACK_DURATION;
 
-        public EnemyStats(float walkSpeed, float rotateSpeed, float health, float damageAgainstPlayer, float damageAgainstBuilding, float attackRange)
+        public EnemyStats(float walkSpeed, float rotateSpeed, float health, float damageAgainstPlayer, float damageAgainstBuilding, float attackRange, float attackDuration)
         {
             WALK_SPEED = walkSpeed;
             ROTATE_SPEED = rotateSpeed;
@@ -72,6 +77,7 @@ public static class Config
             DAMAGE_AGAINST_PLAYER = damageAgainstPlayer;
             DAMAGE_AGAINST_BUILDINGS = damageAgainstBuilding;
             ATTACK_RANGE = attackRange;
+            ATTACK_DURATION = attackDuration;
         }
     }
 }
