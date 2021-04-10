@@ -5,21 +5,15 @@ public class ProgressBar : TDComponent
     public TDSprite Background;
     public TDSprite Foreground;
 
+    public float CurrentProgress;
+    public float MaxProgress;
+
     private bool _isShowing = true;
-    private float _proportion = 1f;
-    
-    public float Proportion
-    {
-        get => _proportion;
-        set
-        {
-            _proportion = value;
-            SetProgressBar();
-        }
-    }
 
     public void Show()
     {
+        SetProgressBar();
+
         if (_isShowing) return;
         _isShowing = true;
 
@@ -38,6 +32,6 @@ public class ProgressBar : TDComponent
 
     public void SetProgressBar()
     {
-        Foreground.TDObject.RectTransform.Scale = new Vector2(Proportion, 1f);
+        Foreground.TDObject.RectTransform.Scale = new Vector2(CurrentProgress / MaxProgress, 1f);
     }
 }

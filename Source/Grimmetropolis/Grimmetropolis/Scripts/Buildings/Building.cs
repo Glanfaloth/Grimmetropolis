@@ -27,8 +27,8 @@ public abstract class Building : Structure
         TDObject healthBarObject = PrefabFactory.CreatePrefab(PrefabType.HealthBar, TDObject.Transform);
         healthBarObject.RectTransform.Offset = 4f * Vector3.Backward;
         _healthBar = healthBarObject.GetComponent<HealthBar>();
-        _healthBar.Health = Health;
-        _healthBar.BaseHealth = BaseHealth;
+        _healthBar.CurrentProgress = Health;
+        _healthBar.MaxProgress = BaseHealth;
 
         base.Initialize();
     }
