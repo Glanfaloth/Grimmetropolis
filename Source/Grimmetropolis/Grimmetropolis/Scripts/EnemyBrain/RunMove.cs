@@ -13,7 +13,7 @@ internal class RunMove : EnemyMove
     {
         get
         {
-            return _distanceCost * (1 + Destination.NearbyOutposts * Config.RUN_MOVE_OUTPOST_COUNT_SCALE_FACTOR);
+            return _distanceCost * Config.RUN_MOVE_DISTANCE_FACTOR * (1 + Destination.NearbyOutposts * Config.RUN_MOVE_OUTPOST_COUNT_SCALE_FACTOR);
         }
     }
 

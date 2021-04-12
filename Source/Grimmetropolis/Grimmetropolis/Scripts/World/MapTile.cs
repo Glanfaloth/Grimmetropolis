@@ -129,7 +129,7 @@ public class MapTile : TDComponent
             {
                 Point delta = tile.Position - Position;
                 float range = MathF.Sqrt(delta.X * delta.X + delta.Y * delta.Y);
-                new RangedAttackMove(tile.TileVertex, StructureVertex, building, range, Config.RANGED_ATTACK_MOVE_BASE_COST, Config.RANGED_ATTACK_MOVE_FACTOR);
+                new RangedAttackMove(tile.TileVertex, StructureVertex, building, range, Config.RANGED_ATTACK_MOVE_BASE_COST, Config.RANGED_ATTACK_MOVE_DISTANCE_FACTOR);
             }
         }
         // TODO: add other edge types

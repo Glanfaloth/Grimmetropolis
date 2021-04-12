@@ -9,11 +9,12 @@ public static class Config
 
     public static readonly float RUN_MOVE_DIAGONAL_BASE_COST = (float)Math.Sqrt(2);
     public const float RUN_MOVE_DIRECT_BASE_COST = 1;
+    public const float RUN_MOVE_DISTANCE_FACTOR = 2;
     public const float RUN_MOVE_OUTPOST_COUNT_SCALE_FACTOR = 0.5f;
     // RUN_MOVE_OUTPOST_COUNT_SCALE_FACTOR = linear
     public const float ATTACK_MOVE_COST = 0.5f;
     public const float RANGED_ATTACK_MOVE_BASE_COST = .25f;
-    public const float RANGED_ATTACK_MOVE_FACTOR = 0f;
+    public const float RANGED_ATTACK_MOVE_DISTANCE_FACTOR = 0f;
 
 
     public const int ENEMY_OUTPOST_AVOIDANCE_RANGE = 3;
