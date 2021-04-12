@@ -23,6 +23,18 @@ public static class Config
     // TODO: find if there is a better way to do this
     public const int MAX_RANGED_ATTACK = 10;
 
+
+    public const float TIME_UNTIL_FIRST_WAVE = 10;
+    public const float TIME_BETWEEN_WAVES = 20;
+    public const float FIRST_WAVE_WITCH_COUNT = 4;
+    public const float FIRST_WAVE_KNIGHT_COUNT = 6;
+
+    // this results in first siege appearing in 5th wave
+    public const float FIRST_WAVE_SIEGE_COUNT = .41f;
+    public const float WAVE_GROWTH_FACTOR = 1.25f;
+
+    public const int WAVE_SPAWN_RADIUS = 5;
+
     #endregion
 
     #region Buildings

@@ -56,11 +56,12 @@ public class GameManager : TDComponent
         // EnemyBrain
         TDObject enemyAI = PrefabFactory.CreatePrefab(PrefabType.Empty);
         EnemyController = enemyAI.AddComponent<EnemyController>();
+        EnemyController.Configure(Config.TIME_UNTIL_FIRST_WAVE, Config.TIME_BETWEEN_WAVES, Config.FIRST_WAVE_KNIGHT_COUNT, Config.FIRST_WAVE_WITCH_COUNT, Config.FIRST_WAVE_SIEGE_COUNT, Config.WAVE_GROWTH_FACTOR);
 
         // Spawner
-        // TODO: replace test spawner with real spawner
-        TDObject testSpawner = PrefabFactory.CreatePrefab(PrefabType.Empty);
-        var spawner = testSpawner.AddComponent<TestSpawner>();
+        //// TODO: replace test spawner with real spawner
+        //TDObject testSpawner = PrefabFactory.CreatePrefab(PrefabType.Empty);
+        //var spawner = testSpawner.AddComponent<TestSpawner>();
 
         // Players
         TDObject playerList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
@@ -82,12 +83,12 @@ public class GameManager : TDComponent
 
         foreach (var entityToSpawn in entitiesToSpawn)
         {
-            SpawnEntity(spawner, enemyList, entityToSpawn);
+            SpawnEntity(enemyList, entityToSpawn);
         }
 
-        if (spawner.SpawnLocations.Count == 0)
+        if (EnemyController.SpawnLocations.Count == 0)
         {
-            spawner.SpawnLocations.Add(Point.Zero);
+            EnemyController.SpawnLocations.Add(Point.Zero);
         }
 
         // Items
@@ -119,7 +120,7 @@ public class GameManager : TDComponent
         //resourceStone.Position = new Point(7, 10);
     }
 
-    private void SpawnEntity(TestSpawner spawner, TDObject enemyList, MapDTO.EntityToSpawn entityToSpawn)
+    private void SpawnEntity(TDObject enemyList, MapDTO.EntityToSpawn entityToSpawn)
     {
         switch (entityToSpawn.Type)
         {
@@ -162,7 +163,7 @@ public class GameManager : TDComponent
                 }
                 break;
             case MapDTO.EntityType.EnemySpawnPoint:
-                spawner.SpawnLocations.Add(entityToSpawn.Position);
+                EnemyController.SpawnLocations.Add(entityToSpawn.Position);
                 break;
             case MapDTO.EntityType.None:
             default:
