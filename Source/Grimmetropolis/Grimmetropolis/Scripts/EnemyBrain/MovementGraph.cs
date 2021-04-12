@@ -47,6 +47,18 @@ public class MovementGraph
         return _paths[key].GetNextMoveFromMapTile(tile);
     }
 
+    internal EnemyMove GetNextMove(EnemyMove move, EnemyMove.Type actions, float attackRange)
+    {
+        int pathAttackRange = (int)attackRange;
+        if ((actions & EnemyMove.Type.RangedAttack) != EnemyMove.Type.RangedAttack)
+        {
+            pathAttackRange = 0;
+        }
+
+        var key = new Tuple<EnemyMove.Type, int>(actions, pathAttackRange);
+        return _paths[key].GetNextMove(move);
+    }
+
     internal void ComputeShortestPathToMapTile(Point start)
     {
         _startLocation = _map.MapTiles[start.X, start.Y].TileVertex;

@@ -75,6 +75,11 @@ public class PathComputation
         }
     }
 
+    internal EnemyMove GetNextMove(EnemyMove move)
+    {
+        return _nextMoves[move.To.Index];
+    }
+
     private void ResetPaths()
     {
         if ((_nextMoves?.Length ?? -1) < _graph.VerticesCount)

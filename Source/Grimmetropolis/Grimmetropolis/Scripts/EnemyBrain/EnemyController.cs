@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class EnemyController : TDComponent
 {
+    // Used for debug purposes
+    private bool _alwaysShowPath = false;
+
     private int _witchToSpawn = 0;
     private int _knightToSpawn = 0;
     private int _siegeToSpawn = 0;
@@ -19,8 +22,12 @@ public class EnemyController : TDComponent
     private float _timeBetweenWaves;
     private float _growthFactor;
 
+    private bool _spawnLocationSet = false;
+
     private int _spawnLocationIndex = -1;
     private List<MapTile> _spawnTiles = new List<MapTile>();
+
+    private List<MapTile> _highlightedPath = new List<MapTile>();
 
     private List<Enemy> enemies = new List<Enemy>();
 
@@ -62,7 +69,6 @@ public class EnemyController : TDComponent
 
     public override void Update(GameTime gameTime)
     {
-        // TODO: add monster spawning
         base.Update(gameTime);
 
         UpdatePathing(gameTime);
@@ -87,8 +93,6 @@ public class EnemyController : TDComponent
             _nextWaveWitch *= _growthFactor;
             _nextWaveSiege *= _growthFactor;
 
-            _spawnLocationIndex = (_spawnLocationIndex + 1) % SpawnLocations.Count;
-
             _spawnTiles = Map.GetNearbyTilesEuclidean(SpawnLocations[_spawnLocationIndex], Config.WAVE_SPAWN_RADIUS)
                 .FindAll(p => p.CheckPassability());
 
@@ -96,12 +100,60 @@ public class EnemyController : TDComponent
             {
                 _spawnTiles.Add(Map.MapTiles[SpawnLocations[_spawnLocationIndex].X, SpawnLocations[_spawnLocationIndex].Y]);
             }
+
+            _spawnLocationSet = false;
+            ClearPathHighlight();
+        }
+
+        if ((!_spawnLocationSet) && _waveTimer - Config.WAVE_ALERT_TIME < 0)
+        {
+            _spawnLocationIndex = (_spawnLocationIndex + 1) % SpawnLocations.Count;
+            _spawnLocationSet = true;
+            HightlightPath();
+        }
+
+        if (_alwaysShowPath && _spawnLocationIndex >= 0)
+        {
+            ClearPathHighlight();
+            HightlightPath();
         }
 
         while (_spawnTimer < 0f && (_witchToSpawn + _knightToSpawn + _siegeToSpawn) > 0)
         {
             SpawnEnemy();
             _spawnTimer += _interval;
+        }
+    }
+
+    private void ClearPathHighlight()
+    {
+        foreach (var tile in _highlightedPath)
+        {
+            tile.Darklight(false);
+        }
+        _highlightedPath.Clear();
+    }
+
+    private void HightlightPath()
+    {
+        EnemyMove.Type actions = EnemyMove.Type.Run | EnemyMove.Type.Attack;
+        MapTile startTile = Map.MapTiles[SpawnLocations[_spawnLocationIndex].X, SpawnLocations[_spawnLocationIndex].Y];
+        _highlightedPath.Add(startTile);
+        EnemyMove nextMove = _graph.GetNextMoveFromMapTile(startTile, actions, 0);
+
+        while (nextMove.MovementType != EnemyMove.Type.StealArtifact)
+        {
+            if (nextMove is RunMove runMove)
+            {
+                _highlightedPath.Add(runMove.Destination);
+            }
+
+            nextMove = _graph.GetNextMove(nextMove, actions, 0);
+        }
+
+        foreach (var tile in _highlightedPath)
+        {
+            tile.Darklight(true);
         }
     }
 
@@ -112,7 +164,7 @@ public class EnemyController : TDComponent
 
         Vector3 position = Map.Corner + _spawnTiles[spawnTileIndex].Position.ToVector3() + Map.Offcenter;
         TDObject enemyObject;
-        // TODO: randomize spawn order?
+
         if (_knightToSpawn > spawnTypeIndex)
         {
             enemyObject = PrefabFactory.CreateEnemyPrefab<EnemyKnight>(Config.ENEMY_KNIGHTS_STATS, position, Quaternion.Identity);

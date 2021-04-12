@@ -211,4 +211,11 @@ public class MapTile : TDComponent
         Structure?.Highlight(highlight);
         Item?.Highlight(highlight);
     }
+
+    public void Darklight(bool highlight)
+    {
+        // TODO: this is a temporary workaround, decide how we want to display the enemy pathing
+        Mesh.BaseHighlightFactor = highlight ? .5f : 1f;
+        Mesh.Highlight(false);
+    }
 }

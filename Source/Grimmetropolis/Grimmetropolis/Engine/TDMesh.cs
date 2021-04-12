@@ -30,6 +30,7 @@ public class TDMesh : TDComponent
         }
     }
 
+    public float BaseHighlightFactor = 1f;
     private float _highlightFactor = 1f;
 
     public override void Initialize()
@@ -100,7 +101,7 @@ public class TDMesh : TDComponent
 
     public void Highlight(bool highlight)
     {
-        _highlightFactor = highlight ? 2f : 1f;
+        _highlightFactor = highlight ? 2f : BaseHighlightFactor;
     }
 
     public override void Destroy()
