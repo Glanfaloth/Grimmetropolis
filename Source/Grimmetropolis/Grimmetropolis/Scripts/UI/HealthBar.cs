@@ -4,6 +4,8 @@ using System.Diagnostics;
 
 public class HealthBar : ProgressBar
 {
+    public bool AlwaysShow = false;
+
     private float _revealTime = 3f;
     private float _time = 0f;
 
@@ -14,15 +16,21 @@ public class HealthBar : ProgressBar
         base.Initialize();
 
         _time = 0f;
+
+        if (AlwaysShow)
+            Show();
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
 
-        _time -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (!AlwaysShow)
+        {
+            _time -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        if (_time <= 0f) Hide();
+            if (_time <= 0f) Hide();
+        }
     }
 
     public override void Show()
@@ -34,6 +42,7 @@ public class HealthBar : ProgressBar
 
     public void QuickShow()
     {
+
         _quickShow = true;
 
         base.Show();
@@ -41,13 +50,15 @@ public class HealthBar : ProgressBar
 
     public override void Hide()
     {
-        if (_quickShow) return;
+        if (_quickShow || AlwaysShow) return;
 
         base.Hide();
     }
 
     public void QuickHide()
     {
+        if (AlwaysShow) return;
+
         _quickShow = false;
         if (_time > 0f) return;
 

@@ -35,7 +35,9 @@ public enum PrefabType
 
     ResourceDisplay,
     HealthBar,
-    ProgressBar
+    ProgressBar,
+
+    PlayerDisplay
 }
 
 public static class PrefabFactory
@@ -299,6 +301,49 @@ public static class PrefabFactory
                     progressBar.Background = background;
                     progressBar.Foreground = foreground;
                     foregroundObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin;
+                    break;
+                }
+
+            case PrefabType.PlayerDisplay:
+                {
+                    CreateEmptyUI(prefab, localPosition, localRotation, localScale);
+                    TDSprite playerIcon = prefab.AddComponent<TDSprite>();
+                    PlayerDisplay playerDisplay = prefab.AddComponent<PlayerDisplay>();
+                    playerIcon.Texture = TDContentManager.LoadTexture("UIPlayer");
+                    prefab.RectTransform.Origin = new Vector2(.5f * playerIcon.Texture.Width, playerIcon.Texture.Height);
+
+                    TDObject healthBarObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    HealthBar healthBar = healthBarObject.AddComponent<HealthBar>();
+                    TDSprite background = healthBarObject.AddComponent<TDSprite>();
+                    background.Texture = TDContentManager.LoadTexture("UIPlayerBar");
+                    background.Color = Color.Black;
+                    background.Depth = 1f;
+                    healthBarObject.RectTransform.LocalPosition = new Vector2(.5f * playerIcon.Texture.Width, -.8f * playerIcon.Texture.Height);
+
+                    TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, healthBarObject.Transform);
+                    TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
+                    foreground.Texture = TDContentManager.LoadTexture("UIPlayerBar");
+                    foreground.Depth = .1f;
+                    healthBar.Background = background;
+                    healthBar.Foreground = foreground;
+                    healthBar.AlwaysShow = true;
+                    playerDisplay.HealthBar = healthBar;
+
+
+                    /*TDSprite background = healthBarObject.AddComponent<TDSprite>();
+                    HealthBar healthBar = healthBarObject.AddComponent<HealthBar>();
+                    background.Texture = TDContentManager.LoadTexture("UIPlayerBar");
+                    background.Color = Color.Black;
+                    background.Depth = 1f;
+                    prefab.RectTransform.Origin = new Vector2(.5f * background.Texture.Width, background.Texture.Height);
+
+                    TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
+                    foreground.Texture = TDContentManager.LoadTexture("UIPlayerBar");
+                    foreground.Depth = .1f;
+                    healthBar.Background = background;
+                    healthBar.Foreground = foreground;
+                    foregroundObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin;*/
                     break;
                 }
         }

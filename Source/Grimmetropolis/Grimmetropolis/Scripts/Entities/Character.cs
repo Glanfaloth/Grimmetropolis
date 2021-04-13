@@ -24,10 +24,10 @@ public abstract class Character : TDComponent, ITDTarget
         set
         {
             _health = value;
-            if (_healthBar != null)
+            if (HealthBar != null)
             {
-                _healthBar.CurrentProgress = _health;
-                _healthBar.Show();
+                HealthBar.CurrentProgress = _health;
+                HealthBar.Show();
             }
             if (_health <= 0f) TDObject?.Destroy();
         }
@@ -40,7 +40,7 @@ public abstract class Character : TDComponent, ITDTarget
 
     // TODO: add shooting range collider
 
-    private HealthBar _healthBar = null;
+    public HealthBar HealthBar = null;
     protected ProgressBar ProgressBar = null;
     protected bool IsShowingCooldown = false;
 
@@ -84,9 +84,9 @@ public abstract class Character : TDComponent, ITDTarget
 
         TDObject healthBarObject = PrefabFactory.CreatePrefab(PrefabType.HealthBar, TDObject.Transform);
         healthBarObject.RectTransform.Offset = 2.5f * Vector3.Backward;
-        _healthBar = healthBarObject.GetComponent<HealthBar>();
-        _healthBar.CurrentProgress = Health;
-        _healthBar.MaxProgress = BaseHealth;
+        HealthBar = healthBarObject.GetComponent<HealthBar>();
+        HealthBar.CurrentProgress = Health;
+        HealthBar.MaxProgress = BaseHealth;
 
         TDObject progessBarObject = PrefabFactory.CreatePrefab(PrefabType.ProgressBar, TDObject.Transform);
         progessBarObject.RectTransform.Offset = 2f * Vector3.Backward;
@@ -174,7 +174,7 @@ public abstract class Character : TDComponent, ITDTarget
     public void Highlight(bool highlight)
     {
         Mesh.Highlight(highlight);
-        if (highlight) _healthBar.QuickShow();
-        else _healthBar.QuickHide();
+        if (highlight) HealthBar.QuickShow();
+        else HealthBar.QuickHide();
     }
 }

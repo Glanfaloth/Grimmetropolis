@@ -25,6 +25,10 @@ public class Player : Character
     {
         base.Initialize();
 
+        HealthBar.TDObject.Destroy();
+        UIManager.Instance.AddPlayerDisplay(this);
+        Health--;
+
         GameManager.Instance.Players.Add(this);
     }
 
