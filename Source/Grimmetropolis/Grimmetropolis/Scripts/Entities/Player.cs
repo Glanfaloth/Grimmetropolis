@@ -27,7 +27,6 @@ public class Player : Character
 
         HealthBar.TDObject.Destroy();
         UIManager.Instance.AddPlayerDisplay(this);
-        Health--;
 
         GameManager.Instance.Players.Add(this);
     }
