@@ -122,6 +122,26 @@ public class Player : Character
         else ResetProgressBarForProgress();
     }
 
+    protected void Build()
+    {
+        MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
+        if (Cooldown <= 0
+            && mapTile.Type == MapTileType.Ground
+            && mapTile.Structure == null
+            && mapTile.Item == null
+            && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST)))
+        {
+            GameManager.Instance.ResourcePool -= new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST);
+            TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost, GameManager.Instance.StructureTransform);
+            Building building = buildingObject.GetComponent<Building>();
+            building.Position = mapTile.Position;
+
+            Cooldown = Config.PLAYER_PLACE_BUILDING_COOLDOWN;
+            ResetProgressBarForProgress();
+            SetProgressBarForBuild();
+        }
+    }
+
     private void ResetProgressBarForProgress()
     {
         _lastClosestResourceDeposit = null;
@@ -129,11 +149,12 @@ public class Player : Character
     }
     private void SetProgressBarForAttack()
     {
-        IsShowingCooldown = true;
+        SetProgressBar(Config.PLAYER_ATTACK_DURATION);
+    }
 
-        ProgressBar.CurrentProgress = Cooldown;
-        ProgressBar.MaxProgress = Config.PLAYER_ATTACK_DURATION;
-        ProgressBar.Show();
+    private void SetProgressBarForBuild()
+    {
+        SetProgressBar(Config.PLAYER_PLACE_BUILDING_COOLDOWN);
     }
 
     private void HighlightClosestCharacter()

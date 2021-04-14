@@ -141,18 +141,6 @@ public abstract class Character : TDComponent, ITDTarget
         }
     }
 
-    protected void Build()
-    {
-        MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        if (mapTile.Type == MapTileType.Ground && mapTile.Structure == null && mapTile.Item == null && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST)))
-        {
-            GameManager.Instance.ResourcePool -= new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST);
-            TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost, GameManager.Instance.StructureTransform);
-            Building building = buildingObject.GetComponent<Building>();
-            building.Position = mapTile.Position;
-        }
-    }
-
     protected virtual void Interact(GameTime gameTime) { }
 
     protected void TakeDrop()
@@ -176,5 +164,14 @@ public abstract class Character : TDComponent, ITDTarget
         Mesh.Highlight(highlight);
         if (highlight) HealthBar.QuickShow();
         else HealthBar.QuickHide();
+    }
+
+    protected void SetProgressBar(float maxProgress)
+    {
+        IsShowingCooldown = true;
+
+        ProgressBar.CurrentProgress = Cooldown;
+        ProgressBar.MaxProgress = maxProgress;
+        ProgressBar.Show();
     }
 }

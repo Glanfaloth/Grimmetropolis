@@ -55,6 +55,8 @@ public static class Config
     public const float OUTPOST_ARROW_DAMAGE = 1f;
     public const float OUTPOST_ARROW_SPEED = 6f;
 
+    public const float OUTPOST_BUILD_TIME = 3f;
+
     public const int RESOURCE_WOOD_GATHER_BASE_RATE = 1;
     public const int RESOURCE_STONE_GATHER_BASE_RATE = 1;
 
@@ -71,6 +73,8 @@ public static class Config
     public const float PLAYER_HEALTH = 3f;
     public const float PLAYER_DAMAGE = 1f;
     public const float PLAYER_ATTACK_DURATION = 1f;
+
+    public const float PLAYER_PLACE_BUILDING_COOLDOWN = .5f;
 
     public const float ENEMY_PROJECTILE_SPEED = 6f;
 
