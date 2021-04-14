@@ -2,6 +2,7 @@
 
 public class Castle : Building
 {
+    public override float BuildTime => 0;
 
     public override void Initialize()
     {
@@ -26,5 +27,9 @@ public class Castle : Building
     public override ResourcePile GetResourceCost()
     {
         return new ResourcePile(0, 0);
+    }
+
+    protected override void DoUpdate(GameTime gameTime)
+    {
     }
 }

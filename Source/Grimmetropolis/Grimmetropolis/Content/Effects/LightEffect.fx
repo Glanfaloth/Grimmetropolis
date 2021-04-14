@@ -100,12 +100,26 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	return (ambient + diffuse) * tex2D(TextureSampler, input.TexCoord);
 }
 
+float4 BlueprintPS(VertexShaderOutput input) : COLOR
+{
+	return float4(0.1, 0.1, 0.1, 0.1);
+}
+
 technique LightEffect
 {
 	pass P0
 	{
 		VertexShader = compile VS_SHADERMODEL MainVS();
 		PixelShader = compile PS_SHADERMODEL MainPS();
+	}
+};
+
+technique BlueprintEffect
+{
+	pass P0
+	{
+		VertexShader = compile VS_SHADERMODEL MainVS();
+		PixelShader = compile PS_SHADERMODEL BlueprintPS();
 	}
 };
 

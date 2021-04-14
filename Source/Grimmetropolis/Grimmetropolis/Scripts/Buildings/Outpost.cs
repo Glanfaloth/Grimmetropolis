@@ -14,6 +14,8 @@ public class Outpost : Building
     private float _arrowSpeed = Config.OUTPOST_ARROW_SPEED;
     private float _arrowDamage = Config.OUTPOST_ARROW_DAMAGE;
 
+    public override float BuildTime => Config.OUTPOST_BUILD_VALUE;
+
     public override void Initialize()
     {
         BaseHealth = Config.OUTPOST_HEALTH;
@@ -28,10 +30,8 @@ public class Outpost : Building
         base.Initialize();
     }
 
-    public override void Update(GameTime gameTime)
+    protected override void DoUpdate(GameTime gameTime)
     {
-        base.Update(gameTime);
-
         _cooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         if (_closestEnemy != null && _cooldown <= 0f)

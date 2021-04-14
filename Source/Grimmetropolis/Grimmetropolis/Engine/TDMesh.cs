@@ -30,6 +30,8 @@ public class TDMesh : TDComponent
         }
     }
 
+    public bool IsBlueprint { get; internal set; }
+
     public float BaseHighlightFactor = 1f;
     private float _highlightFactor = 1f;
 
@@ -75,7 +77,9 @@ public class TDMesh : TDComponent
         {
             foreach (Effect effect in mesh.Effects)
             {
-                effect.CurrentTechnique = effect.Techniques["LightEffect"];
+                effect.CurrentTechnique = IsBlueprint 
+                    ? effect.Techniques["BlueprintEffect"]
+                    : effect.Techniques["LightEffect"];
 
                 effect.Parameters["World"].SetValue(TDObject.Transform.TransformMatrix);
                 effect.Parameters["ViewProjection"].SetValue(TDSceneManager.ActiveScene.CameraObject?.ViewProjectionMatrix ?? Matrix.Identity);

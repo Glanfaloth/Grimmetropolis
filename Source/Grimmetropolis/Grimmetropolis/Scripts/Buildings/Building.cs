@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 public abstract class Building : Structure, ITDTarget
 {
@@ -24,11 +25,32 @@ public abstract class Building : Structure, ITDTarget
         }
     }
 
+    public abstract float BuildTime { get; }
+
     public Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
 
     TDObject ITDTarget.TDObject => TDObject;
 
     private HealthBar _healthBar;
+    private bool _isBlueprint;
+    private float _buildProgress;
+    private ProgressBar _progressBar;
+
+    protected abstract void DoUpdate(GameTime gameTime);
+
+    public sealed override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+
+        if (!_isBlueprint)
+        {
+            DoUpdate(gameTime);
+        }
+        else
+        {
+            _progressBar.Show();
+        }
+    }
 
     public override void Initialize()
     {
@@ -45,5 +67,39 @@ public abstract class Building : Structure, ITDTarget
         Mesh.Highlight(highlight);
         if (highlight) _healthBar.QuickShow();
         else _healthBar.QuickHide();
+    }
+
+    internal void SetAsBlueprint()
+    {
+        _isBlueprint = true;
+        _buildProgress = 0;
+
+        TDObject progessBarObject = PrefabFactory.CreatePrefab(PrefabType.ProgressBar, TDObject.Transform);
+        progessBarObject.RectTransform.Offset = 3f * Vector3.Backward;
+        _progressBar = progessBarObject.GetComponent<ProgressBar>();
+        _progressBar.CurrentProgress = _buildProgress;
+        _progressBar.MaxProgress = BuildTime;
+        _progressBar.Show();
+        Mesh.IsBlueprint = true;
+    }
+
+    internal bool TryBuild(float buildStrength)
+    {
+        if(_isBlueprint)
+        {
+            _buildProgress += buildStrength;
+            _progressBar.CurrentProgress = _buildProgress;
+            if (_buildProgress >= BuildTime)
+            {
+                _isBlueprint = false;
+                _progressBar.Hide();
+                _progressBar.Destroy();
+                _progressBar = null;
+                Mesh.IsBlueprint = false;
+            }
+            return true;
+        }
+
+        return false;
     }
 }

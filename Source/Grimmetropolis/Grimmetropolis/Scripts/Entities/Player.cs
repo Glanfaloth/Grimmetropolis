@@ -41,7 +41,7 @@ public class Player : Character
 
         if (Input.IsSpecialAbilityPressed()) Interact(gameTime);
         else ResetProgressBarForProgress();
-        if (Input.IsUseItemPressed()) Build();
+        if (Input.IsUseItemPressed()) Build(gameTime);
         if (Input.IsSwapItemPressed()) TakeDrop();
 
         base.Update(gameTime);
@@ -122,11 +122,15 @@ public class Player : Character
         else ResetProgressBarForProgress();
     }
 
-    protected void Build()
+    protected void Build(GameTime gameTime)
     {
+        if (Cooldown > 0)
+        {
+            return;
+        }
+
         MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        if (Cooldown <= 0
-            && mapTile.Type == MapTileType.Ground
+        if (mapTile.Type == MapTileType.Ground
             && mapTile.Structure == null
             && mapTile.Item == null
             && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST)))
@@ -135,10 +139,20 @@ public class Player : Character
             TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost, GameManager.Instance.StructureTransform);
             Building building = buildingObject.GetComponent<Building>();
             building.Position = mapTile.Position;
+            building.SetAsBlueprint();
 
             Cooldown = Config.PLAYER_PLACE_BUILDING_COOLDOWN;
             ResetProgressBarForProgress();
-            SetProgressBarForBuild();
+            SetProgressBar(Cooldown);
+        }
+        else if (mapTile.Type == MapTileType.Ground && mapTile.Structure is Building building)
+        {
+            if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH))
+            {
+                Cooldown = Config.PLAYER_BUILD_COOLDONW;
+                ResetProgressBarForProgress();
+                SetProgressBar(Cooldown);
+            }
         }
     }
 
