@@ -136,7 +136,7 @@ public class Player : Character
             && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST)))
         {
             GameManager.Instance.ResourcePool -= new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST);
-            TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost, GameManager.Instance.StructureTransform);
+            TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.BuildingWall, GameManager.Instance.StructureTransform);
             Building building = buildingObject.GetComponent<Building>();
             building.Position = mapTile.Position;
             building.SetAsBlueprint();

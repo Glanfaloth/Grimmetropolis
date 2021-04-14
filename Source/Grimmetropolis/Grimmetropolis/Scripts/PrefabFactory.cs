@@ -19,12 +19,15 @@ public enum PrefabType
 
     BuildingCastle,
     BuildingOutpost,
+    BuildingWall,
 
     ResourceWood,
     ResourceStone,
 
     ToolAxe,
     ToolPickaxe,
+
+    WeaponSword,
 
     Arrow,
 
@@ -181,6 +184,16 @@ public static class PrefabFactory
                     break;
                 }
 
+            case PrefabType.BuildingWall:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    Wall wall = prefab.AddComponent<Wall>();
+                    mesh.Model = TDContentManager.LoadModel("BuildingWall");
+                    mesh.Texture = TDContentManager.LoadTexture("BuildingCastleTexture");
+                    wall.Mesh = mesh;
+                    break;
+                }
+
             // Resources
             case PrefabType.ResourceWood:
                 {
@@ -221,6 +234,16 @@ public static class PrefabFactory
                     mesh.Model = TDContentManager.LoadModel("ToolPickaxe");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     pickaxe.Mesh = mesh;
+                    break;
+                }
+
+            case PrefabType.WeaponSword:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    WeaponSword sword = prefab.AddComponent<WeaponSword>();
+                    mesh.Model = TDContentManager.LoadModel("WeaponSword");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    sword.Mesh = mesh;
                     break;
                 }
 

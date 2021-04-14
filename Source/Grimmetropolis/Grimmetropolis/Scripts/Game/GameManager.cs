@@ -95,8 +95,8 @@ public class GameManager : TDComponent
         TDObject itemList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         ItemTransform = itemList.Transform;
 
-        TDObject pickaxeObject = PrefabFactory.CreatePrefab(PrefabType.ToolPickaxe, ItemTransform);
-        ToolPickaxe pickaxe = pickaxeObject.GetComponent<ToolPickaxe>();
+        TDObject pickaxeObject = PrefabFactory.CreatePrefab(PrefabType.WeaponSword, ItemTransform);
+        WeaponSword pickaxe = pickaxeObject.GetComponent<WeaponSword>();
         pickaxe.Character = playerObject1.GetComponent<Player>();
 
         //TDObject castleObject = PrefabFactory.CreatePrefab(PrefabType.Castle, StructureTransform);

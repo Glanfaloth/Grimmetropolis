@@ -19,11 +19,6 @@ public class Castle : Building
         base.Initialize();
     }
 
-    public override void Destroy()
-    {
-        base.Destroy();
-    }
-
     public override ResourcePile GetResourceCost()
     {
         return new ResourcePile(0, 0);

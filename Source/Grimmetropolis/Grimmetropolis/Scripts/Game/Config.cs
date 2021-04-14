@@ -46,6 +46,7 @@ public static class Config
     public const int CASTLE_SIZE_Y = 3;
     public const float CASTLE_HEALTH = 9f;
 
+
     public const float OUTPOST_HEALTH = 3f;
     public const int OUTPOST_WOOD_COST = 1;
     public const int OUTPOST_STONE_COST = 1;
@@ -56,6 +57,8 @@ public static class Config
     public const float OUTPOST_ARROW_SPEED = 6f;
 
     public const float OUTPOST_BUILD_VALUE = 2f;
+
+    public const float WALL_HEALTH = 9f;
 
     public const int RESOURCE_WOOD_GATHER_BASE_RATE = 1;
     public const int RESOURCE_STONE_GATHER_BASE_RATE = 1;
