@@ -46,7 +46,6 @@ public class TDGamePadInput : TDInput
 
     public TDGamePadInput(int gamePadIndex, GamePadConfig config = null) 
     {
-        // TODO: do we need to check if controller is a gamepad?
         _config = config ?? new GamePadConfig();
 
         GamePadIndex = gamePadIndex;
