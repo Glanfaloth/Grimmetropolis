@@ -23,6 +23,8 @@ public enum PrefabType
 
     ResourceWood,
     ResourceStone,
+    
+    MagicalArtifact,
 
     ToolAxe,
     ToolPickaxe,
@@ -215,6 +217,16 @@ public static class PrefabFactory
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     resource.Type = ResourceDepositType.Stone;
                     resource.Mesh = mesh;
+                    break;
+                }
+
+            case PrefabType.MagicalArtifact:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    MagicalArtifact magicalArtifact = prefab.AddComponent<MagicalArtifact>();
+                    mesh.Model = TDContentManager.LoadModel("MagicalArtifact");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    magicalArtifact.Mesh = mesh;
                     break;
                 }
 

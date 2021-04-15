@@ -95,9 +95,9 @@ public class GameManager : TDComponent
         TDObject itemList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         ItemTransform = itemList.Transform;
 
-        TDObject pickaxeObject = PrefabFactory.CreatePrefab(PrefabType.WeaponSword, ItemTransform);
-        WeaponSword pickaxe = pickaxeObject.GetComponent<WeaponSword>();
-        pickaxe.Character = playerObject1.GetComponent<Player>();
+        TDObject magicalArtifactObject = PrefabFactory.CreatePrefab(PrefabType.MagicalArtifact, ItemTransform);
+        MagicalArtifact magicalArtifact = magicalArtifactObject.GetComponent<MagicalArtifact>();
+        magicalArtifact.Character = playerObject1.GetComponent<Player>();
 
         //TDObject castleObject = PrefabFactory.CreatePrefab(PrefabType.Castle, StructureTransform);
         //Castle castle = castleObject.GetComponent<Castle>();
