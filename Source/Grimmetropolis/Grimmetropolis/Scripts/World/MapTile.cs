@@ -132,7 +132,6 @@ public class MapTile : TDComponent
                 new RangedAttackMove(tile.TileVertex, StructureVertex, building, range, Config.RANGED_ATTACK_MOVE_BASE_COST, Config.RANGED_ATTACK_MOVE_DISTANCE_FACTOR);
             }
         }
-        // TODO: add other edge types
     }
 
     private void UpdateOutpostCount(Structure oldStructure, Structure newStructure)

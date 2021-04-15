@@ -126,8 +126,7 @@ public abstract class Character : TDComponent, ITDTarget
 
     protected void Move(Vector2 direction, GameTime gameTime)
     {
-        // TODO: EPSILON should probably be larger
-        if (direction.LengthSquared() > float.Epsilon)
+        if (direction.LengthSquared() > 1e-5f)
         {
             float targetAngle = MathF.Atan2(direction.Y, direction.X);
             if (targetAngle - LookingAngle > MathHelper.Pi) LookingAngle += MathHelper.TwoPi;
