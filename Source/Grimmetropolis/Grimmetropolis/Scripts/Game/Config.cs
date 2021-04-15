@@ -58,6 +58,8 @@ public static class Config
 
     public const float OUTPOST_BUILD_VALUE = 2f;
 
+    public const int WALL_WOOD_COST = 0;
+    public const int WALL_STONE_COST = 2;
     public const float WALL_HEALTH = 9f;
 
     public const int RESOURCE_WOOD_GATHER_BASE_RATE = 1;

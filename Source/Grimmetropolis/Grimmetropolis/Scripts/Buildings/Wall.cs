@@ -9,6 +9,8 @@ public enum WallOrientation
 
 public class Wall : Building
 {
+    public override ResourcePile GetResourceCost() => new ResourcePile(Config.WALL_WOOD_COST, Config.WALL_STONE_COST);
+
     public override float BuildTime => 0;
 
     private WallOrientation _orientation = WallOrientation.HorizontalOrientation;
@@ -86,11 +88,6 @@ public class Wall : Building
         if (Position.Y <= GameManager.Instance.Map.Width - 2
             && GameManager.Instance.Map.MapTiles[Position.X, Position.Y + 1].Structure is Wall wallDown)
             wallDown.ReorientWall();
-    }
-
-    public override ResourcePile GetResourceCost()
-    {
-        return new ResourcePile(0, 0);
     }
 
     protected override void DoUpdate(GameTime gameTime)

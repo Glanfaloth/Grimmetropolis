@@ -39,6 +39,7 @@ public enum PrefabType
     ResourceDisplay,
     HealthBar,
     ProgressBar,
+    BuildMenu,
 
     PlayerDisplay
 }
@@ -351,22 +352,26 @@ public static class PrefabFactory
                     healthBar.Foreground = foreground;
                     healthBar.AlwaysShow = true;
                     playerDisplay.HealthBar = healthBar;
+                    break;
+                }
 
+            case PrefabType.BuildMenu:
+                {
+                    CreateEmptyUI3D(prefab, localPosition, localRotation, localScale);
+                    TDSprite buildSprite = prefab.AddComponent<TDSprite>();
+                    BuildMenu buildMenu = prefab.AddComponent<BuildMenu>();
+                    buildSprite.Texture = TDContentManager.LoadTexture("UIBuild");
+                    buildSprite.Depth = 1f;
+                    prefab.RectTransform.Origin = new Vector2(0f, buildSprite.Texture.Height);
 
-                    /*TDSprite background = healthBarObject.AddComponent<TDSprite>();
-                    HealthBar healthBar = healthBarObject.AddComponent<HealthBar>();
-                    background.Texture = TDContentManager.LoadTexture("UIPlayerBar");
-                    background.Color = Color.Black;
-                    background.Depth = 1f;
-                    prefab.RectTransform.Origin = new Vector2(.5f * background.Texture.Width, background.Texture.Height);
+                    TDObject iconObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite icon = iconObject.AddComponent<TDSprite>();
+                    icon.Texture = TDContentManager.LoadTexture("UIBuildingOutpostIcon");
+                    iconObject.RectTransform.Origin = .5f * new Vector2(icon.Texture.Width, icon.Texture.Height);
+                    iconObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin + .5f * new Vector2(buildSprite.Texture.Width, buildSprite.Texture.Height);
+                    buildMenu.BuildSprite = buildSprite;
+                    buildMenu.Icon = icon;
 
-                    TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
-                    TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
-                    foreground.Texture = TDContentManager.LoadTexture("UIPlayerBar");
-                    foreground.Depth = .1f;
-                    healthBar.Background = background;
-                    healthBar.Foreground = foreground;
-                    foregroundObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin;*/
                     break;
                 }
         }

@@ -54,11 +54,14 @@ public abstract class Building : Structure, ITDTarget
 
     public override void Initialize()
     {
+        if (Mesh.IsBlueprint) _health = 0f;
+
         TDObject healthBarObject = PrefabFactory.CreatePrefab(PrefabType.HealthBar, TDObject.Transform);
         healthBarObject.RectTransform.Offset = 4f * Vector3.Backward;
         _healthBar = healthBarObject.GetComponent<HealthBar>();
         _healthBar.CurrentProgress = Health;
         _healthBar.MaxProgress = BaseHealth;
+
 
         base.Initialize();
     }
@@ -96,6 +99,8 @@ public abstract class Building : Structure, ITDTarget
                 _progressBar.Destroy();
                 _progressBar = null;
                 Mesh.IsBlueprint = false;
+
+                Health = BaseHealth;
             }
             return true;
         }

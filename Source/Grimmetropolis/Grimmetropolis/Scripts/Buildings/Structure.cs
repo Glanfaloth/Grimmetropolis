@@ -59,7 +59,7 @@ public abstract class Structure : TDComponent
                     {
                         // TODO: double check if this is correct.
                         // -> This is necessary if two people try to construct a building at the exact same location and time. Then, the construction of one building is canceled.
-                        GameManager.Instance.ResourcePool += building.GetResourceCost();
+                        // GameManager.Instance.ResourcePool += building.GetResourceCost();
                     }
                     return;
                 }

@@ -19,6 +19,8 @@ public class HealthBar : ProgressBar
 
         if (AlwaysShow)
             Show();
+
+        Hide();
     }
 
     public override void Update(GameTime gameTime)

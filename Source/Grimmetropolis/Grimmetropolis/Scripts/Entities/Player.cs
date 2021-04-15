@@ -15,11 +15,16 @@ public class Player : Character
 
     public override Vector3 OffsetTarget => .5f * Vector3.Backward;
 
+    public bool ActiveInput = true;
+
     private ResourceDeposit _lastClosestResourceDeposit = null;
     private bool _needsToShowHarvestProgress = false;
 
     private Enemy _closestEnemy = null;
     private MapTile _collidingMapTile = null;
+
+    private BuildMenu _buildMenu = null;
+
 
     public override void Initialize()
     {
@@ -28,21 +33,31 @@ public class Player : Character
         HealthBar.TDObject.Destroy();
         UIManager.Instance.AddPlayerDisplay(this);
 
+        TDObject buildMenuObject = PrefabFactory.CreatePrefab(PrefabType.BuildMenu, TDObject.Transform);
+        _buildMenu = buildMenuObject.GetComponent<BuildMenu>();
+        _buildMenu.Player = this;
+        buildMenuObject.RectTransform.Offset = 2f * Vector3.Backward;
+
         GameManager.Instance.Players.Add(this);
     }
 
     public override void Update(GameTime gameTime)
     {
-        Vector2 inputDirection = Input.GetMoveDirection();
-        Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
-
         HighlightClosestCharacter();
         HighlightMapTile();
 
-        if (Input.IsSpecialAbilityPressed()) Interact(gameTime);
-        else ResetProgressBarForProgress();
-        if (Input.IsUseItemPressed()) Build(gameTime);
-        if (Input.IsSwapItemPressed()) TakeDrop();
+        Vector2 inputDirection = Input.GetMoveDirection();
+        Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
+
+        if (ActiveInput)
+        {
+
+            if (Input.IsSpecialAbilityPressed()) Interact(gameTime);
+            else ResetProgressBarForProgress();
+            if (Input.IsUseItemPressed()) Build(gameTime);
+            if (Input.IsSwapItemPressed()) TakeDrop();
+            if (Input.IsSelectBuildingTypePressed()) _buildMenu.Show();
+        }
 
         base.Update(gameTime);
     }
@@ -122,7 +137,7 @@ public class Player : Character
         else ResetProgressBarForProgress();
     }
 
-    protected void Build(GameTime gameTime)
+    public void BuildBlueprint(Building building)
     {
         if (Cooldown > 0)
         {
@@ -133,11 +148,9 @@ public class Player : Character
         if (mapTile.Type == MapTileType.Ground
             && mapTile.Structure == null
             && mapTile.Item == null
-            && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST)))
+            && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, building.GetResourceCost()))
         {
-            GameManager.Instance.ResourcePool -= new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST);
-            TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.BuildingWall, GameManager.Instance.StructureTransform);
-            Building building = buildingObject.GetComponent<Building>();
+            GameManager.Instance.ResourcePool -= building.GetResourceCost();
             building.Position = mapTile.Position;
             building.SetAsBlueprint();
 
@@ -145,7 +158,16 @@ public class Player : Character
             ResetProgressBarForProgress();
             SetProgressBar(Cooldown);
         }
-        else if (mapTile.Type == MapTileType.Ground && mapTile.Structure is Building building)
+    }
+
+    public void Build(GameTime gameTime)
+    {
+        if (Cooldown > 0)
+        {
+            return;
+        }
+
+        if (_collidingMapTile.Type == MapTileType.Ground && _collidingMapTile.Structure is Building building)
         {
             if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH))
             {
