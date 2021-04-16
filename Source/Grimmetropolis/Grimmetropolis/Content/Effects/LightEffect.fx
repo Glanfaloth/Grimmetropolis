@@ -30,6 +30,8 @@ float4 AmbientColor;
 float DiffuseIntensity;
 float4 DiffuseColor;
 
+float4 BaseColor;
+
 Texture2D Shadow;
 sampler ShadowSampler = sampler_state
 {
@@ -97,7 +99,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	float4 ambient = AmbientIntensity * AmbientColor;
 	float4 diffuse = DiffuseIntensity * normalIntensity * DiffuseColor;
 
-	return (ambient + diffuse) * tex2D(TextureSampler, input.TexCoord);
+	return (ambient + diffuse) * tex2D(TextureSampler, input.TexCoord) * BaseColor;
 }
 
 float4 BlueprintPS(VertexShaderOutput input) : COLOR
