@@ -73,6 +73,12 @@ public class GameManager : TDComponent
         TDObject playerObject1 = PrefabFactory.CreatePrefab(PrefabType.Player, playerList.Transform);
         playerObject1.GetComponent<Player>().Input = TDInputManager.Inputs[1];
 
+        TDObject playerObject2 = PrefabFactory.CreatePrefab(PrefabType.Player, playerList.Transform);
+        playerObject2.GetComponent<Player>().Input = TDInputManager.Inputs[2];
+
+        TDObject playerObject3 = PrefabFactory.CreatePrefab(PrefabType.Player, playerList.Transform);
+        playerObject3.GetComponent<Player>().Input = TDInputManager.Inputs[3];
+
         // Enemies
         TDObject enemyList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         EnemyTransform = enemyList.Transform;

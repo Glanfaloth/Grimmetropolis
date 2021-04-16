@@ -16,7 +16,7 @@ public class TDKeyboardInput : TDInput
         public Keys MoveRight   = Keys.D;
 
         public Keys UseItem     = Keys.Space;
-        public Keys UseItemAlt  = Keys.Enter;
+        public Keys UseItemAlt  = Keys.None;
 
         public Keys CycleNext     = Keys.Q;
         public Keys CyclePrevious = Keys.E;
