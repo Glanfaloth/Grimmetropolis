@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
+
 
 public class GameManager : TDComponent
 {
@@ -105,9 +107,8 @@ public class GameManager : TDComponent
         TDObject itemList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         ItemTransform = itemList.Transform;
 
-        TDObject magicalArtifactObject = PrefabFactory.CreatePrefab(PrefabType.MagicalArtifact, ItemTransform);
-        MagicalArtifact magicalArtifact = magicalArtifactObject.GetComponent<MagicalArtifact>();
-        magicalArtifact.Character = playerObject1.GetComponent<Player>();
+
+        // magicalArtifact.Character = playerObject1.GetComponent<Player>();
 
         //TDObject castleObject = PrefabFactory.CreatePrefab(PrefabType.Castle, StructureTransform);
         //Castle castle = castleObject.GetComponent<Castle>();
@@ -174,6 +175,18 @@ public class GameManager : TDComponent
                 break;
             case MapDTO.EntityType.EnemySpawnPoint:
                 EnemyController.SpawnLocations.Add(entityToSpawn.Position);
+                break;
+            case MapDTO.EntityType.ToolAxe:
+                TDObject toolAxeObject = PrefabFactory.CreatePrefab(PrefabType.ToolAxe, ItemTransform);
+                toolAxeObject.GetComponent<ToolAxe>().Position = entityToSpawn.Position;
+                break;
+            case MapDTO.EntityType.ToolPickaxe:
+                TDObject toolPickaxeObject = PrefabFactory.CreatePrefab(PrefabType.ToolPickaxe, ItemTransform);
+                toolPickaxeObject.GetComponent<ToolPickaxe>().Position = entityToSpawn.Position;
+                break;
+            case MapDTO.EntityType.WeaponSword:
+                TDObject weaponSwordObject = PrefabFactory.CreatePrefab(PrefabType.WeaponSword, ItemTransform);
+                weaponSwordObject.GetComponent<WeaponSword>().Position = entityToSpawn.Position;
                 break;
             case MapDTO.EntityType.None:
             default:

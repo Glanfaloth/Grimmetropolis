@@ -41,8 +41,8 @@ public abstract class Character : TDComponent, ITDTarget
     // TODO: add shooting range collider
 
     public HealthBar HealthBar = null;
-    protected ProgressBar ProgressBar = null;
-    protected bool IsShowingCooldown = false;
+    public ProgressBar ProgressBar = null;
+    public bool IsShowingCooldown = false;
 
     private float _cooldown = 0f;
     public float Cooldown
@@ -142,8 +142,10 @@ public abstract class Character : TDComponent, ITDTarget
 
     protected virtual void Interact(GameTime gameTime) { }
 
-    protected void TakeDrop()
+    protected virtual void TakeDrop()
     {
+        if (Cooldown > 0f) return;
+
         MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
         if (mapTile.Type == MapTileType.Ground && mapTile.Structure == null)
         {

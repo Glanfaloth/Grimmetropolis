@@ -7,6 +7,8 @@ public class Item : TDComponent
 
     public TDMesh Mesh;
 
+    private float _cooldown = .2f;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -23,18 +25,34 @@ public class Item : TDComponent
         {
             Position = GameManager.Instance.Map.GetMapTile(Character.InteractionCollider.CenterXY).Position;
             Character.Items[0] = null;
+            Character.Cooldown = _cooldown;
+            if (Character is Player player)
+            {
+                player.SetProgressForCooldown();
+            }
         }
         SetMapTransform();
         PlaceItem(this, null);
+
+        Character = null;
     }
 
     public void TakeItem(Character character)
     {
+
         character.Items[0] = this;
         TDObject.Transform.Parent = character.TDObject.Transform;
         TDObject.Transform.LocalPosition = new Vector3(0f, -.3f, .55f);
         TDObject.Transform.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Forward, MathHelper.PiOver2) * Quaternion.CreateFromAxisAngle(Vector3.Down, MathHelper.PiOver2);
         PlaceItem(null, this);
+
+        Character = character;
+
+        Character.Cooldown = _cooldown;
+        if (Character is Player player)
+        {
+            player.SetProgressForCooldown();
+        }
     }
 
     private void SetMapTransform()
@@ -58,5 +76,15 @@ public class Item : TDComponent
     public void Highlight(bool highlight)
     {
         Mesh.Highlight(highlight);
+    }
+
+    public virtual void InteractWithCharacter(GameTime gameTime, Character character)
+    {
+
+    }
+
+    public virtual void InteractWithStructure(GameTime gameTime, Structure structure)
+    {
+
     }
 }

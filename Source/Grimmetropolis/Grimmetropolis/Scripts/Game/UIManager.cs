@@ -37,7 +37,7 @@ public class UIManager : TDComponent
 
         for (int i = 0; i < _playerDisplayIndex; i++)
         {
-            PlayerDisplays[i].TDObject.RectTransform.LocalPosition = new Vector2(offsetStart + i * offsetAmount, TDSceneManager.Graphics.PreferredBackBufferHeight - 25f);
+            PlayerDisplays[i].TDObject.RectTransform.LocalPosition = new Vector2(offsetStart + i * _offsetBetweenPlayerDisplay, TDSceneManager.Graphics.PreferredBackBufferHeight - 25f);
         }
     }
 }

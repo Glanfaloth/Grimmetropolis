@@ -41,6 +41,18 @@
       "TileType": "ground",
       "SpawnedEntity": "enemySpawnPoint"
     },
+    "T": {
+      "TileType": "ground",
+      "SpawnedEntity": "toolPickaxe"
+    },
+    "D": {
+      "TileType": "ground",
+      "SpawnedEntity": "toolAxe"
+    },
+    "I": {
+      "TileType": "ground",
+      "SpawnedEntity": "weaponSword"
+    },
   },
   "Map": [ 
     "*                 111                      1   *",
@@ -62,9 +74,9 @@
     "         1111             11                    ",
     "          11               11                   ",
     "                            11      S           ",
-    "                             11                 ",
-    "                              11                ",
-    "        S             W        11               ",
+    "                 TTT         11                 ",
+    "                 DDD          11                ",
+    "        S        III  W        11               ",
     "                                11       W      ",
     "        S    S                   11             ",
     "                                  11            ",

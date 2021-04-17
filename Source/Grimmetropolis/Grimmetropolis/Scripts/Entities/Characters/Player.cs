@@ -17,8 +17,8 @@ public class Player : Character
 
     public bool ActiveInput = true;
 
-    private ResourceDeposit _lastClosestResourceDeposit = null;
-    private bool _needsToShowHarvestProgress = false;
+    public ResourceDeposit LastClosestResourceDeposit = null;
+    public bool NeedsToShowHarvestProgress = false;
 
     private Enemy _closestEnemy = null;
     private MapTile _collidingMapTile = null;
@@ -89,19 +89,25 @@ public class Player : Character
                 }
             }
         }
-        
+
         if (_closestEnemy != null && Cooldown <= 0f)
         {
-            _closestEnemy.Health -= Config.PLAYER_DAMAGE;
-            Cooldown = Config.PLAYER_ATTACK_DURATION;
 
-            ResetProgressBarForProgress();
-            SetProgressBarForAttack();
+            Items[0].InteractWithCharacter(gameTime, _closestEnemy);
+
+            // _closestEnemy.Health -= Config.PLAYER_DAMAGE;
+            // Cooldown = Config.PLAYER_ATTACK_DURATION;
 
         }
         else if (_closestStructure != null)
         {
-            if (Cooldown <= 0f && _closestStructure is Building closestBuilding)
+            if (Cooldown <= 0f)
+            {
+                Items[0].InteractWithStructure(gameTime, _closestStructure);
+            }
+
+
+            /*if (Cooldown <= 0f && _closestStructure is Building closestBuilding)
             {
                 closestBuilding.Health -= Config.PLAYER_DAMAGE;
                 Cooldown = Config.PLAYER_ATTACK_DURATION;
@@ -134,7 +140,8 @@ public class Player : Character
                 }
             }
         }
-        else ResetProgressBarForProgress();
+        else ResetProgressBarForProgress();*/
+        }
     }
 
     public void BuildBlueprint(Building building)
@@ -178,19 +185,14 @@ public class Player : Character
         }
     }
 
-    private void ResetProgressBarForProgress()
+    public void ResetProgressBarForProgress()
     {
-        _lastClosestResourceDeposit = null;
+        LastClosestResourceDeposit = null;
         if (!IsShowingCooldown) ProgressBar.Hide();
     }
-    private void SetProgressBarForAttack()
+    public void SetProgressForCooldown()
     {
-        SetProgressBar(Config.PLAYER_ATTACK_DURATION);
-    }
-
-    private void SetProgressBarForBuild()
-    {
-        SetProgressBar(Config.PLAYER_PLACE_BUILDING_COOLDOWN);
+        SetProgressBar(Cooldown);
     }
 
     private void HighlightClosestCharacter()
