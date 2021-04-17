@@ -9,6 +9,7 @@ public class EnemyController : TDComponent
 
     private int _witchToSpawn = 0;
     private int _knightToSpawn = 0;
+
     private int _siegeToSpawn = 0;
 
     private float _nextWaveWitch;
@@ -191,5 +192,10 @@ public class EnemyController : TDComponent
     {
         Point start = Map.EnemyTarget;
         _graph.ComputeShortestPathToMapTile(start);
+    }
+
+    internal float NextFloat()
+    {
+        return (float)rng.NextDouble();
     }
 }

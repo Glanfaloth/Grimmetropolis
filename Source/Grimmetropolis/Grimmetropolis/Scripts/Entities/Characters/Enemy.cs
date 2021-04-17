@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 public abstract class Enemy : Character
 {
-    private EnemyController _controller;
+    protected EnemyController _controller;
     private float _walkSpeed;
     private float _rotateSpeed;
     private float _baseHealth;
