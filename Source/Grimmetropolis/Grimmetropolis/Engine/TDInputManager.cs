@@ -20,15 +20,14 @@ public static class TDInputManager
             MoveDown = Keys.Down,               // s
             MoveRight = Keys.Right,             // d
 
-            UseItem = Keys.NumPad0,             // SPACE
-            UseItemAlt = Keys.Enter,            // NONE
+            Action = Keys.RightShift,       // SPACE
+            Cancel = Keys.RightControl,
 
-            CycleNext = Keys.OemComma,          // Q
-            CyclePrevious = Keys.OemPeriod,     // E
-            SwapItem = Keys.RightShift,         // L-SHIFT
+            CycleNext = Keys.M,
+            CyclePrevious = Keys.N,
 
-            SelectBuildingType = Keys.Back,     // TAB
-            SpecialAbility = Keys.RightControl, // L-CTRL
+            BuildMode = Keys.B
+
         };
         TDKeyboardInput keyboardInputArrow = new TDKeyboardInput(config);
         Inputs.Add(keyboardInputArrow);

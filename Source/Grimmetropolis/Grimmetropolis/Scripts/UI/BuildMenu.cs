@@ -41,12 +41,16 @@ public class BuildMenu : TDComponent
 
         if (_activeControl && _cooldown <= 0f)
         {
-            if (Player.Input.IsCycleNextItemPressed()) ShowNextBuilding();
-            if (Player.Input.IsCyclePreviousItemPressed()) ShowPreviousBuilding();
+            if (Player.Input.CycleRightPressed()) ShowNextBuilding();
+            if (Player.Input.CycleLeftPressed()) ShowPreviousBuilding();
 
-            if (Player.Input.IsUseItemPressed()) Player.BuildBlueprint(GetBuilding(_currentBuilding));
+            if (Player.Input.ActionPressed())
+            {
+                Player.BuildBlueprint(GetBuilding(_currentBuilding));
+                Hide();
+            }
 
-            if (!Player.Input.IsSelectBuildingTypePressed()) Hide();
+            if (Player.Input.BuildModePressed()) Hide();
         }
 
         if (_requiresHide) Hide();
@@ -88,6 +92,8 @@ public class BuildMenu : TDComponent
         Player.ActiveInput = false;
 
         _activeControl = true;
+
+        _cooldown = _cooldownDuration;
     }
 
     private void ReturnControl()
@@ -95,6 +101,9 @@ public class BuildMenu : TDComponent
         Player.ActiveInput = true;
 
         _activeControl = false;
+
+        Player.Cooldown = _cooldownDuration;
+        Player.SetProgressForCooldown();
     }
 
     private void ShowNextBuilding()

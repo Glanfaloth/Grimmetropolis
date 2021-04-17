@@ -24,13 +24,13 @@ public class TestMoveComponent : TDComponent
         Vector3 movement = Vector3.Zero;
         foreach (TDInput input in TDInputManager.Inputs)
         {
-            Vector2 j1Direction = input.GetMoveDirection();
+            Vector2 j1Direction = input.MoveDirection();
             movement.X -= j1Direction.Y * _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
             movement.Y += j1Direction.X * _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // the names will make sense when controlling the character.
-            if (input.IsCycleNextItemPressed()) movement.Z += _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (input.IsCyclePreviousItemPressed()) movement.Z -= _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (input.CycleRightPressed()) movement.Z += _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (input.CycleLeftPressed()) movement.Z -= _speedMovement * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         TDObject.Transform.LocalPosition += movement;

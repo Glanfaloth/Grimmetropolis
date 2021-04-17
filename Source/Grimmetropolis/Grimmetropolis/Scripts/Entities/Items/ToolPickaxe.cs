@@ -4,8 +4,6 @@ public class ToolPickaxe : Item
 {
     public override void InteractWithStructure(GameTime gameTime, Structure structure)
     {
-        base.InteractWithStructure(gameTime, structure);
-
         if (Character is Player player)
         {
             if (structure is ResourceDeposit closestResourceDeposit && closestResourceDeposit.Type == ResourceDepositType.Stone)
@@ -35,8 +33,15 @@ public class ToolPickaxe : Item
 
             else if (structure is Building closestBuilding)
             {
-                closestBuilding.Health -= Config.PLAYER_DAMAGE;
-                Character.Cooldown = Config.PLAYER_ATTACK_DURATION;
+                if (!closestBuilding.Mesh.IsBlueprint)
+                {
+                    closestBuilding.Health -= Config.PLAYER_DAMAGE;
+                    Character.Cooldown = Config.PLAYER_ATTACK_DURATION;
+                }
+                else
+                {
+                    player.Build(gameTime);
+                }
 
                 player.ResetProgressBarForProgress();
                 player.SetProgressForCooldown();

@@ -142,7 +142,18 @@ public abstract class Character : TDComponent, ITDTarget
 
     protected virtual void Interact(GameTime gameTime) { }
 
-    protected virtual void TakeDrop()
+    protected virtual void Take()
+    {
+        if (Cooldown > 0f) return;
+
+        MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
+        if (mapTile.Type == MapTileType.Ground && mapTile.Structure == null)
+        {
+            if (Items[0] == null && mapTile.Item != null) mapTile.Item.TakeItem(this);
+        }
+    }
+
+    protected virtual void Drop()
     {
         if (Cooldown > 0f) return;
 
@@ -150,7 +161,6 @@ public abstract class Character : TDComponent, ITDTarget
         if (mapTile.Type == MapTileType.Ground && mapTile.Structure == null)
         {
             if (Items[0] != null && mapTile.Item == null) Items[0].Drop();
-            else if (Items[0] == null && mapTile.Item != null) mapTile.Item.TakeItem(this);
         }
     }
 

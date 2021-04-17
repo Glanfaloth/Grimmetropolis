@@ -46,17 +46,17 @@ public class Player : Character
         HighlightClosestCharacter();
         HighlightMapTile();
 
-        Vector2 inputDirection = Input.GetMoveDirection();
+        Vector2 inputDirection = Input.MoveDirection();
         Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
 
         if (ActiveInput)
         {
 
-            if (Input.IsSpecialAbilityPressed()) Interact(gameTime);
+            if (Input.ActionPressed()) Interact(gameTime);
             else ResetProgressBarForProgress();
-            if (Input.IsUseItemPressed()) Build(gameTime);
-            if (Input.IsSwapItemPressed()) TakeDrop();
-            if (Input.IsSelectBuildingTypePressed()) _buildMenu.Show();
+            if (Input.CancelPressed()) Drop();
+            if (Input.BuildModePressed() && Cooldown <= 0f)
+                _buildMenu.Show();
         }
 
         base.Update(gameTime);
@@ -77,6 +77,9 @@ public class Player : Character
 
         float closestStructureDistance = float.MaxValue;
         Structure _closestStructure = null;
+
+        MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
+        Item _closestItem = mapTile.Item;
         foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
         {
             if (colliderEntry.Item1 is TDCuboidCollider && closestStructureDistance > colliderEntry.Item2)
@@ -92,55 +95,31 @@ public class Player : Character
 
         if (_closestEnemy != null && Cooldown <= 0f)
         {
-
-            Items[0].InteractWithCharacter(gameTime, _closestEnemy);
-
-            // _closestEnemy.Health -= Config.PLAYER_DAMAGE;
-            // Cooldown = Config.PLAYER_ATTACK_DURATION;
-
-        }
-        else if (_closestStructure != null)
-        {
-            if (Cooldown <= 0f)
+            if (Items[0] != null) Items[0].InteractWithCharacter(gameTime, _closestEnemy);
+            else
             {
-                Items[0].InteractWithStructure(gameTime, _closestStructure);
-            }
-
-
-            /*if (Cooldown <= 0f && _closestStructure is Building closestBuilding)
-            {
-                closestBuilding.Health -= Config.PLAYER_DAMAGE;
-                Cooldown = Config.PLAYER_ATTACK_DURATION;
+                _closestEnemy.Health -= .25f * Config.PLAYER_DAMAGE;
+                Cooldown = 1.5f * Config.PLAYER_ATTACK_DURATION;
 
                 ResetProgressBarForProgress();
-                SetProgressBarForAttack();
+                SetProgressForCooldown();
             }
-            else if (_closestStructure is ResourceDeposit closestResourceDeposit)
-            {
-                if (closestResourceDeposit != _lastClosestResourceDeposit)
-                {
-                    _needsToShowHarvestProgress = true;
-                    _lastClosestResourceDeposit = closestResourceDeposit;
-                    Progress = 0f;
-                }
 
-                if (!IsShowingCooldown && _needsToShowHarvestProgress)
-                {
-                    _needsToShowHarvestProgress = false;
-
-                    ProgressBar.MaxProgress = _lastClosestResourceDeposit.HarvestTime;
-                    ProgressBar.Show();
-                }
-
-                Progress += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (Progress >= _lastClosestResourceDeposit.HarvestTime)
-                {
-                    _lastClosestResourceDeposit.HarvestResource();
-                    Progress -= _lastClosestResourceDeposit.HarvestTime;
-                }
-            }
         }
-        else ResetProgressBarForProgress();*/
+        else if (_closestItem != null)
+        {
+            Take();
+        }
+        else if (_closestStructure != null && Cooldown <= 0f)
+        {
+            if (Items[0] != null) Items[0].InteractWithStructure(gameTime, _closestStructure);
+            else
+            {
+                if (_closestStructure.Mesh.IsBlueprint)
+                {
+                    Build(gameTime);
+                }
+            }
         }
     }
 

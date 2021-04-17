@@ -28,14 +28,13 @@ public class TDGamePadInput : TDInput
     {
         // TODO: decide on button mappings.
         // TODO: should we be able to choose which joystick to use
-        public Buttons UseItem = Buttons.B;
-        public Buttons CycleNext = Buttons.RightTrigger;
-        public Buttons CyclePrevious = Buttons.LeftTrigger;
-        public Buttons SwapItem = Buttons.Y;
+        public Buttons Action = Buttons.A;
+        public Buttons Cancel = Buttons.B;
 
-        // TODO: do we need this for keyboard?
-        public Buttons SelectBuildingType = Buttons.LeftShoulder;
-        public Buttons SpecialAbility = Buttons.A;
+        public Buttons CycleNext = Buttons.LeftShoulder;
+        public Buttons CyclePrevious = Buttons.RightShoulder;
+
+        public Buttons BuildMode = Buttons.Y;
     }
 
     public int GamePadIndex { get; private set; }
@@ -53,7 +52,7 @@ public class TDGamePadInput : TDInput
         UpdateDevice();
     }
 
-    public Vector2 GetMoveDirection()
+    public Vector2 MoveDirection()
     {
         // TODO: what if only one of the two is available?
         // TODO: check for right ThumbStick?
@@ -64,36 +63,30 @@ public class TDGamePadInput : TDInput
         return direction;
     }
 
-    public bool IsUseItemPressed()
+    public bool ActionPressed()
     {
         // TODO: check capabilities doesn't work with config.
-        return _gamePad.IsButtonDown(_config.UseItem);
+        return _gamePad.IsButtonDown(_config.Action);
     }
 
-    public bool IsCycleNextItemPressed()
+    public bool CancelPressed()
+    {
+        return _gamePad.IsButtonDown(_config.Cancel);
+    }
+
+    public bool CycleRightPressed()
     {
         return _gamePad.IsButtonDown(_config.CycleNext);
     }
 
-    public bool IsCyclePreviousItemPressed()
+    public bool CycleLeftPressed()
     {
         return _gamePad.IsButtonDown(_config.CyclePrevious);
     }
 
-    public bool IsSwapItemPressed()
+    public bool BuildModePressed()
     {
-        return _gamePad.IsButtonDown(_config.SwapItem);
-    }
-
-
-    public bool IsSelectBuildingTypePressed()
-    {
-        return _gamePad.IsButtonDown(_config.SelectBuildingType);
-    }
-
-    public bool IsSpecialAbilityPressed()
-    {
-        return _gamePad.IsButtonDown(_config.SpecialAbility);
+        return _gamePad.IsButtonDown(_config.BuildMode);
     }
 
     public void UpdateDevice()
