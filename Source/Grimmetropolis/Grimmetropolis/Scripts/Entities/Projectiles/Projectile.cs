@@ -27,6 +27,8 @@ public class Projectile : TDComponent
     private ProjectileState _state = ProjectileState.Moving;
     private float _lifeTime = 10f;
 
+    // TODO: replace this temporary workaround.
+    public bool IsEvilArrow { get; internal set; }
 
     public override void Initialize()
     {
@@ -99,7 +101,7 @@ public class Projectile : TDComponent
 
             // TODO: enemies can shoot themselfes and other enemies
             Enemy enemy = oppositeCollider.TDObject.GetComponent<Enemy>();
-            if (enemy != null)
+            if (enemy != null && !IsEvilArrow)
             {
                 _state = ProjectileState.Stuck;
                 TDObject.Transform.Parent = enemy.TDObject.Transform;

@@ -164,6 +164,7 @@ public abstract class Enemy : Character
                 arrow.TargetCharacter = nextMove.Target;
                 arrow.Damage = _damageAgainstBuildings;
                 arrow.Speed = Config.ENEMY_PROJECTILE_SPEED;
+                arrow.IsEvilArrow = true;
 
                 Cooldown = _attackDuration;
 
