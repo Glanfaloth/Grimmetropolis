@@ -9,6 +9,10 @@ public class Item : TDComponent
 
     private float _cooldown = .2f;
 
+    protected Vector3 CarryPosition = new Vector3(0f, -.3f, .55f);
+    protected Quaternion CarryRotation = Quaternion.CreateFromAxisAngle(Vector3.Forward, MathHelper.PiOver2) * Quaternion.CreateFromAxisAngle(Vector3.Down, MathHelper.PiOver2);
+    protected Vector3 CarryScale = Vector3.One;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -42,8 +46,9 @@ public class Item : TDComponent
 
         character.Items[0] = this;
         TDObject.Transform.Parent = character.TDObject.Transform;
-        TDObject.Transform.LocalPosition = new Vector3(0f, -.3f, .55f);
-        TDObject.Transform.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Forward, MathHelper.PiOver2) * Quaternion.CreateFromAxisAngle(Vector3.Down, MathHelper.PiOver2);
+        TDObject.Transform.LocalPosition = CarryPosition;
+        TDObject.Transform.LocalRotation = CarryRotation;
+        TDObject.Transform.LocalScale = CarryScale;
         PlaceItem(null, this);
 
         Character = character;
@@ -55,7 +60,7 @@ public class Item : TDComponent
         }
     }
 
-    private void SetMapTransform()
+    protected virtual void SetMapTransform()
     {
         TDObject.Transform.Parent = null;
 

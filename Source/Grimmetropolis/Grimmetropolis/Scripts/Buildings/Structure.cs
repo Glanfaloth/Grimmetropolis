@@ -31,7 +31,7 @@ public abstract class Structure : TDComponent
         GameManager.Instance.Structures.Remove(this);
     }
 
-    private void SetMapTransform()
+    protected virtual void SetMapTransform()
     {
         Vector3 position = GameManager.Instance.Map.MapTiles[Position.X, Position.Y].TDObject.Transform.Position + new Vector3(Size.X / 2, Size.Y / 2, 0f);
         TDObject.Transform.Position = position;

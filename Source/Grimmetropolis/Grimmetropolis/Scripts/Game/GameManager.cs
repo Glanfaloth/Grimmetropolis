@@ -107,6 +107,10 @@ public class GameManager : TDComponent
         TDObject itemList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         ItemTransform = itemList.Transform;
 
+        TDObject magicalArtifactObject = PrefabFactory.CreatePrefab(PrefabType.MagicalArtifact, TDObject.Transform);
+        MagicalArtifact magicalArtifact = magicalArtifactObject.GetComponent<MagicalArtifact>();
+        magicalArtifact.Position = new Point(17, 17);
+
 
         // magicalArtifact.Character = playerObject1.GetComponent<Player>();
 

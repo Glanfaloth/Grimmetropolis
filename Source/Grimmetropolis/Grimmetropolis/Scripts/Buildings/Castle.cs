@@ -4,6 +4,8 @@ public class Castle : Building
 {
     public override float BuildTime => 0;
 
+    public MagicalArtifact MagicalArtifact = null;
+
     public override void Initialize()
     {
         Size.X = Config.CASTLE_SIZE_X;
@@ -16,7 +18,17 @@ public class Castle : Building
         // this needs to be passable since the ai tries to go to the castle location, otherwise no path will be found
         IsPassable = true;
 
+        MagicalArtifact = PrefabFactory.CreatePrefab(PrefabType.MagicalArtifact, GameManager.Instance.ItemTransform).GetComponent<MagicalArtifact>();
+        MagicalArtifact.Castle = this;
+
         base.Initialize();
+    }
+
+    protected override void SetMapTransform()
+    {
+        base.SetMapTransform();
+
+        MagicalArtifact.Position = Position + new Point(1, 1);
     }
 
     public override ResourcePile GetResourceCost()
