@@ -104,7 +104,7 @@ public static class PrefabFactory
                     TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
                     interactionCollider.IsTrigger = true;
                     interactionCollider.Radius = .25f;
-                    interactionCollider.Height = .5f;
+                    interactionCollider.Height = 2f;
                     interactionCollider.Offset = .5f * Vector3.Backward;
                     player.InteractionCollider = interactionCollider;
                     player.Mesh = mesh;
@@ -411,7 +411,7 @@ public static class PrefabFactory
         TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
         interactionCollider.IsTrigger = true;
         interactionCollider.Radius = .25f;
-        interactionCollider.Height = .5f;
+        interactionCollider.Height = 2f;
         interactionCollider.Offset = .5f * Vector3.Backward;
         enemy.InteractionCollider = interactionCollider;
         enemy.Mesh = mesh;

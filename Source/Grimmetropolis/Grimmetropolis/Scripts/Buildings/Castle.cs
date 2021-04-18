@@ -24,6 +24,13 @@ public class Castle : Building
         base.Initialize();
     }
 
+    public override void Destroy()
+    {
+        base.Destroy();
+
+        MagicalArtifact?.TDObject.Destroy();
+    }
+
     protected override void SetMapTransform()
     {
         base.SetMapTransform();

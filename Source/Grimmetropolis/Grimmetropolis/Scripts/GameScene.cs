@@ -11,7 +11,7 @@ public class GameScene : TDScene
         base.Initialize();
 
         PrefabFactory.CreatePrefab(PrefabType.Camera, new Vector3(8f, 0f, 18f), Quaternion.CreateFromYawPitchRoll(-.375f * MathHelper.Pi, 0f, MathHelper.Pi));
-        PrefabFactory.CreatePrefab(PrefabType.Light, new Vector3(12f, 12f, 18f), Quaternion.CreateFromYawPitchRoll(-.2f * MathHelper.Pi, .2f * MathHelper.Pi, -.8f * MathHelper.Pi));
+        PrefabFactory.CreatePrefab(PrefabType.Light, new Vector3(24f, 24f, 36f), Quaternion.CreateFromYawPitchRoll(-.31f * MathHelper.Pi, .1f * MathHelper.Pi, -.85f * MathHelper.Pi));
 
         PrefabFactory.CreatePrefab(PrefabType.GameManager);
         PrefabFactory.CreatePrefab(PrefabType.UIManager);
