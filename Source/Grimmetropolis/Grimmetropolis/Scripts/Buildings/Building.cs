@@ -107,4 +107,11 @@ public abstract class Building : Structure, ITDTarget
 
         return false;
     }
+
+    public bool TryRepair(float buildStrength)
+    {
+        if (Health >= BaseHealth) return false;
+        Health = MathHelper.Min(Health + buildStrength, BaseHealth);
+        return true;
+    }
 }

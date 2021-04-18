@@ -115,10 +115,7 @@ public class Player : Character
             if (Items[0] != null) Items[0].InteractWithStructure(gameTime, _closestStructure);
             else
             {
-                if (_closestStructure.Mesh.IsBlueprint)
-                {
-                    Build(gameTime);
-                }
+                Build(gameTime);
             }
         }
     }
@@ -155,9 +152,15 @@ public class Player : Character
 
         if (_collidingMapTile.Type == MapTileType.Ground && _collidingMapTile.Structure is Building building)
         {
-            if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH))
+            if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH) && building.Mesh.IsBlueprint)
             {
                 Cooldown = Config.PLAYER_BUILD_COOLDONW;
+                ResetProgressBarForProgress();
+                SetProgressBar(Cooldown);
+            }
+            else if (building.TryRepair(Config.PLAYER_BUILD_STRENGTH))
+            {
+                Cooldown = 2f * Config.PLAYER_BUILD_COOLDONW;
                 ResetProgressBarForProgress();
                 SetProgressBar(Cooldown);
             }

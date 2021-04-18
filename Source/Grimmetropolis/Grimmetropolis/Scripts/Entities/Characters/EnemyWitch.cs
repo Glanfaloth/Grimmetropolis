@@ -11,10 +11,10 @@ class EnemyWitch : Enemy
     {
         base.Initialize();
 
-        TDObject.RunAction(4f, (p) =>
+        TDObject.RunAction(2.5f, (p) =>
         {
             Vector3 position = TDObject.Transform.Position;
-            position.Z = .5f + .25f * MathF.Sin(MathHelper.TwoPi * p);
+            position.Z = .5f + .375f * MathF.Sin(MathHelper.TwoPi * p);
             TDObject.Transform.Position = position;
         }, true);
     }

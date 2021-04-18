@@ -69,7 +69,7 @@ public class MapTile : TDComponent
     {
         if (Structure != null)
         {
-            collider.Size = new Vector3(1f, 1f, 2f);
+            collider.Size = new Vector3(1f, 1f, 4f);
             collider.Offset = Vector3.Zero;
         }
         else
