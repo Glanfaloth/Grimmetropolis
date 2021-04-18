@@ -154,13 +154,13 @@ public class Player : Character
         {
             if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH) && building.Mesh.IsBlueprint)
             {
-                Cooldown = Config.PLAYER_BUILD_COOLDONW;
+                Cooldown = Config.PLAYER_BUILD_COOLDOWN;
                 ResetProgressBarForProgress();
                 SetProgressBar(Cooldown);
             }
             else if (building.TryRepair(Config.PLAYER_BUILD_STRENGTH))
             {
-                Cooldown = 2f * Config.PLAYER_BUILD_COOLDONW;
+                Cooldown = 2f * Config.PLAYER_BUILD_COOLDOWN;
                 ResetProgressBarForProgress();
                 SetProgressBar(Cooldown);
             }

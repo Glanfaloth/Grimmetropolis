@@ -11,7 +11,7 @@ public class Wall : Building
 {
     public override ResourcePile GetResourceCost() => new ResourcePile(Config.WALL_WOOD_COST, Config.WALL_STONE_COST);
 
-    public override float BuildTime => 0;
+    public override float BuildTime => Config.WALL_BUILD_VALUE;
 
     private WallOrientation _orientation = WallOrientation.HorizontalOrientation;
 
