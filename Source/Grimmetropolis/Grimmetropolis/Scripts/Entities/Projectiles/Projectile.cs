@@ -101,11 +101,18 @@ public class Projectile : TDComponent
 
             // TODO: enemies can shoot themselfes and other enemies
             Enemy enemy = oppositeCollider.TDObject.GetComponent<Enemy>();
+            Player player = oppositeCollider.TDObject.GetComponent<Player>();
             if (enemy != null && !IsEvilArrow)
             {
                 _state = ProjectileState.Stuck;
                 TDObject.Transform.Parent = enemy.TDObject.Transform;
                 enemy.Health -= Damage;
+            }
+            else if (player != null && IsEvilArrow)
+            {
+                _state = ProjectileState.Stuck;
+                TDObject.Transform.Parent = player.TDObject.Transform;
+                player.Health -= Damage;
             }
             else
             {
