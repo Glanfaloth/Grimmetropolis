@@ -16,7 +16,7 @@ public class TDKeyboardInput : TDInput
         public Keys MoveRight   = Keys.D;
 
         public Keys Action     = Keys.Space;
-        public Keys Cancel      = Keys.LeftAlt;
+        public Keys Cancel     = Keys.LeftControl;
 
         public Keys CycleNext     = Keys.Q;
         public Keys CyclePrevious = Keys.E;

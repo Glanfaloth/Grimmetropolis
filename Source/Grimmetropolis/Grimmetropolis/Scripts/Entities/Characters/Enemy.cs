@@ -146,12 +146,12 @@ public abstract class Enemy : Character
     private void RangedAttackTarget(RangedAttackMove nextMove, GameTime gameTime)
     {
         Vector2 toTarget = nextMove.Target.TDObject.Transform.LocalPosition.GetXY() - TDObject.Transform.LocalPosition.GetXY();
-        if (toTarget.LengthSquared() > _attackRangeSquared-1f)
-        {
-            if (toTarget.LengthSquared() > 1f) toTarget.Normalize();
-            Move(toTarget, gameTime);
-        }
-        else
+        // if (toTarget.LengthSquared() > _attackRangeSquared-1f)
+        // {
+        //     if (toTarget.LengthSquared() > 1f) toTarget.Normalize();
+        //     Move(toTarget, gameTime);
+        // }
+        // else
         {
             if (Cooldown <= 0f)
             {

@@ -25,8 +25,8 @@ public static class Config
 
 
     public const float WAVE_ALERT_TIME = 8;
-    public const float TIME_UNTIL_FIRST_WAVE = 10;
-    public const float TIME_BETWEEN_WAVES = 20;
+    public const float TIME_UNTIL_FIRST_WAVE = 60;
+    public const float TIME_BETWEEN_WAVES = 40;
     public const float FIRST_WAVE_WITCH_COUNT = 4;
     public const float FIRST_WAVE_KNIGHT_COUNT = 6;
 
@@ -44,12 +44,12 @@ public static class Config
 
     public const int CASTLE_SIZE_X = 3;
     public const int CASTLE_SIZE_Y = 3;
-    public const float CASTLE_HEALTH = 9f;
+    public const float CASTLE_HEALTH = 20f;
 
 
     public const float OUTPOST_HEALTH = 3f;
-    public const int OUTPOST_WOOD_COST = 1;
-    public const int OUTPOST_STONE_COST = 1;
+    public const int OUTPOST_WOOD_COST = 5;
+    public const int OUTPOST_STONE_COST = 5;
     public const float OUTPOST_SHOOTING_RANGE = 3f;
     public const float OUTPOST_SHOOTING_RATE = .5f;
 
@@ -58,15 +58,15 @@ public static class Config
 
     public const float OUTPOST_BUILD_VALUE = 2f;
 
-    public const int WALL_WOOD_COST = 0;
-    public const int WALL_STONE_COST = 2;
-    public const float WALL_HEALTH = 9f;
+    public const int WALL_WOOD_COST = 2;
+    public const int WALL_STONE_COST = 6;
+    public const float WALL_HEALTH = 20f;
 
     public const int RESOURCE_WOOD_GATHER_BASE_RATE = 1;
     public const int RESOURCE_STONE_GATHER_BASE_RATE = 1;
 
-    public const float RESOURCE_WOOD_GATHER_DURATION = .25f;
-    public const float RESOURCE_STONE_GATHER_DURATION = .25f;
+    public const float RESOURCE_WOOD_GATHER_DURATION = .5f;
+    public const float RESOURCE_STONE_GATHER_DURATION = .5f;
 
     #endregion
 

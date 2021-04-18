@@ -15,16 +15,16 @@ public static class TDInputManager
 
         TDKeyboardInput.KeyboardConfig config = new TDKeyboardInput.KeyboardConfig()
         {
-            MoveUp = Keys.Up,                   // w
-            MoveLeft = Keys.Left,               // a
-            MoveDown = Keys.Down,               // s
-            MoveRight = Keys.Right,             // d
+            MoveUp = Keys.I,                   // w
+            MoveLeft = Keys.J,               // a
+            MoveDown = Keys.K,               // s
+            MoveRight = Keys.L,             // d
 
-            Action = Keys.RightShift,       // SPACE
-            Cancel = Keys.RightControl,
-
-            CycleNext = Keys.M,
-            CyclePrevious = Keys.N,
+            Action = Keys.N,       // SPACE
+            Cancel = Keys.M,
+                 
+            CycleNext = Keys.U,
+            CyclePrevious = Keys.O,
 
             BuildMode = Keys.B
 

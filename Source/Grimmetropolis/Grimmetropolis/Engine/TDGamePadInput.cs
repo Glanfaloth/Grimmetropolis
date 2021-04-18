@@ -31,10 +31,10 @@ public class TDGamePadInput : TDInput
         public Buttons Action = Buttons.A;
         public Buttons Cancel = Buttons.B;
 
-        public Buttons CycleNext = Buttons.LeftShoulder;
-        public Buttons CyclePrevious = Buttons.RightShoulder;
+        public Buttons CycleNext = Buttons.DPadRight;
+        public Buttons CyclePrevious = Buttons.DPadLeft;
 
-        public Buttons BuildMode = Buttons.Y;
+        public Buttons BuildMode = Buttons.RightShoulder;
     }
 
     public int GamePadIndex { get; private set; }
