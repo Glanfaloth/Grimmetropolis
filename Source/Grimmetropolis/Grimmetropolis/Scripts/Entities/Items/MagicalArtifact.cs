@@ -3,7 +3,7 @@
 public class MagicalArtifact : Item
 {
 
-    public Castle Castle = null;
+    public Structure Structure = null;
 
     public override void Initialize()
     {
@@ -15,15 +15,23 @@ public class MagicalArtifact : Item
     }
     protected override void SetMapTransform()
     {
-        if (Castle != null) Position = Castle.Position + new Point(1, 1);
+        if (Structure != null) Position = Structure.Position + new Point((int)(.5f * Structure.Size.X), (int)(.5f * Structure.Size.Y));
 
         base.SetMapTransform();
 
-        if (Castle != null)
+        if (Structure != null)
         {
             Vector3 position = TDObject.Transform.Position;
             position.Z = 3f;
             TDObject.Transform.Position = position;
+        }
+    }
+
+    public override void InteractWithStructure(GameTime gameTime, Structure structure)
+    {
+        if (structure is Castle castle)
+        {
+            castle.ReceiveMagicalArtifact(this);
         }
     }
 }

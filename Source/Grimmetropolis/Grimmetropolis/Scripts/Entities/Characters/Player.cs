@@ -115,7 +115,11 @@ public class Player : Character
             if (Items[0] != null) Items[0].InteractWithStructure(gameTime, _closestStructure);
             else
             {
-                Build(gameTime);
+                if (_closestStructure is Castle castle)
+                {
+                    castle.StealMagicalArtifact(this);
+                }
+                else Build(gameTime);
             }
         }
     }

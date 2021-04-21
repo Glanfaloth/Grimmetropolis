@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-public abstract class Character : TDComponent, ITDTarget
+public abstract class Character : TDComponent, ITarget
 {
     public abstract float WalkSpeed { get; }
     protected abstract float RotateSpeed { get; }
@@ -74,7 +74,7 @@ public abstract class Character : TDComponent, ITDTarget
         }
     }
 
-    TDObject ITDTarget.TDObject => TDObject;
+    TDObject ITarget.TDObject => TDObject;
 
     public override void Initialize()
     {

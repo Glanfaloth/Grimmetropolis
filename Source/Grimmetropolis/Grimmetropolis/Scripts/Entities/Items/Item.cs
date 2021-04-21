@@ -41,6 +41,28 @@ public class Item : TDComponent
         Character = null;
     }
 
+    public void PlaceAtBuilding(Structure structure)
+    {
+        if (this is MagicalArtifact magicalArtifact)
+        {
+            magicalArtifact.Structure = structure;
+        }
+        SetMapTransform();
+
+        if (Character != null)
+        {
+            Character.Items[0] = null;
+            Character.Cooldown = _cooldown;
+            if (Character is Player player)
+            {
+                player.SetProgressForCooldown();
+            }
+        }
+        PlaceItem(null, this);
+
+        Character = null;
+    }
+
     public void TakeItem(Character character)
     {
 

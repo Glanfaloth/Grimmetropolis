@@ -12,7 +12,7 @@ public enum ProjectileState
 public class Projectile : TDComponent
 {
     public Vector3 StartPosition = Vector3.Zero;
-    public ITDTarget TargetCharacter = null;
+    public ITarget TargetCharacter = null;
 
     public TDCylinderCollider Collider;
 

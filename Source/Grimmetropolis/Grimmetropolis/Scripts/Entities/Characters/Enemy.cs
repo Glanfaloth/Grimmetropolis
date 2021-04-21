@@ -129,6 +129,12 @@ public abstract class Enemy : Character
             }
             else if (closestBuilding != null)
             {
+
+                if (closestBuilding is Castle castle)
+                {
+                    castle.StealMagicalArtifact(this);
+                }
+
                 closestBuilding.Health -= _damageAgainstBuildings;
                 Cooldown = _attackDuration;
 
