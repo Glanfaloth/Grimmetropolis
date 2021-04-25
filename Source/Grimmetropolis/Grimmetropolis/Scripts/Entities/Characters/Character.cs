@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public abstract class Character : TDComponent, ITarget
 {
@@ -14,6 +15,7 @@ public abstract class Character : TDComponent, ITarget
     public float LookingAngle = 0f;
     public float CurrentWalkSpeed = 0f;
 
+    public CharacterAnimation Animation;
     public TDMesh Mesh;
 
     // health will be set during Initialize
@@ -130,6 +132,7 @@ public abstract class Character : TDComponent, ITarget
         if (CurrentWalkSpeed > 1e-5f)
         {
             CurrentWalkSpeed *= WalkSpeed;
+            if (this is EnemyKnight) Debug.WriteLine(CurrentWalkSpeed);
             float targetAngle = MathF.Atan2(direction.Y, direction.X);
             if (targetAngle - LookingAngle > MathHelper.Pi) LookingAngle += MathHelper.TwoPi;
             else if (LookingAngle - targetAngle > MathHelper.Pi) LookingAngle -= MathHelper.TwoPi;
@@ -174,7 +177,8 @@ public abstract class Character : TDComponent, ITarget
 
     public void Highlight(bool highlight)
     {
-        Mesh.Highlight(highlight);
+        if (Mesh != null) Mesh.Highlight(highlight);
+        else Animation.Highlight(highlight);
         if (highlight) HealthBar.QuickShow();
         else HealthBar.QuickHide();
     }

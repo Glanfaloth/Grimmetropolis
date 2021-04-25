@@ -91,9 +91,10 @@ public static class PrefabFactory
                     // TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
                     Player player = prefab.AddComponent<Player>();
-                    CharacterMovement characterMovement = prefab.AddComponent<CharacterMovement>();
-                    characterMovement.Character = player;
-                    characterMovement.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
+                    CharacterAnimation animation = prefab.AddComponent<CharacterAnimation>();
+                    animation.Character = player;
+                    animation.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
+                    player.Animation = animation;
                     /*mesh.Model = TDContentManager.LoadModel("PlayerCindarella");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");*/
                     collider.Radius = .25f;
@@ -397,12 +398,23 @@ public static class PrefabFactory
     internal static TDObject CreateEnemyPrefab<T>(Config.EnemyStats stats, Vector3 localPosition, Quaternion localRotation, TDTransform parent = null) where T : Enemy, new()
     {
         TDObject prefab = CreatePrefab(PrefabType.Empty, localPosition, localRotation, parent);
-        TDMesh mesh = prefab.AddComponent<TDMesh>();
         TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
         T enemy = prefab.AddComponent<T>();
         enemy.SetBaseStats(stats);
-        mesh.Model = TDContentManager.LoadModel(enemy.MeshName);
-        mesh.Texture = TDContentManager.LoadTexture(enemy.TextureName);
+        if (enemy is EnemyKnight)
+        {
+            CharacterAnimation animation = prefab.AddComponent<CharacterAnimation>();
+            animation.Character = enemy;
+            enemy.Animation = animation;
+            animation.CharacterModel = TDContentManager.LoadModel(enemy.MeshName);
+        }
+        else
+        {
+            TDMesh mesh = prefab.AddComponent<TDMesh>();
+            mesh.Model = TDContentManager.LoadModel(enemy.MeshName);
+            mesh.Texture = TDContentManager.LoadTexture(enemy.TextureName);
+            enemy.Mesh = mesh;
+        }
         collider.Radius = .25f;
         collider.Height = .5f;
         collider.Offset = .5f * Vector3.Backward;
@@ -417,7 +429,6 @@ public static class PrefabFactory
         interactionCollider.Height = 2f;
         interactionCollider.Offset = .5f * Vector3.Backward;
         enemy.InteractionCollider = interactionCollider;
-        enemy.Mesh = mesh;
 
         return prefab;
     }

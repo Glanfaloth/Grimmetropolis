@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-public class CharacterMovement : TDComponent
+public class CharacterAnimation : TDComponent
 {
     public Character Character;
 
@@ -17,6 +17,13 @@ public class CharacterMovement : TDComponent
     public TDTransform RightArm;
 
     public Model CharacterModel;
+
+    private TDMesh _headMesh;
+    private TDMesh _bodyMesh;
+    private TDMesh _leftLegMesh;
+    private TDMesh _rightLegMesh;
+    private TDMesh _leftArmMesh;
+    private TDMesh _rightArmMesh;
 
     private Vector3 _headPositionStandard = new Vector3(0f, 0f, .6f);
     private Vector3 _headPositionElevated = new Vector3(0f, 0f, .625f);
@@ -50,12 +57,12 @@ public class CharacterMovement : TDComponent
     {
         base.Initialize();
 
-        Head = CreateBodyPart("Head");
-        Body = CreateBodyPart("Body");
-        LeftLeg = CreateBodyPart("LeftLeg");
-        RightLeg = CreateBodyPart("RightLeg");
-        LeftArm = CreateBodyPart("LeftArm");
-        RightArm = CreateBodyPart("RightArm");
+        CreateBodyPart("Head", out Head, out _headMesh);
+        CreateBodyPart("Body", out Body, out _bodyMesh);
+        CreateBodyPart("LeftLeg", out LeftLeg, out _leftLegMesh);
+        CreateBodyPart("RightLeg", out RightLeg, out _rightLegMesh);
+        CreateBodyPart("LeftArm", out LeftArm, out _leftArmMesh);
+        CreateBodyPart("RightArm", out RightArm, out _rightArmMesh);
 
         Head.LocalPosition = _headPositionStandard;
         Body.LocalPosition = _bodyPositionStandard;
@@ -71,14 +78,14 @@ public class CharacterMovement : TDComponent
 
         if (!_readyForAnimation) return;
 
-        if (Character.CurrentWalkSpeed <= 0f) IdleAnimation(gameTime);
+        if (Character.CurrentWalkSpeed <= 1e-5f) IdleAnimation(gameTime);
         else WalkAnimation(gameTime, Character.CurrentWalkSpeed);
     }
 
-    private TDTransform CreateBodyPart(string bodyPart)
+    private void CreateBodyPart(string bodyPart, out TDTransform bodyPartTransform, out TDMesh bodyPartMesh)
     {
         TDObject bodyPartObject = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
-        TDMesh bodyPartMesh = bodyPartObject.AddComponent<TDMesh>();
+        bodyPartMesh = bodyPartObject.AddComponent<TDMesh>();
 
         ModelBone bone; CharacterModel.Bones.TryGetValue(bodyPart, out bone);
         ModelMesh mesh; CharacterModel.Meshes.TryGetValue(bodyPart, out mesh);
@@ -86,7 +93,7 @@ public class CharacterMovement : TDComponent
         bodyPartMesh.Model = new Model(TDSceneManager.Graphics.GraphicsDevice, new List<ModelBone>() { bone }, new List<ModelMesh>() { mesh });
         bodyPartMesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
 
-        return bodyPartObject.Transform;
+        bodyPartTransform = bodyPartObject.Transform;
     }
 
     private void ResetAnimation()
@@ -163,5 +170,15 @@ public class CharacterMovement : TDComponent
         RightArm.LocalRotation = Quaternion.Lerp(_armBackward, _armForward, walkLimbsProgress);
         LeftLeg.LocalRotation = Quaternion.Lerp(_legBackward, _legForward, walkLimbsProgress);
         RightLeg.LocalRotation = Quaternion.Lerp(_legForward, _legBackward, walkLimbsProgress);
+    }
+
+    public void Highlight(bool highlight)
+    {
+        _headMesh.Highlight(highlight);
+        _bodyMesh.Highlight(highlight);
+        _leftLegMesh.Highlight(highlight);
+        _rightLegMesh.Highlight(highlight);
+        _leftArmMesh.Highlight(highlight);
+        _rightArmMesh.Highlight(highlight);
     }
 }

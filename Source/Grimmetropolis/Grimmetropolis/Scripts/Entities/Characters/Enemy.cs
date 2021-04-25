@@ -58,6 +58,7 @@ public abstract class Enemy : Character
         if (_controller == null) return;
 
         EnemyMove nextMove = _controller.ComputeNextMove(TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange);
+        CurrentWalkSpeed = 0f;
 
         switch (nextMove.MovementType)
         {
