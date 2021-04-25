@@ -43,6 +43,8 @@ public class ToolAxe : Item
                 player.LastClosestResourceDeposit.HarvestResource();
                 player.Progress -= player.LastClosestResourceDeposit.HarvestTime;
             }
+
+            Character.Animation.UseArm();
         }
     }
 }

@@ -46,6 +46,8 @@ public class ToolPickaxe : Item
                 player.ResetProgressBarForProgress();
                 player.SetProgressForCooldown();
             }
+
+            Character.Animation.UseArm();
         }
     }
 }

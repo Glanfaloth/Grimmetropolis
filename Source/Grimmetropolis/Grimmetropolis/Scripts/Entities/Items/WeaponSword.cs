@@ -14,5 +14,7 @@ public class WeaponSword : Item
             player.ResetProgressBarForProgress();
             player.SetProgressForCooldown();
         }
+
+        Character.Animation.UseArm();
     }
 }

@@ -46,12 +46,17 @@ public class CharacterAnimation : TDComponent
     private Quaternion _legBackward = Quaternion.CreateFromAxisAngle(Vector3.Up, MathHelper.PiOver4);
     private Quaternion _armForward = Quaternion.CreateFromAxisAngle(Vector3.Up, -MathHelper.Pi / 6f);
     private Quaternion _armBackward = Quaternion.CreateFromAxisAngle(Vector3.Up, MathHelper.Pi / 6f);
+    private Quaternion _armStandard = Quaternion.Identity;
+    private Quaternion _armUsing = Quaternion.CreateFromAxisAngle(Vector3.Up, -3f * MathHelper.PiOver4);
 
     private float _time = 0f;
 
     private bool _isWalking = false;
     private bool _readyForAnimation = true;
     private float _resetTime = .1f;
+
+    private bool _armInUse = false;
+    private float _halfArmUsageTime = .15f;
 
     public override void Initialize()
     {
@@ -105,7 +110,7 @@ public class CharacterAnimation : TDComponent
         ResetBodyPart(LeftLeg, _leftLegPositionStandard, Quaternion.Identity);
         ResetBodyPart(RightLeg, _rightLegPositionStandard, Quaternion.Identity);
         ResetBodyPart(LeftArm, _leftArmPositionStandard, Quaternion.Identity);
-        ResetBodyPart(RightArm, _rightArmPositionStandard, Quaternion.Identity);
+        if (!_armInUse) ResetBodyPart(RightArm, _rightArmPositionStandard, Quaternion.Identity);
 
         TDObject.RemoveActions();
         TDObject.RunAction(_resetTime, (p) => { }, () =>
@@ -126,6 +131,24 @@ public class CharacterAnimation : TDComponent
             transform.LocalPosition = Vector3.Lerp(currentPosition, targetPosition, p);
             transform.LocalRotation = Quaternion.Lerp(currentRotation, targetRotation, p);
         });
+    }
+
+    private void ResetUsedArm()
+    {
+        if (_isWalking)
+        {
+            float futureWalkLimbsProgress = CalculateWalkLimbProgress(_time + _resetTime);
+            Quaternion currentRightArmRotation = RightArm.LocalRotation;
+            Quaternion targetRigthArmRotation = Quaternion.Lerp(_armBackward, _armForward, futureWalkLimbsProgress);
+            RightArm.TDObject.RunAction(_resetTime, (p) =>
+            {
+                RightArm.LocalRotation = Quaternion.Lerp(currentRightArmRotation, targetRigthArmRotation, p);
+            }, () =>
+                {
+                    _armInUse = false;
+                });
+        }
+        else _armInUse = false;
     }
 
     private void IdleAnimation(GameTime gameTime)
@@ -157,7 +180,7 @@ public class CharacterAnimation : TDComponent
 
         _time += speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         float walkElevationProgress = MathF.Sin(_time % 1f * MathHelper.TwoPi);
-        float walkLimbsProgress = .5f * MathF.Sin(_time % 2f * MathHelper.Pi) + .5f;
+        float walkLimbsProgress = CalculateWalkLimbProgress(_time);
 
         Head.LocalPosition = Vector3.Lerp(_headPositionStandard, _headPositionHigh, walkElevationProgress);
         Body.LocalPosition = Vector3.Lerp(_bodyPositionStandard, _bodyPositionHigh, walkElevationProgress);
@@ -167,9 +190,33 @@ public class CharacterAnimation : TDComponent
         RightLeg.LocalPosition = Vector3.Lerp(_rightLegPositionStandard, _rightLegPositionHigh, walkElevationProgress);
 
         LeftArm.LocalRotation = Quaternion.Lerp(_armForward, _armBackward, walkLimbsProgress);
-        RightArm.LocalRotation = Quaternion.Lerp(_armBackward, _armForward, walkLimbsProgress);
+        if (!_armInUse) RightArm.LocalRotation = Quaternion.Lerp(_armBackward, _armForward, walkLimbsProgress);
         LeftLeg.LocalRotation = Quaternion.Lerp(_legBackward, _legForward, walkLimbsProgress);
         RightLeg.LocalRotation = Quaternion.Lerp(_legForward, _legBackward, walkLimbsProgress);
+    }
+
+    private float CalculateWalkLimbProgress(float time)
+    {
+        return .5f * MathF.Sin(time % 2f * MathHelper.Pi) + .5f;
+    }
+
+    public void UseArm()
+    {
+        if (_armInUse) return;
+
+        _armInUse = true;
+
+        Quaternion currentRightArmRotation = RightArm.LocalRotation;
+        RightArm.TDObject.RunAction(_halfArmUsageTime, (p) =>
+        {
+            RightArm.LocalRotation = Quaternion.Lerp(currentRightArmRotation, _armUsing, p * (2f - p));
+        }, () =>
+        {
+            RightArm.TDObject.RunAction(_halfArmUsageTime, (p) =>
+            {
+                RightArm.LocalRotation = Quaternion.Lerp(_armUsing, _armStandard, MathF.Pow(p, 2f));
+            }, () => ResetUsedArm());
+        });
     }
 
     public void Highlight(bool highlight)

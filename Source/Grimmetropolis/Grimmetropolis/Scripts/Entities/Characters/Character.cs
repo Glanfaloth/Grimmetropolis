@@ -132,7 +132,6 @@ public abstract class Character : TDComponent, ITarget
         if (CurrentWalkSpeed > 1e-5f)
         {
             CurrentWalkSpeed *= WalkSpeed;
-            if (this is EnemyKnight) Debug.WriteLine(CurrentWalkSpeed);
             float targetAngle = MathF.Atan2(direction.Y, direction.X);
             if (targetAngle - LookingAngle > MathHelper.Pi) LookingAngle += MathHelper.TwoPi;
             else if (LookingAngle - targetAngle > MathHelper.Pi) LookingAngle -= MathHelper.TwoPi;

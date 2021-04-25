@@ -9,8 +9,8 @@ public class Item : TDComponent
 
     private float _cooldown = .2f;
 
-    protected Vector3 CarryPosition = new Vector3(0f, -.3f, .55f);
-    protected Quaternion CarryRotation = Quaternion.CreateFromAxisAngle(Vector3.Forward, MathHelper.PiOver2) * Quaternion.CreateFromAxisAngle(Vector3.Down, MathHelper.PiOver2);
+    protected Vector3 CarryPosition = new Vector3(.05f, -.08f, -.3f);
+    protected Quaternion CarryRotation = Quaternion.CreateFromAxisAngle(Vector3.Left, MathHelper.PiOver2);
     protected Vector3 CarryScale = Vector3.One;
 
     public override void Initialize()
@@ -63,11 +63,11 @@ public class Item : TDComponent
         Character = null;
     }
 
-    public void TakeItem(Character character)
+    public virtual void TakeItem(Character character)
     {
 
         character.Items[0] = this;
-        TDObject.Transform.Parent = character.TDObject.Transform;
+        TDObject.Transform.Parent = character.Animation.RightArm;
         TDObject.Transform.LocalPosition = CarryPosition;
         TDObject.Transform.LocalRotation = CarryRotation;
         TDObject.Transform.LocalScale = CarryScale;
@@ -115,6 +115,7 @@ public class Item : TDComponent
         if (Character is Player player && structure.Mesh.IsBlueprint)
         {
             player.Build(gameTime);
+            player.Animation.UseArm();
         }
     }
 }
