@@ -14,53 +14,41 @@ public class TDHybridInput : TDInput
         _inputTwo = inputTwo;
     }
 
-    public Vector2 GetMoveDirection()
+    public Vector2 MoveDirection()
     {
-        Vector2 direction = _inputOne.GetMoveDirection() + _inputTwo.GetMoveDirection();
+        Vector2 direction = _inputOne.MoveDirection() + _inputTwo.MoveDirection();
         if (direction.LengthSquared() > 1) direction.Normalize();
         return direction;
     }
 
-    public int GetSelectedBuildingIndex()
+    public bool ActionPressed()
     {
-        // TODO: check if this is still correct.
-        return Math.Max(_inputOne.GetSelectedBuildingIndex(), _inputTwo.GetSelectedBuildingIndex());
+        return _inputOne.ActionPressed()
+            || _inputTwo.ActionPressed();
     }
 
-    public bool IsCycleNextItemPressed()
+    public bool CancelPressed()
     {
-        return _inputOne.IsCycleNextItemPressed()
-            || _inputTwo.IsCycleNextItemPressed();
+        return _inputOne.CancelPressed()
+            || _inputTwo.CancelPressed();
     }
 
-    public bool IsCyclePreviousItemPressed()
+    public bool CycleRightPressed()
     {
-        return _inputOne.IsCyclePreviousItemPressed()
-            || _inputTwo.IsCyclePreviousItemPressed();
+        return _inputOne.CycleRightPressed()
+            || _inputTwo.CycleRightPressed();
     }
 
-    public bool IsSelectBuildingTypePressed()
+    public bool CycleLeftPressed()
     {
-        return _inputOne.IsSelectBuildingTypePressed()
-            || _inputTwo.IsSelectBuildingTypePressed();
+        return _inputOne.CycleLeftPressed()
+            || _inputTwo.CycleLeftPressed();
     }
 
-    public bool IsSpecialAbilityPressed()
+    public bool BuildModePressed()
     {
-        return _inputOne.IsSpecialAbilityPressed()
-            || _inputTwo.IsSpecialAbilityPressed();
-    }
-
-    public bool IsSwapItemPressed()
-    {
-        return _inputOne.IsSwapItemPressed()
-            || _inputTwo.IsSwapItemPressed();
-    }
-
-    public bool IsUseItemPressed()
-    {
-        return _inputOne.IsUseItemPressed()
-            || _inputTwo.IsUseItemPressed();
+        return _inputOne.BuildModePressed()
+            || _inputTwo.BuildModePressed();
     }
 
     public void UpdateDevice()

@@ -69,7 +69,7 @@ public class MapTile : TDComponent
     {
         if (Structure != null)
         {
-            collider.Size = new Vector3(1f, 1f, 2f);
+            collider.Size = new Vector3(1f, 1f, 4f);
             collider.Offset = Vector3.Zero;
         }
         else
@@ -132,7 +132,6 @@ public class MapTile : TDComponent
                 new RangedAttackMove(tile.TileVertex, StructureVertex, building, range, Config.RANGED_ATTACK_MOVE_BASE_COST, Config.RANGED_ATTACK_MOVE_DISTANCE_FACTOR);
             }
         }
-        // TODO: add other edge types
     }
 
     private void UpdateOutpostCount(Structure oldStructure, Structure newStructure)

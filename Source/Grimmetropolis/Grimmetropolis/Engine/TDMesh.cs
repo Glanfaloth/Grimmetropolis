@@ -30,6 +30,8 @@ public class TDMesh : TDComponent
         }
     }
 
+    public Vector3 BaseColor { get; set; } = Vector3.One;
+
     public bool IsBlueprint { get; internal set; }
 
     public float BaseHighlightFactor = 1f;
@@ -94,6 +96,8 @@ public class TDMesh : TDComponent
 
                 effect.Parameters["DiffuseIntensity"].SetValue(.8f);
                 effect.Parameters["DiffuseColor"].SetValue(Vector3.One);
+
+                effect.Parameters["BaseColor"].SetValue(BaseColor);
 
                 effect.Parameters["Shadow"].SetValue(TDSceneManager.ActiveScene.ShadowRender);
                 effect.Parameters["InvertedShadowSize"].SetValue(TDSceneManager.ActiveScene.InvertedShadowSize);

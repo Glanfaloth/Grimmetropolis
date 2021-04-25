@@ -21,6 +21,9 @@ public class MapDTO
         EnemyCatapult,
         Outpost,
         EnemySpawnPoint,
+        ToolAxe,
+        ToolPickaxe,
+        WeaponSword
     }
 
     public Dictionary<string, LegendItem> Legend { get; set; } = new Dictionary<string, LegendItem>();

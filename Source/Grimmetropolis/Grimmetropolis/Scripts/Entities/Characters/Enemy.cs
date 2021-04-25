@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 public abstract class Enemy : Character
 {
-    private EnemyController _controller;
+    protected EnemyController _controller;
     private float _walkSpeed;
     private float _rotateSpeed;
     private float _baseHealth;
@@ -58,6 +58,7 @@ public abstract class Enemy : Character
         if (_controller == null) return;
 
         EnemyMove nextMove = _controller.ComputeNextMove(TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange);
+        CurrentWalkSpeed = 0f;
 
         switch (nextMove.MovementType)
         {
@@ -129,6 +130,12 @@ public abstract class Enemy : Character
             }
             else if (closestBuilding != null)
             {
+
+                if (closestBuilding is Castle castle)
+                {
+                    castle.StealMagicalArtifact(this);
+                }
+
                 closestBuilding.Health -= _damageAgainstBuildings;
                 Cooldown = _attackDuration;
 
@@ -146,12 +153,12 @@ public abstract class Enemy : Character
     private void RangedAttackTarget(RangedAttackMove nextMove, GameTime gameTime)
     {
         Vector2 toTarget = nextMove.Target.TDObject.Transform.LocalPosition.GetXY() - TDObject.Transform.LocalPosition.GetXY();
-        if (toTarget.LengthSquared() > _attackRangeSquared-1f)
-        {
-            if (toTarget.LengthSquared() > 1f) toTarget.Normalize();
-            Move(toTarget, gameTime);
-        }
-        else
+        // if (toTarget.LengthSquared() > _attackRangeSquared-1f)
+        // {
+        //     if (toTarget.LengthSquared() > 1f) toTarget.Normalize();
+        //     Move(toTarget, gameTime);
+        // }
+        // else
         {
             if (Cooldown <= 0f)
             {
@@ -164,6 +171,7 @@ public abstract class Enemy : Character
                 arrow.TargetCharacter = nextMove.Target;
                 arrow.Damage = _damageAgainstBuildings;
                 arrow.Speed = Config.ENEMY_PROJECTILE_SPEED;
+                arrow.IsEvilArrow = true;
 
                 Cooldown = _attackDuration;
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 
-public abstract class Building : Structure, ITDTarget
+public abstract class Building : Structure, ITarget
 {
     public abstract ResourcePile GetResourceCost();
 
@@ -9,8 +9,8 @@ public abstract class Building : Structure, ITDTarget
 
     public float BaseHealth = Config.BUILDING_DEFAULT_HEALTH;
 
-    private float _health = Config.BUILDING_DEFAULT_HEALTH;
-    public float Health
+    protected float _health = Config.BUILDING_DEFAULT_HEALTH;
+    public virtual float Health
     {
         get => _health;
         set
@@ -29,7 +29,7 @@ public abstract class Building : Structure, ITDTarget
 
     public Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
 
-    TDObject ITDTarget.TDObject => TDObject;
+    TDObject ITarget.TDObject => TDObject;
 
     private HealthBar _healthBar;
     private bool _isBlueprint;
@@ -54,11 +54,14 @@ public abstract class Building : Structure, ITDTarget
 
     public override void Initialize()
     {
+        if (Mesh.IsBlueprint) _health = 0f;
+
         TDObject healthBarObject = PrefabFactory.CreatePrefab(PrefabType.HealthBar, TDObject.Transform);
         healthBarObject.RectTransform.Offset = 4f * Vector3.Backward;
         _healthBar = healthBarObject.GetComponent<HealthBar>();
         _healthBar.CurrentProgress = Health;
         _healthBar.MaxProgress = BaseHealth;
+
 
         base.Initialize();
     }
@@ -96,10 +99,19 @@ public abstract class Building : Structure, ITDTarget
                 _progressBar.Destroy();
                 _progressBar = null;
                 Mesh.IsBlueprint = false;
+
+                Health = BaseHealth;
             }
             return true;
         }
 
         return false;
+    }
+
+    public bool TryRepair(float buildStrength)
+    {
+        if (Health >= BaseHealth) return false;
+        Health = MathHelper.Min(Health + buildStrength, BaseHealth);
+        return true;
     }
 }

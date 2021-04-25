@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
+
 
 public class GameManager : TDComponent
 {
@@ -41,7 +43,7 @@ public class GameManager : TDComponent
         // TODO: maybe use Content.Load functionalitiy of mgcb
         // WARNING: testEmpty128 is laggy.
         List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/default.map");
-        // List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/test.map");
+        // List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/testWitchFlying.map");
         // List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/testAvoidOutpost.map");
         // List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/testAttackOutpost.map");
         // List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/testAttackRangedOutpost.map");
@@ -73,6 +75,16 @@ public class GameManager : TDComponent
         TDObject playerObject1 = PrefabFactory.CreatePrefab(PrefabType.Player, playerList.Transform);
         playerObject1.GetComponent<Player>().Input = TDInputManager.Inputs[1];
 
+        TDObject playerObject2 = PrefabFactory.CreatePrefab(PrefabType.Player, playerList.Transform);
+        playerObject2.GetComponent<Player>().Input = TDInputManager.Inputs[2];
+
+        TDObject playerObject3 = PrefabFactory.CreatePrefab(PrefabType.Player, playerList.Transform);
+        playerObject3.GetComponent<Player>().Input = TDInputManager.Inputs[3];
+
+        /*playerObject1.GetComponent<Player>().Mesh.BaseColor = new Vector3(1, .5f, .5f);
+        playerObject2.GetComponent<Player>().Mesh.BaseColor = new Vector3(.5f, 1, .5f);
+        playerObject3.GetComponent<Player>().Mesh.BaseColor = new Vector3(.5f, .5f, 1);*/
+
         // Enemies
         TDObject enemyList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         EnemyTransform = enemyList.Transform;
@@ -95,9 +107,12 @@ public class GameManager : TDComponent
         TDObject itemList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         ItemTransform = itemList.Transform;
 
-        TDObject pickaxeObject = PrefabFactory.CreatePrefab(PrefabType.ToolPickaxe, ItemTransform);
-        ToolPickaxe pickaxe = pickaxeObject.GetComponent<ToolPickaxe>();
-        pickaxe.Character = playerObject1.GetComponent<Player>();
+        TDObject magicalArtifactObject = PrefabFactory.CreatePrefab(PrefabType.MagicalArtifact, TDObject.Transform);
+        MagicalArtifact magicalArtifact = magicalArtifactObject.GetComponent<MagicalArtifact>();
+        magicalArtifact.Position = new Point(17, 17);
+
+
+        // magicalArtifact.Character = playerObject1.GetComponent<Player>();
 
         //TDObject castleObject = PrefabFactory.CreatePrefab(PrefabType.Castle, StructureTransform);
         //Castle castle = castleObject.GetComponent<Castle>();
@@ -164,6 +179,18 @@ public class GameManager : TDComponent
                 break;
             case MapDTO.EntityType.EnemySpawnPoint:
                 EnemyController.SpawnLocations.Add(entityToSpawn.Position);
+                break;
+            case MapDTO.EntityType.ToolAxe:
+                TDObject toolAxeObject = PrefabFactory.CreatePrefab(PrefabType.ToolAxe, ItemTransform);
+                toolAxeObject.GetComponent<ToolAxe>().Position = entityToSpawn.Position;
+                break;
+            case MapDTO.EntityType.ToolPickaxe:
+                TDObject toolPickaxeObject = PrefabFactory.CreatePrefab(PrefabType.ToolPickaxe, ItemTransform);
+                toolPickaxeObject.GetComponent<ToolPickaxe>().Position = entityToSpawn.Position;
+                break;
+            case MapDTO.EntityType.WeaponSword:
+                TDObject weaponSwordObject = PrefabFactory.CreatePrefab(PrefabType.WeaponSword, ItemTransform);
+                weaponSwordObject.GetComponent<WeaponSword>().Position = entityToSpawn.Position;
                 break;
             case MapDTO.EntityType.None:
             default:

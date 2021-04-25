@@ -20,11 +20,11 @@ public class TestComponent : TDComponent
 
         foreach (TDInput input in TDInputManager.Inputs)
         {
-            Vector2 j1Direction = input.GetMoveDirection();
+            Vector2 j1Direction = input.MoveDirection();
             _eulerAngles.X += j1Direction.X * _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
             _eulerAngles.Y += j1Direction.Y * _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (input.IsSelectBuildingTypePressed()) _eulerAngles.Z += _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (input.IsSpecialAbilityPressed()) _eulerAngles.Z -= _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (input.ActionPressed()) _eulerAngles.Z += _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (input.CancelPressed()) _eulerAngles.Z -= _speedAngles * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         TDObject.Transform.LocalRotation = Quaternion.CreateFromYawPitchRoll(_eulerAngles.X, _eulerAngles.Y, _eulerAngles.Z);

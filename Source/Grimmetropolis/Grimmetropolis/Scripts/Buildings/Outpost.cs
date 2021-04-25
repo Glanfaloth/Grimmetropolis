@@ -23,7 +23,7 @@ public class Outpost : Building
 
         ShootingRange.IsTrigger = true;
         ShootingRange.Radius = Config.OUTPOST_SHOOTING_RANGE;
-        ShootingRange.Height = 1f;
+        ShootingRange.Height = 2f;
         ShootingRange.Offset = Vector3.Zero;
         ShootingRange.collisionEvent += GetClosestCollider;
 

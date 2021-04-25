@@ -15,11 +15,16 @@ public class Player : Character
 
     public override Vector3 OffsetTarget => .5f * Vector3.Backward;
 
-    private ResourceDeposit _lastClosestResourceDeposit = null;
-    private bool _needsToShowHarvestProgress = false;
+    public bool ActiveInput = true;
+
+    public ResourceDeposit LastClosestResourceDeposit = null;
+    public bool NeedsToShowHarvestProgress = false;
 
     private Enemy _closestEnemy = null;
     private MapTile _collidingMapTile = null;
+
+    private BuildMenu _buildMenu = null;
+
 
     public override void Initialize()
     {
@@ -28,21 +33,31 @@ public class Player : Character
         HealthBar.TDObject.Destroy();
         UIManager.Instance.AddPlayerDisplay(this);
 
+        TDObject buildMenuObject = PrefabFactory.CreatePrefab(PrefabType.BuildMenu, TDObject.Transform);
+        _buildMenu = buildMenuObject.GetComponent<BuildMenu>();
+        _buildMenu.Player = this;
+        buildMenuObject.RectTransform.Offset = 2f * Vector3.Backward;
+
         GameManager.Instance.Players.Add(this);
     }
 
     public override void Update(GameTime gameTime)
     {
-        Vector2 inputDirection = Input.GetMoveDirection();
-        Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
-
         HighlightClosestCharacter();
         HighlightMapTile();
 
-        if (Input.IsSpecialAbilityPressed()) Interact(gameTime);
-        else ResetProgressBarForProgress();
-        if (Input.IsUseItemPressed()) Build(gameTime);
-        if (Input.IsSwapItemPressed()) TakeDrop();
+        Vector2 inputDirection = Input.MoveDirection();
+        Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
+
+        if (ActiveInput)
+        {
+
+            if (Input.ActionPressed()) Interact(gameTime);
+            else ResetProgressBarForProgress();
+            if (Input.CancelPressed()) Drop();
+            if (Input.BuildModePressed() && Cooldown <= 0f)
+                _buildMenu.Show();
+        }
 
         base.Update(gameTime);
     }
@@ -62,6 +77,9 @@ public class Player : Character
 
         float closestStructureDistance = float.MaxValue;
         Structure _closestStructure = null;
+
+        MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
+        Item _closestItem = mapTile.Item;
         foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
         {
             if (colliderEntry.Item1 is TDCuboidCollider && closestStructureDistance > colliderEntry.Item2)
@@ -74,55 +92,39 @@ public class Player : Character
                 }
             }
         }
-        
+
         if (_closestEnemy != null && Cooldown <= 0f)
         {
-            _closestEnemy.Health -= Config.PLAYER_DAMAGE;
-            Cooldown = Config.PLAYER_ATTACK_DURATION;
-
-            ResetProgressBarForProgress();
-            SetProgressBarForAttack();
-
-        }
-        else if (_closestStructure != null)
-        {
-            if (Cooldown <= 0f && _closestStructure is Building closestBuilding)
+            if (Items[0] != null) Items[0].InteractWithCharacter(gameTime, _closestEnemy);
+            else
             {
-                closestBuilding.Health -= Config.PLAYER_DAMAGE;
-                Cooldown = Config.PLAYER_ATTACK_DURATION;
+                _closestEnemy.Health -= .25f * Config.PLAYER_DAMAGE;
+                Cooldown = 1.5f * Config.PLAYER_ATTACK_DURATION;
 
                 ResetProgressBarForProgress();
-                SetProgressBarForAttack();
+                SetProgressForCooldown();
             }
-            else if (_closestStructure is ResourceDeposit closestResourceDeposit)
+
+        }
+        else if (_closestItem != null)
+        {
+            Take();
+        }
+        else if (_closestStructure != null && Cooldown <= 0f)
+        {
+            if (Items[0] != null) Items[0].InteractWithStructure(gameTime, _closestStructure);
+            else
             {
-                if (closestResourceDeposit != _lastClosestResourceDeposit)
+                if (_closestStructure is Castle castle)
                 {
-                    _needsToShowHarvestProgress = true;
-                    _lastClosestResourceDeposit = closestResourceDeposit;
-                    Progress = 0f;
+                    castle.StealMagicalArtifact(this);
                 }
-
-                if (!IsShowingCooldown && _needsToShowHarvestProgress)
-                {
-                    _needsToShowHarvestProgress = false;
-
-                    ProgressBar.MaxProgress = _lastClosestResourceDeposit.HarvestTime;
-                    ProgressBar.Show();
-                }
-
-                Progress += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (Progress >= _lastClosestResourceDeposit.HarvestTime)
-                {
-                    _lastClosestResourceDeposit.HarvestResource();
-                    Progress -= _lastClosestResourceDeposit.HarvestTime;
-                }
+                Build(gameTime);
             }
         }
-        else ResetProgressBarForProgress();
     }
 
-    protected void Build(GameTime gameTime)
+    public void BuildBlueprint(Building building)
     {
         if (Cooldown > 0)
         {
@@ -133,11 +135,9 @@ public class Player : Character
         if (mapTile.Type == MapTileType.Ground
             && mapTile.Structure == null
             && mapTile.Item == null
-            && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST)))
+            && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, building.GetResourceCost()))
         {
-            GameManager.Instance.ResourcePool -= new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST);
-            TDObject buildingObject = PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost, GameManager.Instance.StructureTransform);
-            Building building = buildingObject.GetComponent<Building>();
+            GameManager.Instance.ResourcePool -= building.GetResourceCost();
             building.Position = mapTile.Position;
             building.SetAsBlueprint();
 
@@ -145,30 +145,40 @@ public class Player : Character
             ResetProgressBarForProgress();
             SetProgressBar(Cooldown);
         }
-        else if (mapTile.Type == MapTileType.Ground && mapTile.Structure is Building building)
+    }
+
+    public void Build(GameTime gameTime)
+    {
+        if (Cooldown > 0)
         {
-            if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH))
+            return;
+        }
+
+        if (_collidingMapTile.Type == MapTileType.Ground && _collidingMapTile.Structure is Building building)
+        {
+            if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH) && building.Mesh.IsBlueprint)
             {
-                Cooldown = Config.PLAYER_BUILD_COOLDONW;
+                Cooldown = Config.PLAYER_BUILD_COOLDOWN;
+                ResetProgressBarForProgress();
+                SetProgressBar(Cooldown);
+            }
+            else if (building.TryRepair(Config.PLAYER_BUILD_STRENGTH))
+            {
+                Cooldown = 2f * Config.PLAYER_BUILD_COOLDOWN;
                 ResetProgressBarForProgress();
                 SetProgressBar(Cooldown);
             }
         }
     }
 
-    private void ResetProgressBarForProgress()
+    public void ResetProgressBarForProgress()
     {
-        _lastClosestResourceDeposit = null;
+        LastClosestResourceDeposit = null;
         if (!IsShowingCooldown) ProgressBar.Hide();
     }
-    private void SetProgressBarForAttack()
+    public void SetProgressForCooldown()
     {
-        SetProgressBar(Config.PLAYER_ATTACK_DURATION);
-    }
-
-    private void SetProgressBarForBuild()
-    {
-        SetProgressBar(Config.PLAYER_PLACE_BUILDING_COOLDOWN);
+        SetProgressBar(Cooldown);
     }
 
     private void HighlightClosestCharacter()

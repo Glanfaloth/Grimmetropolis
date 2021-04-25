@@ -31,7 +31,7 @@ public abstract class Structure : TDComponent
         GameManager.Instance.Structures.Remove(this);
     }
 
-    private void SetMapTransform()
+    protected virtual void SetMapTransform()
     {
         Vector3 position = GameManager.Instance.Map.MapTiles[Position.X, Position.Y].TDObject.Transform.Position + new Vector3(Size.X / 2, Size.Y / 2, 0f);
         TDObject.Transform.Position = position;
@@ -39,6 +39,7 @@ public abstract class Structure : TDComponent
 
     private void PlaceStructure(Structure structure, Structure previousStructure)
     {
+
         // TODO: doesn't this allow to place buildings partly outside the map?
         // -> Yep, can be problematic. For now, don't place buildings partially outside of the map.
         int xHigh = Math.Clamp(Position.X + Size.X, 0, GameManager.Instance.Map.Width);
@@ -48,21 +49,19 @@ public abstract class Structure : TDComponent
         {
             for (int y = Position.Y; y < yHigh; y++)
             {
-                if (GameManager.Instance.Map.MapTiles[x, y].Structure == previousStructure)
+                if (GameManager.Instance.Map.MapTiles[x, y].Structure != previousStructure)
                 {
-                    GameManager.Instance.Map.MapTiles[x, y].Structure = structure;
-                }
-                else if (structure != null)
-                {
-                    TDObject.Destroy();
-                    if (structure is Building building)
-                    {
-                        // TODO: double check if this is correct.
-                        // -> This is necessary if two people try to construct a building at the exact same location and time. Then, the construction of one building is canceled.
-                        GameManager.Instance.ResourcePool += building.GetResourceCost();
-                    }
+                    TDObject?.Destroy();
                     return;
                 }
+            }
+        }
+
+        for (int x = Position.X; x < xHigh; x++)
+        {
+            for (int y = Position.Y; y < yHigh; y++)
+            {
+                GameManager.Instance.Map.MapTiles[x, y].Structure = structure;
             }
         }
     }

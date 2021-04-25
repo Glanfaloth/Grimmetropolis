@@ -15,16 +15,13 @@ public class TDKeyboardInput : TDInput
         public Keys MoveDown    = Keys.S;
         public Keys MoveRight   = Keys.D;
 
-        public Keys UseItem     = Keys.Space;
-        public Keys UseItemAlt  = Keys.Enter;
+        public Keys Action     = Keys.Space;
+        public Keys Cancel     = Keys.LeftControl;
 
         public Keys CycleNext     = Keys.Q;
         public Keys CyclePrevious = Keys.E;
-        public Keys SwapItem = Keys.LeftShift;
 
-        // TODO: do we need this for keyboard?
-        public Keys SelectBuildingType = Keys.Tab;
-        public Keys SpecialAbility = Keys.LeftControl;
+        public Keys BuildMode = Keys.Tab;
     }
 
     private KeyboardState _keyboard;
@@ -35,7 +32,7 @@ public class TDKeyboardInput : TDInput
         UpdateDevice();
     }
 
-    public Vector2 GetMoveDirection()
+    public Vector2 MoveDirection()
     {
         Vector2 direction = Vector2.Zero;
         if (_keyboard.IsKeyDown(_config.MoveRight)) direction.X += 1f;
@@ -47,41 +44,29 @@ public class TDKeyboardInput : TDInput
         return direction;
     }
 
-    public bool IsUseItemPressed()
+    public bool ActionPressed()
     {
-        return _keyboard.IsKeyDown(_config.UseItem) || _keyboard.IsKeyDown(_config.UseItemAlt);
+        return _keyboard.IsKeyDown(_config.Action);
     }
 
-    public bool IsCycleNextItemPressed()
+    public bool CancelPressed()
+    {
+        return _keyboard.IsKeyDown(_config.Cancel);
+    }
+
+    public bool CycleRightPressed()
     {
         return _keyboard.IsKeyDown(_config.CycleNext);
     }
 
-    public bool IsCyclePreviousItemPressed()
+    public bool CycleLeftPressed()
     {
         return _keyboard.IsKeyDown(_config.CyclePrevious);
     }
 
-    public bool IsSwapItemPressed()
+    public bool BuildModePressed()
     {
-        return _keyboard.IsKeyDown(_config.SwapItem);
-    }
-
-
-    public bool IsSelectBuildingTypePressed()
-    {
-        return _keyboard.IsKeyDown(_config.SelectBuildingType);
-    }
-
-    public int GetSelectedBuildingIndex()
-    {
-        throw new NotImplementedException();
-    }
-
-
-    public bool IsSpecialAbilityPressed()
-    {
-        return _keyboard.IsKeyDown(_config.SpecialAbility);
+        return _keyboard.IsKeyDown(_config.BuildMode);
     }
 
     public void UpdateDevice()

@@ -2,8 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
-public abstract class Character : TDComponent, ITDTarget
+public abstract class Character : TDComponent, ITarget
 {
     public abstract float WalkSpeed { get; }
     protected abstract float RotateSpeed { get; }
@@ -14,6 +15,7 @@ public abstract class Character : TDComponent, ITDTarget
     public float LookingAngle = 0f;
     public float CurrentWalkSpeed = 0f;
 
+    public CharacterAnimation Animation;
     public TDMesh Mesh;
 
     // health will be set during Initialize
@@ -41,8 +43,8 @@ public abstract class Character : TDComponent, ITDTarget
     // TODO: add shooting range collider
 
     public HealthBar HealthBar = null;
-    protected ProgressBar ProgressBar = null;
-    protected bool IsShowingCooldown = false;
+    public ProgressBar ProgressBar = null;
+    public bool IsShowingCooldown = false;
 
     private float _cooldown = 0f;
     public float Cooldown
@@ -74,7 +76,7 @@ public abstract class Character : TDComponent, ITDTarget
         }
     }
 
-    TDObject ITDTarget.TDObject => TDObject;
+    TDObject ITarget.TDObject => TDObject;
 
     public override void Initialize()
     {
@@ -126,9 +128,10 @@ public abstract class Character : TDComponent, ITDTarget
 
     protected void Move(Vector2 direction, GameTime gameTime)
     {
-        // TODO: EPSILON should probably be larger
-        if (direction.LengthSquared() > float.Epsilon)
+        CurrentWalkSpeed = direction.Length();
+        if (CurrentWalkSpeed > 1e-5f)
         {
+            CurrentWalkSpeed *= WalkSpeed;
             float targetAngle = MathF.Atan2(direction.Y, direction.X);
             if (targetAngle - LookingAngle > MathHelper.Pi) LookingAngle += MathHelper.TwoPi;
             else if (LookingAngle - targetAngle > MathHelper.Pi) LookingAngle -= MathHelper.TwoPi;
@@ -143,13 +146,25 @@ public abstract class Character : TDComponent, ITDTarget
 
     protected virtual void Interact(GameTime gameTime) { }
 
-    protected void TakeDrop()
+    protected virtual void Take()
     {
+        if (Cooldown > 0f) return;
+
+        MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
+        if (mapTile.Type == MapTileType.Ground && mapTile.Structure == null)
+        {
+            if (Items[0] == null && mapTile.Item != null) mapTile.Item.TakeItem(this);
+        }
+    }
+
+    protected virtual void Drop()
+    {
+        if (Cooldown > 0f) return;
+
         MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
         if (mapTile.Type == MapTileType.Ground && mapTile.Structure == null)
         {
             if (Items[0] != null && mapTile.Item == null) Items[0].Drop();
-            else if (Items[0] == null && mapTile.Item != null) mapTile.Item.TakeItem(this);
         }
     }
 
@@ -161,7 +176,8 @@ public abstract class Character : TDComponent, ITDTarget
 
     public void Highlight(bool highlight)
     {
-        Mesh.Highlight(highlight);
+        if (Mesh != null) Mesh.Highlight(highlight);
+        else Animation.Highlight(highlight);
         if (highlight) HealthBar.QuickShow();
         else HealthBar.QuickHide();
     }

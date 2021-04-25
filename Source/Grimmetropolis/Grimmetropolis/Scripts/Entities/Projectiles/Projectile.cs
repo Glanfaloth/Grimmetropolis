@@ -12,7 +12,7 @@ public enum ProjectileState
 public class Projectile : TDComponent
 {
     public Vector3 StartPosition = Vector3.Zero;
-    public ITDTarget TargetCharacter = null;
+    public ITarget TargetCharacter = null;
 
     public TDCylinderCollider Collider;
 
@@ -27,6 +27,8 @@ public class Projectile : TDComponent
     private ProjectileState _state = ProjectileState.Moving;
     private float _lifeTime = 10f;
 
+    // TODO: replace this temporary workaround.
+    public bool IsEvilArrow { get; internal set; }
 
     public override void Initialize()
     {
@@ -99,11 +101,18 @@ public class Projectile : TDComponent
 
             // TODO: enemies can shoot themselfes and other enemies
             Enemy enemy = oppositeCollider.TDObject.GetComponent<Enemy>();
-            if (enemy != null)
+            Player player = oppositeCollider.TDObject.GetComponent<Player>();
+            if (enemy != null && !IsEvilArrow)
             {
                 _state = ProjectileState.Stuck;
                 TDObject.Transform.Parent = enemy.TDObject.Transform;
                 enemy.Health -= Damage;
+            }
+            else if (player != null && IsEvilArrow)
+            {
+                _state = ProjectileState.Stuck;
+                TDObject.Transform.Parent = player.TDObject.Transform;
+                player.Health -= Damage;
             }
             else
             {

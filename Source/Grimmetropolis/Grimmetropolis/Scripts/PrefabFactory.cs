@@ -19,12 +19,17 @@ public enum PrefabType
 
     BuildingCastle,
     BuildingOutpost,
+    BuildingWall,
 
     ResourceWood,
     ResourceStone,
+    
+    MagicalArtifact,
 
     ToolAxe,
     ToolPickaxe,
+
+    WeaponSword,
 
     Arrow,
 
@@ -36,6 +41,7 @@ public enum PrefabType
     ResourceDisplay,
     HealthBar,
     ProgressBar,
+    BuildMenu,
 
     PlayerDisplay
 }
@@ -82,11 +88,15 @@ public static class PrefabFactory
             // Characters
             case PrefabType.Player:
                 {
-                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    // TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
                     Player player = prefab.AddComponent<Player>();
-                    mesh.Model = TDContentManager.LoadModel("PlayerCindarella");
-                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    CharacterAnimation animation = prefab.AddComponent<CharacterAnimation>();
+                    animation.Character = player;
+                    animation.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
+                    player.Animation = animation;
+                    /*mesh.Model = TDContentManager.LoadModel("PlayerCindarella");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");*/
                     collider.Radius = .25f;
                     collider.Height = .5f;
                     collider.Offset = .5f * Vector3.Backward;
@@ -98,10 +108,10 @@ public static class PrefabFactory
                     TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
                     interactionCollider.IsTrigger = true;
                     interactionCollider.Radius = .25f;
-                    interactionCollider.Height = .5f;
+                    interactionCollider.Height = 2f;
                     interactionCollider.Offset = .5f * Vector3.Backward;
                     player.InteractionCollider = interactionCollider;
-                    player.Mesh = mesh;
+                    // player.Mesh = mesh;
                     break;
                 }
 
@@ -181,6 +191,16 @@ public static class PrefabFactory
                     break;
                 }
 
+            case PrefabType.BuildingWall:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    Wall wall = prefab.AddComponent<Wall>();
+                    mesh.Model = TDContentManager.LoadModel("BuildingWall");
+                    mesh.Texture = TDContentManager.LoadTexture("BuildingCastleTexture");
+                    wall.Mesh = mesh;
+                    break;
+                }
+
             // Resources
             case PrefabType.ResourceWood:
                 {
@@ -204,6 +224,16 @@ public static class PrefabFactory
                     break;
                 }
 
+            case PrefabType.MagicalArtifact:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    MagicalArtifact magicalArtifact = prefab.AddComponent<MagicalArtifact>();
+                    mesh.Model = TDContentManager.LoadModel("MagicalArtifact");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    magicalArtifact.Mesh = mesh;
+                    break;
+                }
+
             case PrefabType.ToolAxe:
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
@@ -221,6 +251,16 @@ public static class PrefabFactory
                     mesh.Model = TDContentManager.LoadModel("ToolPickaxe");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     pickaxe.Mesh = mesh;
+                    break;
+                }
+
+            case PrefabType.WeaponSword:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    WeaponSword sword = prefab.AddComponent<WeaponSword>();
+                    mesh.Model = TDContentManager.LoadModel("WeaponSword");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    sword.Mesh = mesh;
                     break;
                 }
 
@@ -328,22 +368,26 @@ public static class PrefabFactory
                     healthBar.Foreground = foreground;
                     healthBar.AlwaysShow = true;
                     playerDisplay.HealthBar = healthBar;
+                    break;
+                }
 
+            case PrefabType.BuildMenu:
+                {
+                    CreateEmptyUI3D(prefab, localPosition, localRotation, localScale);
+                    TDSprite buildSprite = prefab.AddComponent<TDSprite>();
+                    BuildMenu buildMenu = prefab.AddComponent<BuildMenu>();
+                    buildSprite.Texture = TDContentManager.LoadTexture("UIBuild");
+                    buildSprite.Depth = 1f;
+                    prefab.RectTransform.Origin = new Vector2(0f, buildSprite.Texture.Height);
 
-                    /*TDSprite background = healthBarObject.AddComponent<TDSprite>();
-                    HealthBar healthBar = healthBarObject.AddComponent<HealthBar>();
-                    background.Texture = TDContentManager.LoadTexture("UIPlayerBar");
-                    background.Color = Color.Black;
-                    background.Depth = 1f;
-                    prefab.RectTransform.Origin = new Vector2(.5f * background.Texture.Width, background.Texture.Height);
+                    TDObject iconObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite icon = iconObject.AddComponent<TDSprite>();
+                    icon.Texture = TDContentManager.LoadTexture("UIBuildingOutpostIcon");
+                    iconObject.RectTransform.Origin = .5f * new Vector2(icon.Texture.Width, icon.Texture.Height);
+                    iconObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin + .5f * new Vector2(buildSprite.Texture.Width, buildSprite.Texture.Height);
+                    buildMenu.BuildSprite = buildSprite;
+                    buildMenu.Icon = icon;
 
-                    TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
-                    TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
-                    foreground.Texture = TDContentManager.LoadTexture("UIPlayerBar");
-                    foreground.Depth = .1f;
-                    healthBar.Background = background;
-                    healthBar.Foreground = foreground;
-                    foregroundObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin;*/
                     break;
                 }
         }
@@ -354,12 +398,23 @@ public static class PrefabFactory
     internal static TDObject CreateEnemyPrefab<T>(Config.EnemyStats stats, Vector3 localPosition, Quaternion localRotation, TDTransform parent = null) where T : Enemy, new()
     {
         TDObject prefab = CreatePrefab(PrefabType.Empty, localPosition, localRotation, parent);
-        TDMesh mesh = prefab.AddComponent<TDMesh>();
         TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
         T enemy = prefab.AddComponent<T>();
         enemy.SetBaseStats(stats);
-        mesh.Model = TDContentManager.LoadModel(enemy.MeshName);
-        mesh.Texture = TDContentManager.LoadTexture(enemy.TextureName);
+        if (enemy is EnemyKnight)
+        {
+            CharacterAnimation animation = prefab.AddComponent<CharacterAnimation>();
+            animation.Character = enemy;
+            enemy.Animation = animation;
+            animation.CharacterModel = TDContentManager.LoadModel(enemy.MeshName);
+        }
+        else
+        {
+            TDMesh mesh = prefab.AddComponent<TDMesh>();
+            mesh.Model = TDContentManager.LoadModel(enemy.MeshName);
+            mesh.Texture = TDContentManager.LoadTexture(enemy.TextureName);
+            enemy.Mesh = mesh;
+        }
         collider.Radius = .25f;
         collider.Height = .5f;
         collider.Offset = .5f * Vector3.Backward;
@@ -371,10 +426,9 @@ public static class PrefabFactory
         TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
         interactionCollider.IsTrigger = true;
         interactionCollider.Radius = .25f;
-        interactionCollider.Height = .5f;
+        interactionCollider.Height = 2f;
         interactionCollider.Offset = .5f * Vector3.Backward;
         enemy.InteractionCollider = interactionCollider;
-        enemy.Mesh = mesh;
 
         return prefab;
     }
