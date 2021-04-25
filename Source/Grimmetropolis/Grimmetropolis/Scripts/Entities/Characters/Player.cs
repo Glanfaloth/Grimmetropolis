@@ -119,7 +119,7 @@ public class Player : Character
                 {
                     castle.StealMagicalArtifact(this);
                 }
-                else Build(gameTime);
+                Build(gameTime);
             }
         }
     }

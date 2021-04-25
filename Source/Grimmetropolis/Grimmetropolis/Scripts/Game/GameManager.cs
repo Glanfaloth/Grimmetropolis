@@ -81,9 +81,9 @@ public class GameManager : TDComponent
         TDObject playerObject3 = PrefabFactory.CreatePrefab(PrefabType.Player, playerList.Transform);
         playerObject3.GetComponent<Player>().Input = TDInputManager.Inputs[3];
 
-        playerObject1.GetComponent<Player>().Mesh.BaseColor = new Vector3(1, .5f, .5f);
+        /*playerObject1.GetComponent<Player>().Mesh.BaseColor = new Vector3(1, .5f, .5f);
         playerObject2.GetComponent<Player>().Mesh.BaseColor = new Vector3(.5f, 1, .5f);
-        playerObject3.GetComponent<Player>().Mesh.BaseColor = new Vector3(.5f, .5f, 1);
+        playerObject3.GetComponent<Player>().Mesh.BaseColor = new Vector3(.5f, .5f, 1);*/
 
         // Enemies
         TDObject enemyList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);

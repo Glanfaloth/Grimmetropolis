@@ -88,11 +88,14 @@ public static class PrefabFactory
             // Characters
             case PrefabType.Player:
                 {
-                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    // TDMesh mesh = prefab.AddComponent<TDMesh>();
                     TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
                     Player player = prefab.AddComponent<Player>();
-                    mesh.Model = TDContentManager.LoadModel("PlayerCindarella");
-                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    CharacterMovement characterMovement = prefab.AddComponent<CharacterMovement>();
+                    characterMovement.Character = player;
+                    characterMovement.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
+                    /*mesh.Model = TDContentManager.LoadModel("PlayerCindarella");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");*/
                     collider.Radius = .25f;
                     collider.Height = .5f;
                     collider.Offset = .5f * Vector3.Backward;
@@ -107,7 +110,7 @@ public static class PrefabFactory
                     interactionCollider.Height = 2f;
                     interactionCollider.Offset = .5f * Vector3.Backward;
                     player.InteractionCollider = interactionCollider;
-                    player.Mesh = mesh;
+                    // player.Mesh = mesh;
                     break;
                 }
 
