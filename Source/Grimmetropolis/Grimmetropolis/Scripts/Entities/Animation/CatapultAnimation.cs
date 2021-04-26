@@ -29,7 +29,7 @@ public class CatapultAnimation : EntityAnimation
     private Quaternion _armRotationShooting = Quaternion.CreateFromAxisAngle(Vector3.Up, .8f * MathHelper.PiOver2);
 
     private float _wheelAngle = 0f;
-    private float _rotationReload = 2f* MathHelper.TwoPi;
+    private float _reloadAngle = 0f;
 
     private bool _armInUse = false;
     public float PartialArmUseTime = .3f;
@@ -65,7 +65,7 @@ public class CatapultAnimation : EntityAnimation
 
     protected override void WalkAnimation(GameTime gameTime, float speed)
     {
-        _wheelAngle = (_wheelAngle + .2f * speed / MathHelper.TwoPi) % MathHelper.TwoPi;
+        _wheelAngle = (_wheelAngle + .032f * speed) % MathHelper.TwoPi;
 
         FrontWheel.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, _wheelAngle);
         BackWheel.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, _wheelAngle);
@@ -83,11 +83,13 @@ public class CatapultAnimation : EntityAnimation
             Arm.LocalRotation = Quaternion.Lerp(currentRightArmRotation, _armRotationShooting, p);
         }, () =>
         {
-            Arm.TDObject.RunAction(4f * PartialArmUseTime, (p) =>
+            Arm.TDObject.RunAction(6f * PartialArmUseTime, (p) =>
             {
-                Arm.LocalRotation = Quaternion.Lerp(_armRotationShooting, _armRotationStandard, MathF.Pow(p, 2f));
-                ReloadWheel.Rotation *= Quaternion.CreateFromAxisAngle(Vector3.Up, _rotationReload);
-            }, 2f * PartialArmUseTime, _armInUse = false);
+                Arm.LocalRotation = Quaternion.Lerp(_armRotationShooting, _armRotationStandard, p);
+
+                _reloadAngle = MathHelper.Lerp(0f, -MathHelper.TwoPi, p);
+                ReloadWheel.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, _reloadAngle);
+        }, 2f * PartialArmUseTime, _armInUse = false);
         });
     }
 
