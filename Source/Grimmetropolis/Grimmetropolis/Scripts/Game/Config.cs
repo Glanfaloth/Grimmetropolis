@@ -84,8 +84,6 @@ public static class Config
     public const float PLAYER_BUILD_COOLDOWN = .5f;
     public const float PLAYER_BUILD_STRENGTH = 1f;
 
-    public const float ENEMY_PROJECTILE_SPEED = 6f;
-
     public static readonly EnemyStats ENEMY_CATAPULT_STATS = new EnemyStats(
         walkSpeed: 1f,
         rotateSpeed: 1f * MathHelper.Pi,
@@ -93,7 +91,8 @@ public static class Config
         damageAgainstPlayer: 1f,
         damageAgainstBuilding: 2f,
         attackRange: 4f,
-        attackDuration: 8f);
+        attackDuration: 8f,
+        projectileSpeed: 6f);
     public static readonly EnemyStats ENEMY_WITCH_STATS = new EnemyStats(
         walkSpeed: 2f,
         rotateSpeed: 3f * MathHelper.Pi,
@@ -101,7 +100,8 @@ public static class Config
         damageAgainstPlayer: 1f,
         damageAgainstBuilding: 1f,
         attackRange: 2f,
-        attackDuration: 4f);
+        attackDuration: 4f,
+        projectileSpeed: 8f);
     public static readonly EnemyStats ENEMY_KNIGHTS_STATS = new EnemyStats(
         walkSpeed: 1.5f,
         rotateSpeed: 3f * MathHelper.Pi,
@@ -109,7 +109,8 @@ public static class Config
         damageAgainstPlayer: 1f,
         damageAgainstBuilding: 1f,
         attackRange: .25f,
-        attackDuration: 2f);
+        attackDuration: 2f,
+        projectileSpeed: 0f);
 
     #endregion
 
@@ -122,8 +123,9 @@ public static class Config
         public readonly float DAMAGE_AGAINST_BUILDINGS;
         public readonly float ATTACK_RANGE;
         public readonly float ATTACK_DURATION;
+        public readonly float PROJECTILE_SPEED;
 
-        public EnemyStats(float walkSpeed, float rotateSpeed, float health, float damageAgainstPlayer, float damageAgainstBuilding, float attackRange, float attackDuration)
+        public EnemyStats(float walkSpeed, float rotateSpeed, float health, float damageAgainstPlayer, float damageAgainstBuilding, float attackRange, float attackDuration, float projectileSpeed)
         {
             WALK_SPEED = walkSpeed;
             ROTATE_SPEED = rotateSpeed;
@@ -132,6 +134,7 @@ public static class Config
             DAMAGE_AGAINST_BUILDINGS = damageAgainstBuilding;
             ATTACK_RANGE = attackRange;
             ATTACK_DURATION = attackDuration;
+            PROJECTILE_SPEED = projectileSpeed;
         }
     }
 }

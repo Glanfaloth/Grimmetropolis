@@ -17,7 +17,8 @@ public class MagicalArtifact : Item
     {
         base.TakeItem(character);
 
-        TDObject.Transform.Parent = character.Animation.Head;
+        if (character.Animation is CharacterAnimation characterAnimation) TDObject.Transform.Parent = characterAnimation.Head;
+        else TDObject.Transform.Parent = character.TDObject.Transform;
         TDObject.Transform.LocalPosition = CarryPosition;
         TDObject.Transform.LocalRotation = CarryRotation;
         TDObject.Transform.LocalScale = CarryScale;

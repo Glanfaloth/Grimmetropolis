@@ -15,10 +15,12 @@ public abstract class Enemy : Character
     private float _attackRange;
     private float _attackRangeSquared;
     private float _attackDuration;
+    private float _projectileSpeed;
 
     protected abstract EnemyMove.Type Actions { get; }
 
     public abstract String MeshName { get; }
+
     public virtual String TextureName => "ColorPaletteTexture";
 
     public override float WalkSpeed => _walkSpeed;
@@ -29,6 +31,11 @@ public abstract class Enemy : Character
 
     public float AttackRange => _attackRange;
     public float AttackDuration => _attackDuration;
+    protected float ProjectileSpeed => _projectileSpeed;
+
+    protected float DamageAgainstPlayers => _damageAgainstPlayers;
+    protected float DamageAgainstBuildigns => _damageAgainstBuildings;
+
 
     public override Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
 
@@ -42,6 +49,7 @@ public abstract class Enemy : Character
         _attackRange = stats.ATTACK_RANGE;
         _attackRangeSquared = _attackRange * _attackRange;
         _attackDuration = stats.ATTACK_DURATION;
+        _projectileSpeed = stats.PROJECTILE_SPEED;
     }
 
     public override void Initialize()
@@ -162,22 +170,27 @@ public abstract class Enemy : Character
         {
             if (Cooldown <= 0f)
             {
-                // nextMove.Target.Health -= _damageAgainstBuildings;
-                TDObject arrowObject = PrefabFactory.CreatePrefab(PrefabType.Arrow);
-                Projectile arrow = arrowObject.GetComponent<Projectile>();
-
-                //TODO: if shot from enemy height, enemy hits itself ...
-                arrow.StartPosition = TDObject.Transform.Position + 1.25f * Vector3.Backward;
-                arrow.TargetCharacter = nextMove.Target;
-                arrow.Damage = _damageAgainstBuildings;
-                arrow.Speed = Config.ENEMY_PROJECTILE_SPEED;
-                arrow.IsEvilArrow = true;
+                ShootProjectile(nextMove);
 
                 Cooldown = _attackDuration;
 
                 SetProgressBarForAttack();
             }
         }
+    }
+
+    protected virtual void ShootProjectile(RangedAttackMove nextMove)
+    {
+        // nextMove.Target.Health -= _damageAgainstBuildings;
+        TDObject arrowObject = PrefabFactory.CreatePrefab(PrefabType.Arrow);
+        Projectile arrow = arrowObject.GetComponent<Projectile>();
+
+        //TODO: if shot from enemy height, enemy hits itself ...
+        arrow.StartPosition = TDObject.Transform.Position + 1.25f * Vector3.Backward;
+        arrow.TargetCharacter = nextMove.Target;
+        arrow.Damage = _damageAgainstBuildings;
+        arrow.Speed = ProjectileSpeed;
+        arrow.IsEvilArrow = true;
     }
 
     private void MoveToTarget(RunMove runMove, GameTime gameTime)

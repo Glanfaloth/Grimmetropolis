@@ -32,6 +32,8 @@ public enum PrefabType
     WeaponSword,
 
     Arrow,
+    StonePayload,
+    Icicle,
 
     UIManager,
 
@@ -94,6 +96,7 @@ public static class PrefabFactory
                     CharacterAnimation animation = prefab.AddComponent<CharacterAnimation>();
                     animation.Character = player;
                     animation.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
+                    animation.CharacterTexture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     player.Animation = animation;
                     /*mesh.Model = TDContentManager.LoadModel("PlayerCindarella");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");*/
@@ -275,6 +278,26 @@ public static class PrefabFactory
                     projectile.Collider = collider;
                     break;
                 }
+            case PrefabType.StonePayload:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
+                    Projectile projectile = prefab.AddComponent<Projectile>();
+                    mesh.Model = TDContentManager.LoadModel("ProjectileStonePayload");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    projectile.Collider = collider;
+                    break;
+                }
+            case PrefabType.Icicle:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
+                    Projectile projectile = prefab.AddComponent<Projectile>();
+                    mesh.Model = TDContentManager.LoadModel("ProjectileIcicle");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    projectile.Collider = collider;
+                    break;
+                }
 
             // UI
             case PrefabType.UIManager:
@@ -407,6 +430,15 @@ public static class PrefabFactory
             animation.Character = enemy;
             enemy.Animation = animation;
             animation.CharacterModel = TDContentManager.LoadModel(enemy.MeshName);
+            animation.CharacterTexture = TDContentManager.LoadTexture("ColorPaletteTexture");
+        }
+        else if (enemy is EnemyCatapult)
+        {
+            CatapultAnimation animation = prefab.AddComponent<CatapultAnimation>();
+            animation.Character = enemy;
+            enemy.Animation = animation;
+            animation.CharacterModel = TDContentManager.LoadModel(enemy.MeshName);
+            animation.CharacterTexture = TDContentManager.LoadTexture("ColorPaletteTexture");
         }
         else
         {
@@ -415,7 +447,8 @@ public static class PrefabFactory
             mesh.Texture = TDContentManager.LoadTexture(enemy.TextureName);
             enemy.Mesh = mesh;
         }
-        collider.Radius = .25f;
+        if (enemy is EnemyCatapult) collider.Radius = .375f;
+        else collider.Radius = .25f;
         collider.Height = .5f;
         collider.Offset = .5f * Vector3.Backward;
 

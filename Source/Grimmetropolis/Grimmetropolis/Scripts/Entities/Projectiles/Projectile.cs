@@ -69,7 +69,6 @@ public class Projectile : TDComponent
         }
     }
 
-
     private void UpdateTransform(GameTime gameTime)
     {
         CalculateValues();

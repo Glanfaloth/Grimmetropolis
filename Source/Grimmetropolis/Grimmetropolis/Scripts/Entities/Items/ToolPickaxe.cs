@@ -47,7 +47,7 @@ public class ToolPickaxe : Item
                 player.SetProgressForCooldown();
             }
 
-            Character.Animation.UseArm();
+            Character.Animation.UseAnimation();
         }
     }
 }

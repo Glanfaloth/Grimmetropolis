@@ -14,7 +14,7 @@ public static class TDContentManager
 
     public static Model LoadModel(string name)
     {
-        if (!_loadedModels.ContainsKey(name))
+            if (!_loadedModels.ContainsKey(name))
         {
             Model model = Content.Load<Model>(@"Models\" + name);
             _loadedModels.Add(name, model);

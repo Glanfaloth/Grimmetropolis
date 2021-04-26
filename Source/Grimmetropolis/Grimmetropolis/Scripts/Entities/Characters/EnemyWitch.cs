@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
+using System;
 
 class EnemyWitch : Enemy
 {
@@ -22,5 +20,17 @@ class EnemyWitch : Enemy
     public override string MeshName => "EnemyWitch";
 
     protected override EnemyMove.Type Actions => EnemyMove.Type.Run | EnemyMove.Type.RangedAttack;
+    protected override void ShootProjectile(RangedAttackMove nextMove)
+    {
+        // nextMove.Target.Health -= _damageAgainstBuildings;
+        TDObject icicleObject = PrefabFactory.CreatePrefab(PrefabType.Icicle);
+        Projectile icicle = icicleObject.GetComponent<Projectile>();
 
+        //TODO: if shot from enemy height, enemy hits itself ...
+        icicle.StartPosition = TDObject.Transform.Position + 1.25f * Vector3.Backward;
+        icicle.TargetCharacter = nextMove.Target;
+        icicle.Damage = DamageAgainstBuildigns;
+        icicle.Speed = ProjectileSpeed;
+        icicle.IsEvilArrow = true;
+    }
 }

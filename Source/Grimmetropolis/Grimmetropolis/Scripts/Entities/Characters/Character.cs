@@ -15,7 +15,7 @@ public abstract class Character : TDComponent, ITarget
     public float LookingAngle = 0f;
     public float CurrentWalkSpeed = 0f;
 
-    public CharacterAnimation Animation;
+    public EntityAnimation Animation;
     public TDMesh Mesh;
 
     // health will be set during Initialize

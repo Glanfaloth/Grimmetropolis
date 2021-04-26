@@ -67,7 +67,8 @@ public class Item : TDComponent
     {
 
         character.Items[0] = this;
-        TDObject.Transform.Parent = character.Animation.RightArm;
+        if (character.Animation is CharacterAnimation characterAnimation) TDObject.Transform.Parent = characterAnimation.RightArm;
+        else TDObject.Transform.Parent = character.TDObject.Transform;
         TDObject.Transform.LocalPosition = CarryPosition;
         TDObject.Transform.LocalRotation = CarryRotation;
         TDObject.Transform.LocalScale = CarryScale;
@@ -115,7 +116,7 @@ public class Item : TDComponent
         if (Character is Player player && structure.Mesh.IsBlueprint)
         {
             player.Build(gameTime);
-            player.Animation.UseArm();
+            player.Animation.UseAnimation();
         }
     }
 }

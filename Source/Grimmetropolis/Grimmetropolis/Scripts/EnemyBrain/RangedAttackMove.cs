@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-class RangedAttackMove : EnemyMove
+public class RangedAttackMove : EnemyMove
 {
     private readonly float _attackRange;
 

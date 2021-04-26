@@ -5,18 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-public class CharacterAnimation : TDComponent
+public class CharacterAnimation : EntityAnimation
 {
-    public Character Character;
-
     public TDTransform Head;
     public TDTransform Body;
     public TDTransform LeftLeg;
     public TDTransform RightLeg;
     public TDTransform LeftArm;
     public TDTransform RightArm;
-
-    public Model CharacterModel;
 
     private TDMesh _headMesh;
     private TDMesh _bodyMesh;
@@ -87,20 +83,6 @@ public class CharacterAnimation : TDComponent
         else WalkAnimation(gameTime, Character.CurrentWalkSpeed);
     }
 
-    private void CreateBodyPart(string bodyPart, out TDTransform bodyPartTransform, out TDMesh bodyPartMesh)
-    {
-        TDObject bodyPartObject = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
-        bodyPartMesh = bodyPartObject.AddComponent<TDMesh>();
-
-        ModelBone bone; CharacterModel.Bones.TryGetValue(bodyPart, out bone);
-        ModelMesh mesh; CharacterModel.Meshes.TryGetValue(bodyPart, out mesh);
-
-        bodyPartMesh.Model = new Model(TDSceneManager.Graphics.GraphicsDevice, new List<ModelBone>() { bone }, new List<ModelMesh>() { mesh });
-        bodyPartMesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
-
-        bodyPartTransform = bodyPartObject.Transform;
-    }
-
     private void ResetAnimation()
     {
         _readyForAnimation = false;
@@ -133,7 +115,7 @@ public class CharacterAnimation : TDComponent
         });
     }
 
-    private void ResetUsedArm()
+    private void ResetUseAnimation()
     {
         if (_isWalking)
         {
@@ -151,7 +133,7 @@ public class CharacterAnimation : TDComponent
         else _armInUse = false;
     }
 
-    private void IdleAnimation(GameTime gameTime)
+    protected override void IdleAnimation(GameTime gameTime)
     {
         if (_isWalking)
         {
@@ -169,7 +151,7 @@ public class CharacterAnimation : TDComponent
         RightArm.LocalPosition = Vector3.Lerp(_rightArmPositionStandard, _rightArmPositionElevated, idleProgress);
     }
 
-    private void WalkAnimation(GameTime gameTime, float speed)
+    protected override void WalkAnimation(GameTime gameTime, float speed)
     {
         if (!_isWalking)
         {
@@ -200,7 +182,7 @@ public class CharacterAnimation : TDComponent
         return .5f * MathF.Sin(time % 2f * MathHelper.Pi) + .5f;
     }
 
-    public void UseArm()
+    public override  void UseAnimation()
     {
         if (_armInUse) return;
 
@@ -215,11 +197,11 @@ public class CharacterAnimation : TDComponent
             RightArm.TDObject.RunAction(_halfArmUsageTime, (p) =>
             {
                 RightArm.LocalRotation = Quaternion.Lerp(_armUsing, _armStandard, MathF.Pow(p, 2f));
-            }, () => ResetUsedArm());
+            }, () => ResetUseAnimation());
         });
     }
 
-    public void Highlight(bool highlight)
+    public override void Highlight(bool highlight)
     {
         _headMesh.Highlight(highlight);
         _bodyMesh.Highlight(highlight);

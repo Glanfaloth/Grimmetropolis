@@ -15,6 +15,6 @@ public class WeaponSword : Item
             player.SetProgressForCooldown();
         }
 
-        Character.Animation.UseArm();
+        Character.Animation.UseAnimation();
     }
 }
