@@ -26,15 +26,15 @@ public class ResourceDeposit : Structure
         set
         {
             _currentStorage = value;
-            if (HealthBar != null)
+            if (_healthBar != null)
             {
-                HealthBar.CurrentProgress = _currentStorage;
-                HealthBar.Show();
+                _healthBar.CurrentProgress = _currentStorage;
+                _healthBar.Show();
             }
         }
     }
 
-    public HealthBar HealthBar = null;
+    public HealthBar _healthBar = null;
 
     public override void Initialize()
     {
@@ -42,9 +42,9 @@ public class ResourceDeposit : Structure
 
         TDObject healthBarObject = PrefabFactory.CreatePrefab(PrefabType.HealthBar, TDObject.Transform);
         healthBarObject.RectTransform.Offset = 2.5f * Vector3.Backward;
-        HealthBar = healthBarObject.GetComponent<HealthBar>();
-        HealthBar.CurrentProgress = _currentStorage;
-        HealthBar.MaxProgress = Storage;
+        _healthBar = healthBarObject.GetComponent<HealthBar>();
+        _healthBar.CurrentProgress = _currentStorage;
+        _healthBar.MaxProgress = Storage;
 
         HarvestTime = Type switch
         {
@@ -69,8 +69,6 @@ public class ResourceDeposit : Structure
 
     public void HarvestResource()
     {
-        if (_currentStorage <= 0) return;
-
         switch (Type)
         {
             case ResourceDepositType.Wood:
@@ -84,6 +82,14 @@ public class ResourceDeposit : Structure
         }
 
         CurrentStorage--;
+        _time = 0f;
+    }
+
+    public override void Highlight(bool highlight)
+    {
+        Mesh.Highlight(highlight);
+        if (highlight) _healthBar.QuickShow();
+        else _healthBar.QuickHide();
     }
 }
 

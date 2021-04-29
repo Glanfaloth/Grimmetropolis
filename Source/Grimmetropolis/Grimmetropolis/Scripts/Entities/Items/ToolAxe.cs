@@ -37,7 +37,8 @@ public class ToolAxe : Item
                 player.ProgressBar.Show();
             }
 
-            player.Progress += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (player.LastClosestResourceDeposit.CurrentStorage > 0) player.Progress += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             if (player.Progress >= player.LastClosestResourceDeposit.HarvestTime)
             {
                 player.LastClosestResourceDeposit.HarvestResource();

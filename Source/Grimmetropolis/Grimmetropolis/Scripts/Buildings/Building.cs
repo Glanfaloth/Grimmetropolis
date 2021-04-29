@@ -65,6 +65,7 @@ public abstract class Building : Structure, ITarget
 
         base.Initialize();
     }
+
     public override void Highlight(bool highlight)
     {
         Mesh.Highlight(highlight);
