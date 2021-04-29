@@ -121,6 +121,11 @@ public abstract class Character : TDComponent, ITarget
 
     public override void Destroy()
     {
+        foreach (Item item in Items)
+        {
+            item?.Drop();
+        }
+
         InteractionCollider.collisionEvent -= GetClosestCollider;
 
         base.Destroy();

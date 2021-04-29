@@ -68,6 +68,7 @@ public class Castle : Building
     {
         if (_stealPossible && MagicalArtifact != null)
         {
+            MagicalArtifact.Structure = null;
             MagicalArtifact.TakeItem(character);
             MagicalArtifact = null;
         }

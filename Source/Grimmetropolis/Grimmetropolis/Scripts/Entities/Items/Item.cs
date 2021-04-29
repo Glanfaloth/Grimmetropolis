@@ -27,7 +27,7 @@ public class Item : TDComponent
     {
         if (Character != null)
         {
-            Position = GameManager.Instance.Map.GetMapTile(Character.InteractionCollider.CenterXY).Position;
+            Position = GameManager.Instance.Map.GetMapTile(Character.TDObject.Transform.Position.GetXY()).Position;
             Character.Items[0] = null;
             Character.Cooldown = _cooldown;
             if (Character is Player player)
