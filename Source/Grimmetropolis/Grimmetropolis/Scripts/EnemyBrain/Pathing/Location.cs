@@ -3,10 +3,17 @@ using System.Collections.Generic;
 
 public class Location
 {
+    public MapTile Tile { get; }
+
     // for now make directed graph
     public List<EnemyMove> OutEdges { get; } = new List<EnemyMove>();
     public List<EnemyMove> InEdges { get; } = new List<EnemyMove>();
     public int Index { get; internal set; }
+
+    public Location(MapTile tile)
+    {
+        Tile = tile;
+    }
 
     internal void AddOutgoingEdge(EnemyMove edge)
     {

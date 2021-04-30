@@ -65,7 +65,16 @@ public abstract class Enemy : Character
     {
         if (_controller == null) return;
 
-        EnemyMove nextMove = _controller.ComputeNextMove(TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange);
+        EnemyMove nextMove;
+        if (Items[0] is MagicalArtifact)
+        {
+            nextMove = _controller.ComputeNextMove(TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange, true);
+        }
+        else
+        {
+            nextMove = _controller.ComputeNextMove(TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange);
+        }
+
         CurrentWalkSpeed = 0f;
 
         switch (nextMove.MovementType)
@@ -75,6 +84,11 @@ public abstract class Enemy : Character
                 break;
             case EnemyMove.Type.StealArtifact:
                 // TODO: implement win condition
+                Debug.WriteLine("YOU LOSE");
+                break;
+            case EnemyMove.Type.TakeArtifact:
+                // TODO: implement pick up
+                Debug.WriteLine("encountered EnemyMove.Type.TakeArtifact");
                 break;
             case EnemyMove.Type.Run:
                 MoveToTarget((RunMove)nextMove, gameTime);
@@ -102,33 +116,34 @@ public abstract class Enemy : Character
     {
         base.Interact(gameTime);
 
-        float closestPlayerDistance = float.MaxValue;
-        float closestBuildingDistance = float.MaxValue;
-        Player closestPlayer = null;
-        Building closestBuilding = null;
-        foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
-        {
-            if (colliderEntry.Item1 is TDCylinderCollider && closestPlayerDistance > colliderEntry.Item2)
-            {
-                Player player = colliderEntry.Item1.TDObject?.GetComponent<Player>();
-                if (player != null)
-                {
-                    closestPlayerDistance = colliderEntry.Item2;
-                    closestPlayer = player;
-                }
-            }
-            else if (colliderEntry.Item1 is TDCuboidCollider && closestBuildingDistance > colliderEntry.Item2)
-            {
-                if (colliderEntry.Item1.TDObject?.GetComponent<MapTile>().Structure is Building building)
-                {
-                    closestBuildingDistance = colliderEntry.Item2;
-                    closestBuilding = building;
-                }
-            }
-        }
 
         if (Cooldown <= 0f)
         {
+            float closestPlayerDistance = float.MaxValue;
+            float closestBuildingDistance = float.MaxValue;
+            Player closestPlayer = null;
+            Building closestBuilding = null;
+            foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
+            {
+                if (colliderEntry.Item1 is TDCylinderCollider && closestPlayerDistance > colliderEntry.Item2)
+                {
+                    Player player = colliderEntry.Item1.TDObject?.GetComponent<Player>();
+                    if (player != null)
+                    {
+                        closestPlayerDistance = colliderEntry.Item2;
+                        closestPlayer = player;
+                    }
+                }
+                else if (colliderEntry.Item1 is TDCuboidCollider && closestBuildingDistance > colliderEntry.Item2)
+                {
+                    if (colliderEntry.Item1.TDObject?.GetComponent<MapTile>().Structure is Building building)
+                    {
+                        closestBuildingDistance = colliderEntry.Item2;
+                        closestBuilding = building;
+                    }
+                }
+            }
+
             if (closestPlayer != null)
             {
                 closestPlayer.Health -= _damageAgainstPlayers;

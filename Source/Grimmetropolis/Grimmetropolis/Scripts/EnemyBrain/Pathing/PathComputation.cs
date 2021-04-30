@@ -22,18 +22,89 @@ public class PathComputation
         _attackRange = attackRange;
     }
 
+    internal EnemyMove GetNextMoveFromTo(MapTile from, Location target)
+    {
+        // TODO: make sure reusing those is safe
+        if ((_visited?.Length ?? -1) < _graph.VerticesCount)
+        {
+            _visited = new bool[_graph.VerticesCount];
+            _handles = new Handle[_graph.VerticesCount];
+        }
+        else
+        {
+            for (int i = 0; i < _nextMoves.Length; i++)
+            {
+                _visited[i] = false;
+                _handles[i] = null;
+            }
+        }
+
+
+        var pq = new TDPriorityQueue<EnemyMove>();
+        pq.Insert(0f, 0f, new StealArtifact(target));
+
+        while (!pq.IsEmpty())
+        {
+            Handle h = pq.ExtractMin();
+
+            float distance = h.Cost;
+            Location v = h.Value.From;
+            EnemyMove e = h.Value;
+
+            if (v.Tile == from)
+            {
+                return e;
+            }
+
+            if (!_visited[v.Index])
+            {
+                _visited[v.Index] = true;
+
+                // we traverse graph in reverse, since we compute all path to target
+                foreach (EnemyMove inEdge in v.InEdges)
+                {
+                    if (inEdge.IsMoveAllowed(_actions, _attackRange))
+                    {
+                        int u = inEdge.From.Index;
+                        if (!_visited[u])
+                        {
+                            // TODO: add weight factor depending on enemy type
+                            float costPath = distance + inEdge.Cost;
+                            // _handles[u] = pq.Insert(futureCost, inEdge);
+                            if (_handles[u] == null)
+                            {
+                                int dx = v.Tile.Position.X - from.Position.X;
+                                int dy = v.Tile.Position.Y - from.Position.Y;
+
+                                float costEstimation = MathF.Sqrt(dx * dx + dy * dy);
+
+                                _handles[u] = pq.Insert(costPath, costEstimation, inEdge);
+                            }
+                            else if (_handles[u].CostPath > costPath)
+                            {
+                                pq.DecreaseCostPath(_handles[u], costPath, inEdge);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return EnemyMove.NONE;
+    }
+
     internal EnemyMove GetNextMoveFromMapTile(MapTile tile)
     {
         return _nextMoves[tile.TileVertex.Index] ?? EnemyMove.NONE;
     }
 
-    internal void ComputeShortestPathToMapTile(Location startLocation)
+    internal void ComputeShortestPathToMapTile(Location target)
     {
         // TODO: this function is currently a bottleneck for large maps
         ResetPaths();
 
         var pq = new TDPriorityQueue<EnemyMove>();
-        pq.Insert(0f, new StealArtifact(startLocation));
+        pq.Insert(0f, 0f, new TakeArtifact(target));
 
         // for now we use a djikstra
         while (!pq.IsEmpty())
@@ -62,11 +133,11 @@ public class PathComputation
                             // _handles[u] = pq.Insert(futureCost, inEdge);
                             if (_handles[u] == null)
                             {
-                                _handles[u] = pq.Insert(futureCost, inEdge);
+                                _handles[u] = pq.Insert(futureCost, 0, inEdge);
                             }
                             else if (_handles[u].Cost > futureCost)
                             {
-                                pq.DecreaseCost(_handles[u], futureCost, inEdge);
+                                pq.DecreaseCostPath(_handles[u], futureCost, inEdge);
                             }
                         }
                     }

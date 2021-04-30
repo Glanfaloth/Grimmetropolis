@@ -3,17 +3,20 @@ using System;
 
 public abstract class EnemyMove
 {
-    private static Location _noLocation = new Location();
+    private static Location _noLocation = new Location(null);
     public static EnemyMove NONE { get; } = new NoMove(_noLocation);
 
     [Flags]
     public enum Type
     {
         None            = 0x00,
-        StealArtifact   = 0x01,
-        Run             = 0x02,
-        Attack          = 0x04,
-        RangedAttack    = 0x08,
+        Run             = 0x01,
+        Attack          = 0x02,
+        RangedAttack    = 0x04,
+
+        // special moves 
+        StealArtifact   = 0x1000,
+        TakeArtifact    = 0x2000,
     }
 
     public abstract Type MovementType { get; }

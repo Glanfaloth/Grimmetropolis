@@ -45,10 +45,16 @@ public class MapTile : TDComponent
         }
     }
 
-    public Location TileVertex { get; } = new Location();
-    public Location StructureVertex { get; } = new Location();
+    public Location TileVertex { get; }
+    public Location StructureVertex { get; }
 
     public Map Map { get; internal set; }
+
+    public MapTile()
+    {
+        TileVertex = new Location(this);
+        StructureVertex = new Location(this);
+    }
 
     public override void Initialize()
     {

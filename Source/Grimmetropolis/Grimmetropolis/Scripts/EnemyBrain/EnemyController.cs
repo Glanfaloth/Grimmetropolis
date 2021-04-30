@@ -62,10 +62,10 @@ public class EnemyController : TDComponent
         _graph = MovementGraph.BuildGraphFromMap(Map);
     }
 
-    internal EnemyMove ComputeNextMove(Vector2 localPosition, EnemyMove.Type actions, float attackRange)
+    internal EnemyMove ComputeNextMove(Vector2 localPosition, EnemyMove.Type actions, float attackRange, bool isCarryingArtifact = false)
     {
         MapTile tile = Map.GetMapTile(localPosition);
-        return _graph.GetNextMoveFromMapTile(tile, actions, attackRange);
+        return _graph.GetNextMoveFromMapTile(tile, actions, attackRange, isCarryingArtifact ? Map.MapTiles[0, 0].TileVertex : null);
     }
 
     public override void Update(GameTime gameTime)
@@ -142,7 +142,7 @@ public class EnemyController : TDComponent
         _highlightedPath.Add(startTile);
         EnemyMove nextMove = _graph.GetNextMoveFromMapTile(startTile, actions, 0);
 
-        while (nextMove.MovementType != EnemyMove.Type.StealArtifact)
+        while (nextMove.MovementType != EnemyMove.Type.TakeArtifact)
         {
             if (nextMove is RunMove runMove)
             {

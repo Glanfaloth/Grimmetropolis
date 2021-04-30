@@ -28,7 +28,7 @@ public class MovementGraph
         _map = map;
     }
 
-    internal EnemyMove GetNextMoveFromMapTile(MapTile tile, EnemyMove.Type actions, float attackRange)
+    internal EnemyMove GetNextMoveFromMapTile(MapTile tile, EnemyMove.Type actions, float attackRange, Location target = null)
     {
         int pathAttackRange = (int)attackRange;
         if ((actions & EnemyMove.Type.RangedAttack) != EnemyMove.Type.RangedAttack)
@@ -44,7 +44,10 @@ public class MovementGraph
             path.ComputeShortestPathToMapTile(_startLocation);
         }
 
-        return _paths[key].GetNextMoveFromMapTile(tile);
+        
+        return target != null
+            ? _paths[key].GetNextMoveFromTo(tile, target)
+            : _paths[key].GetNextMoveFromMapTile(tile);
     }
 
     internal EnemyMove GetNextMove(EnemyMove move, EnemyMove.Type actions, float attackRange)

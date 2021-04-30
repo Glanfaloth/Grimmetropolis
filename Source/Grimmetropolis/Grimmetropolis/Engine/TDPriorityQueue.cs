@@ -25,9 +25,9 @@ class TDPriorityQueue<TValue>
         return result;
     }
 
-    public Handle Insert(float cost, TValue value)
+    public Handle Insert(float costPath, float costEstimation, TValue value)
     {
-        Handle newHandle = new Handle(cost, value, _heap.Count);
+        Handle newHandle = new Handle(costPath, costEstimation, value, _heap.Count);
 
         _heap.Add(newHandle);
         SiftUp(newHandle._index);
@@ -35,9 +35,17 @@ class TDPriorityQueue<TValue>
         return newHandle;
     }
 
-    public void DecreaseCost(Handle handle, float newCost, TValue value)
+    public void DecreaseCostPath(Handle handle, float newCostPath, TValue value)
     {
-        handle.Cost = newCost;
+        handle.CostPath = newCostPath;
+        handle.Value = value;
+        SiftUp(handle._index);
+    }
+
+    public void DecreaseCost(Handle handle, float newCostPath, float newCostEstimation, TValue value)
+    {
+        handle.CostPath = newCostPath;
+        handle.CostEstimation = newCostEstimation;
         handle.Value = value;
         SiftUp(handle._index);
     }
@@ -86,14 +94,18 @@ class TDPriorityQueue<TValue>
 
     public class Handle
     {
-        public float Cost { get; internal set; }
+        public float Cost => CostPath + CostEstimation;
         public TValue Value { get; internal set; }
+
+        public float CostPath { get; internal set; }
+        public float CostEstimation { get; internal set; }
 
         internal int _index;
 
-        public Handle(float cost, TValue value, int index)
+        public Handle(float costPath, float costEstimation, TValue value, int index)
         {
-            Cost = cost;
+            CostPath = costPath;
+            CostEstimation = costEstimation;
             Value = value;
             _index = index;
         }
