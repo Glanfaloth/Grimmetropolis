@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ public static class TDContentManager
     private static Dictionary<string, Texture2D> _loadedTextures = new Dictionary<string, Texture2D>();
     private static Dictionary<string, Effect> _loadedEffects = new Dictionary<string, Effect>();
     private static Dictionary<string, SpriteFont> _loadedSpriteFonts = new Dictionary<string, SpriteFont>();
+
+    private static Dictionary<string, SoundEffect> _loadedSoundEffects = new Dictionary<string, SoundEffect>();
 
     public static Model LoadModel(string name)
     {
@@ -62,5 +65,18 @@ public static class TDContentManager
         }
 
         return _loadedSpriteFonts[name];
+    }
+
+    public static SoundEffect LoadSoundEffect(string name)
+    {
+        if (!_loadedSoundEffects.ContainsKey(name))
+        {
+            SoundEffect soundEffect = Content.Load<SoundEffect>(@"SoundEffects\" + name);
+            _loadedSoundEffects.Add(name, soundEffect);
+
+            return soundEffect;
+        }
+
+        return _loadedSoundEffects[name];
     }
 }

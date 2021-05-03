@@ -13,7 +13,11 @@ public class GameScene : TDScene
         PrefabFactory.CreatePrefab(PrefabType.Camera, new Vector3(8f, 0f, 18f), Quaternion.CreateFromYawPitchRoll(-.375f * MathHelper.Pi, 0f, MathHelper.Pi));
         PrefabFactory.CreatePrefab(PrefabType.Light, new Vector3(24f, 24f, 36f), Quaternion.CreateFromYawPitchRoll(-.31f * MathHelper.Pi, .1f * MathHelper.Pi, -.85f * MathHelper.Pi));
 
-        PrefabFactory.CreatePrefab(PrefabType.GameManager);
+        TDObject gameManager = PrefabFactory.CreatePrefab(PrefabType.GameManager);
+        TDSound backgroundTest = gameManager.AddComponent<TDSound>();
+        backgroundTest.SoundEffect = TDContentManager.LoadSoundEffect("BackgroundMusic");
+        backgroundTest.Play();
+
         PrefabFactory.CreatePrefab(PrefabType.UIManager);
 
         /*TDObject testImage = PrefabFactory.CreatePrefab(PrefabType.EmptyUI, new Vector3(10f, 10f, 0f), Quaternion.CreateFromAxisAngle(Vector3.Backward, .1f), new Vector3(.5f, .5f, 1f), null);

@@ -30,7 +30,7 @@ public static class TDInputManager
 
         };
         TDKeyboardInput keyboardInputArrow = new TDKeyboardInput(config);
-        Inputs.Add(keyboardInputArrow);
+        // Inputs.Add(keyboardInputArrow);
 
         TDInput firstGamePadInput = new TDGamePadInput(0);
 

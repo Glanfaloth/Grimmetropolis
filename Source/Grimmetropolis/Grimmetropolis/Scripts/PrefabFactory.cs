@@ -110,7 +110,7 @@ public static class PrefabFactory
                     // meshCollider.Texture = TDContentManager.LoadTexture("DefaultTexture");
                     TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
                     interactionCollider.IsTrigger = true;
-                    interactionCollider.Radius = .25f;
+                    interactionCollider.Radius = .5f;
                     interactionCollider.Height = 2f;
                     interactionCollider.Offset = .5f * Vector3.Backward;
                     player.InteractionCollider = interactionCollider;
@@ -458,7 +458,7 @@ public static class PrefabFactory
         // meshCollider.Texture = TDContentManager.LoadTexture("DefaultTexture");
         TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
         interactionCollider.IsTrigger = true;
-        interactionCollider.Radius = .25f;
+        interactionCollider.Radius = .5f;
         interactionCollider.Height = 2f;
         interactionCollider.Offset = .5f * Vector3.Backward;
         enemy.InteractionCollider = interactionCollider;
