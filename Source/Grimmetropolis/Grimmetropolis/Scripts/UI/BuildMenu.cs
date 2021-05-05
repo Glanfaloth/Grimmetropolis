@@ -25,6 +25,8 @@ public class BuildMenu : TDComponent
     private float _cooldown = 0f;
     private float _cooldownDuration = .2f;
 
+    private Building _previewBuilding = null;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -33,6 +35,7 @@ public class BuildMenu : TDComponent
 
         Hide();
     }
+
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
@@ -50,6 +53,12 @@ public class BuildMenu : TDComponent
                 Hide();
             }
 
+            if (_isShowing && _previewBuilding != null)
+            {
+                _previewBuilding.Position = GameManager.Instance.Map.GetMapTile(Player.InteractionCollider.CenterXY).Position;
+                _previewBuilding.SetMapTransform();
+            }
+
             if (Player.Input.BuildModePressed()) Hide();
         }
 
@@ -65,6 +74,9 @@ public class BuildMenu : TDComponent
 
         _isShowing = true;
 
+        _previewBuilding = GetBuilding(_currentBuilding);
+        _previewBuilding.SetAsPreview();
+
         OvertakeControl();
     }
 
@@ -79,6 +91,8 @@ public class BuildMenu : TDComponent
 
             _isShowing = false;
             _requiresHide = false;
+
+            _previewBuilding?.TDObject.Destroy();
 
             ReturnControl();
         }

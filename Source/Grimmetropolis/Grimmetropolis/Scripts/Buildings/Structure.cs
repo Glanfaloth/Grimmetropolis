@@ -8,17 +8,20 @@ public abstract class Structure : TDComponent
     public Point Position = Point.Zero;
     public Point Size = new Point(1, 1);
 
+
     public bool IsPassable = false;
     public virtual bool CanBeAttacked => false;
 
     public TDMesh Mesh;
+
+    protected bool _isPreview = false;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SetMapTransform();
-        PlaceStructure(this, null);
+        if (!_isPreview) PlaceStructure(this, null);
 
         GameManager.Instance.Structures.Add(this);
     }
@@ -27,11 +30,11 @@ public abstract class Structure : TDComponent
     {
         base.Destroy();
 
-        PlaceStructure(null, this);
+        if (!_isPreview) PlaceStructure(null, this);
         GameManager.Instance.Structures.Remove(this);
     }
 
-    protected virtual void SetMapTransform()
+    public virtual void SetMapTransform()
     {
         Vector3 position = GameManager.Instance.Map.MapTiles[Position.X, Position.Y].TDObject.Transform.Position + new Vector3(Size.X / 2, Size.Y / 2, 0f);
         TDObject.Transform.Position = position;

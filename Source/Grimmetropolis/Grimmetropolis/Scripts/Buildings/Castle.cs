@@ -48,7 +48,7 @@ public class Castle : Building
         MagicalArtifact?.TDObject.Destroy();
     }
 
-    protected override void SetMapTransform()
+    public override void SetMapTransform()
     {
         base.SetMapTransform();
 

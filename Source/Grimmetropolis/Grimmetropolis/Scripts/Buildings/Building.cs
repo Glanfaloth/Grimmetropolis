@@ -46,7 +46,7 @@ public abstract class Building : Structure, ITarget
         {
             DoUpdate(gameTime);
         }
-        else
+        else if (!_isPreview)
         {
             _progressBar.Show();
         }
@@ -62,7 +62,6 @@ public abstract class Building : Structure, ITarget
         _healthBar.CurrentProgress = Health;
         _healthBar.MaxProgress = BaseHealth;
 
-
         base.Initialize();
     }
 
@@ -71,6 +70,13 @@ public abstract class Building : Structure, ITarget
         Mesh.Highlight(highlight);
         if (highlight) _healthBar.QuickShow();
         else _healthBar.QuickHide();
+    }
+
+    public void SetAsPreview()
+    {
+        _isPreview = true;
+        _isBlueprint = true;
+        Mesh.IsBlueprint = true;
     }
 
     internal void SetAsBlueprint()
