@@ -206,7 +206,15 @@ public class Player : Character
     private void HighlightMapTile()
     {
         _collidingMapTile?.Highlight(false);
+        _collidingMapTile?.Item?.Highlight(false);
         _collidingMapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        _collidingMapTile.Highlight(true);
+        if (_buildMenu.IsShowing)
+        {
+            _collidingMapTile.Highlight(true);
+        }
+        else if (_collidingMapTile.Item != null && Items[0] == null)
+        {
+            _collidingMapTile.Item.Highlight(true);
+        }
     }
 }
