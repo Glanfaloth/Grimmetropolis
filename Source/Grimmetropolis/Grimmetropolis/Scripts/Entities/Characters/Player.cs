@@ -156,7 +156,7 @@ public class Player : Character
 
         if (_collidingMapTile.Type == MapTileType.Ground && _collidingMapTile.Structure is Building building)
         {
-            if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH) && building.Mesh.IsBlueprint)
+            if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH) && building.Mesh.IsPreview)
             {
                 Cooldown = Config.PLAYER_BUILD_COOLDOWN;
                 ResetProgressBarForProgress();

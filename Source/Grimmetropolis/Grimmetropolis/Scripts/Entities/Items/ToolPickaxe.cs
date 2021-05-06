@@ -33,7 +33,7 @@ public class ToolPickaxe : Item
 
             else if (structure is Building closestBuilding)
             {
-                if (!closestBuilding.Mesh.IsBlueprint)
+                if (!closestBuilding.Mesh.IsPreview)
                 {
                     closestBuilding.Health -= Config.PLAYER_DAMAGE;
                     Character.Cooldown = Config.PLAYER_ATTACK_DURATION;

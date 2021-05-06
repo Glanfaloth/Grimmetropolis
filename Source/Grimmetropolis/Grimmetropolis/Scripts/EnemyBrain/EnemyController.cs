@@ -130,7 +130,7 @@ public class EnemyController : TDComponent
     {
         foreach (var tile in _highlightedPath)
         {
-            tile.Darklight(false);
+            tile.Highlight(false);
         }
         _highlightedPath.Clear();
     }
@@ -154,7 +154,7 @@ public class EnemyController : TDComponent
 
         foreach (var tile in _highlightedPath)
         {
-            tile.Darklight(true);
+            tile.Highlight(true);
         }
     }
 

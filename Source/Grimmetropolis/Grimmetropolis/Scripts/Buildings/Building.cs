@@ -54,7 +54,7 @@ public abstract class Building : Structure, ITarget
 
     public override void Initialize()
     {
-        if (Mesh.IsBlueprint) _health = 0f;
+        if (Mesh.IsPreview) _health = 0f;
 
         TDObject healthBarObject = PrefabFactory.CreatePrefab(PrefabType.HealthBar, TDObject.Transform);
         healthBarObject.RectTransform.Offset = 4f * Vector3.Backward;
@@ -76,13 +76,16 @@ public abstract class Building : Structure, ITarget
     {
         _isPreview = true;
         _isBlueprint = true;
-        Mesh.IsBlueprint = true;
+        Mesh.IsPreview = true;
+        Mesh.BaseColor = new Vector4(.1f, .1f, .1f, .5f);
     }
 
     internal void SetAsBlueprint()
     {
         _isBlueprint = true;
         _buildProgress = 0;
+        Mesh.IsPreview = true;
+        Mesh.BaseColor = new Vector4(.1f, .1f, .1f, .5f);
 
         TDObject progessBarObject = PrefabFactory.CreatePrefab(PrefabType.ProgressBar, TDObject.Transform);
         progessBarObject.RectTransform.Offset = 3f * Vector3.Backward;
@@ -90,7 +93,7 @@ public abstract class Building : Structure, ITarget
         _progressBar.CurrentProgress = _buildProgress;
         _progressBar.MaxProgress = BuildTime;
         _progressBar.Show();
-        Mesh.IsBlueprint = true;
+        Mesh.IsPreview = true;
     }
 
     internal bool TryBuild(float buildStrength)
@@ -105,7 +108,8 @@ public abstract class Building : Structure, ITarget
                 _progressBar.Hide();
                 _progressBar.Destroy();
                 _progressBar = null;
-                Mesh.IsBlueprint = false;
+                Mesh.IsPreview = false;
+                Mesh.BaseColor = Vector4.One;
 
                 Health = BaseHealth;
             }
