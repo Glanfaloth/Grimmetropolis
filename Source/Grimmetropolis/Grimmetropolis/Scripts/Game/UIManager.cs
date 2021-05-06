@@ -5,6 +5,7 @@ public class UIManager : TDComponent
     public static UIManager Instance;
 
     public ResourceDisplay ResourceDisplay;
+    public WaveIndicator WaveIndicator;
     public PlayerDisplay[] PlayerDisplays = new PlayerDisplay[4];
 
     private int _playerDisplayIndex = 0;
@@ -18,6 +19,9 @@ public class UIManager : TDComponent
 
         TDObject resourceDisplayObject = PrefabFactory.CreatePrefab(PrefabType.ResourceDisplay);
         ResourceDisplay = resourceDisplayObject.GetComponent<ResourceDisplay>();
+
+        TDObject waveIndicatorObject = PrefabFactory.CreatePrefab(PrefabType.WaveIndicator);
+        WaveIndicator = waveIndicatorObject.GetComponent<WaveIndicator>();
     }
 
     public void AddPlayerDisplay(Player player)

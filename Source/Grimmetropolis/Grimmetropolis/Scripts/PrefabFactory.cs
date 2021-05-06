@@ -44,7 +44,7 @@ public enum PrefabType
     HealthBar,
     ProgressBar,
     BuildMenu,
-
+    WaveIndicator,
     PlayerDisplay
 }
 
@@ -410,7 +410,24 @@ public static class PrefabFactory
                     iconObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin + .5f * new Vector2(buildSprite.Texture.Width, buildSprite.Texture.Height);
                     buildMenu.BuildSprite = buildSprite;
                     buildMenu.Icon = icon;
+                    break;
+                }
 
+            case PrefabType.WaveIndicator:
+                {
+                    CreateEmptyUI(prefab, localPosition, localRotation, localScale);
+                    TDSprite testImage = prefab.AddComponent<TDSprite>();
+                    WaveIndicator waveIndicator = prefab.AddComponent<WaveIndicator>();
+                    testImage.Texture = TDContentManager.LoadTexture("UIPlayer");
+                    testImage.Depth = 1f;
+                    waveIndicator.Image = testImage;
+                    prefab.RectTransform.Origin = new Vector2(testImage.Texture.Width, 0f);
+
+                    TDObject textInfoObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDText testText = textInfoObject.AddComponent<TDText>();
+                    testText.Text = "Hello, world! This is a test!";
+                    testImage.Depth = .9f;
+                    textInfoObject.RectTransform.LocalPosition = new Vector2(-(testImage.Texture.Width + testText.Width + 10f), 0f);
                     break;
                 }
         }
