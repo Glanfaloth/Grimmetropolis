@@ -24,13 +24,14 @@ sampler TextureSampler = sampler_state
 float3 LightPosition;
 float4x4 LightViewProjection;
 
+float4 BaseColor;
+
 float AmbientIntensity;
 float4 AmbientColor;
 
 float DiffuseIntensity;
 float4 DiffuseColor;
 
-float4 BaseColor;
 
 Texture2D Shadow;
 sampler ShadowSampler = sampler_state
@@ -99,12 +100,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	float4 ambient = AmbientIntensity * AmbientColor;
 	float4 diffuse = DiffuseIntensity * normalIntensity * DiffuseColor;
 
-	return (ambient + diffuse) * tex2D(TextureSampler, input.TexCoord) * BaseColor;
-}
-
-float4 BlueprintPS(VertexShaderOutput input) : COLOR
-{
-	return float4(0.1, 0.1, 0.1, 0.1);
+	return (ambient + diffuse) * BaseColor * tex2D(TextureSampler, input.TexCoord);
 }
 
 technique LightEffect
@@ -113,15 +109,6 @@ technique LightEffect
 	{
 		VertexShader = compile VS_SHADERMODEL MainVS();
 		PixelShader = compile PS_SHADERMODEL MainPS();
-	}
-};
-
-technique BlueprintEffect
-{
-	pass P0
-	{
-		VertexShader = compile VS_SHADERMODEL MainVS();
-		PixelShader = compile PS_SHADERMODEL BlueprintPS();
 	}
 };
 
@@ -159,5 +146,43 @@ technique ShadowEffect
 	{
 		VertexShader = compile VS_SHADERMODEL ShadowVS();
 		PixelShader = compile PS_SHADERMODEL ShadowPS();
+	}
+};
+
+// Preview effect
+struct PreviewShaderInput
+{
+	float4 Position : POSITION0;
+};
+
+struct PreviewShadowOutput
+{
+	float4 Position : SV_POSITION;
+};
+
+
+PreviewShadowOutput PreviewVS(in PreviewShaderInput input)
+{
+	PreviewShadowOutput output = (PreviewShadowOutput)0;
+
+	output.Position = mul(mul(input.Position, World), ViewProjection);
+
+	return output;
+}
+
+float4 PreviewPS(VertexShaderOutput input) : COLOR
+{
+	return BaseColor;
+}
+
+technique PreviewEffect
+{
+	pass P0
+	{
+		AlphaBlendEnable = TRUE;
+		DestBlend = INVSRCALPHA;
+		SrcBlend = SRCALPHA;
+		VertexShader = compile VS_SHADERMODEL PreviewVS();
+		PixelShader = compile PS_SHADERMODEL PreviewPS();
 	}
 };
