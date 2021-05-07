@@ -17,7 +17,7 @@ public abstract class Enemy : Character
     private float _attackDuration;
     private float _projectileSpeed;
 
-    protected abstract EnemyMove.Type Actions { get; }
+    public abstract EnemyMove.Type Actions { get; }
 
     public abstract String MeshName { get; }
 
@@ -36,8 +36,11 @@ public abstract class Enemy : Character
     protected float DamageAgainstPlayers => _damageAgainstPlayers;
     protected float DamageAgainstBuildigns => _damageAgainstBuildings;
 
+    public EnemyCommand CurrentCommand { get; set; }
 
     public override Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
+
+    public Vector2 Position => TDObject.Transform.LocalPosition.GetXY();
 
     public void SetBaseStats(Config.EnemyStats stats)
     {
@@ -63,17 +66,10 @@ public abstract class Enemy : Character
 
     public override void Update(GameTime gameTime)
     {
-        if (_controller == null) return;
+        if (CurrentCommand == null) return;
 
-        EnemyMove nextMove;
-        if (Items[0] is MagicalArtifact)
-        {
-            nextMove = _controller.ComputeNextMove(TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange, true);
-        }
-        else
-        {
-            nextMove = _controller.ComputeNextMove(TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange);
-        }
+        EnemyMove nextMove = CurrentCommand.GetNextMove(TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange);
+
 
         CurrentWalkSpeed = 0f;
 
@@ -82,13 +78,10 @@ public abstract class Enemy : Character
             case EnemyMove.Type.None:
                 Debug.WriteLine("ERROR: no valid move found for enemy");
                 break;
-            case EnemyMove.Type.StealArtifact:
+            case EnemyMove.Type.EndOfPath:
+                // ToDo: double check win condition holds, as EndOfPath can now occur for multiple reasons.
                 // TODO: implement win condition
                 Debug.WriteLine("YOU LOSE");
-                break;
-            case EnemyMove.Type.TakeArtifact:
-                // TODO: implement pick up
-                Debug.WriteLine("encountered EnemyMove.Type.TakeArtifact");
                 break;
             case EnemyMove.Type.Run:
                 MoveToTarget((RunMove)nextMove, gameTime);

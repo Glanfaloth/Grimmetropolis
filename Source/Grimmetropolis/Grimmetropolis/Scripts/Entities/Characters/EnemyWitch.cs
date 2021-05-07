@@ -2,7 +2,7 @@
 
 using System;
 
-class EnemyWitch : Enemy
+public class EnemyWitch : Enemy
 {
 
     public override void Initialize()
@@ -19,7 +19,7 @@ class EnemyWitch : Enemy
 
     public override string MeshName => "EnemyWitch";
 
-    protected override EnemyMove.Type Actions => EnemyMove.Type.Run | EnemyMove.Type.RangedAttack;
+    public override EnemyMove.Type Actions => EnemyMove.Type.Run | EnemyMove.Type.RangedAttack;
     protected override void ShootProjectile(RangedAttackMove nextMove)
     {
         // nextMove.Target.Health -= _damageAgainstBuildings;

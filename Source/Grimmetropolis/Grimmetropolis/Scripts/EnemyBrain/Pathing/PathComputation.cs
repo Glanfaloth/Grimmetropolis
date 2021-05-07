@@ -15,6 +15,8 @@ public class PathComputation
     private bool[] _visited;
     private Handle[] _handles;
 
+    private Dictionary<Tuple<MapTile, Location>, EnemyMove> _moveCache = new Dictionary<Tuple<MapTile, Location>, EnemyMove>();
+
     internal PathComputation(MovementGraph graph, EnemyMove.Type actions, int attackRange)
     {
         _graph = graph;
@@ -22,26 +24,29 @@ public class PathComputation
         _attackRange = attackRange;
     }
 
+    internal void ClearPaths()
+    {
+        _moveCache.Clear();
+    }
+
     internal EnemyMove GetNextMoveFromTo(MapTile from, Location target)
     {
-        // TODO: make sure reusing those is safe
-        if ((_visited?.Length ?? -1) < _graph.VerticesCount)
+        Tuple<MapTile, Location> key = new Tuple<MapTile, Location>(from, target);
+
+        if (!_moveCache.ContainsKey(key))
         {
-            _visited = new bool[_graph.VerticesCount];
-            _handles = new Handle[_graph.VerticesCount];
-        }
-        else
-        {
-            for (int i = 0; i < _nextMoves.Length; i++)
-            {
-                _visited[i] = false;
-                _handles[i] = null;
-            }
+            _moveCache[key] = DoComputeNextMoveFromTo(from, target);
         }
 
+        return _moveCache[key];
+    }
+
+    private EnemyMove DoComputeNextMoveFromTo(MapTile from, Location target)
+    {
+        ResetPaths();
 
         var pq = new TDPriorityQueue<EnemyMove>();
-        pq.Insert(0f, 0f, new StealArtifact(target));
+        pq.Insert(0f, 0f, new EndOfPath(target));
 
         while (!pq.IsEmpty())
         {
@@ -51,16 +56,17 @@ public class PathComputation
             Location v = h.Value.From;
             EnemyMove e = h.Value;
 
-            if (v.Tile == from)
-            {
-                return e;
-            }
-
             if (!_visited[v.Index])
             {
                 _visited[v.Index] = true;
+                _nextMoves[v.Index] = e;
 
-                // we traverse graph in reverse, since we compute all path to target
+                if (v.Tile == from)
+                {
+                    return e;
+                }
+
+                // we traverse graph in reverse
                 foreach (EnemyMove inEdge in v.InEdges)
                 {
                     if (inEdge.IsMoveAllowed(_actions, _attackRange))
@@ -93,63 +99,80 @@ public class PathComputation
         return EnemyMove.NONE;
     }
 
-    internal EnemyMove GetNextMoveFromMapTile(MapTile tile)
+    internal List<EnemyMove> GetPathToLocation(MapTile startTile, Location targetLocation)
     {
-        return _nextMoves[tile.TileVertex.Index] ?? EnemyMove.NONE;
-    }
+        var moves = new List<EnemyMove>();
+        EnemyMove previousMove = null;
+        EnemyMove nextMove = DoComputeNextMoveFromTo(startTile, targetLocation);
 
-    internal void ComputeShortestPathToMapTile(Location target)
-    {
-        // TODO: this function is currently a bottleneck for large maps
-        ResetPaths();
-
-        var pq = new TDPriorityQueue<EnemyMove>();
-        pq.Insert(0f, 0f, new TakeArtifact(target));
-
-        // for now we use a djikstra
-        while (!pq.IsEmpty())
+        // last move is a loop
+        while(nextMove != null && nextMove != previousMove)
         {
-            Handle h = pq.ExtractMin();
-
-            float distance = h.Cost;
-            Location v = h.Value.From;
-            EnemyMove e = h.Value;
-
-            if (!_visited[v.Index])
-            {
-                _visited[v.Index] = true;
-                _nextMoves[v.Index] = e;
-
-                // we traverse graph in reverse, since we compute all path to target
-                foreach (EnemyMove inEdge in v.InEdges)
-                {
-                    if (inEdge.IsMoveAllowed(_actions, _attackRange))
-                    {
-                        int u = inEdge.From.Index;
-                        if (!_visited[u])
-                        {
-                            // TODO: add weight factor depending on enemy type
-                            float futureCost = distance + inEdge.Cost;
-                            // _handles[u] = pq.Insert(futureCost, inEdge);
-                            if (_handles[u] == null)
-                            {
-                                _handles[u] = pq.Insert(futureCost, 0, inEdge);
-                            }
-                            else if (_handles[u].Cost > futureCost)
-                            {
-                                pq.DecreaseCostPath(_handles[u], futureCost, inEdge);
-                            }
-                        }
-                    }
-                }
-            }
+            moves.Add(nextMove);
+            previousMove = nextMove;
+            nextMove = _nextMoves[nextMove.To.Index];
         }
+
+        return moves;
     }
 
-    internal EnemyMove GetNextMove(EnemyMove move)
-    {
-        return _nextMoves[move.To.Index];
-    }
+    //internal EnemyMove GetNextMoveFromMapTile(MapTile tile)
+    //{
+    //    return _nextMoves[tile.TileVertex.Index] ?? EnemyMove.NONE;
+    //}
+
+    //internal void ComputeShortestPathToMapTile(Location target)
+    //{
+    //    // TODO: this function is currently a bottleneck for large maps
+    //    ResetPaths();
+
+    //    var pq = new TDPriorityQueue<EnemyMove>();
+    //    pq.Insert(0f, 0f, new TakeArtifact(target));
+
+    //    // for now we use a djikstra
+    //    while (!pq.IsEmpty())
+    //    {
+    //        Handle h = pq.ExtractMin();
+
+    //        float distance = h.Cost;
+    //        Location v = h.Value.From;
+    //        EnemyMove e = h.Value;
+
+    //        if (!_visited[v.Index])
+    //        {
+    //            _visited[v.Index] = true;
+    //            _nextMoves[v.Index] = e;
+
+    //            // we traverse graph in reverse, since we compute all path to target
+    //            foreach (EnemyMove inEdge in v.InEdges)
+    //            {
+    //                if (inEdge.IsMoveAllowed(_actions, _attackRange))
+    //                {
+    //                    int u = inEdge.From.Index;
+    //                    if (!_visited[u])
+    //                    {
+    //                        // TODO: add weight factor depending on enemy type
+    //                        float futureCost = distance + inEdge.Cost;
+    //                        // _handles[u] = pq.Insert(futureCost, inEdge);
+    //                        if (_handles[u] == null)
+    //                        {
+    //                            _handles[u] = pq.Insert(futureCost, 0, inEdge);
+    //                        }
+    //                        else if (_handles[u].Cost > futureCost)
+    //                        {
+    //                            pq.DecreaseCostPath(_handles[u], futureCost, inEdge);
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+
+    //internal EnemyMove GetNextMove(EnemyMove move)
+    //{
+    //    return _nextMoves[move.To.Index];
+    //}
 
     private void ResetPaths()
     {

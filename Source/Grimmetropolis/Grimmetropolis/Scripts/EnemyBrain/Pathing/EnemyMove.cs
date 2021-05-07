@@ -15,8 +15,7 @@ public abstract class EnemyMove
         RangedAttack    = 0x04,
 
         // special moves 
-        StealArtifact   = 0x1000,
-        TakeArtifact    = 0x2000,
+        EndOfPath       = 0x1000,
     }
 
     public abstract Type MovementType { get; }

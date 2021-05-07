@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class EnemyController : TDComponent
 {
+    public List<EnemyGroup> Groups = new List<EnemyGroup>();
+
     // Used for debug purposes
     private bool _alwaysShowPath = false;
 
@@ -30,11 +32,12 @@ public class EnemyController : TDComponent
 
     private List<MapTile> _highlightedPath = new List<MapTile>();
 
-    private List<Enemy> enemies = new List<Enemy>();
-
     public List<Point> SpawnLocations { get; } = new List<Point>();
 
-    private MovementGraph _graph;
+    public MovementGraph Graph { get; set; }
+
+    private EnemyGroup _currentGroup;
+
 
     // TODO: introduce seed for rng
     // maybe create custom class in engine for providing all random numbers
@@ -42,6 +45,7 @@ public class EnemyController : TDComponent
 
     public Map Map { get; set; }
 
+    
     // TODO: add behaviour after artifact is stolen
 
     public void Configure(float timeUntilSpawn, float timeBetweenWaves, float nrKnights, float nrWitches, float nrSiege, float growthFactor)
@@ -59,21 +63,40 @@ public class EnemyController : TDComponent
         base.Initialize();
 
         Map = GameManager.Instance.Map;
-        _graph = MovementGraph.BuildGraphFromMap(Map);
-    }
-
-    internal EnemyMove ComputeNextMove(Vector2 localPosition, EnemyMove.Type actions, float attackRange, bool isCarryingArtifact = false)
-    {
-        MapTile tile = Map.GetMapTile(localPosition);
-        return _graph.GetNextMoveFromMapTile(tile, actions, attackRange, isCarryingArtifact ? Map.MapTiles[0, 0].TileVertex : null);
+        Graph = MovementGraph.BuildGraphFromMap(Map);
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
 
-        UpdatePathing(gameTime);
+        ClearPaths(gameTime);
         SpawnEnemies(gameTime);
+        UpdateGroups(gameTime);
+    }
+
+    private void ClearPaths(GameTime gameTime)
+    {
+        Graph.ClearPaths();
+    }
+
+    private void UpdateGroups(GameTime gameTime)
+    {
+
+        List<EnemyGroup> toRemove = new List<EnemyGroup>();
+        foreach (EnemyGroup group in Groups)
+        {
+            group.Update(gameTime);
+            if (group.IsDefeated)
+            {
+                toRemove.Add(group);
+            }
+        }
+
+        foreach (EnemyGroup group in toRemove)
+        {
+            Groups.Remove(group);
+        }
     }
 
     private void SpawnEnemies(GameTime gameTime)
@@ -97,12 +120,16 @@ public class EnemyController : TDComponent
             _spawnTiles = Map.GetNearbyTilesEuclidean(SpawnLocations[_spawnLocationIndex], Config.WAVE_SPAWN_RADIUS)
                 .FindAll(p => p.CheckPassability());
 
+            var spawnTile = Map.MapTiles[SpawnLocations[_spawnLocationIndex].X, SpawnLocations[_spawnLocationIndex].Y];
+
             if (_spawnTiles.Count == 0)
             {
-                _spawnTiles.Add(Map.MapTiles[SpawnLocations[_spawnLocationIndex].X, SpawnLocations[_spawnLocationIndex].Y]);
+                _spawnTiles.Add(spawnTile);
             }
 
             _spawnLocationSet = false;
+            _currentGroup = new EnemyGroup(spawnTile, this, new MoveToArtifactState());
+            Groups.Add(_currentGroup);
             ClearPathHighlight();
         }
 
@@ -139,17 +166,17 @@ public class EnemyController : TDComponent
     {
         EnemyMove.Type actions = EnemyMove.Type.Run | EnemyMove.Type.Attack;
         MapTile startTile = Map.MapTiles[SpawnLocations[_spawnLocationIndex].X, SpawnLocations[_spawnLocationIndex].Y];
-        _highlightedPath.Add(startTile);
-        EnemyMove nextMove = _graph.GetNextMoveFromMapTile(startTile, actions, 0);
 
-        while (nextMove.MovementType != EnemyMove.Type.TakeArtifact)
+        List<EnemyMove> moves = Graph.GetPathToTile(startTile, Map.EnemyTarget, actions, 0);
+
+        _highlightedPath.Add(startTile);
+
+        foreach (EnemyMove nextMove in moves)
         {
             if (nextMove is RunMove runMove)
             {
                 _highlightedPath.Add(runMove.Destination);
             }
-
-            nextMove = _graph.GetNextMove(nextMove, actions, 0);
         }
 
         foreach (var tile in _highlightedPath)
@@ -170,29 +197,31 @@ public class EnemyController : TDComponent
         {
             enemyObject = PrefabFactory.CreateEnemyPrefab<EnemyKnight>(Config.ENEMY_KNIGHTS_STATS, position, Quaternion.Identity);
             _knightToSpawn--;
+            _currentGroup.Knights.Add(enemyObject.GetComponent<EnemyKnight>());
         }
         else if (_witchToSpawn > spawnTypeIndex - _knightToSpawn)
         {
             enemyObject = PrefabFactory.CreateEnemyPrefab<EnemyWitch>(Config.ENEMY_WITCH_STATS, position, Quaternion.Identity);
             _witchToSpawn--;
+            _currentGroup.Witches.Add(enemyObject.GetComponent<EnemyWitch>());
         }
         else if (_siegeToSpawn > spawnTypeIndex - (_knightToSpawn + _witchToSpawn))
         {
             enemyObject = PrefabFactory.CreateEnemyPrefab<EnemyCatapult>(Config.ENEMY_CATAPULT_STATS, position, Quaternion.Identity);
             _siegeToSpawn--;
+            _currentGroup.Catapults.Add(enemyObject.GetComponent<EnemyCatapult>());
         }
         else
         {
             return;
         }
-        enemies.Add(enemyObject.GetComponent<Enemy>());
     }
 
-    private void UpdatePathing(GameTime gameTime)
-    {
-        Point start = Map.EnemyTarget;
-        _graph.ComputeShortestPathToMapTile(start);
-    }
+    //private void UpdatePathing(GameTime gameTime)
+    //{
+    //    Point start = Map.EnemyTarget;
+    //    _graph.ComputeShortestPathToMapTile(start);
+    //}
 
     internal float NextFloat()
     {

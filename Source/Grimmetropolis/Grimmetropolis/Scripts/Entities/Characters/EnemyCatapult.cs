@@ -4,7 +4,7 @@ public class EnemyCatapult : Enemy
 {
     public override string MeshName => "EnemyCatapult";
 
-    protected override EnemyMove.Type Actions => EnemyMove.Type.Run | EnemyMove.Type.RangedAttack;
+    public override EnemyMove.Type Actions => EnemyMove.Type.Run | EnemyMove.Type.RangedAttack;
 
     protected override void ShootProjectile(RangedAttackMove nextMove)
     {
