@@ -20,6 +20,7 @@ public enum PrefabType
     BuildingCastle,
     BuildingOutpost,
     BuildingWall,
+    BuildingFarm,
 
     ResourceWood,
     ResourceStone,
@@ -201,6 +202,15 @@ public static class PrefabFactory
                     mesh.Model = TDContentManager.LoadModel("BuildingWall");
                     mesh.Texture = TDContentManager.LoadTexture("BuildingCastleTexture");
                     wall.Mesh = mesh;
+                    break;
+                }
+            case PrefabType.BuildingFarm:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    Farm farm = prefab.AddComponent<Farm>();
+                    mesh.Model = TDContentManager.LoadModel("BuildingFarm");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    farm.Mesh = mesh;
                     break;
                 }
 

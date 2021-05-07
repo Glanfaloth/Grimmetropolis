@@ -6,7 +6,8 @@ using System;
 public enum SelectableBuilding
 {
     Outpost,
-    Wall
+    Wall,
+    Farm
 }
 
 public class BuildMenu : TDComponent
@@ -75,7 +76,7 @@ public class BuildMenu : TDComponent
         IsShowing = true;
 
         _previewBuilding = GetBuilding(_currentBuilding);
-        _previewBuilding.SetAsPreview();
+        _previewBuilding.IsPreview = true;
 
         OvertakeControl();
     }
@@ -129,6 +130,10 @@ public class BuildMenu : TDComponent
 
         Icon.Texture = GetIcon(_currentBuilding);
 
+        _previewBuilding.TDObject.Destroy();
+        _previewBuilding = GetBuilding(_currentBuilding);
+        _previewBuilding.IsPreview = true;
+
         _cooldown = _cooldownDuration;
     }
 
@@ -140,6 +145,11 @@ public class BuildMenu : TDComponent
         else _currentBuilding--;
 
         Icon.Texture = GetIcon(_currentBuilding);
+
+        _previewBuilding.TDObject.Destroy();
+        _previewBuilding = GetBuilding(_currentBuilding);
+        _previewBuilding.IsPreview = true;
+
         _cooldown = _cooldownDuration;
     }
 
@@ -151,6 +161,7 @@ public class BuildMenu : TDComponent
         {
             SelectableBuilding.Outpost => TDContentManager.LoadTexture("UIBuildingOutpostIcon"),
             SelectableBuilding.Wall => TDContentManager.LoadTexture("UIBuildingWallIcon"),
+            SelectableBuilding.Farm => TDContentManager.LoadTexture("UIBuildingFarmIcon"),
             _ => TDContentManager.LoadTexture("UIBuildingOutpostIcon")
         };
     }
@@ -163,6 +174,7 @@ public class BuildMenu : TDComponent
         {
             SelectableBuilding.Outpost => PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost).GetComponent<Outpost>(),
             SelectableBuilding.Wall => PrefabFactory.CreatePrefab(PrefabType.BuildingWall).GetComponent<Wall>(),
+            SelectableBuilding.Farm => PrefabFactory.CreatePrefab(PrefabType.BuildingFarm).GetComponent<Farm>(),
             _ => PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost).GetComponent<Outpost>()
         };
     }

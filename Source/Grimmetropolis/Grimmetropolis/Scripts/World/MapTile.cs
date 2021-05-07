@@ -73,13 +73,18 @@ public class MapTile : TDComponent
 
     private void AdjustCollider()
     {
-        if (Structure != null)
+        bool highCollider = Structure != null;
+        if (Structure is Farm farm)
+        {
+            highCollider = farm.GetMillCollider(this);
+        }
+
+        if (highCollider)
         {
             collider.Size = new Vector3(1f, 1f, 4f);
             collider.Offset = Vector3.Zero;
         }
-        else
-        {
+        else {
             switch (Type)
             {
                 case MapTileType.Ground:

@@ -48,6 +48,7 @@ public static class Config
     public const float OUTPOST_HEALTH = 20f;
     public const int OUTPOST_WOOD_COST = 5;
     public const int OUTPOST_STONE_COST = 5;
+    public const int OUTPOST_FOOD_UPKEEP = 1;
     public const float OUTPOST_SHOOTING_RANGE = 3f;
     public const float OUTPOST_SHOOTING_RATE = .5f;
 
@@ -62,6 +63,12 @@ public static class Config
 
     public const float WALL_BUILD_VALUE = 10f;
 
+    public const int FARM_WOOD_COST = 4;
+    public const int FARM_STONE_COST = 2;
+    public const int FARM_FOOD_UPKEEP = -4;
+    public const float FARM_HEALTH = 10f;
+
+    public const float FARM_BUILD_VALUE = 10f;
 
     public const int RESOURCE_WOOD_GATHER_BASE_RATE = 1;
     public const int RESOURCE_STONE_GATHER_BASE_RATE = 1;

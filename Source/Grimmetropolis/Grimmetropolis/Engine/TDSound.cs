@@ -38,7 +38,7 @@ public class TDSound : TDComponent
 
         if (_isPlaying) _time += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        if (_targetTimes[0] <= _time)
+        if (_targetTimes.Count > 0 && _targetTimes[0] <= _time)
         {
             _soundEffectInstances.RemoveAt(0);
             _targetTimes.RemoveAt(0);

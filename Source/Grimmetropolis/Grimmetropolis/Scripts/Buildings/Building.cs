@@ -1,9 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 using System;
+using System.Collections.Generic;
 
 public abstract class Building : Structure, ITarget
 {
     public abstract ResourcePile GetResourceCost();
+    public abstract ResourcePile GetResourceUpkeep();
 
     public override bool CanBeAttacked => true;
 
@@ -31,26 +35,14 @@ public abstract class Building : Structure, ITarget
 
     TDObject ITarget.TDObject => TDObject;
 
+    public bool IsBlueprint;
+
     private HealthBar _healthBar;
-    private bool _isBlueprint;
-    private float _buildProgress;
+    protected float _buildProgress;
     private ProgressBar _progressBar;
 
-    protected abstract void DoUpdate(GameTime gameTime);
-
-    public sealed override void Update(GameTime gameTime)
-    {
-        base.Update(gameTime);
-
-        if (!_isBlueprint)
-        {
-            DoUpdate(gameTime);
-        }
-        else if (!_isPreview)
-        {
-            _progressBar.Show();
-        }
-    }
+    private float _durationResourceUpkeep = 1f;
+    private float _timeResourceUpkeep = 1f;
 
     public override void Initialize()
     {
@@ -62,7 +54,29 @@ public abstract class Building : Structure, ITarget
         _healthBar.CurrentProgress = Health;
         _healthBar.MaxProgress = BaseHealth;
 
+        if (IsPreview) SetAsPreview();
+        if (IsBlueprint) SetAsBlueprint();
+
         base.Initialize();
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+
+        if (!IsPreview)
+        {
+            if (!IsBlueprint)
+            {
+                _timeResourceUpkeep -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (_timeResourceUpkeep <= 0f)
+                {
+                    _timeResourceUpkeep += _durationResourceUpkeep;
+                    GameManager.Instance.ResourcePool -= GetResourceUpkeep();
+                }
+            }
+            _progressBar?.Show();
+        }
     }
 
     public override void Highlight(bool highlight)
@@ -72,17 +86,16 @@ public abstract class Building : Structure, ITarget
         else _healthBar.QuickHide();
     }
 
-    public void SetAsPreview()
+    protected virtual void SetAsPreview()
     {
-        _isPreview = true;
-        _isBlueprint = true;
+        IsPreview = true;
+        IsBlueprint = true;
         Mesh.IsPreview = true;
         Mesh.BaseColor = new Vector4(.1f, .1f, .1f, .5f);
     }
 
-    internal void SetAsBlueprint()
+    protected virtual void SetAsBlueprint()
     {
-        _isBlueprint = true;
         _buildProgress = 0;
         Mesh.IsPreview = true;
         Mesh.BaseColor = new Vector4(.1f, .1f, .1f, .5f);
@@ -93,20 +106,19 @@ public abstract class Building : Structure, ITarget
         _progressBar.CurrentProgress = _buildProgress;
         _progressBar.MaxProgress = BuildTime;
         _progressBar.Show();
-        Mesh.IsPreview = true;
     }
 
-    internal bool TryBuild(float buildStrength)
+    public virtual bool TryBuild(float buildStrength)
     {
-        if(_isBlueprint)
+        if(IsBlueprint)
         {
             _buildProgress += buildStrength;
             _progressBar.CurrentProgress = _buildProgress;
             if (_buildProgress >= BuildTime)
             {
-                _isBlueprint = false;
+                IsBlueprint = false;
                 _progressBar.Hide();
-                _progressBar.Destroy();
+                _progressBar.TDObject.Destroy();
                 _progressBar = null;
                 Mesh.IsPreview = false;
                 Mesh.BaseColor = Vector4.One;
@@ -124,5 +136,47 @@ public abstract class Building : Structure, ITarget
         if (Health >= BaseHealth) return false;
         Health = MathHelper.Min(Health + buildStrength, BaseHealth);
         return true;
+    }
+
+    public bool CheckPlacability(MapTile mapTile)
+    {
+        int xHigh = Math.Clamp(mapTile.Position.X + Size.X, 0, GameManager.Instance.Map.Width);
+        int yHigh = Math.Clamp(mapTile.Position.Y + Size.Y, 0, GameManager.Instance.Map.Height);
+
+        for (int x = mapTile.Position.X; x < xHigh; x++)
+        {
+            for (int y = mapTile.Position.Y; y < yHigh; y++)
+            {
+                if (GameManager.Instance.Map.MapTiles[x, y].Type != MapTileType.Ground
+                    || GameManager.Instance.Map.MapTiles[x, y].Item != null
+                    || GameManager.Instance.Map.MapTiles[x, y].Structure != null)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    protected void CreateBuildingPart(Model model, Texture2D texture, string bodyPart, out TDTransform buildingPartTransform, out TDMesh buildingPartMesh)
+    {
+        TDObject buildingPartObject = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
+        buildingPartMesh = buildingPartObject.AddComponent<TDMesh>();
+
+        ModelBone bone; model.Bones.TryGetValue(bodyPart, out bone);
+        ModelMesh mesh; model.Meshes.TryGetValue(bodyPart, out mesh);
+
+        buildingPartMesh.Model = new Model(TDSceneManager.Graphics.GraphicsDevice, new List<ModelBone>() { bone }, new List<ModelMesh>() { mesh });
+        buildingPartMesh.Texture = texture;
+
+        buildingPartTransform = buildingPartObject.Transform;
+    }
+    protected void CreateMainBuildingPart(Model model, Texture2D texture, string bodyPart)
+    {
+        ModelBone bone; model.Bones.TryGetValue(bodyPart, out bone);
+        ModelMesh mesh; model.Meshes.TryGetValue(bodyPart, out mesh);
+
+        Mesh.Model = new Model(TDSceneManager.Graphics.GraphicsDevice, new List<ModelBone>() { bone }, new List<ModelMesh>() { mesh });
+        Mesh.Texture = texture;
     }
 }

@@ -8,20 +8,19 @@ public abstract class Structure : TDComponent
     public Point Position = Point.Zero;
     public Point Size = new Point(1, 1);
 
-
     public bool IsPassable = false;
     public virtual bool CanBeAttacked => false;
+    public bool IsPreview = false;
 
     public TDMesh Mesh;
 
-    protected bool _isPreview = false;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SetMapTransform();
-        if (!_isPreview) PlaceStructure(this, null);
+        if (!IsPreview) PlaceStructure(this, null);
 
         GameManager.Instance.Structures.Add(this);
     }
@@ -30,21 +29,18 @@ public abstract class Structure : TDComponent
     {
         base.Destroy();
 
-        if (!_isPreview) PlaceStructure(null, this);
+        if (!IsPreview) PlaceStructure(null, this);
         GameManager.Instance.Structures.Remove(this);
     }
 
     public virtual void SetMapTransform()
     {
-        Vector3 position = GameManager.Instance.Map.MapTiles[Position.X, Position.Y].TDObject.Transform.Position + new Vector3(Size.X / 2, Size.Y / 2, 0f);
+        Vector3 position = GameManager.Instance.Map.MapTiles[Position.X, Position.Y].TDObject.Transform.Position + new Vector3((Size.X - 1) / 2, (Size.Y - 1) / 2, 0f);
         TDObject.Transform.Position = position;
     }
 
     private void PlaceStructure(Structure structure, Structure previousStructure)
     {
-
-        // TODO: doesn't this allow to place buildings partly outside the map?
-        // -> Yep, can be problematic. For now, don't place buildings partially outside of the map.
         int xHigh = Math.Clamp(Position.X + Size.X, 0, GameManager.Instance.Map.Width);
         int yHigh = Math.Clamp(Position.Y + Size.Y, 0, GameManager.Instance.Map.Height);
 

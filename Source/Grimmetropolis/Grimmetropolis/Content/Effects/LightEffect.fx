@@ -177,7 +177,7 @@ float4 PreviewPS(VertexShaderOutput input) : COLOR
 
 technique PreviewEffect
 {
-	pass P0
+	pass P1
 	{
 		AlphaBlendEnable = TRUE;
 		DestBlend = INVSRCALPHA;
