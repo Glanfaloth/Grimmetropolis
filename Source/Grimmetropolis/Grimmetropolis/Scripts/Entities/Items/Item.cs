@@ -113,7 +113,7 @@ public class Item : TDComponent
 
     public virtual void InteractWithStructure(GameTime gameTime, Structure structure)
     {
-        if (Character is Player player && structure.Mesh.IsBlueprint)
+        if (Character is Player player && structure.Mesh.IsPreview)
         {
             player.Build(gameTime);
             player.Animation.UseAnimation();

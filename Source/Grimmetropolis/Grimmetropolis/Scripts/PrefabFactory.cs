@@ -20,6 +20,7 @@ public enum PrefabType
     BuildingCastle,
     BuildingOutpost,
     BuildingWall,
+    BuildingFarm,
 
     ResourceWood,
     ResourceStone,
@@ -203,6 +204,15 @@ public static class PrefabFactory
                     wall.Mesh = mesh;
                     break;
                 }
+            case PrefabType.BuildingFarm:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    Farm farm = prefab.AddComponent<Farm>();
+                    mesh.Model = TDContentManager.LoadModel("BuildingFarm");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    farm.Mesh = mesh;
+                    break;
+                }
 
             // Resources
             case PrefabType.ResourceWood:
@@ -324,6 +334,20 @@ public static class PrefabFactory
                     TDText text = prefab.AddComponent<TDText>();
                     ResourceDisplay resourceDisplay = prefab.AddComponent<ResourceDisplay>();
                     resourceDisplay.TextUI = text;
+
+                    TDObject woodObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDObject stoneObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite wood = woodObject.AddComponent<TDSprite>();
+                    TDSprite stone = stoneObject.AddComponent<TDSprite>();
+                    wood.Texture = TDContentManager.LoadTexture("UIWood");
+                    stone.Texture = TDContentManager.LoadTexture("UIStone");
+                    resourceDisplay.WoodUI = wood;
+                    resourceDisplay.StoneUI = stone;
+                    woodObject.RectTransform.Scale = 0.05f * Vector2.One;
+                    woodObject.RectTransform.LocalPosition = new Vector2(-4f, 10f);
+                    stoneObject.RectTransform.Scale = 0.04f * Vector2.One;
+                    stoneObject.RectTransform.LocalPosition = new Vector2(-2f + 0.05f * wood.Texture.Width, 10f);
+
                     break;
                 }
 

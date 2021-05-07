@@ -3,6 +3,7 @@
 public class Outpost : Building
 {
     public override ResourcePile GetResourceCost() => new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST);
+    public override ResourcePile GetResourceUpkeep() => new ResourcePile(0, 0, Config.OUTPOST_FOOD_UPKEEP);
 
     public TDCylinderCollider ShootingRange = null;
 
@@ -30,8 +31,12 @@ public class Outpost : Building
         base.Initialize();
     }
 
-    protected override void DoUpdate(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
+        base.Update(gameTime);
+
+        if (IsPreview || IsBlueprint) return;
+
         _cooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         if (_closestEnemy != null && _cooldown <= 0f)

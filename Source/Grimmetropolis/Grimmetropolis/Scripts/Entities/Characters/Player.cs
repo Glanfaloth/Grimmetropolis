@@ -132,14 +132,12 @@ public class Player : Character
         }
 
         MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        if (mapTile.Type == MapTileType.Ground
-            && mapTile.Structure == null
-            && mapTile.Item == null
+        if (building.CheckPlacability(mapTile)
             && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, building.GetResourceCost()))
         {
             GameManager.Instance.ResourcePool -= building.GetResourceCost();
             building.Position = mapTile.Position;
-            building.SetAsBlueprint();
+            building.IsBlueprint = true;
 
             Cooldown = Config.PLAYER_PLACE_BUILDING_COOLDOWN;
             ResetProgressBarForProgress();
@@ -156,7 +154,7 @@ public class Player : Character
 
         if (_collidingMapTile.Type == MapTileType.Ground && _collidingMapTile.Structure is Building building)
         {
-            if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH) && building.Mesh.IsBlueprint)
+            if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH) && building.Mesh.IsPreview)
             {
                 Cooldown = Config.PLAYER_BUILD_COOLDOWN;
                 ResetProgressBarForProgress();

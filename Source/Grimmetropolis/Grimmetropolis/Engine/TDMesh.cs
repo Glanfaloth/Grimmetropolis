@@ -30,12 +30,32 @@ public class TDMesh : TDComponent
         }
     }
 
-    public Vector3 BaseColor { get; set; } = Vector3.One;
+    private bool _isHighlighted = false;
+    public bool IsHighlighted
+    {
+        get => _isHighlighted;
+        set
+        {
+            _isHighlighted = value;
+            _highlight = (_isHighlighted ? 2f : 1f) * Vector3.One;
+        }
+    }
 
-    public bool IsBlueprint { get; internal set; }
+    private bool _isPreview = false;
+    public bool IsPreview
+    {
+        get => _isPreview;
+        set
+        {
+            _isPreview = value;
+            _technique = _isPreview ? "PreviewEffect" : "LightEffect";
+        }
+    }
 
-    public float BaseHighlightFactor = 1f;
-    private float _highlightFactor = 1f;
+    public Vector4 BaseColor = Vector4.One;
+
+    private string _technique = "LightEffect";
+    private Vector3 _highlight = Vector3.One;
 
     public override void Initialize()
     {
@@ -59,6 +79,8 @@ public class TDMesh : TDComponent
 
     public void DrawShadow()
     {
+        if (IsPreview) return;
+
         foreach (ModelMesh mesh in _model?.Meshes ?? Enumerable.Empty<ModelMesh>())
         {
             foreach (Effect effect in mesh.Effects)
@@ -79,9 +101,7 @@ public class TDMesh : TDComponent
         {
             foreach (Effect effect in mesh.Effects)
             {
-                effect.CurrentTechnique = IsBlueprint 
-                    ? effect.Techniques["BlueprintEffect"]
-                    : effect.Techniques["LightEffect"];
+                effect.CurrentTechnique = effect.Techniques[_technique];
 
                 effect.Parameters["World"].SetValue(TDObject.Transform.TransformMatrix);
                 effect.Parameters["ViewProjection"].SetValue(TDSceneManager.ActiveScene.CameraObject?.ViewProjectionMatrix ?? Matrix.Identity);
@@ -92,7 +112,7 @@ public class TDMesh : TDComponent
                 effect.Parameters["LightViewProjection"].SetValue(TDSceneManager.ActiveScene.LightObject?.ViewProjectionMatrix ?? Matrix.Identity);
 
                 effect.Parameters["AmbientIntensity"].SetValue(.2f);
-                effect.Parameters["AmbientColor"].SetValue(_highlightFactor * Vector3.One);
+                effect.Parameters["AmbientColor"].SetValue(_highlight);
 
                 effect.Parameters["DiffuseIntensity"].SetValue(.8f);
                 effect.Parameters["DiffuseColor"].SetValue(Vector3.One);
@@ -109,7 +129,7 @@ public class TDMesh : TDComponent
 
     public void Highlight(bool highlight)
     {
-        _highlightFactor = highlight ? 2f : BaseHighlightFactor;
+        IsHighlighted = highlight;
     }
 
     public override void Destroy()

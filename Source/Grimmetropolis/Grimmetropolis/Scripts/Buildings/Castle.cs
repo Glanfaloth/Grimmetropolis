@@ -55,14 +55,9 @@ public class Castle : Building
         MagicalArtifact.Position = Position + new Point(1, 1);
     }
 
-    public override ResourcePile GetResourceCost()
-    {
-        return new ResourcePile(0, 0);
-    }
+    public override ResourcePile GetResourceCost() => new ResourcePile(0, 0);
 
-    protected override void DoUpdate(GameTime gameTime)
-    {
-    }
+    public override ResourcePile GetResourceUpkeep() => new ResourcePile(0, 0);
 
     public void StealMagicalArtifact(Character character)
     {
