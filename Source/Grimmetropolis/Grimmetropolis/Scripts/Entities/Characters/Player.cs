@@ -78,8 +78,7 @@ public class Player : Character
         float closestStructureDistance = float.MaxValue;
         Structure _closestStructure = null;
 
-        MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        Item _closestItem = mapTile.Item;
+        Item _closestItem = GameManager.Instance.Map.GetMapTile(TDObject.Transform.Position.GetXY()).Item;
         foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
         {
             if (colliderEntry.Item1 is TDCuboidCollider && closestStructureDistance > colliderEntry.Item2)
@@ -132,8 +131,7 @@ public class Player : Character
         }
 
         MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        if (building.CheckPlacability(mapTile)
-            && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, building.GetResourceCost()))
+        if (building.CheckPlacability(mapTile) && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, building.GetResourceCost()))
         {
             GameManager.Instance.ResourcePool -= building.GetResourceCost();
             building.Position = mapTile.Position;
@@ -152,7 +150,7 @@ public class Player : Character
             return;
         }
 
-        if (_collidingMapTile.Type == MapTileType.Ground && _collidingMapTile.Structure is Building building)
+        if (_collidingMapTile.Structure is Building building)
         {
             if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH) && building.Mesh.IsPreview)
             {

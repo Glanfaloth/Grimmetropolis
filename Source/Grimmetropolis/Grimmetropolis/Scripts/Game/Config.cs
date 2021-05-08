@@ -61,11 +61,11 @@ public static class Config
 
     public const float OUTPOST_BUILD_VALUE = 10f;
 
-    public const int WALL_WOOD_COST = 2;
-    public const int WALL_STONE_COST = 6;
-    public const float WALL_HEALTH = 50f;
+    public const int WALL_WOOD_COST = 0;
+    public const int WALL_STONE_COST = 2;
+    public const float WALL_HEALTH = 30f;
 
-    public const float WALL_BUILD_VALUE = 10f;
+    public const float WALL_BUILD_VALUE = 4f;
 
     public const int FARM_WOOD_COST = 4;
     public const int FARM_STONE_COST = 2;
@@ -79,6 +79,9 @@ public static class Config
 
     public const float RESOURCE_WOOD_GATHER_DURATION = .5f;
     public const float RESOURCE_STONE_GATHER_DURATION = .5f;
+
+    public const float RESOURCE_WOOD_REGENERATION_TIME = 5f;
+    public const float RESOURCE_STONE_REGENERATION_TIME = 5f;
 
     #endregion
 

@@ -2,8 +2,6 @@
 
 public class Castle : Building
 {
-    public override float BuildTime => 0;
-
     public MagicalArtifact MagicalArtifact = null;
 
     private bool _stealPossible = false;
@@ -37,6 +35,7 @@ public class Castle : Building
 
         MagicalArtifact = PrefabFactory.CreatePrefab(PrefabType.MagicalArtifact, GameManager.Instance.ItemTransform).GetComponent<MagicalArtifact>();
         MagicalArtifact.Structure = this;
+        GameManager.Instance.Map.MagicalArtifact = MagicalArtifact;
 
         base.Initialize();
     }
@@ -56,8 +55,6 @@ public class Castle : Building
     }
 
     public override ResourcePile GetResourceCost() => new ResourcePile(0, 0);
-
-    public override ResourcePile GetResourceUpkeep() => new ResourcePile(0, 0);
 
     public void StealMagicalArtifact(Character character)
     {

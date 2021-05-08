@@ -49,6 +49,7 @@ public class Farm : Building
         {
             _millRotorMesh.IsPreview = false;
             _millRotorMesh.BaseColor = Vector4.One;
+
         }
 
         return base.TryBuild(buildStrength);

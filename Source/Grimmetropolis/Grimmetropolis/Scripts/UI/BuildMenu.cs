@@ -7,7 +7,8 @@ public enum SelectableBuilding
 {
     Outpost,
     Wall,
-    Farm
+    Farm,
+    Bridge,
 }
 
 public class BuildMenu : TDComponent
@@ -162,6 +163,7 @@ public class BuildMenu : TDComponent
             SelectableBuilding.Outpost => TDContentManager.LoadTexture("UIBuildingOutpostIcon"),
             SelectableBuilding.Wall => TDContentManager.LoadTexture("UIBuildingWallIcon"),
             SelectableBuilding.Farm => TDContentManager.LoadTexture("UIBuildingFarmIcon"),
+            SelectableBuilding.Bridge => TDContentManager.LoadTexture("UIBuildingBridgeIcon"),
             _ => TDContentManager.LoadTexture("UIBuildingOutpostIcon")
         };
     }
@@ -170,12 +172,14 @@ public class BuildMenu : TDComponent
     {
         if (Icon == null) return null;
 
-        return buildingIcon switch
+        Building building = buildingIcon switch
         {
             SelectableBuilding.Outpost => PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost).GetComponent<Outpost>(),
             SelectableBuilding.Wall => PrefabFactory.CreatePrefab(PrefabType.BuildingWall).GetComponent<Wall>(),
             SelectableBuilding.Farm => PrefabFactory.CreatePrefab(PrefabType.BuildingFarm).GetComponent<Farm>(),
+            SelectableBuilding.Bridge => PrefabFactory.CreatePrefab(PrefabType.BuildingBridge).GetComponent<Bridge>(),
             _ => PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost).GetComponent<Outpost>()
         };
+        return building;
     }
 }

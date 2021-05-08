@@ -21,6 +21,7 @@ public enum PrefabType
     BuildingOutpost,
     BuildingWall,
     BuildingFarm,
+    BuildingBridge,
 
     ResourceWood,
     ResourceStone,
@@ -211,6 +212,15 @@ public static class PrefabFactory
                     mesh.Model = TDContentManager.LoadModel("BuildingFarm");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     farm.Mesh = mesh;
+                    break;
+                }
+            case PrefabType.BuildingBridge:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    Bridge bridge = prefab.AddComponent<Bridge>();
+                    mesh.Model = TDContentManager.LoadModel("BuildingBridge");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    bridge.Mesh = mesh;
                     break;
                 }
 

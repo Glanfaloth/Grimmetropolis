@@ -1,15 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 
 using System;
-using System.Diagnostics;
 
 public abstract class Structure : TDComponent
 {
-    public Point Position = Point.Zero;
+    private Point _position = Point.Zero;
+    public virtual Point Position
+    {
+        get => _position;
+        set
+        {
+            _position = value;
+        }
+    }
+
     public Point Size = new Point(1, 1);
 
     public bool IsPassable = false;
     public virtual bool CanBeAttacked => false;
+
     public bool IsPreview = false;
 
     public TDMesh Mesh;
