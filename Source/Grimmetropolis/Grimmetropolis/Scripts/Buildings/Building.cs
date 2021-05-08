@@ -14,6 +14,14 @@ public abstract class Building : Structure, ITarget
     public float BaseHealth = Config.BUILDING_DEFAULT_HEALTH;
 
     protected float _health = Config.BUILDING_DEFAULT_HEALTH;
+
+    protected bool _missingUpkeep = false;
+    public virtual bool MissingUpkeep
+    {
+        get => _missingUpkeep;
+        set => _missingUpkeep = value;
+    }
+
     public virtual float Health
     {
         get => _health;
@@ -71,8 +79,10 @@ public abstract class Building : Structure, ITarget
                 _timeResourceUpkeep -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (_timeResourceUpkeep <= 0f)
                 {
+                    MissingUpkeep = !ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, GetResourceUpkeep());
                     _timeResourceUpkeep += _durationResourceUpkeep;
                     GameManager.Instance.ResourcePool -= GetResourceUpkeep();
+                    GameManager.Instance.ResourcePool = ResourcePile.Max(GameManager.Instance.ResourcePool, new ResourcePile(0, 0, 0));
                 }
             }
             _progressBar?.Show();

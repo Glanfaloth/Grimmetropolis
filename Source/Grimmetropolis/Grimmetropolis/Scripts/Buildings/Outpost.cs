@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using System.Diagnostics;
+
 public class Outpost : Building
 {
     public override ResourcePile GetResourceCost() => new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST);
@@ -17,13 +19,24 @@ public class Outpost : Building
 
     public override float BuildTime => Config.OUTPOST_BUILD_VALUE;
 
+    public override bool MissingUpkeep
+    {
+        get => base.MissingUpkeep;
+        set
+        {
+            base.MissingUpkeep = value;
+            _interval = (MissingUpkeep ? 2f : 1f) * Config.OUTPOST_SHOOTING_RATE;
+            ShootingRange.Radius = (MissingUpkeep ? .5f : 1f) * Config.OUTPOST_SHOOTING_RANGE;
+        }
+    }
+
     public override void Initialize()
     {
         BaseHealth = Config.OUTPOST_HEALTH;
         Health = Config.OUTPOST_HEALTH;
 
         ShootingRange.IsTrigger = true;
-        ShootingRange.Radius = Config.OUTPOST_SHOOTING_RANGE;
+        ShootingRange.Radius = (MissingUpkeep ? .5f : 1f) * Config.OUTPOST_SHOOTING_RANGE;
         ShootingRange.Height = 2f;
         ShootingRange.Offset = Vector3.Zero;
         ShootingRange.collisionEvent += GetClosestCollider;

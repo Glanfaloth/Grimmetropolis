@@ -1,4 +1,6 @@
-﻿public class ResourcePile
+﻿using Microsoft.Xna.Framework;
+
+public class ResourcePile
 {
     public int Wood = 0;
     public int Stone = 0;
@@ -15,9 +17,9 @@
 
     public ResourcePile() : this(0, 0) { }
 
-    public static ResourcePile operator -(ResourcePile a) => new ResourcePile(-a.Wood, -a.Stone, -a.Food);
-    public static ResourcePile operator +(ResourcePile a, ResourcePile b) => new ResourcePile(a.Wood + b.Wood, a.Stone + b.Stone, a.Food + b.Food);
-    public static ResourcePile operator -(ResourcePile a, ResourcePile b) => new ResourcePile(a.Wood - b.Wood, a.Stone - b.Stone, a.Food - b.Food);
+    public static ResourcePile operator-(ResourcePile a) => new ResourcePile(-a.Wood, -a.Stone, -a.Food);
+    public static ResourcePile operator+(ResourcePile a, ResourcePile b) => new ResourcePile(a.Wood + b.Wood, a.Stone + b.Stone, a.Food + b.Food);
+    public static ResourcePile operator-(ResourcePile a, ResourcePile b) => new ResourcePile(a.Wood - b.Wood, a.Stone - b.Stone, a.Food - b.Food);
     public override string ToString() => $"Wood: {Wood}, Stone {Stone}, Food {Food}";
 
     public static bool CheckAvailability(ResourcePile a, ResourcePile b)
@@ -27,5 +29,14 @@
         if (a.Food - b.Food < 0) return false;
 
         return true;
+    }
+
+    public static ResourcePile Max(ResourcePile a, ResourcePile b)
+    {
+        return new ResourcePile(MathHelper.Max(a.Wood, b.Wood), MathHelper.Max(a.Stone, b.Stone), MathHelper.Max(a.Food, b.Food));
+    }
+    public static ResourcePile Min(ResourcePile a, ResourcePile b)
+    {
+        return new ResourcePile(MathHelper.Min(a.Wood, b.Wood), MathHelper.Min(a.Stone, b.Stone), MathHelper.Min(a.Food, b.Food));
     }
 }
