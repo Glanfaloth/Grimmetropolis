@@ -6,6 +6,7 @@ public class Outpost : Building
 {
     public override ResourcePile GetResourceCost() => new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST);
     public override ResourcePile GetResourceUpkeep() => new ResourcePile(0, 0, Config.OUTPOST_FOOD_UPKEEP);
+    public override float BuildTime => Config.OUTPOST_BUILD_VALUE;
 
     public TDCylinderCollider ShootingRange = null;
 
@@ -17,7 +18,6 @@ public class Outpost : Building
     private float _arrowSpeed = Config.OUTPOST_ARROW_SPEED;
     private float _arrowDamage = Config.OUTPOST_ARROW_DAMAGE;
 
-    public override float BuildTime => Config.OUTPOST_BUILD_VALUE;
 
     public override bool MissingUpkeep
     {

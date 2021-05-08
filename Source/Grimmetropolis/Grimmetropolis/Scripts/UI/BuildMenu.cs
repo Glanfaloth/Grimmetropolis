@@ -19,7 +19,6 @@ public class BuildMenu : TDComponent
     public TDSprite Icon;
 
     public bool IsShowing = true;
-    private bool _requiresHide = false;
 
     private SelectableBuilding _currentBuilding;
     private bool _activeControl = true;
@@ -65,20 +64,18 @@ public class BuildMenu : TDComponent
 
             if (Player.Input.BuildModePressed()) Hide();
         }
-
-        if (_requiresHide) Hide();
     }
 
     public void Show()
     {
         if (IsShowing) return;
-
-        if (!TDSceneManager.ActiveScene.SpriteObjects.Contains(BuildSprite)) TDSceneManager.ActiveScene.SpriteObjects.Add(BuildSprite);
-        if (!TDSceneManager.ActiveScene.SpriteObjects.Contains(Icon)) TDSceneManager.ActiveScene.SpriteObjects.Add(Icon);
-
         IsShowing = true;
 
+        BuildSprite.IsShowing = IsShowing;
+        Icon.IsShowing = IsShowing;
+
         _previewBuilding = GetBuilding(_currentBuilding);
+        _previewBuilding.Position = GameManager.Instance.Map.GetMapTile(Player.InteractionCollider.CenterXY).Position;
         _previewBuilding.IsPreview = true;
 
         OvertakeControl();
@@ -87,37 +84,27 @@ public class BuildMenu : TDComponent
     public void Hide()
     {
         if (!IsShowing) return;
+        IsShowing = false;
 
-        if (TDSceneManager.ActiveScene.SpriteObjects.Contains(BuildSprite) && TDSceneManager.ActiveScene.SpriteObjects.Contains(Icon))
-        {
-            TDSceneManager.ActiveScene.SpriteObjects.Remove(BuildSprite);
-            TDSceneManager.ActiveScene.SpriteObjects.Remove(Icon);
+        BuildSprite.IsShowing = IsShowing;
+        Icon.IsShowing = IsShowing;
 
-            IsShowing = false;
-            _requiresHide = false;
-
-            _previewBuilding?.TDObject.Destroy();
-
-            ReturnControl();
-        }
-        else _requiresHide = true;
+        _previewBuilding?.TDObject.Destroy();
+        ReturnControl();
     }
 
     private void OvertakeControl()
     {
         if (_activeControl) return;
-
-        Player.ActiveInput = false;
-
         _activeControl = true;
 
+        Player.ActiveInput = false;
         _cooldown = _cooldownDuration;
     }
 
     private void ReturnControl()
     {
         Player.ActiveInput = true;
-
         _activeControl = false;
 
         Player.Cooldown = _cooldownDuration;

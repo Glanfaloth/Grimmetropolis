@@ -30,13 +30,13 @@ public class TDMesh : TDComponent
         }
     }
 
-    private bool _isShown = true;
-    public bool IsShown
+    private bool _isShowing = true;
+    public bool IsShowing
     {
-        get => _isShown;
+        get => _isShowing;
         set
         {
-            _isShown = value;
+            _isShowing = value;
             AddToList();
         }
     }
@@ -142,7 +142,7 @@ public class TDMesh : TDComponent
 
     private void AddToList()
     {
-        if (_isShown)
+        if (_isShowing)
         {
             if (_isPreview)
             {

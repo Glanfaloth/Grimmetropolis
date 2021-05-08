@@ -9,6 +9,9 @@ public enum BridgeOrientation
 public class Bridge : Building
 {
     public override MapTileType GetRequiredMapTileType() => MapTileType.Water;
+    public override ResourcePile GetResourceCost() => new ResourcePile(Config.BRIDGE_WOOD_COST, Config.BRIDGE_STONE_COST);
+    public override float BuildTime => Config.BRIDGE_BUILD_VALUE;
+
     public override bool CanBeAttacked => false;
 
     private TDTransform[] _bridgeAttachementTransforms = new TDTransform[4];
@@ -28,6 +31,9 @@ public class Bridge : Building
 
     public override void Initialize()
     {
+        BaseHealth = Config.BRIDGE_HEALTH;
+        Health = Config.BRIDGE_HEALTH;
+
         IsPassable = true;
 
         for (int i = 0; i < _bridgeAttachementTransforms.Length; i++)
@@ -102,10 +108,10 @@ public class Bridge : Building
         MapTile mapTileLeft = mapTile.GetNeighbouringMapTile(new Point(0, -1));
         MapTile mapTileDown = mapTile.GetNeighbouringMapTile(new Point(1, 0));
         MapTile mapTileRight = mapTile.GetNeighbouringMapTile(new Point(0, 1));
-        _bridgeAttachementMeshes[0].IsShown = mapTileUp?.Type == MapTileType.Ground;
-        _bridgeAttachementMeshes[1].IsShown = mapTileLeft?.Type == MapTileType.Ground;
-        _bridgeAttachementMeshes[2].IsShown = mapTileDown?.Type == MapTileType.Ground;
-        _bridgeAttachementMeshes[3].IsShown = mapTileRight?.Type == MapTileType.Ground;
+        _bridgeAttachementMeshes[0].IsShowing = mapTileUp?.Type == MapTileType.Ground;
+        _bridgeAttachementMeshes[1].IsShowing = mapTileLeft?.Type == MapTileType.Ground;
+        _bridgeAttachementMeshes[2].IsShowing = mapTileDown?.Type == MapTileType.Ground;
+        _bridgeAttachementMeshes[3].IsShowing = mapTileRight?.Type == MapTileType.Ground;
 
         if (!IsPreview)
         {
@@ -113,10 +119,10 @@ public class Bridge : Building
             else if (mapTileDown?.Structure is Bridge bridge1) Orientation = bridge1.Orientation;
             else if (mapTileLeft?.Structure is Bridge bridge2) Orientation = bridge2.Orientation;
             else if (mapTileRight?.Structure is Bridge bridge3) Orientation = bridge3.Orientation;
-            else if (_bridgeAttachementMeshes[0].IsShown && _bridgeAttachementMeshes[2].IsShown) Orientation = BridgeOrientation.Vertical;
-            else if (_bridgeAttachementMeshes[1].IsShown && _bridgeAttachementMeshes[3].IsShown) Orientation = BridgeOrientation.Horizontal;
-            else if (_bridgeAttachementMeshes[0].IsShown || _bridgeAttachementMeshes[2].IsShown) Orientation = BridgeOrientation.Vertical;
-            else if (_bridgeAttachementMeshes[1].IsShown || _bridgeAttachementMeshes[3].IsShown) Orientation = BridgeOrientation.Horizontal;
+            else if (_bridgeAttachementMeshes[0].IsShowing && _bridgeAttachementMeshes[2].IsShowing) Orientation = BridgeOrientation.Vertical;
+            else if (_bridgeAttachementMeshes[1].IsShowing && _bridgeAttachementMeshes[3].IsShowing) Orientation = BridgeOrientation.Horizontal;
+            else if (_bridgeAttachementMeshes[0].IsShowing || _bridgeAttachementMeshes[2].IsShowing) Orientation = BridgeOrientation.Vertical;
+            else if (_bridgeAttachementMeshes[1].IsShowing || _bridgeAttachementMeshes[3].IsShowing) Orientation = BridgeOrientation.Horizontal;
 
             if (Orientation == BridgeOrientation.Horizontal)
             {

@@ -74,6 +74,12 @@ public static class Config
 
     public const float FARM_BUILD_VALUE = 10f;
 
+    public const int BRIDGE_WOOD_COST = 2;
+    public const int BRIDGE_STONE_COST = 0;
+    public const float BRIDGE_HEALTH = 10f;
+
+    public const float BRIDGE_BUILD_VALUE = 10f;
+
     public const int RESOURCE_WOOD_GATHER_BASE_RATE = 1;
     public const int RESOURCE_STONE_GATHER_BASE_RATE = 1;
 
