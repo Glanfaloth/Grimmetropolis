@@ -18,7 +18,8 @@ public abstract class Character : TDComponent, ITarget
     public TDMesh Mesh;
 
     // health will be set during Initialize
-    private float _health = -1;
+    // ToDo: -1 introduces bugs for EnemyGroup
+    private float _health = int.MaxValue;
     public float Health
     {
         get => _health;

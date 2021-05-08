@@ -14,7 +14,7 @@ public class MovementGraph
         return result;
     }
 
-    private readonly Map _map;
+    public Map Map { get; }
     private readonly List<Location> _vertices = new List<Location>();
     private readonly Dictionary<Tuple<EnemyMove.Type, int>, PathComputation> _paths = new Dictionary<Tuple<EnemyMove.Type, int>, PathComputation>();
 
@@ -25,10 +25,23 @@ public class MovementGraph
 
     private MovementGraph(Map map)
     {
-        _map = map;
+        Map = map;
     }
 
-    internal EnemyMove GetNextMoveFromMapTile(MapTile tile, EnemyMove.Type actions, float attackRange, Location target = null)
+    internal List<EnemyMove> GetPathToTile(MapTile startTile, Point target, EnemyMove.Type actions, float attackRange)
+    {
+        Location targetLocation = Map.MapTiles[target.X, target.Y].TileVertex;
+        PathComputation pathComputation = GetPathComputation(actions, attackRange);
+        return pathComputation.GetPathToLocation(startTile, targetLocation);
+    }
+
+    internal EnemyMove GetNextMoveFromMapTile(MapTile tile, EnemyMove.Type actions, float attackRange, Location target)
+    {
+        PathComputation pathComputation = GetPathComputation(actions, attackRange);
+        return pathComputation.GetNextMoveFromTo(tile, target);
+    }
+
+    private PathComputation GetPathComputation(EnemyMove.Type actions, float attackRange)
     {
         int pathAttackRange = (int)attackRange;
         if ((actions & EnemyMove.Type.RangedAttack) != EnemyMove.Type.RangedAttack)
@@ -41,34 +54,38 @@ public class MovementGraph
         {
             PathComputation path = new PathComputation(this, actions, pathAttackRange);
             _paths[key] = path;
-            path.ComputeShortestPathToMapTile(_startLocation);
         }
 
-        
-        return target != null
-            ? _paths[key].GetNextMoveFromTo(tile, target)
-            : _paths[key].GetNextMoveFromMapTile(tile);
+        return _paths[key];
     }
 
-    internal EnemyMove GetNextMove(EnemyMove move, EnemyMove.Type actions, float attackRange)
+    //internal EnemyMove GetNextMove(EnemyMove move, EnemyMove.Type actions, float attackRange)
+    //{
+    //    int pathAttackRange = (int)attackRange;
+    //    if ((actions & EnemyMove.Type.RangedAttack) != EnemyMove.Type.RangedAttack)
+    //    {
+    //        pathAttackRange = 0;
+    //    }
+
+    //    var key = new Tuple<EnemyMove.Type, int>(actions, pathAttackRange);
+    //    return _paths[key].GetNextMove(move);
+    //}
+
+    //internal void ComputeShortestPathToMapTile(Point start)
+    //{
+    //    _startLocation = Map.MapTiles[start.X, start.Y].TileVertex;
+
+    //    foreach (var path in _paths.Values)
+    //    {
+    //        path.ComputeShortestPathToMapTile(_startLocation);
+    //    }
+    //}
+
+    internal void ClearPaths()
     {
-        int pathAttackRange = (int)attackRange;
-        if ((actions & EnemyMove.Type.RangedAttack) != EnemyMove.Type.RangedAttack)
-        {
-            pathAttackRange = 0;
-        }
-
-        var key = new Tuple<EnemyMove.Type, int>(actions, pathAttackRange);
-        return _paths[key].GetNextMove(move);
-    }
-
-    internal void ComputeShortestPathToMapTile(Point start)
-    {
-        _startLocation = _map.MapTiles[start.X, start.Y].TileVertex;
-
         foreach (var path in _paths.Values)
         {
-            path.ComputeShortestPathToMapTile(_startLocation);
+            path.ClearPaths();
         }
     }
 
@@ -80,12 +97,12 @@ public class MovementGraph
 
     private void AddMapVertices()
     {
-        for (int x = 0; x < _map.Width; x++)
+        for (int x = 0; x < Map.Width; x++)
         {
-            for (int y = 0; y < _map.Height; y++)
+            for (int y = 0; y < Map.Height; y++)
             {
-                AddVertex(_map.MapTiles[x, y].TileVertex);
-                AddVertex(_map.MapTiles[x, y].StructureVertex);
+                AddVertex(Map.MapTiles[x, y].TileVertex);
+                AddVertex(Map.MapTiles[x, y].StructureVertex);
             }
         }
     }

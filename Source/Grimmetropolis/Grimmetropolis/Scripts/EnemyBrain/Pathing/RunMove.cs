@@ -22,4 +22,9 @@ internal class RunMove : EnemyMove
         Destination = destination;
         _distanceCost = distanceCost;
     }
+
+    public override NextMoveInfo CreateInfo()
+    {
+        return new NextMoveInfo(null, MovementType, To.Tile.TDObject.Transform.LocalPosition.GetXY());
+    }
 }

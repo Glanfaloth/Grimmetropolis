@@ -15,14 +15,16 @@ public abstract class EnemyMove
         RangedAttack    = 0x04,
 
         // special moves 
-        StealArtifact   = 0x1000,
-        TakeArtifact    = 0x2000,
+        EndOfPath       = 0x1000,
     }
 
     public abstract Type MovementType { get; }
 
     public Location From { get; }
     public Location To { get; }
+
+    public abstract NextMoveInfo CreateInfo();
+
     public abstract float Cost { get; }
 
     protected EnemyMove(Location location)
@@ -54,6 +56,11 @@ public abstract class EnemyMove
 
         internal NoMove(Location location) : base(location)
         {
+        }
+
+        public override NextMoveInfo CreateInfo()
+        {
+            return new NextMoveInfo(null, MovementType, Vector2.Zero);
         }
     }
 }
