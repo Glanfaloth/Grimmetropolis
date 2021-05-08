@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 
 public class TDScene
@@ -13,6 +13,7 @@ public class TDScene
     public TDCamera CameraObject;
     public TDLight LightObject;
     public List<TDMesh> MeshObjects = new List<TDMesh>();
+    public List<TDMesh> TransparentMeshObjects = new List<TDMesh>();
 
     public List<TDCylinderCollider> CylinderColliderObjects = new List<TDCylinderCollider>();
     public TDCuboidCollider[,] CuboidColliderObjects = new TDCuboidCollider[0, 0];
@@ -97,9 +98,13 @@ public class TDScene
         TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(null);
 
         // Draw render
-        foreach (TDMesh meshObject in MeshObjects)
+        for (int i = 0; i < MeshObjects.Count; i++)
         {
-            meshObject.Draw();
+            MeshObjects[i].Draw();
+        }
+        for (int i = 0; i < TransparentMeshObjects.Count; i++)
+        {
+            TransparentMeshObjects[i].Draw();
         }
 
         // Draw sprites and strings

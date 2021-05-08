@@ -49,6 +49,17 @@ public class TDMesh : TDComponent
         {
             _isPreview = value;
             _technique = _isPreview ? "PreviewEffect" : "LightEffect";
+
+            if (_isPreview)
+            {
+                TDSceneManager.ActiveScene.MeshObjects.Remove(this);
+                if (!TDSceneManager.ActiveScene.TransparentMeshObjects.Contains(this)) TDSceneManager.ActiveScene.TransparentMeshObjects.Add(this);
+            }
+            else
+            {
+                if (!TDSceneManager.ActiveScene.MeshObjects.Contains(this)) TDSceneManager.ActiveScene.MeshObjects.Add(this);
+                TDSceneManager.ActiveScene.TransparentMeshObjects.Remove(this);
+            }
         }
     }
 
@@ -63,7 +74,8 @@ public class TDMesh : TDComponent
 
         Effect = TDContentManager.LoadEffect("LightEffect");
 
-        TDSceneManager.ActiveScene.MeshObjects.Add(this);
+        if (_isPreview && !TDSceneManager.ActiveScene.TransparentMeshObjects.Contains(this)) TDSceneManager.ActiveScene.TransparentMeshObjects.Add(this);
+        else if (!IsPreview && !TDSceneManager.ActiveScene.MeshObjects.Contains(this)) TDSceneManager.ActiveScene.MeshObjects.Add(this);
     }
 
     private void SetModelEffect()
@@ -137,5 +149,6 @@ public class TDMesh : TDComponent
         base.Destroy();
 
         TDSceneManager.ActiveScene.MeshObjects.Remove(this);
+        TDSceneManager.ActiveScene.TransparentMeshObjects.Remove(this);
     }
 }
