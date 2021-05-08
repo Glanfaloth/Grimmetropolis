@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,8 +13,9 @@ public class MoveCommand : EnemyCommand
         _targetLocation = targetLocation;
     }
 
-    protected override EnemyMove DoGetNextMove(MapTile tile, EnemyMove.Type actions, float attackRange)
+    protected override NextMoveInfo DoGetNextMoveInfo(MapTile tile, EnemyMove.Type actions, float attackRange, Vector2 localPosition)
     {
-        return Graph.GetNextMoveFromMapTile(tile, actions, attackRange, _targetLocation);
+        EnemyMove nextMove = Graph.GetNextMoveFromMapTile(tile, actions, attackRange, _targetLocation);
+        return nextMove.CreateInfo();
     }
 }

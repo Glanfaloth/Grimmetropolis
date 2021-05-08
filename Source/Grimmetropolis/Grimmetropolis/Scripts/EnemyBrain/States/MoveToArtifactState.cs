@@ -41,14 +41,26 @@ public class MoveToArtifactState : EnemyGroupState
 
         MoveCommand cmd = new MoveCommand(enemyGroup.Graph, futureTile);
         SendCommandToAll(enemyGroup, cmd);
+
+        // TODO: snyc up speed
+        // TODO: move in formation
     }
 
     internal override EnemyGroupState UpdateState(EnemyGroup enemyGroup)
     {
-        if (enemyGroup.ArtifactBearer != null)
+        // TODO: handle civilian buildings (RaidState?)
+        // TODO: Group up state
+        // TODO: handle buildings on the way
+        // TODO: handle players close
+        if (_pathLength < Config.ATTACK_MOVE_COUNT_STATE_CHANGE)
         {
-            return new StealArtifactState();
+            return new AttackCastleState();
         }
+
+        //if (_movesUntilAttack < Config.ATTACK_MOVE_COUNT_STATE_CHANGE)
+        //{
+        //    return new AttackObstacleState(_firstAttackMove);
+        //}
         return this;
     }
 }

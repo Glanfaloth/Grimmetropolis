@@ -6,7 +6,7 @@ public class EnemyCatapult : Enemy
 
     public override EnemyMove.Type Actions => EnemyMove.Type.Run | EnemyMove.Type.RangedAttack;
 
-    protected override void ShootProjectile(RangedAttackMove nextMove)
+    protected override void ShootProjectile(ITarget target)
     {
         Animation.UseAnimation();
 
@@ -20,7 +20,7 @@ public class EnemyCatapult : Enemy
 
                 //TODO: if shot from enemy height, enemy hits itself ...
                 stonePayload.StartPosition = TDObject.Transform.Position + new Vector3(0f, 0f, 1.25f);
-                stonePayload.TargetCharacter = nextMove.Target;
+                stonePayload.TargetCharacter = target;
                 stonePayload.Damage = DamageAgainstBuildigns;
                 stonePayload.Speed = ProjectileSpeed;
                 stonePayload.IsEvilArrow = true;

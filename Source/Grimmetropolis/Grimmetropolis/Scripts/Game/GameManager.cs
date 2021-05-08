@@ -54,8 +54,9 @@ public class GameManager : TDComponent
 
         // ResourcePool
         ResourcePool = new ResourcePile();
-        //ResourcePool.Stone = 100;
-        //ResourcePool.Wood = 100;
+
+        ResourcePool.Stone = 100;
+        ResourcePool.Wood = 100;
 
         // EnemyBrain
         TDObject enemyAI = PrefabFactory.CreatePrefab(PrefabType.Empty);

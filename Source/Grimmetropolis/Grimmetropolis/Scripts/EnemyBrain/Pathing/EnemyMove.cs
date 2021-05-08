@@ -22,6 +22,9 @@ public abstract class EnemyMove
 
     public Location From { get; }
     public Location To { get; }
+
+    public abstract NextMoveInfo CreateInfo();
+
     public abstract float Cost { get; }
 
     protected EnemyMove(Location location)
@@ -53,6 +56,11 @@ public abstract class EnemyMove
 
         internal NoMove(Location location) : base(location)
         {
+        }
+
+        public override NextMoveInfo CreateInfo()
+        {
+            return new NextMoveInfo(null, MovementType, Vector2.Zero);
         }
     }
 }

@@ -85,12 +85,11 @@ public class EnemyGroup
 
     private void RemoveDeadEnemies<T>(List<T> enemies) where T : Enemy
     {
-        int index = enemies.Count - 1;
         for (int i = enemies.Count - 1; i >= 0; i--)
         {
-            if (enemies[index].Health <= 0)
+            if (enemies[i].Health <= 0)
             {
-                enemies.RemoveAt(index);
+                enemies.RemoveAt(i);
             }
         }
     }

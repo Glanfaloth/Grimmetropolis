@@ -5,7 +5,7 @@ using System.Text;
 
 public static class Config
 {
-    #region PathingAI
+    #region EnemyBehaviour
 
     public static readonly float RUN_MOVE_DIAGONAL_BASE_COST = (float)Math.Sqrt(2);
     public const float RUN_MOVE_DIRECT_BASE_COST = 1;
@@ -33,6 +33,10 @@ public static class Config
     public const float WAVE_GROWTH_FACTOR = 1.125f;
 
     public const int WAVE_SPAWN_RADIUS = 5;
+
+
+    public const int ATTACK_MOVE_COUNT_STATE_CHANGE = 5;
+    public const int COMMAND_PROXIMITY_RANGE = 5;
 
     #endregion
 
