@@ -130,17 +130,16 @@ public class Player : Character
             return;
         }
 
-        MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        if (building.CheckPlacability(mapTile) && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, building.GetResourceCost()))
+        if (building.CheckPlacability(building.Position) && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, building.GetResourceCost()))
         {
             GameManager.Instance.ResourcePool -= building.GetResourceCost();
-            building.Position = mapTile.Position;
             building.IsBlueprint = true;
 
             Cooldown = Config.PLAYER_PLACE_BUILDING_COOLDOWN;
             ResetProgressBarForProgress();
             SetProgressBar(Cooldown);
         }
+        else building.TDObject.Destroy();
     }
 
     public void Build(GameTime gameTime)

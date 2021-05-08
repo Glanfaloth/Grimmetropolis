@@ -11,6 +11,8 @@ public abstract class Structure : TDComponent
         set
         {
             _position = value;
+            if (_position.X + Size.X > GameManager.Instance.Map.Width) _position.X = GameManager.Instance.Map.Width - Size.X;
+            if (_position.Y + Size.Y > GameManager.Instance.Map.Height) _position.Y = GameManager.Instance.Map.Height - Size.Y;
         }
     }
 

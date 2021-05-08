@@ -40,7 +40,7 @@ public abstract class Building : Structure, ITarget
 
     public virtual float BuildTime { get; } = Config.OUTPOST_BUILD_VALUE;
 
-    public Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
+    public virtual Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
 
     TDObject ITarget.TDObject => TDObject;
 
@@ -149,8 +149,14 @@ public abstract class Building : Structure, ITarget
         return true;
     }
 
-    public bool CheckPlacability(MapTile mapTile)
+    public bool CheckPlacability(Point mapTilePosition)
     {
+        if (mapTilePosition.X < 0 || mapTilePosition.Y < 0
+            || mapTilePosition.X - 1 > GameManager.Instance.Map.Width
+            || mapTilePosition.Y - 1 > GameManager.Instance.Map.Height) return false;
+
+        MapTile mapTile = GameManager.Instance.Map.MapTiles[mapTilePosition.X, mapTilePosition.Y];
+
         int xHigh = mapTile.Position.X + Size.X;
         int yHigh = mapTile.Position.Y + Size.Y;
 

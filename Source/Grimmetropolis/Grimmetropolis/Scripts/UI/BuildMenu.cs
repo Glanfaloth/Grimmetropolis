@@ -51,7 +51,9 @@ public class BuildMenu : TDComponent
 
             if (Player.Input.ActionPressed())
             {
-                Player.BuildBlueprint(GetBuilding(_currentBuilding));
+                Building building = GetBuilding(_currentBuilding);
+                building.Position = _previewBuilding.Position;
+                Player.BuildBlueprint(building);
                 Hide();
             }
 
