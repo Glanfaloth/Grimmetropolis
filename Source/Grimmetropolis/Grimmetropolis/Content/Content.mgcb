@@ -613,6 +613,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/UIClock.png
 
+#begin Textures/UIFood.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UIFood.png
+
 #begin Textures/UIHeart.png
 /importer:TextureImporter
 /processor:TextureProcessor

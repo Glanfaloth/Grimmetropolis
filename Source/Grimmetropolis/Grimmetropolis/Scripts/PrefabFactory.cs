@@ -337,17 +337,22 @@ public static class PrefabFactory
 
                     TDObject woodObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDObject stoneObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDObject foodObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDSprite wood = woodObject.AddComponent<TDSprite>();
                     TDSprite stone = stoneObject.AddComponent<TDSprite>();
+                    TDSprite food = foodObject.AddComponent<TDSprite>();
                     wood.Texture = TDContentManager.LoadTexture("UIWood");
                     stone.Texture = TDContentManager.LoadTexture("UIStone");
+                    food.Texture = TDContentManager.LoadTexture("UIFood");
                     resourceDisplay.WoodUI = wood;
                     resourceDisplay.StoneUI = stone;
+                    resourceDisplay.FoodUI = food;
                     woodObject.RectTransform.Scale = 0.05f * Vector2.One;
-                    woodObject.RectTransform.LocalPosition = new Vector2(-4f, 10f);
+                    woodObject.RectTransform.LocalPosition = new Vector2(-2f, 10f);
                     stoneObject.RectTransform.Scale = 0.04f * Vector2.One;
-                    stoneObject.RectTransform.LocalPosition = new Vector2(-2f + 0.05f * wood.Texture.Width, 10f);
-
+                    stoneObject.RectTransform.LocalPosition = new Vector2(5f + 0.05f * wood.Texture.Width, 10f);
+                    foodObject.RectTransform.Scale = 0.06f * Vector2.One;
+                    foodObject.RectTransform.LocalPosition = new Vector2(0.05f * wood.Texture.Width + 0.06f * stone.Texture.Width, 25f);
                     break;
                 }
 

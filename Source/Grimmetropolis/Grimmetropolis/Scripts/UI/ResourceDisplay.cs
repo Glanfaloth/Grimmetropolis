@@ -5,6 +5,7 @@ public class ResourceDisplay : TDComponent
     public TDText TextUI;
     public TDSprite WoodUI;
     public TDSprite StoneUI;
+    public TDSprite FoodUI;
 
     public override void Initialize()
     {
