@@ -5,7 +5,7 @@ using System.Text;
 
 public static class Config
 {
-    #region PathingAI
+    #region EnemyBehaviour
 
     public static readonly float RUN_MOVE_DIAGONAL_BASE_COST = (float)Math.Sqrt(2);
     public const float RUN_MOVE_DIRECT_BASE_COST = 1;
@@ -34,6 +34,10 @@ public static class Config
 
     public const int WAVE_SPAWN_RADIUS = 5;
 
+
+    public const int ATTACK_MOVE_COUNT_STATE_CHANGE = 5;
+    public const int COMMAND_PROXIMITY_RANGE = 5;
+
     #endregion
 
     #region Buildings
@@ -48,6 +52,7 @@ public static class Config
     public const float OUTPOST_HEALTH = 20f;
     public const int OUTPOST_WOOD_COST = 5;
     public const int OUTPOST_STONE_COST = 5;
+    public const int OUTPOST_FOOD_UPKEEP = 1;
     public const float OUTPOST_SHOOTING_RANGE = 3f;
     public const float OUTPOST_SHOOTING_RATE = .5f;
 
@@ -62,6 +67,12 @@ public static class Config
 
     public const float WALL_BUILD_VALUE = 10f;
 
+    public const int FARM_WOOD_COST = 4;
+    public const int FARM_STONE_COST = 2;
+    public const int FARM_FOOD_UPKEEP = -4;
+    public const float FARM_HEALTH = 10f;
+
+    public const float FARM_BUILD_VALUE = 10f;
 
     public const int RESOURCE_WOOD_GATHER_BASE_RATE = 1;
     public const int RESOURCE_STONE_GATHER_BASE_RATE = 1;

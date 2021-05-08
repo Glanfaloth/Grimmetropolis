@@ -73,11 +73,9 @@ public class ResourceDeposit : Structure
         {
             case ResourceDepositType.Wood:
                 GameManager.Instance.ResourcePool += new ResourcePile(Config.RESOURCE_WOOD_GATHER_BASE_RATE, 0);
-                Debug.WriteLine("Wood collected to " + GameManager.Instance.ResourcePool.Wood);
                 break;
             case ResourceDepositType.Stone:
                 GameManager.Instance.ResourcePool += new ResourcePile(0, Config.RESOURCE_STONE_GATHER_BASE_RATE);
-                Debug.WriteLine("Stone collected to " + GameManager.Instance.ResourcePool.Stone);
                 break;
         }
 

@@ -23,17 +23,20 @@ public class ToolPickaxe : Item
                     player.ProgressBar.Show();
                 }
 
-                player.Progress += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (player.LastClosestResourceDeposit.CurrentStorage > 0) player.Progress += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
                 if (player.Progress >= player.LastClosestResourceDeposit.HarvestTime)
                 {
                     player.LastClosestResourceDeposit.HarvestResource();
                     player.Progress -= player.LastClosestResourceDeposit.HarvestTime;
                 }
+
+                Character.Animation.UseAnimation();
             }
 
             else if (structure is Building closestBuilding)
             {
-                if (!closestBuilding.Mesh.IsBlueprint)
+                if (!closestBuilding.Mesh.IsPreview)
                 {
                     closestBuilding.Health -= Config.PLAYER_DAMAGE;
                     Character.Cooldown = Config.PLAYER_ATTACK_DURATION;

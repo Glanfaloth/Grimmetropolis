@@ -2,7 +2,7 @@
 
 using System;
 
-class EnemyWitch : Enemy
+public class EnemyWitch : Enemy
 {
 
     public override void Initialize()
@@ -19,8 +19,8 @@ class EnemyWitch : Enemy
 
     public override string MeshName => "EnemyWitch";
 
-    protected override EnemyMove.Type Actions => EnemyMove.Type.Run | EnemyMove.Type.RangedAttack;
-    protected override void ShootProjectile(RangedAttackMove nextMove)
+    public override EnemyMove.Type Actions => EnemyMove.Type.Run | EnemyMove.Type.RangedAttack;
+    protected override void ShootProjectile(ITarget target)
     {
         // nextMove.Target.Health -= _damageAgainstBuildings;
         TDObject icicleObject = PrefabFactory.CreatePrefab(PrefabType.Icicle);
@@ -28,7 +28,7 @@ class EnemyWitch : Enemy
 
         //TODO: if shot from enemy height, enemy hits itself ...
         icicle.StartPosition = TDObject.Transform.Position + 1.25f * Vector3.Backward;
-        icicle.TargetCharacter = nextMove.Target;
+        icicle.TargetCharacter = target;
         icicle.Damage = DamageAgainstBuildigns;
         icicle.Speed = ProjectileSpeed;
         icicle.IsEvilArrow = true;

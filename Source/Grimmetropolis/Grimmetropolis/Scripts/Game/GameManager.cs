@@ -31,6 +31,8 @@ public class GameManager : TDComponent
     public TDTransform StructureTransform;
     public TDTransform ItemTransform;
 
+    private EnemyGroup _spawnGroup;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -52,14 +54,17 @@ public class GameManager : TDComponent
 
         // ResourcePool
         ResourcePool = new ResourcePile();
-        //ResourcePool.Stone = 100;
-        //ResourcePool.Wood = 100;
+
+        ResourcePool.Stone = 100;
+        ResourcePool.Wood = 100;
 
         // EnemyBrain
         TDObject enemyAI = PrefabFactory.CreatePrefab(PrefabType.Empty);
         EnemyController = enemyAI.AddComponent<EnemyController>();
         EnemyController.Configure(Config.TIME_UNTIL_FIRST_WAVE, Config.TIME_BETWEEN_WAVES, Config.FIRST_WAVE_KNIGHT_COUNT, Config.FIRST_WAVE_WITCH_COUNT, Config.FIRST_WAVE_SIEGE_COUNT, Config.WAVE_GROWTH_FACTOR);
 
+        _spawnGroup = new EnemyGroup(null, EnemyController, new MapSpawnDebugState());
+        EnemyController.Groups.Add(_spawnGroup);
         // Spawner
         //// TODO: replace test spawner with real spawner
         //TDObject testSpawner = PrefabFactory.CreatePrefab(PrefabType.Empty);
@@ -160,16 +165,25 @@ public class GameManager : TDComponent
                 }
                 break;
             case MapDTO.EntityType.EnemyWitch:
-                PrefabFactory.CreateEnemyPrefab<EnemyWitch>(Config.ENEMY_WITCH_STATS, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
-                    Quaternion.Identity, enemyList.Transform);
+                {
+                    var enemy = PrefabFactory.CreateEnemyPrefab<EnemyWitch>(Config.ENEMY_WITCH_STATS, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
+                        Quaternion.Identity, enemyList.Transform);
+                    _spawnGroup.Witches.Add(enemy.GetComponent<EnemyWitch>());
+                }
                 break;
             case MapDTO.EntityType.EnemyKnight:
-                PrefabFactory.CreateEnemyPrefab<EnemyKnight>(Config.ENEMY_KNIGHTS_STATS, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
-                    Quaternion.Identity, enemyList.Transform);
+                {
+                    var enemy = PrefabFactory.CreateEnemyPrefab<EnemyKnight>(Config.ENEMY_KNIGHTS_STATS, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
+                        Quaternion.Identity, enemyList.Transform);
+                    _spawnGroup.Knights.Add(enemy.GetComponent<EnemyKnight>());
+                }
                 break;
             case MapDTO.EntityType.EnemyCatapult:
-                PrefabFactory.CreateEnemyPrefab<EnemyCatapult>(Config.ENEMY_CATAPULT_STATS, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
-                    Quaternion.Identity, enemyList.Transform);
+                {
+                    var enemy = PrefabFactory.CreateEnemyPrefab<EnemyCatapult>(Config.ENEMY_CATAPULT_STATS, Map.Corner + entityToSpawn.Position.ToVector3() + Map.Offcenter,
+                        Quaternion.Identity, enemyList.Transform);
+                    _spawnGroup.Catapults.Add(enemy.GetComponent<EnemyCatapult>());
+                }
                 break;
             case MapDTO.EntityType.Outpost:
                 {

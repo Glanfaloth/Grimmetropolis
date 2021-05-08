@@ -90,6 +90,7 @@ public class Item : TDComponent
         Vector3 position = GameManager.Instance.Map.MapTiles[Position.X, Position.Y].TDObject.Transform.Position;
         TDObject.Transform.Position = position;
         TDObject.Transform.LocalRotation = Quaternion.Identity;
+        TDObject.Transform.Scale = Vector3.One;
     }
 
     private void PlaceItem(Item item, Item previousItem)
@@ -98,9 +99,8 @@ public class Item : TDComponent
         {
             GameManager.Instance.Map.MapTiles[Position.X, Position.Y].Item = item;
         }
-
-        // TODO: in case two players place their item at the exact same time: cancel on drop off of item.
     }
+
     public void Highlight(bool highlight)
     {
         Mesh.Highlight(highlight);
@@ -113,7 +113,7 @@ public class Item : TDComponent
 
     public virtual void InteractWithStructure(GameTime gameTime, Structure structure)
     {
-        if (Character is Player player && structure.Mesh.IsBlueprint)
+        if (Character is Player player && structure.Mesh.IsPreview)
         {
             player.Build(gameTime);
             player.Animation.UseAnimation();

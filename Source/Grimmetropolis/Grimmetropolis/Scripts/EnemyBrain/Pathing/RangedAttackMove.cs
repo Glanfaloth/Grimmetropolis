@@ -11,10 +11,10 @@ public class RangedAttackMove : EnemyMove
 
     public override Type MovementType => Type.RangedAttack;
 
-    public Building Target { get; }
+    public ITarget Target { get; }
     public override float Cost => _baseCost + _attackRange * _rangeFactor;
 
-    public RangedAttackMove(Location from, Location to, Building target, float attackRange, float baseCost, float rangeFactor) : base(from, to)
+    public RangedAttackMove(Location from, Location to, ITarget target, float attackRange, float baseCost, float rangeFactor) : base(from, to)
     {
         Target = target;
         _attackRange = attackRange;
@@ -25,6 +25,11 @@ public class RangedAttackMove : EnemyMove
     public override bool IsMoveAllowed(Type actions, float attackRange)
     {
         return base.IsMoveAllowed(actions, attackRange) && _attackRange <= attackRange;
+    }
+
+    public override NextMoveInfo CreateInfo()
+    {
+        return new NextMoveInfo(Target, MovementType, To.Tile.TDObject.Transform.LocalPosition.GetXY());
     }
 }
 

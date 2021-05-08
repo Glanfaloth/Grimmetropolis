@@ -73,13 +73,18 @@ public class MapTile : TDComponent
 
     private void AdjustCollider()
     {
-        if (Structure != null)
+        bool highCollider = Structure != null;
+        if (Structure is Farm farm)
+        {
+            highCollider = farm.GetMillCollider(this);
+        }
+
+        if (highCollider)
         {
             collider.Size = new Vector3(1f, 1f, 4f);
             collider.Offset = Vector3.Zero;
         }
-        else
-        {
+        else {
             switch (Type)
             {
                 case MapTileType.Ground:
@@ -215,12 +220,5 @@ public class MapTile : TDComponent
 
         Structure?.Highlight(highlight);
         Item?.Highlight(highlight);
-    }
-
-    public void Darklight(bool highlight)
-    {
-        // TODO: this is a temporary workaround, decide how we want to display the enemy pathing
-        Mesh.BaseHighlightFactor = highlight ? .5f : 1f;
-        Mesh.Highlight(false);
     }
 }

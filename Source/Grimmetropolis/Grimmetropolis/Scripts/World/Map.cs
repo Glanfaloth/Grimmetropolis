@@ -9,6 +9,14 @@ using System.Text.Json.Serialization;
 public class Map : TDComponent
 {
 
+    public MapTile this[Point index]
+    {
+        get
+        {
+            return MapTiles[index.X, index.Y];
+        }
+    }
+
     public MapTile[,] MapTiles { get; private set; }
     public int Width { get; private set; }
     public int Height { get; private set; }

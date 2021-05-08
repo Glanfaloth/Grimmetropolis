@@ -15,6 +15,7 @@ public class GameScene : TDScene
 
         TDObject gameManager = PrefabFactory.CreatePrefab(PrefabType.GameManager);
         TDSound backgroundTest = gameManager.AddComponent<TDSound>();
+        backgroundTest.IsLooped = true;
         backgroundTest.SoundEffect = TDContentManager.LoadSoundEffect("BackgroundMusic");
         backgroundTest.Play();
 

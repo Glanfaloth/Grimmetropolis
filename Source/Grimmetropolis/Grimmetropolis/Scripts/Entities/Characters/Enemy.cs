@@ -17,7 +17,7 @@ public abstract class Enemy : Character
     private float _attackDuration;
     private float _projectileSpeed;
 
-    protected abstract EnemyMove.Type Actions { get; }
+    public abstract EnemyMove.Type Actions { get; }
 
     public abstract String MeshName { get; }
 
@@ -36,8 +36,11 @@ public abstract class Enemy : Character
     protected float DamageAgainstPlayers => _damageAgainstPlayers;
     protected float DamageAgainstBuildigns => _damageAgainstBuildings;
 
+    public EnemyCommand CurrentCommand { get; set; }
 
     public override Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
+
+    public Vector2 Position => TDObject.Transform.LocalPosition.GetXY();
 
     public void SetBaseStats(Config.EnemyStats stats)
     {
@@ -63,17 +66,10 @@ public abstract class Enemy : Character
 
     public override void Update(GameTime gameTime)
     {
-        if (_controller == null) return;
+        if (CurrentCommand == null) return;
 
-        EnemyMove nextMove;
-        if (Items[0] is MagicalArtifact)
-        {
-            nextMove = _controller.ComputeNextMove(TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange, true);
-        }
-        else
-        {
-            nextMove = _controller.ComputeNextMove(TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange);
-        }
+        NextMoveInfo nextMove = CurrentCommand.GetNextMoveInfo(TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange);
+
 
         CurrentWalkSpeed = 0f;
 
@@ -82,22 +78,23 @@ public abstract class Enemy : Character
             case EnemyMove.Type.None:
                 Debug.WriteLine("ERROR: no valid move found for enemy");
                 break;
-            case EnemyMove.Type.StealArtifact:
+            case EnemyMove.Type.EndOfPath:
+                // end of path means the enemy arrived at it's destination and has nothing to do
+
                 // TODO: implement win condition
-                Debug.WriteLine("YOU LOSE");
-                break;
-            case EnemyMove.Type.TakeArtifact:
-                // TODO: implement pick up
-                Debug.WriteLine("encountered EnemyMove.Type.TakeArtifact");
+                if (Items[0] is MagicalArtifact)
+                {
+                    Debug.WriteLine("YOU LOSE");
+                }
                 break;
             case EnemyMove.Type.Run:
-                MoveToTarget((RunMove)nextMove, gameTime);
+                MoveToTarget(nextMove.LocalPosition, gameTime);
                 break;
             case EnemyMove.Type.Attack:
-                AttackTarget((AttackMove)nextMove, gameTime);
+                AttackTarget(nextMove.Target, gameTime);
                 break;
             case EnemyMove.Type.RangedAttack:
-                RangedAttackTarget((RangedAttackMove)nextMove, gameTime);
+                RangedAttackTarget(nextMove.Target, gameTime);
                 break;
             default:
                 throw new NotSupportedException();
@@ -167,15 +164,15 @@ public abstract class Enemy : Character
         }
     }
 
-    private void AttackTarget(AttackMove nextMove, GameTime gameTime)
+    private void AttackTarget(ITarget target, GameTime gameTime)
     {
         // TODO: this doesn't seem to work when diagonal
         Interact(gameTime);
     }
 
-    private void RangedAttackTarget(RangedAttackMove nextMove, GameTime gameTime)
+    private void RangedAttackTarget(ITarget target, GameTime gameTime)
     {
-        Vector2 toTarget = nextMove.Target.TDObject.Transform.LocalPosition.GetXY() - TDObject.Transform.LocalPosition.GetXY();
+        // Vector2 toTarget = nextMove.Target.TDObject.Transform.LocalPosition.GetXY() - TDObject.Transform.LocalPosition.GetXY();
         // if (toTarget.LengthSquared() > _attackRangeSquared-1f)
         // {
         //     if (toTarget.LengthSquared() > 1f) toTarget.Normalize();
@@ -185,7 +182,7 @@ public abstract class Enemy : Character
         {
             if (Cooldown <= 0f)
             {
-                ShootProjectile(nextMove);
+                ShootProjectile(target);
 
                 Cooldown = _attackDuration;
 
@@ -194,7 +191,7 @@ public abstract class Enemy : Character
         }
     }
 
-    protected virtual void ShootProjectile(RangedAttackMove nextMove)
+    protected virtual void ShootProjectile(ITarget target)
     {
         // nextMove.Target.Health -= _damageAgainstBuildings;
         TDObject arrowObject = PrefabFactory.CreatePrefab(PrefabType.Arrow);
@@ -202,15 +199,15 @@ public abstract class Enemy : Character
 
         //TODO: if shot from enemy height, enemy hits itself ...
         arrow.StartPosition = TDObject.Transform.Position + 1.25f * Vector3.Backward;
-        arrow.TargetCharacter = nextMove.Target;
+        arrow.TargetCharacter = target;
         arrow.Damage = _damageAgainstBuildings;
         arrow.Speed = ProjectileSpeed;
         arrow.IsEvilArrow = true;
     }
 
-    private void MoveToTarget(RunMove runMove, GameTime gameTime)
+    private void MoveToTarget(Vector2 localPosition, GameTime gameTime)
     {
-        Vector2 direction = runMove.Destination.TDObject.Transform.LocalPosition.GetXY() - TDObject.Transform.LocalPosition.GetXY();
+        Vector2 direction = localPosition - TDObject.Transform.LocalPosition.GetXY();
         if (direction.LengthSquared() > 1f) direction.Normalize();
         Move(direction, gameTime);
     }

@@ -6,7 +6,8 @@ using System;
 public enum SelectableBuilding
 {
     Outpost,
-    Wall
+    Wall,
+    Farm
 }
 
 public class BuildMenu : TDComponent
@@ -16,7 +17,7 @@ public class BuildMenu : TDComponent
     public TDSprite BuildSprite;
     public TDSprite Icon;
 
-    private bool _isShowing = true;
+    public bool IsShowing = true;
     private bool _requiresHide = false;
 
     private SelectableBuilding _currentBuilding;
@@ -53,7 +54,7 @@ public class BuildMenu : TDComponent
                 Hide();
             }
 
-            if (_isShowing && _previewBuilding != null)
+            if (IsShowing && _previewBuilding != null)
             {
                 _previewBuilding.Position = GameManager.Instance.Map.GetMapTile(Player.InteractionCollider.CenterXY).Position;
                 _previewBuilding.SetMapTransform();
@@ -67,29 +68,29 @@ public class BuildMenu : TDComponent
 
     public void Show()
     {
-        if (_isShowing) return;
+        if (IsShowing) return;
 
         if (!TDSceneManager.ActiveScene.SpriteObjects.Contains(BuildSprite)) TDSceneManager.ActiveScene.SpriteObjects.Add(BuildSprite);
         if (!TDSceneManager.ActiveScene.SpriteObjects.Contains(Icon)) TDSceneManager.ActiveScene.SpriteObjects.Add(Icon);
 
-        _isShowing = true;
+        IsShowing = true;
 
         _previewBuilding = GetBuilding(_currentBuilding);
-        _previewBuilding.SetAsPreview();
+        _previewBuilding.IsPreview = true;
 
         OvertakeControl();
     }
 
     public void Hide()
     {
-        if (!_isShowing) return;
+        if (!IsShowing) return;
 
         if (TDSceneManager.ActiveScene.SpriteObjects.Contains(BuildSprite) && TDSceneManager.ActiveScene.SpriteObjects.Contains(Icon))
         {
             TDSceneManager.ActiveScene.SpriteObjects.Remove(BuildSprite);
             TDSceneManager.ActiveScene.SpriteObjects.Remove(Icon);
 
-            _isShowing = false;
+            IsShowing = false;
             _requiresHide = false;
 
             _previewBuilding?.TDObject.Destroy();
@@ -129,6 +130,10 @@ public class BuildMenu : TDComponent
 
         Icon.Texture = GetIcon(_currentBuilding);
 
+        _previewBuilding.TDObject.Destroy();
+        _previewBuilding = GetBuilding(_currentBuilding);
+        _previewBuilding.IsPreview = true;
+
         _cooldown = _cooldownDuration;
     }
 
@@ -140,6 +145,11 @@ public class BuildMenu : TDComponent
         else _currentBuilding--;
 
         Icon.Texture = GetIcon(_currentBuilding);
+
+        _previewBuilding.TDObject.Destroy();
+        _previewBuilding = GetBuilding(_currentBuilding);
+        _previewBuilding.IsPreview = true;
+
         _cooldown = _cooldownDuration;
     }
 
@@ -151,6 +161,7 @@ public class BuildMenu : TDComponent
         {
             SelectableBuilding.Outpost => TDContentManager.LoadTexture("UIBuildingOutpostIcon"),
             SelectableBuilding.Wall => TDContentManager.LoadTexture("UIBuildingWallIcon"),
+            SelectableBuilding.Farm => TDContentManager.LoadTexture("UIBuildingFarmIcon"),
             _ => TDContentManager.LoadTexture("UIBuildingOutpostIcon")
         };
     }
@@ -163,6 +174,7 @@ public class BuildMenu : TDComponent
         {
             SelectableBuilding.Outpost => PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost).GetComponent<Outpost>(),
             SelectableBuilding.Wall => PrefabFactory.CreatePrefab(PrefabType.BuildingWall).GetComponent<Wall>(),
+            SelectableBuilding.Farm => PrefabFactory.CreatePrefab(PrefabType.BuildingFarm).GetComponent<Farm>(),
             _ => PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost).GetComponent<Outpost>()
         };
     }

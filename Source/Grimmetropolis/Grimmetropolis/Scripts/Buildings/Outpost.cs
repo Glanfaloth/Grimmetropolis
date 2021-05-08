@@ -1,8 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
+using System.Diagnostics;
+
 public class Outpost : Building
 {
     public override ResourcePile GetResourceCost() => new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST);
+    public override ResourcePile GetResourceUpkeep() => new ResourcePile(0, 0, Config.OUTPOST_FOOD_UPKEEP);
 
     public TDCylinderCollider ShootingRange = null;
 
@@ -16,13 +19,24 @@ public class Outpost : Building
 
     public override float BuildTime => Config.OUTPOST_BUILD_VALUE;
 
+    public override bool MissingUpkeep
+    {
+        get => base.MissingUpkeep;
+        set
+        {
+            base.MissingUpkeep = value;
+            _interval = (MissingUpkeep ? 2f : 1f) * Config.OUTPOST_SHOOTING_RATE;
+            ShootingRange.Radius = (MissingUpkeep ? .5f : 1f) * Config.OUTPOST_SHOOTING_RANGE;
+        }
+    }
+
     public override void Initialize()
     {
         BaseHealth = Config.OUTPOST_HEALTH;
         Health = Config.OUTPOST_HEALTH;
 
         ShootingRange.IsTrigger = true;
-        ShootingRange.Radius = Config.OUTPOST_SHOOTING_RANGE;
+        ShootingRange.Radius = (MissingUpkeep ? .5f : 1f) * Config.OUTPOST_SHOOTING_RANGE;
         ShootingRange.Height = 2f;
         ShootingRange.Offset = Vector3.Zero;
         ShootingRange.collisionEvent += GetClosestCollider;
@@ -30,8 +44,12 @@ public class Outpost : Building
         base.Initialize();
     }
 
-    protected override void DoUpdate(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
+        base.Update(gameTime);
+
+        if (IsPreview || IsBlueprint) return;
+
         _cooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         if (_closestEnemy != null && _cooldown <= 0f)
