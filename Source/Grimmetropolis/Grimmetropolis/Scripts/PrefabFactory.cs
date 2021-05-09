@@ -447,16 +447,19 @@ public static class PrefabFactory
                     CreateEmptyUI(prefab, localPosition, localRotation, localScale);
                     TDSprite testImage = prefab.AddComponent<TDSprite>();
                     WaveIndicator waveIndicator = prefab.AddComponent<WaveIndicator>();
-                    testImage.Texture = TDContentManager.LoadTexture("UIPlayer");
+                    testImage.Texture = TDContentManager.LoadTexture("UIWarning");
                     testImage.Depth = 1f;
                     waveIndicator.Image = testImage;
                     prefab.RectTransform.Origin = new Vector2(testImage.Texture.Width, 0f);
+                    prefab.RectTransform.Scale = 0.2f * Vector2.One;
 
                     TDObject textInfoObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDText testText = textInfoObject.AddComponent<TDText>();
-                    testText.Text = "Hello, world! This is a test!";
+                    testText.Text = "The next wave is coming!";
                     testImage.Depth = .9f;
-                    textInfoObject.RectTransform.LocalPosition = new Vector2(-(testImage.Texture.Width + testText.Width + 10f), 0f);
+                    textInfoObject.RectTransform.Origin = new Vector2(testText.Width, 0f);
+                    textInfoObject.RectTransform.LocalPosition = new Vector2(-(testImage.Texture.Width + 10f), 0f);
+                    textInfoObject.RectTransform.Scale = 1.5f * Vector2.One;
                     break;
                 }
         }
