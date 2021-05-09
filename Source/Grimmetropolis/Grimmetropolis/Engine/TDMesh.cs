@@ -30,6 +30,17 @@ public class TDMesh : TDComponent
         }
     }
 
+    private bool _isShowing = true;
+    public bool IsShowing
+    {
+        get => _isShowing;
+        set
+        {
+            _isShowing = value;
+            AddToList();
+        }
+    }
+
     private bool _isHighlighted = false;
     public bool IsHighlighted
     {
@@ -50,16 +61,7 @@ public class TDMesh : TDComponent
             _isPreview = value;
             _technique = _isPreview ? "PreviewEffect" : "LightEffect";
 
-            if (_isPreview)
-            {
-                TDSceneManager.ActiveScene.MeshObjects.Remove(this);
-                if (!TDSceneManager.ActiveScene.TransparentMeshObjects.Contains(this)) TDSceneManager.ActiveScene.TransparentMeshObjects.Add(this);
-            }
-            else
-            {
-                if (!TDSceneManager.ActiveScene.MeshObjects.Contains(this)) TDSceneManager.ActiveScene.MeshObjects.Add(this);
-                TDSceneManager.ActiveScene.TransparentMeshObjects.Remove(this);
-            }
+            AddToList();
         }
     }
 
@@ -74,8 +76,7 @@ public class TDMesh : TDComponent
 
         Effect = TDContentManager.LoadEffect("LightEffect");
 
-        if (_isPreview && !TDSceneManager.ActiveScene.TransparentMeshObjects.Contains(this)) TDSceneManager.ActiveScene.TransparentMeshObjects.Add(this);
-        else if (!IsPreview && !TDSceneManager.ActiveScene.MeshObjects.Contains(this)) TDSceneManager.ActiveScene.MeshObjects.Add(this);
+        AddToList();
     }
 
     private void SetModelEffect()
@@ -136,6 +137,28 @@ public class TDMesh : TDComponent
             }
 
             mesh.Draw();
+        }
+    }
+
+    private void AddToList()
+    {
+        if (_isShowing)
+        {
+            if (_isPreview)
+            {
+                TDSceneManager.ActiveScene.MeshObjects.Remove(this);
+                if (!TDSceneManager.ActiveScene.TransparentMeshObjects.Contains(this)) TDSceneManager.ActiveScene.TransparentMeshObjects.Add(this);
+            }
+            else
+            {
+                if (!TDSceneManager.ActiveScene.MeshObjects.Contains(this)) TDSceneManager.ActiveScene.MeshObjects.Add(this);
+                TDSceneManager.ActiveScene.TransparentMeshObjects.Remove(this);
+            }
+        }
+        else
+        {
+            TDSceneManager.ActiveScene.MeshObjects.Remove(this);
+            TDSceneManager.ActiveScene.TransparentMeshObjects.Remove(this);
         }
     }
 

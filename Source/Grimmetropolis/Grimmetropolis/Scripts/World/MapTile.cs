@@ -71,12 +71,16 @@ public class MapTile : TDComponent
         base.Destroy();
     }
 
-    private void AdjustCollider()
+    public void AdjustCollider()
     {
-        bool highCollider = Structure != null;
+        bool highCollider = Structure != null || Type == MapTileType.Water;
         if (Structure is Farm farm)
         {
             highCollider = farm.GetMillCollider(this);
+        }
+        if (Structure is Bridge bridge)
+        {
+            highCollider = bridge.IsBlueprint;
         }
 
         if (highCollider)
@@ -85,21 +89,22 @@ public class MapTile : TDComponent
             collider.Offset = Vector3.Zero;
         }
         else {
-            switch (Type)
-            {
-                case MapTileType.Ground:
-                    collider.Size = Vector3.One;
-                    collider.Offset = -.5f * Vector3.Backward;
-                    break;
-                case MapTileType.Water:
-                    collider.Size = new Vector3(1f, 1f, 2f);
-                    collider.Offset = Vector3.Zero;
-                    break;
-            }
+            collider.Size = Vector3.One;
+            collider.Offset = -.5f * Vector3.Backward;
         }
     }
 
-    private void UpdateGraph()
+    public void UpdateGraph()
+    {
+        // we need to also update neighbouring tiles so that diagonal edges are also updated
+        var tilesToUpdate = Map.GetNearbyTilesManhattan(Position, 1);
+        foreach (var tileToUpdate in tilesToUpdate)
+        {
+            tileToUpdate.UpdateGraphForTile();
+        }
+    }
+
+    private void UpdateGraphForTile()
     {
         TileVertex.ClearIncomingEdges();
         StructureVertex.ClearIncomingEdges();
@@ -187,6 +192,15 @@ public class MapTile : TDComponent
             default:
                 throw new NotSupportedException();
         }
+    }
+
+    public MapTile GetNeighbouringMapTile(Point offset)
+    {
+        Point coordinate = Position + offset;
+        if (coordinate.X < 0 || coordinate.X >= GameManager.Instance.Map.Width) return null;
+        if (coordinate.Y < 0 || coordinate.Y >= GameManager.Instance.Map.Height) return null;
+
+        return GameManager.Instance.Map.MapTiles[coordinate.X, coordinate.Y];
     }
 
     private bool IsTilePassable(int x, int y)

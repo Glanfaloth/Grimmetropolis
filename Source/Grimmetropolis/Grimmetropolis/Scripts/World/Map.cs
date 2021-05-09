@@ -16,7 +16,6 @@ public class Map : TDComponent
             return MapTiles[index.X, index.Y];
         }
     }
-
     public MapTile[,] MapTiles { get; private set; }
     public int Width { get; private set; }
     public int Height { get; private set; }
@@ -25,9 +24,12 @@ public class Map : TDComponent
     private int[,] _loadedMap;
 
     public Vector3 Corner { get; private set; }
+
     public Vector3 Offcenter { get; } = new Vector3(.5f, .5f, 0f);
     // TODO: change this to artifact location
-    public Point EnemyTarget { get; set; }
+    public Point EnemyTarget => GetMapTile(MagicalArtifact?.TDObject.Transform.Position.GetXY() ?? Vector2.Zero).Position;
+
+    public Item MagicalArtifact = null;
 
     public List<MapDTO.EntityToSpawn> LoadFromFile(string fileName)
     {
@@ -178,6 +180,23 @@ public class Map : TDComponent
                     dy = -dy;
                     if (IsInBounds(x + dx, y + dy)) result.Add(MapTiles[x + dx, y + dy]);
                 }
+            }
+        }
+
+        return result;
+    }
+
+    public MapTile[,] GetNearbyTilesSquare(Point position, int radius)
+    {
+        int x = position.X;
+        int y = position.Y;
+        MapTile[,] result = new MapTile[2 * radius + 1, 2 * radius + 1];
+
+        for (int dx = -radius; dx <= radius; dx++)
+        {
+            for (int dy = -radius; dy <= radius; dy++)
+            {
+                result[radius + dx, radius + dy] = MapTiles[x + dx, y + dy];
             }
         }
 

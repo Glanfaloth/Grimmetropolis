@@ -30,6 +30,8 @@ public class Player : Character
     {
         base.Initialize();
 
+        Health = 1f;
+
         HealthBar.TDObject.Destroy();
         UIManager.Instance.AddPlayerDisplay(this);
 
@@ -78,8 +80,7 @@ public class Player : Character
         float closestStructureDistance = float.MaxValue;
         Structure _closestStructure = null;
 
-        MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        Item _closestItem = mapTile.Item;
+        Item _closestItem = GameManager.Instance.Map.GetMapTile(TDObject.Transform.Position.GetXY()).Item;
         foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
         {
             if (colliderEntry.Item1 is TDCuboidCollider && closestStructureDistance > colliderEntry.Item2)
@@ -131,18 +132,16 @@ public class Player : Character
             return;
         }
 
-        MapTile mapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
-        if (building.CheckPlacability(mapTile)
-            && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, building.GetResourceCost()))
+        if (building.CheckPlacability(building.Position) && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, building.GetResourceCost()))
         {
             GameManager.Instance.ResourcePool -= building.GetResourceCost();
-            building.Position = mapTile.Position;
             building.IsBlueprint = true;
 
             Cooldown = Config.PLAYER_PLACE_BUILDING_COOLDOWN;
             ResetProgressBarForProgress();
             SetProgressBar(Cooldown);
         }
+        else building.TDObject.Destroy();
     }
 
     public void Build(GameTime gameTime)
@@ -152,7 +151,7 @@ public class Player : Character
             return;
         }
 
-        if (_collidingMapTile.Type == MapTileType.Ground && _collidingMapTile.Structure is Building building)
+        if (_collidingMapTile.Structure is Building building)
         {
             if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH) && building.Mesh.IsPreview)
             {

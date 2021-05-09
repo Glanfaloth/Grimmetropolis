@@ -24,11 +24,22 @@ public class TDText : TDComponent
     public float Width { get; private set; }
     public float Height { get; private set; }
 
+    private bool _isShowing = true;
+    public bool IsShowing
+    {
+        get => _isShowing;
+        set
+        {
+            _isShowing = value;
+            AddToList();
+        }
+    }
+
     public override void Initialize()
     {
         base.Initialize();
 
-        TDSceneManager.ActiveScene.TextObjects.Add(this);
+        AddToList();
     }
 
     public override void Destroy()
@@ -42,5 +53,10 @@ public class TDText : TDComponent
     {
         TDSceneManager.SpriteBatch.DrawString(SpriteFont, Text, TDObject.RectTransform.Position, Color, TDObject.RectTransform.Rotation,
             TDObject.RectTransform.Origin, TDObject.RectTransform.Scale, SpriteEffects.None, Depth);
+    }
+    private void AddToList()
+    {
+        if (_isShowing && !TDSceneManager.ActiveScene.TextObjects.Contains(this)) TDSceneManager.ActiveScene.TextObjects.Add(this);
+        else TDSceneManager.ActiveScene.TextObjects.Remove(this);
     }
 }

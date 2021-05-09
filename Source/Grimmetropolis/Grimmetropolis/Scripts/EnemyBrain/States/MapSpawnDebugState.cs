@@ -11,13 +11,13 @@ public class MapSpawnDebugState : EnemyGroupState
     internal override void SendCommands(EnemyGroup enemyGroup)
     {
         
-        MoveCommand cmd = new MoveCommand(enemyGroup.Graph, GetArtifactLocation());
+        MoveCommand cmd = new MoveCommand(enemyGroup.Graph, GetArtifactLocation(), EnemyMove.Type.None);
         foreach (var enemy in enemyGroup.AllEnemies)
         {
             enemy.CurrentCommand = cmd;
             if (enemy.Items[0] is MagicalArtifact)
             {
-                enemy.CurrentCommand = new MoveCommand(enemyGroup.Graph, GameManager.Instance.Map.MapTiles[0, 0].TileVertex);
+                enemy.CurrentCommand = new MoveCommand(enemyGroup.Graph, GameManager.Instance.Map.MapTiles[0, 0].TileVertex, EnemyMove.Type.StealArtifact);
             }
         }
     }

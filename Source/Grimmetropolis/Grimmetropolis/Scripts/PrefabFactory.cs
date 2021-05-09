@@ -21,6 +21,9 @@ public enum PrefabType
     BuildingOutpost,
     BuildingWall,
     BuildingFarm,
+    BuildingBridge,
+    BuildingHospital,
+    BuildingResourceBuilding,
 
     ResourceWood,
     ResourceStone,
@@ -177,6 +180,7 @@ public static class PrefabFactory
                     Castle castle = prefab.AddComponent<Castle>();
                     mesh.Model = TDContentManager.LoadModel("BuildingCastle");
                     mesh.Texture = TDContentManager.LoadTexture("BuildingCastleTexture");
+                    castle.Size = new Point(3, 3);
                     castle.Mesh = mesh;
                     break;
                 }
@@ -210,7 +214,45 @@ public static class PrefabFactory
                     Farm farm = prefab.AddComponent<Farm>();
                     mesh.Model = TDContentManager.LoadModel("BuildingFarm");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    farm.Size = new Point(2, 2);
                     farm.Mesh = mesh;
+                    break;
+                }
+            case PrefabType.BuildingBridge:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    Bridge bridge = prefab.AddComponent<Bridge>();
+                    mesh.Model = TDContentManager.LoadModel("BuildingBridge");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    bridge.Mesh = mesh;
+                    break;
+                }
+            case PrefabType.BuildingHospital:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    Hospital hospital = prefab.AddComponent<Hospital>();
+                    mesh.Model = TDContentManager.LoadModel("BuildingHospital");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    hospital.Size = new Point(2, 2);
+                    hospital.Mesh = mesh;
+
+                    TDObject interactionColliderObject = CreatePrefab(PrefabType.Empty, prefab.Transform);
+                    TDCylinderCollider interactionCollider = interactionColliderObject.AddComponent<TDCylinderCollider>();
+                    hospital.InteractionCollider = interactionCollider;
+                    break;
+                }
+            case PrefabType.BuildingResourceBuilding:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    ResourceBuilding resourceBuilding = prefab.AddComponent<ResourceBuilding>();
+                    mesh.Model = TDContentManager.LoadModel("BuildingResourceBuilding");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    resourceBuilding.Size = new Point(2, 2);
+                    resourceBuilding.Mesh = mesh;
+
+                    TDObject interactionColliderObject = CreatePrefab(PrefabType.Empty, prefab.Transform);
+                    TDCylinderCollider interactionCollider = interactionColliderObject.AddComponent<TDCylinderCollider>();
+                    resourceBuilding.InteractionCollider = interactionCollider;
                     break;
                 }
 

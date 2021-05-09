@@ -8,7 +8,6 @@ public enum ResourceDepositType
     Stone
 }
 
-
 public class ResourceDeposit : Structure
 {
     public ResourceDepositType Type = ResourceDepositType.Wood;
@@ -52,6 +51,13 @@ public class ResourceDeposit : Structure
             ResourceDepositType.Stone => Config.RESOURCE_STONE_GATHER_DURATION,
             _ => 1f
         };
+
+        RegenerationTime = Type switch
+        {
+            ResourceDepositType.Wood => Config.RESOURCE_WOOD_REGENERATION_TIME,
+            ResourceDepositType.Stone => Config.RESOURCE_STONE_REGENERATION_TIME,
+            _ => 2f
+        };
     }
 
     public override void Update(GameTime gameTime)
@@ -80,7 +86,7 @@ public class ResourceDeposit : Structure
         }
 
         CurrentStorage--;
-        _time = 0f;
+        if (CurrentStorage == Storage - 1) _time = 0f;
     }
 
     public override void Highlight(bool highlight)

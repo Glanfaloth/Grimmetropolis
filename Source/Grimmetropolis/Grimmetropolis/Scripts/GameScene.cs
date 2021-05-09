@@ -14,10 +14,10 @@ public class GameScene : TDScene
         PrefabFactory.CreatePrefab(PrefabType.Light, new Vector3(24f, 24f, 36f), Quaternion.CreateFromYawPitchRoll(-.31f * MathHelper.Pi, .1f * MathHelper.Pi, -.85f * MathHelper.Pi));
 
         TDObject gameManager = PrefabFactory.CreatePrefab(PrefabType.GameManager);
-        TDSound backgroundTest = gameManager.AddComponent<TDSound>();
+        /*TDSound backgroundTest = gameManager.AddComponent<TDSound>();
         backgroundTest.IsLooped = true;
         backgroundTest.SoundEffect = TDContentManager.LoadSoundEffect("BackgroundMusic");
-        backgroundTest.Play();
+        backgroundTest.Play();*/
 
         PrefabFactory.CreatePrefab(PrefabType.UIManager);
 
@@ -89,8 +89,9 @@ public class GameScene : TDScene
         foreach (TDCylinderCollider cylinder in CylinderColliderObjects)
         {
             cylinder.UpdateColliderGeometry();
-            int minX = Math.Max(cylinder.MapPosition.X - 1, 0); int maxX = Math.Min(cylinder.MapPosition.X + 1, GameManager.Instance.Map.Width - 1);
-            int minY = Math.Max(cylinder.MapPosition.Y - 1, 0); int maxY = Math.Min(cylinder.MapPosition.Y + 1, GameManager.Instance.Map.Height - 1);
+            int offset = (int)cylinder.Radius + 1;
+            int minX = Math.Max(cylinder.MapPosition.X - offset, 0); int maxX = Math.Min(cylinder.MapPosition.X + offset, GameManager.Instance.Map.Width - 1);
+            int minY = Math.Max(cylinder.MapPosition.Y - offset, 0); int maxY = Math.Min(cylinder.MapPosition.Y + offset, GameManager.Instance.Map.Height - 1);
             for (int x = minX; x <= maxX; x++)
             {
                 for (int y = minY; y <= maxY; y++)

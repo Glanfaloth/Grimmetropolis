@@ -40,6 +40,7 @@ public abstract class Enemy : Character
 
     public override Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
 
+    // TODO: Last enemy killed in a group -> NullReferenceException
     public Vector2 Position => TDObject?.Transform.LocalPosition.GetXY() ?? Vector2.Zero;
 
     public void SetBaseStats(Config.EnemyStats stats)
@@ -78,15 +79,14 @@ public abstract class Enemy : Character
             case EnemyMove.Type.None:
                 Debug.WriteLine("ERROR: no valid move found for enemy");
                 break;
-            case EnemyMove.Type.EndOfPath:
-                // end of path means the enemy arrived at it's destination and has nothing to do
+            //case EnemyMove.Type.EndOfPath:
+            //    // end of path means the enemy arrived at it's destination and has nothing to do
 
-                // TODO: implement win condition
-                if (Items[0] is MagicalArtifact)
-                {
-                    Debug.WriteLine("YOU LOSE");
-                }
-                break;
+            //    if (Items[0] is MagicalArtifact)
+            //    {
+            //        Debug.WriteLine("YOU LOSE");
+            //    }
+            //    break;
             case EnemyMove.Type.Run:
                 MoveToTarget(nextMove.LocalPosition, gameTime);
                 break;
@@ -95,6 +95,18 @@ public abstract class Enemy : Character
                 break;
             case EnemyMove.Type.RangedAttack:
                 RangedAttackTarget(nextMove.Target, gameTime);
+                break;
+            case EnemyMove.Type.PickUpArtifact:
+
+                MapTile mapTile = GameManager.Instance.Map.GetMapTile(TDObject.Transform.Position.GetXY());
+                if (mapTile.Item != null && mapTile.Item is MagicalArtifact)
+                {
+                    Take();
+                }
+                break;
+            case EnemyMove.Type.StealArtifact:
+                // TODO: implement win condition
+                Debug.WriteLine("YOU LOSE");
                 break;
             default:
                 throw new NotSupportedException();

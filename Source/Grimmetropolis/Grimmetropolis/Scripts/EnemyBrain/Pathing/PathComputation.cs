@@ -29,24 +29,24 @@ public class PathComputation
         _moveCache.Clear();
     }
 
-    internal EnemyMove GetNextMoveFromTo(MapTile from, Location target)
+    internal EnemyMove GetNextMoveFromTo(MapTile from, Location target, EnemyMove.Type endOfPathAction)
     {
         Tuple<MapTile, Location> key = new Tuple<MapTile, Location>(from, target);
 
         if (!_moveCache.ContainsKey(key))
         {
-            _moveCache[key] = DoComputeNextMoveFromTo(from, target);
+            _moveCache[key] = DoComputeNextMoveFromTo(from, target, endOfPathAction);
         }
 
         return _moveCache[key];
     }
 
-    private EnemyMove DoComputeNextMoveFromTo(MapTile from, Location target)
+    private EnemyMove DoComputeNextMoveFromTo(MapTile from, Location target, EnemyMove.Type endOfPathAction)
     {
         ResetPaths();
 
         var pq = new TDPriorityQueue<EnemyMove>();
-        pq.Insert(0f, 0f, new EndOfPath(target));
+        pq.Insert(0f, 0f, new EndOfPath(target, endOfPathAction));
 
         while (!pq.IsEmpty())
         {
@@ -103,7 +103,7 @@ public class PathComputation
     {
         var moves = new List<EnemyMove>();
         EnemyMove previousMove = null;
-        EnemyMove nextMove = DoComputeNextMoveFromTo(startTile, targetLocation);
+        EnemyMove nextMove = DoComputeNextMoveFromTo(startTile, targetLocation, EnemyMove.Type.None);
 
         // last move is a loop
         while(nextMove != null && nextMove != previousMove)

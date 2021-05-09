@@ -6,7 +6,7 @@ public class HealthBar : ProgressBar
 {
     public bool AlwaysShow = false;
 
-    private float _revealTime = 3f;
+    private float _revealTime = 5f;
     private float _time = 0f;
 
     private bool _quickShow = false;
