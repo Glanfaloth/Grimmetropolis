@@ -57,30 +57,41 @@ public static class Config
     public const int OUTPOST_FOOD_UPKEEP = 1;
     public const float OUTPOST_SHOOTING_RANGE = 3f;
     public const float OUTPOST_SHOOTING_RATE = .5f;
-
     public const float OUTPOST_ARROW_DAMAGE = 1f;
     public const float OUTPOST_ARROW_SPEED = 6f;
-
     public const float OUTPOST_BUILD_VALUE = 10f;
 
-    public const int WALL_WOOD_COST = 2;
-    public const int WALL_STONE_COST = 6;
-    public const float WALL_HEALTH = 50f;
-
-    public const float WALL_BUILD_VALUE = 10f;
+    public const int WALL_WOOD_COST = 0;
+    public const int WALL_STONE_COST = 2;
+    public const float WALL_HEALTH = 30f;
+    public const float WALL_BUILD_VALUE = 4f;
 
     public const int FARM_WOOD_COST = 4;
     public const int FARM_STONE_COST = 2;
     public const int FARM_FOOD_UPKEEP = -4;
     public const float FARM_HEALTH = 10f;
-
     public const float FARM_BUILD_VALUE = 10f;
+
+    public const int BRIDGE_WOOD_COST = 2;
+    public const int BRIDGE_STONE_COST = 0;
+    public const float BRIDGE_HEALTH = 5f;
+    public const float BRIDGE_BUILD_VALUE = 10f;
+
+    public const int HOSPITAL_WOOD_COST = 8;
+    public const int HOSPITAL_STONE_COST = 2;
+    public const float HOSPITAL_HEALTH = 5f;
+    public const float HOSPITAL_BUILD_VALUE = 20f;
+    public const float HOSPITAL_HEAL_RATE = 5f;
+    public const float HOSPTIAL_HEAL_RANGE = 3f;
 
     public const int RESOURCE_WOOD_GATHER_BASE_RATE = 1;
     public const int RESOURCE_STONE_GATHER_BASE_RATE = 1;
 
     public const float RESOURCE_WOOD_GATHER_DURATION = .5f;
     public const float RESOURCE_STONE_GATHER_DURATION = .5f;
+
+    public const float RESOURCE_WOOD_REGENERATION_TIME = 5f;
+    public const float RESOURCE_STONE_REGENERATION_TIME = 5f;
 
     #endregion
 

@@ -2,19 +2,18 @@
 
 public enum WallOrientation
 {
-    HorizontalOrientation,
-    VerticalOrientation,
-    CenterOrientation
+    Horizontal,
+    Vertical,
+    Center
 }
 
 public class Wall : Building
 {
-    public override ResourcePile GetResourceCost() => new ResourcePile(Config.WALL_WOOD_COST, Config.WALL_STONE_COST);
-    public override ResourcePile GetResourceUpkeep() => new ResourcePile(0, 0);
-
     public override float BuildTime => Config.WALL_BUILD_VALUE;
+    public override ResourcePile GetResourceCost() => new ResourcePile(Config.WALL_WOOD_COST, Config.WALL_STONE_COST);
 
-    private WallOrientation _orientation = WallOrientation.HorizontalOrientation;
+
+    private WallOrientation _orientation = WallOrientation.Center;
 
     public override void Initialize()
     {
@@ -47,28 +46,28 @@ public class Wall : Building
             && GameManager.Instance.Map.MapTiles[Position.X, Position.Y + 1].Structure is Wall;
 
         if ((leftWall || rightWall) && (upWall || downWall))
-            _orientation = WallOrientation.CenterOrientation;
+            _orientation = WallOrientation.Center;
         else if (leftWall && rightWall)
-            _orientation = WallOrientation.VerticalOrientation;
+            _orientation = WallOrientation.Vertical;
         else if (upWall && downWall)
-            _orientation = WallOrientation.HorizontalOrientation;
+            _orientation = WallOrientation.Horizontal;
         else if (leftWall || rightWall)
-            _orientation = WallOrientation.VerticalOrientation;
+            _orientation = WallOrientation.Vertical;
         else if (upWall || downWall)
-            _orientation = WallOrientation.HorizontalOrientation;
+            _orientation = WallOrientation.Horizontal;
 
 
         switch (_orientation)
         {
-            case WallOrientation.HorizontalOrientation:
+            case WallOrientation.Horizontal:
                 Mesh.Model = TDContentManager.LoadModel("BuildingWall");
                 TDObject.Transform.LocalRotation = Quaternion.Identity;
                 break;
-            case WallOrientation.VerticalOrientation:
+            case WallOrientation.Vertical:
                 Mesh.Model = TDContentManager.LoadModel("BuildingWall");
                 TDObject.Transform.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Backward, MathHelper.PiOver2);
                 break;
-            case WallOrientation.CenterOrientation:
+            case WallOrientation.Center:
                 Mesh.Model = TDContentManager.LoadModel("BuildingCenterWall");
                 TDObject.Transform.LocalRotation = Quaternion.Identity;
                 break;

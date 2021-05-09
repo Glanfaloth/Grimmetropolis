@@ -2,6 +2,10 @@
 
 public class ResourcePile
 {
+    private static int _maxWood = int.MaxValue;
+    private static int _maxStone = int.MaxValue;
+    private static int _maxFood = 200;
+
     public int Wood = 0;
     public int Stone = 0;
     public int Food = 0;
@@ -17,9 +21,17 @@ public class ResourcePile
 
     public ResourcePile() : this(0, 0) { }
 
-    public static ResourcePile operator-(ResourcePile a) => new ResourcePile(-a.Wood, -a.Stone, -a.Food);
-    public static ResourcePile operator+(ResourcePile a, ResourcePile b) => new ResourcePile(a.Wood + b.Wood, a.Stone + b.Stone, a.Food + b.Food);
-    public static ResourcePile operator-(ResourcePile a, ResourcePile b) => new ResourcePile(a.Wood - b.Wood, a.Stone - b.Stone, a.Food - b.Food);
+    public static ResourcePile operator -(ResourcePile a) => new ResourcePile(-a.Wood, -a.Stone, -a.Food);
+    public static ResourcePile operator +(ResourcePile a, ResourcePile b)
+    {
+        return Min(new ResourcePile(a.Wood + b.Wood, a.Stone + b.Stone, a.Food + b.Food), new ResourcePile(_maxWood, _maxStone, _maxFood));
+    }
+
+    public static ResourcePile operator -(ResourcePile a, ResourcePile b)
+    {
+        return Min(new ResourcePile(a.Wood - b.Wood, a.Stone - b.Stone, a.Food - b.Food), new ResourcePile(_maxWood, _maxStone, _maxFood));
+    }
+
     public override string ToString() => $"Wood: {Wood}, Stone {Stone}, Food {Food}";
 
     public static bool CheckAvailability(ResourcePile a, ResourcePile b)

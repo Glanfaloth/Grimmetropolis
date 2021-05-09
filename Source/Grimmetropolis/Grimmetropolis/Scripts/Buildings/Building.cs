@@ -6,8 +6,9 @@ using System.Collections.Generic;
 
 public abstract class Building : Structure, ITarget
 {
-    public abstract ResourcePile GetResourceCost();
-    public abstract ResourcePile GetResourceUpkeep();
+    public virtual ResourcePile GetResourceCost() => new ResourcePile(1, 1);
+    public virtual ResourcePile GetResourceUpkeep() => new ResourcePile();
+    public virtual MapTileType GetRequiredMapTileType() => MapTileType.Ground;
 
     public override bool CanBeAttacked => true;
 
@@ -37,9 +38,9 @@ public abstract class Building : Structure, ITarget
         }
     }
 
-    public abstract float BuildTime { get; }
+    public virtual float BuildTime { get; } = Config.OUTPOST_BUILD_VALUE;
 
-    public Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
+    public virtual Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
 
     TDObject ITarget.TDObject => TDObject;
 
@@ -148,16 +149,25 @@ public abstract class Building : Structure, ITarget
         return true;
     }
 
-    public bool CheckPlacability(MapTile mapTile)
+    public bool CheckPlacability(Point mapTilePosition)
     {
-        int xHigh = Math.Clamp(mapTile.Position.X + Size.X, 0, GameManager.Instance.Map.Width);
-        int yHigh = Math.Clamp(mapTile.Position.Y + Size.Y, 0, GameManager.Instance.Map.Height);
+        if (mapTilePosition.X < 0 || mapTilePosition.Y < 0
+            || mapTilePosition.X - 1 > GameManager.Instance.Map.Width
+            || mapTilePosition.Y - 1 > GameManager.Instance.Map.Height) return false;
+
+        MapTile mapTile = GameManager.Instance.Map.MapTiles[mapTilePosition.X, mapTilePosition.Y];
+
+        int xHigh = mapTile.Position.X + Size.X;
+        int yHigh = mapTile.Position.Y + Size.Y;
+
+        if (xHigh >= GameManager.Instance.Map.Width) return false;
+        if (yHigh >= GameManager.Instance.Map.Height) return false;
 
         for (int x = mapTile.Position.X; x < xHigh; x++)
         {
             for (int y = mapTile.Position.Y; y < yHigh; y++)
             {
-                if (GameManager.Instance.Map.MapTiles[x, y].Type != MapTileType.Ground
+                if (GameManager.Instance.Map.MapTiles[x, y].Type != GetRequiredMapTileType()
                     || GameManager.Instance.Map.MapTiles[x, y].Item != null
                     || GameManager.Instance.Map.MapTiles[x, y].Structure != null)
                 {
@@ -168,23 +178,23 @@ public abstract class Building : Structure, ITarget
         return true;
     }
 
-    protected void CreateBuildingPart(Model model, Texture2D texture, string bodyPart, out TDTransform buildingPartTransform, out TDMesh buildingPartMesh)
+    protected void CreateBuildingPart(Model model, Texture2D texture, string buildingPart, out TDTransform buildingPartTransform, out TDMesh buildingPartMesh)
     {
         TDObject buildingPartObject = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         buildingPartMesh = buildingPartObject.AddComponent<TDMesh>();
 
-        ModelBone bone; model.Bones.TryGetValue(bodyPart, out bone);
-        ModelMesh mesh; model.Meshes.TryGetValue(bodyPart, out mesh);
+        ModelBone bone; model.Bones.TryGetValue(buildingPart, out bone);
+        ModelMesh mesh; model.Meshes.TryGetValue(buildingPart, out mesh);
 
         buildingPartMesh.Model = new Model(TDSceneManager.Graphics.GraphicsDevice, new List<ModelBone>() { bone }, new List<ModelMesh>() { mesh });
         buildingPartMesh.Texture = texture;
 
         buildingPartTransform = buildingPartObject.Transform;
     }
-    protected void CreateMainBuildingPart(Model model, Texture2D texture, string bodyPart)
+    protected void CreateMainBuildingPart(Model model, Texture2D texture, string buildingPart)
     {
-        ModelBone bone; model.Bones.TryGetValue(bodyPart, out bone);
-        ModelMesh mesh; model.Meshes.TryGetValue(bodyPart, out mesh);
+        ModelBone bone; model.Bones.TryGetValue(buildingPart, out bone);
+        ModelMesh mesh; model.Meshes.TryGetValue(buildingPart, out mesh);
 
         Mesh.Model = new Model(TDSceneManager.Graphics.GraphicsDevice, new List<ModelBone>() { bone }, new List<ModelMesh>() { mesh });
         Mesh.Texture = texture;

@@ -7,7 +7,9 @@ public enum SelectableBuilding
 {
     Outpost,
     Wall,
-    Farm
+    Farm,
+    Bridge,
+    Hopspital
 }
 
 public class BuildMenu : TDComponent
@@ -18,7 +20,6 @@ public class BuildMenu : TDComponent
     public TDSprite Icon;
 
     public bool IsShowing = true;
-    private bool _requiresHide = false;
 
     private SelectableBuilding _currentBuilding;
     private bool _activeControl = true;
@@ -50,7 +51,9 @@ public class BuildMenu : TDComponent
 
             if (Player.Input.ActionPressed())
             {
-                Player.BuildBlueprint(GetBuilding(_currentBuilding));
+                Building building = GetBuilding(_currentBuilding);
+                building.Position = _previewBuilding.Position;
+                Player.BuildBlueprint(building);
                 Hide();
             }
 
@@ -62,20 +65,18 @@ public class BuildMenu : TDComponent
 
             if (Player.Input.BuildModePressed()) Hide();
         }
-
-        if (_requiresHide) Hide();
     }
 
     public void Show()
     {
         if (IsShowing) return;
-
-        if (!TDSceneManager.ActiveScene.SpriteObjects.Contains(BuildSprite)) TDSceneManager.ActiveScene.SpriteObjects.Add(BuildSprite);
-        if (!TDSceneManager.ActiveScene.SpriteObjects.Contains(Icon)) TDSceneManager.ActiveScene.SpriteObjects.Add(Icon);
-
         IsShowing = true;
 
+        BuildSprite.IsShowing = IsShowing;
+        Icon.IsShowing = IsShowing;
+
         _previewBuilding = GetBuilding(_currentBuilding);
+        _previewBuilding.Position = GameManager.Instance.Map.GetMapTile(Player.InteractionCollider.CenterXY).Position;
         _previewBuilding.IsPreview = true;
 
         OvertakeControl();
@@ -84,37 +85,27 @@ public class BuildMenu : TDComponent
     public void Hide()
     {
         if (!IsShowing) return;
+        IsShowing = false;
 
-        if (TDSceneManager.ActiveScene.SpriteObjects.Contains(BuildSprite) && TDSceneManager.ActiveScene.SpriteObjects.Contains(Icon))
-        {
-            TDSceneManager.ActiveScene.SpriteObjects.Remove(BuildSprite);
-            TDSceneManager.ActiveScene.SpriteObjects.Remove(Icon);
+        BuildSprite.IsShowing = IsShowing;
+        Icon.IsShowing = IsShowing;
 
-            IsShowing = false;
-            _requiresHide = false;
-
-            _previewBuilding?.TDObject.Destroy();
-
-            ReturnControl();
-        }
-        else _requiresHide = true;
+        _previewBuilding?.TDObject.Destroy();
+        ReturnControl();
     }
 
     private void OvertakeControl()
     {
         if (_activeControl) return;
-
-        Player.ActiveInput = false;
-
         _activeControl = true;
 
+        Player.ActiveInput = false;
         _cooldown = _cooldownDuration;
     }
 
     private void ReturnControl()
     {
         Player.ActiveInput = true;
-
         _activeControl = false;
 
         Player.Cooldown = _cooldownDuration;
@@ -162,6 +153,8 @@ public class BuildMenu : TDComponent
             SelectableBuilding.Outpost => TDContentManager.LoadTexture("UIBuildingOutpostIcon"),
             SelectableBuilding.Wall => TDContentManager.LoadTexture("UIBuildingWallIcon"),
             SelectableBuilding.Farm => TDContentManager.LoadTexture("UIBuildingFarmIcon"),
+            SelectableBuilding.Bridge => TDContentManager.LoadTexture("UIBuildingBridgeIcon"),
+            SelectableBuilding.Hopspital => TDContentManager.LoadTexture("UIBuildingHospitalIcon"),
             _ => TDContentManager.LoadTexture("UIBuildingOutpostIcon")
         };
     }
@@ -170,12 +163,15 @@ public class BuildMenu : TDComponent
     {
         if (Icon == null) return null;
 
-        return buildingIcon switch
+        Building building = buildingIcon switch
         {
             SelectableBuilding.Outpost => PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost).GetComponent<Outpost>(),
             SelectableBuilding.Wall => PrefabFactory.CreatePrefab(PrefabType.BuildingWall).GetComponent<Wall>(),
             SelectableBuilding.Farm => PrefabFactory.CreatePrefab(PrefabType.BuildingFarm).GetComponent<Farm>(),
+            SelectableBuilding.Bridge => PrefabFactory.CreatePrefab(PrefabType.BuildingBridge).GetComponent<Bridge>(),
+            SelectableBuilding.Hopspital => PrefabFactory.CreatePrefab(PrefabType.BuildingHospital).GetComponent<Hospital>(),
             _ => PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost).GetComponent<Outpost>()
         };
+        return building;
     }
 }

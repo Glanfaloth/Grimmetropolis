@@ -40,6 +40,7 @@ public abstract class Enemy : Character
 
     public override Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
 
+    // TODO: Last enemy killed in a group -> NullReferenceException
     public Vector2 Position => TDObject?.Transform.LocalPosition.GetXY() ?? Vector2.Zero;
 
     public void SetBaseStats(Config.EnemyStats stats)

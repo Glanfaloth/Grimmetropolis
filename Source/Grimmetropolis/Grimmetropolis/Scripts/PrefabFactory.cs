@@ -21,6 +21,8 @@ public enum PrefabType
     BuildingOutpost,
     BuildingWall,
     BuildingFarm,
+    BuildingBridge,
+    BuildingHospital,
 
     ResourceWood,
     ResourceStone,
@@ -177,6 +179,7 @@ public static class PrefabFactory
                     Castle castle = prefab.AddComponent<Castle>();
                     mesh.Model = TDContentManager.LoadModel("BuildingCastle");
                     mesh.Texture = TDContentManager.LoadTexture("BuildingCastleTexture");
+                    castle.Size = new Point(3, 3);
                     castle.Mesh = mesh;
                     break;
                 }
@@ -210,7 +213,31 @@ public static class PrefabFactory
                     Farm farm = prefab.AddComponent<Farm>();
                     mesh.Model = TDContentManager.LoadModel("BuildingFarm");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    farm.Size = new Point(2, 2);
                     farm.Mesh = mesh;
+                    break;
+                }
+            case PrefabType.BuildingBridge:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    Bridge bridge = prefab.AddComponent<Bridge>();
+                    mesh.Model = TDContentManager.LoadModel("BuildingBridge");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    bridge.Mesh = mesh;
+                    break;
+                }
+            case PrefabType.BuildingHospital:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    Hospital hospital = prefab.AddComponent<Hospital>();
+                    mesh.Model = TDContentManager.LoadModel("BuildingHospital");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    hospital.Size = new Point(2, 2);
+                    hospital.Mesh = mesh;
+
+                    TDObject interactionCollider = CreatePrefab(PrefabType.Empty, prefab.Transform);
+                    TDCylinderCollider shootingRange = interactionCollider.AddComponent<TDCylinderCollider>();
+                    hospital.InteractionCollider = shootingRange;
                     break;
                 }
 

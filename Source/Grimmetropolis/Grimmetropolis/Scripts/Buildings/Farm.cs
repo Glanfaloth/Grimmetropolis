@@ -6,6 +6,7 @@ public class Farm : Building
     public override float BuildTime => Config.FARM_BUILD_VALUE;
     public override ResourcePile GetResourceCost() => new ResourcePile(Config.FARM_WOOD_COST, Config.FARM_STONE_COST);
     public override ResourcePile GetResourceUpkeep() => new ResourcePile(0, 0, Config.FARM_FOOD_UPKEEP);
+    public override Vector3 OffsetTarget { get; } = new Vector3(0f, 1f, .5f);
 
     public Point MillPosition = new Point(0, 1);
 
@@ -15,8 +16,6 @@ public class Farm : Building
 
     public override void Initialize()
     {
-        Size = new Point(2, 2);
-
         CreateBuildingPart(Mesh.Model, Mesh.Texture, "MillRotor", out _millRotorTransform, out _millRotorMesh);
         CreateMainBuildingPart(Mesh.Model, Mesh.Texture, "Farm");
 

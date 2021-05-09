@@ -8,7 +8,6 @@ public enum ResourceDepositType
     Stone
 }
 
-
 public class ResourceDeposit : Structure
 {
     public ResourceDepositType Type = ResourceDepositType.Wood;
@@ -51,6 +50,13 @@ public class ResourceDeposit : Structure
             ResourceDepositType.Wood => Config.RESOURCE_WOOD_GATHER_DURATION,
             ResourceDepositType.Stone => Config.RESOURCE_STONE_GATHER_DURATION,
             _ => 1f
+        };
+
+        RegenerationTime = Type switch
+        {
+            ResourceDepositType.Wood => Config.RESOURCE_WOOD_REGENERATION_TIME,
+            ResourceDepositType.Stone => Config.RESOURCE_STONE_REGENERATION_TIME,
+            _ => 2f
         };
     }
 

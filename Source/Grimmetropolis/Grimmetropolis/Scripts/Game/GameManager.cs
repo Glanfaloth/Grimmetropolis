@@ -109,11 +109,6 @@ public class GameManager : TDComponent
         TDObject itemList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         ItemTransform = itemList.Transform;
 
-        TDObject magicalArtifactObject = PrefabFactory.CreatePrefab(PrefabType.MagicalArtifact, TDObject.Transform);
-        MagicalArtifact magicalArtifact = magicalArtifactObject.GetComponent<MagicalArtifact>();
-        magicalArtifact.Position = new Point(17, 17);
-
-
         // magicalArtifact.Character = playerObject1.GetComponent<Player>();
 
         //TDObject castleObject = PrefabFactory.CreatePrefab(PrefabType.Castle, StructureTransform);
@@ -158,7 +153,6 @@ public class GameManager : TDComponent
                     // TODO: do we need to check there is only one?
                     TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.BuildingCastle, StructureTransform);
                     newEntity.GetComponent<Castle>().Position = entityToSpawn.Position;
-                    Map.EnemyTarget = entityToSpawn.Position;
                 }
                 break;
             case MapDTO.EntityType.EnemyWitch:

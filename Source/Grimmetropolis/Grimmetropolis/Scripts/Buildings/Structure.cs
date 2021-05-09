@@ -1,15 +1,26 @@
 ﻿using Microsoft.Xna.Framework;
 
 using System;
-using System.Diagnostics;
 
 public abstract class Structure : TDComponent
 {
-    public Point Position = Point.Zero;
+    private Point _position = Point.Zero;
+    public virtual Point Position
+    {
+        get => _position;
+        set
+        {
+            _position = value;
+            if (_position.X + Size.X > GameManager.Instance.Map.Width) _position.X = GameManager.Instance.Map.Width - Size.X;
+            if (_position.Y + Size.Y > GameManager.Instance.Map.Height) _position.Y = GameManager.Instance.Map.Height - Size.Y;
+        }
+    }
+
     public Point Size = new Point(1, 1);
 
     public bool IsPassable = false;
     public virtual bool CanBeAttacked => false;
+
     public bool IsPreview = false;
 
     public TDMesh Mesh;

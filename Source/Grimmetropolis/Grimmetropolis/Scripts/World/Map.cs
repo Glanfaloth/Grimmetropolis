@@ -16,7 +16,6 @@ public class Map : TDComponent
             return MapTiles[index.X, index.Y];
         }
     }
-
     public MapTile[,] MapTiles { get; private set; }
     public int Width { get; private set; }
     public int Height { get; private set; }
@@ -28,7 +27,9 @@ public class Map : TDComponent
 
     public Vector3 Offcenter { get; } = new Vector3(.5f, .5f, 0f);
     // TODO: change this to artifact location
-    public Point EnemyTarget { get; set; }
+    public Point EnemyTarget => GetMapTile(MagicalArtifact?.TDObject.Transform.Position.GetXY() ?? Vector2.Zero).Position;
+
+    public Item MagicalArtifact = null;
 
     public List<MapDTO.EntityToSpawn> LoadFromFile(string fileName)
     {
