@@ -494,7 +494,7 @@ public static class PrefabFactory
                     waveIndicator.Image = testImage;
                     prefab.RectTransform.Origin = new Vector2(testImage.Texture.Width, 0f);
                     prefab.RectTransform.Scale = 0.2f * Vector2.One;
-
+                    
                     TDObject textInfoObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDText testText = textInfoObject.AddComponent<TDText>();
                     testText.Text = "The next wave is coming!";
@@ -502,6 +502,7 @@ public static class PrefabFactory
                     textInfoObject.RectTransform.Origin = new Vector2(testText.Width, 0f);
                     textInfoObject.RectTransform.LocalPosition = new Vector2(-(testImage.Texture.Width + 10f), 0f);
                     textInfoObject.RectTransform.Scale = 1.5f * Vector2.One;
+                    waveIndicator.Info = testText;
                     break;
                 }
         }

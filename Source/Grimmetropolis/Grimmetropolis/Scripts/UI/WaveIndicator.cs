@@ -7,8 +7,7 @@ public class WaveIndicator : TDComponent
     public TDSprite Image;
     public TDText Info;
 
-    protected bool _isShowing = true;
-    private bool _requiresHide = false;
+    protected bool _isShowing = false;
 
     public override void Initialize()
     {
@@ -29,27 +28,21 @@ public class WaveIndicator : TDComponent
     {
         base.Update(gameTime);
 
-        if (_requiresHide) Hide();
+        _isShowing = GameManager.Instance.EnemyController._waveIndicator;
+
+        if (_isShowing) Show();
+        else if (!_isShowing) Hide();
     }
 
     public virtual void Show()
     {
-        if (_isShowing) return;
         if (!TDSceneManager.ActiveScene.SpriteObjects.Contains(Image)) TDSceneManager.ActiveScene.SpriteObjects.Add(Image);
         if (!TDSceneManager.ActiveScene.TextObjects.Contains(Info)) TDSceneManager.ActiveScene.TextObjects.Add(Info);
-        _isShowing = true;
     }
 
     public virtual void Hide()
     {
-        if (!_isShowing) return;
-        if (TDSceneManager.ActiveScene.SpriteObjects.Contains(Image) && TDSceneManager.ActiveScene.TextObjects.Contains(Info))
-        {
-            TDSceneManager.ActiveScene.SpriteObjects.Remove(Image);
-            TDSceneManager.ActiveScene.TextObjects.Remove(Info);
-            _isShowing = false;
-            _requiresHide = false;
-        }
-        else _requiresHide = true;
+        if (TDSceneManager.ActiveScene.SpriteObjects.Contains(Image)) TDSceneManager.ActiveScene.SpriteObjects.Remove(Image); 
+        if (TDSceneManager.ActiveScene.TextObjects.Contains(Info)) TDSceneManager.ActiveScene.TextObjects.Remove(Info);
     }
 }
