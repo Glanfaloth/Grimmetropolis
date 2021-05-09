@@ -129,7 +129,7 @@ public class AttackObstacleState : EnemyGroupState
         // TODO: split up large groups
         if (offensiveBuildings.Count > 0)
         {
-            SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, map[offensiveBuildings.Values[0].Position].TileVertex));
+            SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, map[offensiveBuildings.Values[0].Position].TileVertex, EnemyMove.Type.None));
         }
         else
         {
@@ -143,12 +143,12 @@ public class AttackObstacleState : EnemyGroupState
 
             if (offensiveBuildings.Count > 0)
             {
-                SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, map[offensiveBuildings.Values[0].Position].TileVertex));
+                SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, map[offensiveBuildings.Values[0].Position].TileVertex, EnemyMove.Type.None));
             }
             else
             {
                 _hasOutpostOutside = false;
-                SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, _obstacleTile.TileVertex));
+                SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, _obstacleTile.TileVertex, EnemyMove.Type.None));
             }
         }
     }

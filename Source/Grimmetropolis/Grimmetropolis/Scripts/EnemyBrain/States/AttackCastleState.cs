@@ -34,11 +34,11 @@ public class AttackCastleState : EnemyGroupState
         // TODO: split up large groups
         if (offensiveBuildings.Count > 0)
         {
-            SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, map[offensiveBuildings.Values[0].Position].TileVertex));
+            SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, map[offensiveBuildings.Values[0].Position].TileVertex, EnemyMove.Type.None));
         }
         else
         {
-            SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, map[map.EnemyTarget].TileVertex));
+            SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, map[map.EnemyTarget].TileVertex, EnemyMove.Type.PickUpArtifact));
         }
     }
 
