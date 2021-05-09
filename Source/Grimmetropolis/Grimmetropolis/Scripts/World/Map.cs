@@ -25,6 +25,7 @@ public class Map : TDComponent
     private int[,] _loadedMap;
 
     public Vector3 Corner { get; private set; }
+
     public Vector3 Offcenter { get; } = new Vector3(.5f, .5f, 0f);
     // TODO: change this to artifact location
     public Point EnemyTarget { get; set; }
@@ -178,6 +179,23 @@ public class Map : TDComponent
                     dy = -dy;
                     if (IsInBounds(x + dx, y + dy)) result.Add(MapTiles[x + dx, y + dy]);
                 }
+            }
+        }
+
+        return result;
+    }
+
+    public MapTile[,] GetNearbyTilesSquare(Point position, int radius)
+    {
+        int x = position.X;
+        int y = position.Y;
+        MapTile[,] result = new MapTile[2 * radius + 1, 2 * radius + 1];
+
+        for (int dx = -radius; dx <= radius; dx++)
+        {
+            for (int dy = -radius; dy <= radius; dy++)
+            {
+                result[radius + dx, radius + dy] = MapTiles[x + dx, y + dy];
             }
         }
 

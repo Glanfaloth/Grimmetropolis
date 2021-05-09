@@ -37,6 +37,8 @@ public static class Config
 
     public const int ATTACK_MOVE_COUNT_STATE_CHANGE = 5;
     public const int COMMAND_PROXIMITY_RANGE = 5;
+    public const int COMMAND_MAX_OUTPOST_BEFORE_ATTACK = 2;
+    public const int COMMAND_FUTURE_TILE_LOCATION = 5;
 
     #endregion
 

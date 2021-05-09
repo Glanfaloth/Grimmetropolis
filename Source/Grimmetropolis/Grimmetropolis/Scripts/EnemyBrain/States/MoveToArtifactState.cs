@@ -7,6 +7,7 @@ public class MoveToArtifactState : EnemyGroupState
     private int _pathLength;
     private int _movesUntilAttack = -1;
     private EnemyMove _firstAttackMove;
+    private MapTile _futureTile;
 
     internal override void SendCommands(EnemyGroup enemyGroup)
     {
@@ -15,7 +16,7 @@ public class MoveToArtifactState : EnemyGroupState
         Map map = GameManager.Instance.Map;
         var path = enemyGroup.Graph.GetPathToTile(map.GetMapTile(enemyGroup.Leader.Position), map.EnemyTarget, enemyGroup.Leader.Actions, enemyGroup.Leader.AttackRange);
 
-        Location futureTile = path[0].To;
+        _futureTile = path[0].To.Tile;
 
         for (int i = 0; i < path.Count; i++)
         {
@@ -30,16 +31,16 @@ public class MoveToArtifactState : EnemyGroupState
             }
             if (nextMove.MovementType == EnemyMove.Type.Run)
             {
-                if (i < 5 && _movesUntilAttack < 0)
+                if (i < Config.COMMAND_FUTURE_TILE_LOCATION && _movesUntilAttack < 0)
                 {
-                    futureTile = nextMove.To;
+                    _futureTile = nextMove.To.Tile;
                 }
             }
         }
 
         _pathLength = path.Count;
 
-        MoveCommand cmd = new MoveCommand(enemyGroup.Graph, futureTile);
+        MoveCommand cmd = new MoveCommand(enemyGroup.Graph, _futureTile.TileVertex);
         SendCommandToAll(enemyGroup, cmd);
 
         // TODO: snyc up speed
@@ -57,10 +58,16 @@ public class MoveToArtifactState : EnemyGroupState
             return new AttackCastleState();
         }
 
-        //if (_movesUntilAttack < Config.ATTACK_MOVE_COUNT_STATE_CHANGE)
-        //{
-        //    return new AttackObstacleState(_firstAttackMove);
-        //}
+        if (_movesUntilAttack >= 0 && _movesUntilAttack < Config.ATTACK_MOVE_COUNT_STATE_CHANGE)
+        {
+            return new AttackObstacleState(_firstAttackMove.To.Tile);
+        }
+
+        if (_futureTile.NearbyOutposts >= Config.COMMAND_MAX_OUTPOST_BEFORE_ATTACK)
+        {
+            return new AttackObstacleState(_futureTile);
+        }
+
         return this;
     }
 }
