@@ -14,9 +14,9 @@ class StealArtifactState : EnemyGroupState
 
         Location artifactLocation = GameManager.Instance.Map.GetMapTile(enemyGroup.ArtifactBearer.Position).TileVertex;
 
-        EnemyCommand cmd = new MoveCommand(enemyGroup.Graph, artifactLocation);
+        EnemyCommand cmd = new MoveCommand(enemyGroup.Graph, artifactLocation, EnemyMove.Type.None);
         SendCommandToAll(enemyGroup, cmd);
-        enemyGroup.ArtifactBearer.CurrentCommand = new MoveCommand(enemyGroup.Graph, enemyGroup.SpawnPoint.TileVertex);
+        enemyGroup.ArtifactBearer.CurrentCommand = new MoveCommand(enemyGroup.Graph, enemyGroup.SpawnPoint.TileVertex, EnemyMove.Type.StealArtifact);
     }
 
     internal override EnemyGroupState UpdateState(EnemyGroup enemyGroup)

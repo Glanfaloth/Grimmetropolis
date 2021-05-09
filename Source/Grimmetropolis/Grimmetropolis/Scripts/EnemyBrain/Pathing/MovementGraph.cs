@@ -35,10 +35,10 @@ public class MovementGraph
         return pathComputation.GetPathToLocation(startTile, targetLocation);
     }
 
-    internal EnemyMove GetNextMoveFromMapTile(MapTile tile, EnemyMove.Type actions, float attackRange, Location target)
+    internal EnemyMove GetNextMoveFromMapTile(MapTile tile, EnemyMove.Type actions, float attackRange, Location target, EnemyMove.Type endOfPathAction)
     {
         PathComputation pathComputation = GetPathComputation(actions, attackRange);
-        return pathComputation.GetNextMoveFromTo(tile, target);
+        return pathComputation.GetNextMoveFromTo(tile, target, endOfPathAction);
     }
 
     private PathComputation GetPathComputation(EnemyMove.Type actions, float attackRange)

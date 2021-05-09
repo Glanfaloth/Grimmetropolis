@@ -26,7 +26,7 @@ public class AttackPlayerCommand : EnemyCommand
             }
             else
             {
-                EnemyMove nextMove = Graph.GetNextMoveFromMapTile(tile, actions, attackRange, targetTile.TileVertex);
+                EnemyMove nextMove = Graph.GetNextMoveFromMapTile(tile, actions, attackRange, targetTile.TileVertex, EnemyMove.Type.None);
                 return nextMove.CreateInfo();
             }
         }
@@ -39,7 +39,7 @@ public class AttackPlayerCommand : EnemyCommand
             }
             else
             {
-                EnemyMove nextMove = Graph.GetNextMoveFromMapTile(tile, actions, attackRange, targetTile.TileVertex);
+                EnemyMove nextMove = Graph.GetNextMoveFromMapTile(tile, actions, attackRange, targetTile.TileVertex, EnemyMove.Type.None);
                 return nextMove.CreateInfo();
             }
         }

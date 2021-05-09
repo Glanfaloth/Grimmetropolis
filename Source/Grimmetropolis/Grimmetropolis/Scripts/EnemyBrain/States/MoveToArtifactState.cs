@@ -40,7 +40,7 @@ public class MoveToArtifactState : EnemyGroupState
 
         _pathLength = path.Count;
 
-        MoveCommand cmd = new MoveCommand(enemyGroup.Graph, _futureTile.TileVertex);
+        MoveCommand cmd = new MoveCommand(enemyGroup.Graph, _futureTile.TileVertex, EnemyMove.Type.None);
         SendCommandToAll(enemyGroup, cmd);
 
         // TODO: snyc up speed

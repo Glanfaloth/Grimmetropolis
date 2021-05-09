@@ -5,12 +5,13 @@ using System.Text;
 
 class EndOfPath : EnemyMove
 {
-    public override Type MovementType => Type.EndOfPath;
+    public override Type MovementType { get; }
 
     public override float Cost => 0;
 
-    public EndOfPath(Location location) : base(location)
+    public EndOfPath(Location location, Type endOfPathAction) : base(location)
     {
+        MovementType = endOfPathAction;
     }
 
     public override NextMoveInfo CreateInfo()
