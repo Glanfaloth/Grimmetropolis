@@ -96,6 +96,16 @@ public class MapTile : TDComponent
 
     public void UpdateGraph()
     {
+        // we need to also update neighbouring tiles so that diagonal edges are also updated
+        var tilesToUpdate = Map.GetNearbyTilesManhattan(Position, 1);
+        foreach (var tileToUpdate in tilesToUpdate)
+        {
+            tileToUpdate.UpdateGraphForTile();
+        }
+    }
+
+    private void UpdateGraphForTile()
+    {
         TileVertex.ClearIncomingEdges();
         StructureVertex.ClearIncomingEdges();
 
