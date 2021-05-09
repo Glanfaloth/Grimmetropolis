@@ -86,7 +86,7 @@ public class ResourceDeposit : Structure
         }
 
         CurrentStorage--;
-        _time = 0f;
+        if (CurrentStorage == Storage - 1) _time = 0f;
     }
 
     public override void Highlight(bool highlight)

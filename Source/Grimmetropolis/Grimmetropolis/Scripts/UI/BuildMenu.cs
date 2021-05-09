@@ -9,7 +9,8 @@ public enum SelectableBuilding
     Wall,
     Farm,
     Bridge,
-    Hopspital
+    Hospital,
+    ResourceBuilding
 }
 
 public class BuildMenu : TDComponent
@@ -154,7 +155,8 @@ public class BuildMenu : TDComponent
             SelectableBuilding.Wall => TDContentManager.LoadTexture("UIBuildingWallIcon"),
             SelectableBuilding.Farm => TDContentManager.LoadTexture("UIBuildingFarmIcon"),
             SelectableBuilding.Bridge => TDContentManager.LoadTexture("UIBuildingBridgeIcon"),
-            SelectableBuilding.Hopspital => TDContentManager.LoadTexture("UIBuildingHospitalIcon"),
+            SelectableBuilding.Hospital => TDContentManager.LoadTexture("UIBuildingHospitalIcon"),
+            SelectableBuilding.ResourceBuilding => TDContentManager.LoadTexture("UIBuildingResourceBuildingIcon"),
             _ => TDContentManager.LoadTexture("UIBuildingOutpostIcon")
         };
     }
@@ -169,7 +171,8 @@ public class BuildMenu : TDComponent
             SelectableBuilding.Wall => PrefabFactory.CreatePrefab(PrefabType.BuildingWall).GetComponent<Wall>(),
             SelectableBuilding.Farm => PrefabFactory.CreatePrefab(PrefabType.BuildingFarm).GetComponent<Farm>(),
             SelectableBuilding.Bridge => PrefabFactory.CreatePrefab(PrefabType.BuildingBridge).GetComponent<Bridge>(),
-            SelectableBuilding.Hopspital => PrefabFactory.CreatePrefab(PrefabType.BuildingHospital).GetComponent<Hospital>(),
+            SelectableBuilding.Hospital => PrefabFactory.CreatePrefab(PrefabType.BuildingHospital).GetComponent<Hospital>(),
+            SelectableBuilding.ResourceBuilding => PrefabFactory.CreatePrefab(PrefabType.BuildingResourceBuilding).GetComponent<ResourceBuilding>(),
             _ => PrefabFactory.CreatePrefab(PrefabType.BuildingOutpost).GetComponent<Outpost>()
         };
         return building;

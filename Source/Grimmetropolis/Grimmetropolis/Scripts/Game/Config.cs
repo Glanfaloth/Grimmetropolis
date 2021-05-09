@@ -77,10 +77,17 @@ public static class Config
 
     public const int HOSPITAL_WOOD_COST = 8;
     public const int HOSPITAL_STONE_COST = 2;
-    public const float HOSPITAL_HEALTH = 5f;
+    public const float HOSPITAL_HEALTH = 10f;
     public const float HOSPITAL_BUILD_VALUE = 20f;
     public const float HOSPITAL_HEAL_RATE = 5f;
     public const float HOSPTIAL_HEAL_RANGE = 3f;
+
+    public const int RESOURCE_BUILDING_WOOD_COST = 10;
+    public const int RESOURCE_BUILDING_STONE_COST = 10;
+    public const float RESOURCE_BUILDING_HEALTH = 10f;
+    public const float RESOURCE_BUILDING_BUILD_VALUE = 20f;
+    public const float RESOURCE_BUILDING_COLLECTION_TIME = 10f;
+    public const float RESOURCE_BUILDING_COLLECTION_RANGE = 4f;
 
     public const int RESOURCE_WOOD_GATHER_BASE_RATE = 1;
     public const int RESOURCE_STONE_GATHER_BASE_RATE = 1;
