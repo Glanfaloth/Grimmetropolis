@@ -30,6 +30,8 @@ public class Player : Character
     {
         base.Initialize();
 
+        Health = 1f;
+
         HealthBar.TDObject.Destroy();
         UIManager.Instance.AddPlayerDisplay(this);
 

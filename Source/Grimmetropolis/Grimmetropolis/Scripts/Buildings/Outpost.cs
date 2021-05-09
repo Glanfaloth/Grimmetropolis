@@ -65,6 +65,7 @@ public class Outpost : Building
     public override void Destroy()
     {
         ShootingRange.collisionEvent -= GetClosestCollider;
+        ShootingRange = null;
 
         base.Destroy();
     }

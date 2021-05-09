@@ -22,6 +22,7 @@ public enum PrefabType
     BuildingWall,
     BuildingFarm,
     BuildingBridge,
+    BuildingHospital,
 
     ResourceWood,
     ResourceStone,
@@ -223,6 +224,20 @@ public static class PrefabFactory
                     mesh.Model = TDContentManager.LoadModel("BuildingBridge");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     bridge.Mesh = mesh;
+                    break;
+                }
+            case PrefabType.BuildingHospital:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    Hospital hospital = prefab.AddComponent<Hospital>();
+                    mesh.Model = TDContentManager.LoadModel("BuildingHospital");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    hospital.Size = new Point(2, 2);
+                    hospital.Mesh = mesh;
+
+                    TDObject interactionCollider = CreatePrefab(PrefabType.Empty, prefab.Transform);
+                    TDCylinderCollider shootingRange = interactionCollider.AddComponent<TDCylinderCollider>();
+                    hospital.InteractionCollider = shootingRange;
                     break;
                 }
 
