@@ -21,7 +21,7 @@ public class MoveToArtifactState : EnemyGroupState
         for (int i = 0; i < path.Count; i++)
         {
             EnemyMove nextMove = path[i];
-            if (nextMove.MovementType == EnemyMove.Type.Attack)
+            if (nextMove.MovementType == EnemyMove.Type.Attack && !(nextMove.To.Tile.Structure is Castle))
             {
                 if (_movesUntilAttack < 0)
                 {
