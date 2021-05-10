@@ -5,4 +5,5 @@ public class PlayerDisplay : TDComponent {
     public ToolAxe ToolAxe = null;
     public ToolPickaxe ToolPickaxe = null;
     public WeaponSword WeaponSword = null;
+    public TDSprite PlayerIcon;
 }

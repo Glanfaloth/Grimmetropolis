@@ -655,6 +655,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/UIBar.png
 
+#begin Textures/UIBeast.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UIBeast.png
+
 #begin Textures/UIBow.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -751,6 +763,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/UIBuildingWallIcon.png
 
+#begin Textures/UICinderella.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UICinderella.png
+
 #begin Textures/UIClock.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -774,6 +798,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/UIFood.png
+
+#begin Textures/UIFrog.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UIFrog.png
 
 #begin Textures/UIHeart.png
 /importer:TextureImporter
@@ -822,6 +858,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/UIPlayerBar.png
+
+#begin Textures/UISnowWhite.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UISnowWhite.png
 
 #begin Textures/UIStone.png
 /importer:TextureImporter

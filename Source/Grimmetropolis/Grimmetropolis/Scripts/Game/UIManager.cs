@@ -10,7 +10,7 @@ public class UIManager : TDComponent
 
     private int _playerDisplayIndex = 0;
     private float _offsetBetweenPlayerDisplay = .2f * TDSceneManager.Graphics.PreferredBackBufferWidth;
-
+    private string[] _playerIcons = { "UICinderella", "UISnowWhite", "UIFrog", "UIBeast" };
     public override void Initialize()
     {
         base.Initialize();
@@ -36,12 +36,14 @@ public class UIManager : TDComponent
         player.HealthBar = PlayerDisplays[_playerDisplayIndex].HealthBar;
         PlayerDisplays[_playerDisplayIndex].HealthBar.CurrentProgress = player.Health;
         PlayerDisplays[_playerDisplayIndex].HealthBar.MaxProgress = player.BaseHealth;
+        //player.PlayerIcon = PlayerDisplays[_playerDisplayIndex].PlayerIcon;
 
         _playerDisplayIndex++;
 
         for (int i = 0; i < _playerDisplayIndex; i++)
         {
-            PlayerDisplays[i].TDObject.RectTransform.LocalPosition = new Vector2(offsetStart + i * _offsetBetweenPlayerDisplay, TDSceneManager.Graphics.PreferredBackBufferHeight - 25f);
+            PlayerDisplays[i].PlayerIcon.Texture = TDContentManager.LoadTexture(_playerIcons[i]);
+            PlayerDisplays[i].TDObject.RectTransform.LocalPosition = new Vector2(offsetStart + i * _offsetBetweenPlayerDisplay, TDSceneManager.Graphics.PreferredBackBufferHeight - 60f);
         }
     }
 }

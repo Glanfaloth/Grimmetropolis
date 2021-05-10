@@ -20,6 +20,8 @@ public class Player : Character
     public ResourceDeposit LastClosestResourceDeposit = null;
     public bool NeedsToShowHarvestProgress = false;
 
+    // public TDSprite PlayerIcon = null;
+
     private Enemy _closestEnemy = null;
     private MapTile _collidingMapTile = null;
 

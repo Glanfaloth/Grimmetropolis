@@ -74,7 +74,7 @@ public class GameManager : TDComponent
         Player player0 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(3, -2, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
         player0.Animation.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
         player0.Input = TDInputManager.Inputs[0];
-
+        
         Player player1 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(3, -1, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
         player1.Animation.CharacterModel = TDContentManager.LoadModel("PlayerSnowwhite");
         player1.Input = TDInputManager.Inputs[1];
