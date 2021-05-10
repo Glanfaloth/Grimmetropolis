@@ -7,6 +7,8 @@ public class TDSound : TDComponent
 {
     public SoundEffect SoundEffect;
 
+    public float Volume = 1f;
+
     public bool SingleInstance = false;
 
     public bool IsPositional = false;
@@ -54,6 +56,7 @@ public class TDSound : TDComponent
 
             SoundEffectInstance soundEffectInstance = SoundEffect.CreateInstance();
             soundEffectInstance.IsLooped = IsLooped;
+            soundEffectInstance.Volume = Volume;
             soundEffectInstance.Play();
 
             _soundEffectInstances.Add(soundEffectInstance);
