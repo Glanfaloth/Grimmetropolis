@@ -474,6 +474,14 @@ public static class PrefabFactory
                     playerIconObject.RectTransform.Scale = 0.3f * Vector2.One;
                     playerIconObject.RectTransform.LocalPosition = new Vector2(0f, 0.7f * playerIconBackground.Texture.Height);
                     playerDisplay.PlayerIcon = playerIcon;
+
+                    TDObject playerNameObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDText playerName = playerNameObject.AddComponent<TDText>();
+                    playerName.Text = "Player Name";
+                    playerName.Depth = 0.1f;
+                    playerNameObject.RectTransform.Origin = new Vector2(0.5f * playerName.Width, playerName.Height);
+                    playerNameObject.RectTransform.LocalPosition = new Vector2(0f, -2f - playerIconBackground.Texture.Height);
+                    playerDisplay.PlayerName = playerName;
                     break;
                 }
 
