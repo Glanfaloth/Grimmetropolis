@@ -53,7 +53,7 @@ public class GameManager : TDComponent
         // List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/testEmpty128.map");
 
         // ResourcePool
-        ResourcePool = new ResourcePile(100, 100);
+        ResourcePool = new ResourcePile();
 
         // EnemyBrain
         TDObject enemyAI = PrefabFactory.CreatePrefab(PrefabType.Empty);
