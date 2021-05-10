@@ -391,11 +391,11 @@ public static class PrefabFactory
                     resourceDisplay.StoneUI = stone;
                     resourceDisplay.FoodUI = food;
                     woodObject.RectTransform.Scale = 0.05f * Vector2.One;
-                    woodObject.RectTransform.LocalPosition = new Vector2(-2f, 10f);
+                    woodObject.RectTransform.LocalPosition = new Vector2(-6f, 10f);
                     stoneObject.RectTransform.Scale = 0.04f * Vector2.One;
-                    stoneObject.RectTransform.LocalPosition = new Vector2(5f + 0.05f * wood.Texture.Width, 10f);
-                    foodObject.RectTransform.Scale = 0.06f * Vector2.One;
-                    foodObject.RectTransform.LocalPosition = new Vector2(0.05f * wood.Texture.Width + 0.06f * stone.Texture.Width, 25f);
+                    stoneObject.RectTransform.LocalPosition = new Vector2(-2f + 0.05f * wood.Texture.Width, 10f);
+                    foodObject.RectTransform.Scale = 0.08f * Vector2.One;
+                    foodObject.RectTransform.LocalPosition = new Vector2(-8f + 0.05f * wood.Texture.Width + 0.06f * stone.Texture.Width, 25f);
                     break;
                 }
 
