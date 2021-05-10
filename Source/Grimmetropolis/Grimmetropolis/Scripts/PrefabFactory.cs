@@ -102,6 +102,7 @@ public static class PrefabFactory
                     animation.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
                     animation.CharacterTexture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     player.Animation = animation;
+                    player.Collider = collider;
                     /*mesh.Model = TDContentManager.LoadModel("PlayerCindarella");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");*/
                     collider.Radius = .25f;
@@ -541,6 +542,7 @@ public static class PrefabFactory
         }
         if (enemy is EnemyCatapult) collider.Radius = .375f;
         else collider.Radius = .25f;
+        enemy.Collider = collider;
         collider.Height = .5f;
         collider.Offset = .5f * Vector3.Backward;
 
