@@ -27,6 +27,7 @@ public class TDCuboidCollider : TDCollider
 
     public Vector3 CuboidCornerLow { get; private set; }
     public Vector3 CuboidCornerHigh { get; private set; }
+    public Vector3 CuboidCenter { get; private set; }
 
     public override void Initialize()
     {
@@ -39,6 +40,7 @@ public class TDCuboidCollider : TDCollider
     {
         CuboidCornerLow = TDObject.Transform.Position - .5f * Vector3.Multiply(TDObject.Transform.Scale, Size) + Offset;
         CuboidCornerHigh = CuboidCornerLow + Vector3.Multiply(TDObject.Transform.Scale, Size);
+        CuboidCenter = CuboidCornerLow + .5f * (CuboidCornerHigh - CuboidCornerLow);
     }
 
     public override void UpdateCollision(TDCollider collider)

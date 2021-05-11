@@ -197,6 +197,10 @@ public class GameManager : TDComponent
                 TDObject toolPickaxeObject = PrefabFactory.CreatePrefab(PrefabType.ToolPickaxe, ItemTransform);
                 toolPickaxeObject.GetComponent<ToolPickaxe>().Position = entityToSpawn.Position;
                 break;
+            case MapDTO.EntityType.ToolHammer:
+                TDObject toolHammerObject = PrefabFactory.CreatePrefab(PrefabType.ToolHammer, ItemTransform);
+                toolHammerObject.GetComponent<ToolHammer>().Position = entityToSpawn.Position;
+                break;
             case MapDTO.EntityType.WeaponSword:
                 TDObject weaponSwordObject = PrefabFactory.CreatePrefab(PrefabType.WeaponSword, ItemTransform);
                 weaponSwordObject.GetComponent<WeaponSword>().Position = entityToSpawn.Position;
