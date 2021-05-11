@@ -482,6 +482,14 @@ public static class PrefabFactory
                     playerNameObject.RectTransform.Origin = new Vector2(0.5f * playerName.Width, playerName.Height);
                     playerNameObject.RectTransform.LocalPosition = new Vector2(0f, -2f - playerIconBackground.Texture.Height);
                     playerDisplay.PlayerName = playerName;
+
+                    TDObject currentItemObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite currentItem = currentItemObject.AddComponent<TDSprite>();
+                    currentItem.Texture = TDContentManager.LoadTexture("UIAxe");
+                    currentItemObject.RectTransform.LocalPosition = new Vector2(.6f * playerIconBackground.Texture.Width, -0.5f * playerIconBackground.Texture.Height);
+                    currentItemObject.RectTransform.Scale = 0.15f * Vector2.One;
+                    playerDisplay.CurrentItem = currentItem;
+
                     break;
                 }
 
