@@ -453,10 +453,12 @@ public static class PrefabFactory
             case PrefabType.PlayerDisplay:
                 {
                     CreateEmptyUI(prefab, localPosition, localRotation, localScale);
-                    TDSprite playerIcon = prefab.AddComponent<TDSprite>();
+                    TDSprite playerIconBackground = prefab.AddComponent<TDSprite>();
+   
                     PlayerDisplay playerDisplay = prefab.AddComponent<PlayerDisplay>();
-                    playerIcon.Texture = TDContentManager.LoadTexture("UIPlayer");
-                    prefab.RectTransform.Origin = new Vector2(.5f * playerIcon.Texture.Width, playerIcon.Texture.Height);
+                    playerIconBackground.Texture = TDContentManager.LoadTexture("UIPlayer");
+                    playerIconBackground.Depth = 1f;
+                    prefab.RectTransform.Origin = new Vector2(.5f * playerIconBackground.Texture.Width, playerIconBackground.Texture.Height);
 
                     TDObject healthBarObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     HealthBar healthBar = healthBarObject.AddComponent<HealthBar>();
@@ -464,7 +466,7 @@ public static class PrefabFactory
                     background.Texture = TDContentManager.LoadTexture("UIPlayerBar");
                     background.Color = Color.Black;
                     background.Depth = 1f;
-                    healthBarObject.RectTransform.LocalPosition = new Vector2(.5f * playerIcon.Texture.Width, -.8f * playerIcon.Texture.Height);
+                    healthBarObject.RectTransform.LocalPosition = new Vector2(.5f * playerIconBackground.Texture.Width, -.8f * playerIconBackground.Texture.Height);
 
                     TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, healthBarObject.Transform);
                     TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
@@ -474,6 +476,23 @@ public static class PrefabFactory
                     healthBar.Foreground = foreground;
                     healthBar.AlwaysShow = true;
                     playerDisplay.HealthBar = healthBar;
+
+                    TDObject playerIconObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite playerIcon = playerIconObject.AddComponent<TDSprite>();
+                    playerIcon.Texture = TDContentManager.LoadTexture("UICinderella");
+                    playerIcon.Depth = 0.1f;
+                    playerIconObject.RectTransform.Origin = new Vector2(.5f * playerIcon.Texture.Width, playerIcon.Texture.Height);
+                    playerIconObject.RectTransform.Scale = 0.3f * Vector2.One;
+                    playerIconObject.RectTransform.LocalPosition = new Vector2(0f, 0.7f * playerIconBackground.Texture.Height);
+                    playerDisplay.PlayerIcon = playerIcon;
+
+                    TDObject playerNameObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDText playerName = playerNameObject.AddComponent<TDText>();
+                    playerName.Text = "Player Name";
+                    playerName.Depth = 0.1f;
+                    playerNameObject.RectTransform.Origin = new Vector2(0.5f * playerName.Width, playerName.Height);
+                    playerNameObject.RectTransform.LocalPosition = new Vector2(0f, -2f - playerIconBackground.Texture.Height);
+                    playerDisplay.PlayerName = playerName;
                     break;
                 }
 
