@@ -41,10 +41,6 @@ public class ToolPickaxe : Item
                     closestBuilding.Health -= Config.PLAYER_DAMAGE;
                     Character.Cooldown = Config.PLAYER_ATTACK_DURATION;
                 }
-                else
-                {
-                    player.Build(gameTime, closestBuilding);
-                }
 
                 player.ResetProgressBarForProgress();
                 player.SetProgressForCooldown();

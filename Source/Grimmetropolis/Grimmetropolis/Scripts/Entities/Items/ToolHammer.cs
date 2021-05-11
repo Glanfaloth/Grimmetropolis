@@ -19,7 +19,7 @@ public class ToolHammer : Item
     {
         base.InteractWithStructure(gameTime, structure);
 
-        if (Character is Player player && structure.Mesh.IsPreview)
+        if (Character is Player player)
         {
             if (structure is Building building) player.Build(gameTime, building);
             player.Animation.UseAnimation();
