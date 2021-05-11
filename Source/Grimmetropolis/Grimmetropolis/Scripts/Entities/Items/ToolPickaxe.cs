@@ -43,7 +43,7 @@ public class ToolPickaxe : Item
                 }
                 else
                 {
-                    player.Build(gameTime);
+                    player.Build(gameTime, closestBuilding);
                 }
 
                 player.ResetProgressBarForProgress();

@@ -32,6 +32,7 @@ public enum PrefabType
 
     ToolAxe,
     ToolPickaxe,
+    ToolHammer,
 
     WeaponSword,
 
@@ -307,6 +308,16 @@ public static class PrefabFactory
                     mesh.Model = TDContentManager.LoadModel("ToolPickaxe");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     pickaxe.Mesh = mesh;
+                    break;
+                }
+
+            case PrefabType.ToolHammer:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    ToolHammer hammer = prefab.AddComponent<ToolHammer>();
+                    mesh.Model = TDContentManager.LoadModel("ToolHammer");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    hammer.Mesh = mesh;
                     break;
                 }
 

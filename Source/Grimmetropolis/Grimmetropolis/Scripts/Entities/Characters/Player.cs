@@ -21,6 +21,7 @@ public class Player : Character
     public bool NeedsToShowHarvestProgress = false;
 
     private Enemy _closestEnemy = null;
+    private MapTile _interactionCollidingMapTile = null;
     private MapTile _collidingMapTile = null;
 
     private BuildMenu _buildMenu = null;
@@ -55,7 +56,7 @@ public class Player : Character
             if (Input.ActionPressed()) Interact(gameTime);
             else ResetProgressBarForProgress();
             if (Input.CancelPressed()) Drop();
-            if (Input.BuildModePressed() && Cooldown <= 0f)
+            if (Input.BuildModePressed() && Items[0] is ToolHammer && Cooldown <= 0f)
                 _buildMenu.Show();
         }
 
@@ -76,18 +77,17 @@ public class Player : Character
         base.Interact(gameTime);
 
         float closestStructureDistance = float.MaxValue;
-        Structure _closestStructure = null;
+        Structure closestStructure = null;
 
-        Item _closestItem = GameManager.Instance.Map.GetMapTile(TDObject.Transform.Position.GetXY()).Item;
-        foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
+        foreach (Tuple<TDCollider, float, float> colliderEntry in _colliderList)
         {
-            if (colliderEntry.Item1 is TDCuboidCollider && closestStructureDistance > colliderEntry.Item2)
+            if (colliderEntry.Item1 is TDCuboidCollider && closestStructureDistance > colliderEntry.Item3)
             {
                 Structure structure = colliderEntry.Item1.TDObject?.GetComponent<MapTile>().Structure;
                 if (structure != null)
                 {
-                    closestStructureDistance = colliderEntry.Item2;
-                    _closestStructure = structure;
+                    closestStructureDistance = colliderEntry.Item3;
+                    closestStructure = structure;
                 }
             }
         }
@@ -105,21 +105,13 @@ public class Player : Character
             }
 
         }
-        else if (_closestItem != null)
+        else if (_collidingMapTile.Item != null)
         {
             Take();
         }
-        else if (_closestStructure != null && Cooldown <= 0f)
+        else if (closestStructure != null && Cooldown <= 0f)
         {
-            if (Items[0] != null) Items[0].InteractWithStructure(gameTime, _closestStructure);
-            else
-            {
-                if (_closestStructure is Castle castle)
-                {
-                    castle.StealMagicalArtifact(this);
-                }
-                Build(gameTime);
-            }
+            if (Items[0] != null) Items[0].InteractWithStructure(gameTime, closestStructure);
         }
     }
 
@@ -142,27 +134,24 @@ public class Player : Character
         else building.TDObject.Destroy();
     }
 
-    public void Build(GameTime gameTime)
+    public void Build(GameTime gameTime, Building building)
     {
         if (Cooldown > 0)
         {
             return;
         }
 
-        if (_collidingMapTile.Structure is Building building)
+        if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH) && building.Mesh.IsPreview)
         {
-            if(building.TryBuild(Config.PLAYER_BUILD_STRENGTH) && building.Mesh.IsPreview)
-            {
-                Cooldown = Config.PLAYER_BUILD_COOLDOWN;
-                ResetProgressBarForProgress();
-                SetProgressBar(Cooldown);
-            }
-            else if (building.TryRepair(Config.PLAYER_BUILD_STRENGTH))
-            {
-                Cooldown = 2f * Config.PLAYER_BUILD_COOLDOWN;
-                ResetProgressBarForProgress();
-                SetProgressBar(Cooldown);
-            }
+            Cooldown = Config.PLAYER_BUILD_COOLDOWN;
+            ResetProgressBarForProgress();
+            SetProgressBar(Cooldown);
+        }
+        else if (building.TryRepair(Config.PLAYER_BUILD_STRENGTH))
+        {
+            Cooldown = 2f * Config.PLAYER_BUILD_COOLDOWN;
+            ResetProgressBarForProgress();
+            SetProgressBar(Cooldown);
         }
     }
 
@@ -183,14 +172,14 @@ public class Player : Character
         float closestEnemyDistance = float.MaxValue;
         _closestEnemy = null;
 
-        foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
+        foreach (Tuple<TDCollider, float, float> colliderEntry in _colliderList)
         {
-            if (colliderEntry.Item1 is TDCylinderCollider && closestEnemyDistance > colliderEntry.Item2)
+            if (colliderEntry.Item1 is TDCylinderCollider && closestEnemyDistance > colliderEntry.Item3)
             {
                 Enemy enemy = colliderEntry.Item1.TDObject?.GetComponent<Enemy>();
                 if (enemy != null)
                 {
-                    closestEnemyDistance = colliderEntry.Item2;
+                    closestEnemyDistance = colliderEntry.Item3;
                     _closestEnemy = enemy;
                 }
             }
@@ -200,13 +189,19 @@ public class Player : Character
 
     private void HighlightMapTile()
     {
-        _collidingMapTile?.Highlight(false);
+        _interactionCollidingMapTile?.Highlight(false);
+        // _interactionCollidingMapTile?.Structure?.Highlight(true);
         _collidingMapTile?.Item?.Highlight(false);
-        _collidingMapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
+        _interactionCollidingMapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
+        _collidingMapTile = GameManager.Instance.Map.GetMapTile(Collider.CenterXY);
         if (_buildMenu.IsShowing)
         {
-            _collidingMapTile.Highlight(true);
+            _interactionCollidingMapTile.Highlight(true);
         }
+        /*else if (_interactionCollidingMapTile?.Structure != null && !(_interactionCollidingMapTile?.Structure is Bridge))
+        {
+            _interactionCollidingMapTile.Structure.Highlight(true);
+        }*/
         else if (_collidingMapTile.Item != null && Items[0] == null)
         {
             _collidingMapTile.Item.Highlight(true);

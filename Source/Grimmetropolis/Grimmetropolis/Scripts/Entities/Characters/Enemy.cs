@@ -132,9 +132,9 @@ public abstract class Enemy : Character
             float closestBuildingDistance = float.MaxValue;
             Player closestPlayer = null;
             Building closestBuilding = null;
-            foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
+            foreach (Tuple<TDCollider, float, float> colliderEntry in _colliderList)
             {
-                if (colliderEntry.Item1 is TDCylinderCollider && closestPlayerDistance > colliderEntry.Item2)
+                if (colliderEntry.Item1 is TDCylinderCollider && closestPlayerDistance > colliderEntry.Item3)
                 {
                     Player player = colliderEntry.Item1.TDObject?.GetComponent<Player>();
                     if (player != null)
@@ -143,11 +143,11 @@ public abstract class Enemy : Character
                         closestPlayer = player;
                     }
                 }
-                else if (colliderEntry.Item1 is TDCuboidCollider && closestBuildingDistance > colliderEntry.Item2)
+                else if (colliderEntry.Item1 is TDCuboidCollider && closestBuildingDistance > colliderEntry.Item3)
                 {
                     if (colliderEntry.Item1.TDObject?.GetComponent<MapTile>().Structure is Building building)
                     {
-                        closestBuildingDistance = colliderEntry.Item2;
+                        closestBuildingDistance = colliderEntry.Item3;
                         closestBuilding = building;
                     }
                 }
