@@ -25,6 +25,10 @@ public class TDScene
     public List<TDSprite> SpriteObjects = new List<TDSprite>();
     public List<TDText> TextObjects = new List<TDText>();
 
+    public List<TDSound> SoundObjects = new List<TDSound>();
+
+    public bool RequiresLoadingScene = false;
+
     public virtual void Initialize()
     {
         ShadowRender = new RenderTarget2D(TDSceneManager.Graphics.GraphicsDevice, 4096, 4096, true, SurfaceFormat.Single, DepthFormat.Depth24);
@@ -33,6 +37,16 @@ public class TDScene
 
     public virtual void Update(GameTime gameTime)
     {
+        if (RequiresLoadingScene)
+        {
+            foreach(TDSound soundObject in SoundObjects)
+            {
+                soundObject.Stop();
+            }
+            TDSceneManager.LoadTemporaryScene();
+            return;
+        }
+
         // Initialize newly created TDObjects
         for (int i = 0; i < CreatedObjects.Count; i++)
         {

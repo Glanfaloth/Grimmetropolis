@@ -34,6 +34,13 @@ public class TDSound : TDComponent
     private List<SoundEffectInstance> _soundEffectInstances = new List<SoundEffectInstance>();
     private List<float> _targetTimes = new List<float>();
 
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        TDSceneManager.ActiveScene.SoundObjects.Add(this);
+    }
+
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
@@ -45,6 +52,14 @@ public class TDSound : TDComponent
             _soundEffectInstances.RemoveAt(0);
             _targetTimes.RemoveAt(0);
         }
+    }
+
+    public override void Destroy()
+    {
+        base.Destroy();
+
+        Stop();
+        TDSceneManager.ActiveScene.SoundObjects.Remove(this);
     }
 
     public void Play()

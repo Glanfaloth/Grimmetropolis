@@ -106,6 +106,7 @@ public abstract class Enemy : Character
                 break;
             case EnemyMove.Type.StealArtifact:
                 // TODO: implement win condition
+                GameManager.Instance.GameState = GameState.GameOver;
                 Debug.WriteLine("YOU LOSE");
                 break;
             default:

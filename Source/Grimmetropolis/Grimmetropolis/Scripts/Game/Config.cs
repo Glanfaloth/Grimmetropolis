@@ -23,7 +23,7 @@ public static class Config
     public const int MAX_RANGED_ATTACK = 10;
 
     public const float WAVE_ALERT_TIME = 20f;
-    public const float TIME_UNTIL_FIRST_WAVE = 120f;
+    public const float TIME_UNTIL_FIRST_WAVE = 60f;
     public const float TIME_BETWEEN_WAVES = 40f;
     public const float FIRST_WAVE_WITCH_COUNT = 4;
     public const float FIRST_WAVE_KNIGHT_COUNT = 6;

@@ -27,7 +27,9 @@ public class EnemyController : TDComponent
 
     private bool _spawnLocationSet = false;
 
-    private int _spawnLocationIndex = -1;
+    // TODO: Why is it 0 the first time, this scene is started?
+    // private int _spawnLocationIndex = -1;
+    private int _spawnLocationIndex = 0;
     private List<MapTile> _spawnTiles = new List<MapTile>();
 
     private List<MapTile> _highlightedPath = new List<MapTile>();

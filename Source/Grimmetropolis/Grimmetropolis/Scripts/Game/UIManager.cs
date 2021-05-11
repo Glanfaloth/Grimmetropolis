@@ -7,6 +7,7 @@ public class UIManager : TDComponent
     public ResourceDisplay ResourceDisplay;
     public WaveIndicator WaveIndicator;
     public PlayerDisplay[] PlayerDisplays = new PlayerDisplay[4];
+    public GameOverOverlay GameOverOverlay;
 
     private int _playerDisplayIndex = 0;
     private float _offsetBetweenPlayerDisplay = .2f * TDSceneManager.Graphics.PreferredBackBufferWidth;
@@ -24,6 +25,14 @@ public class UIManager : TDComponent
 
         TDObject waveIndicatorObject = PrefabFactory.CreatePrefab(PrefabType.WaveIndicator);
         WaveIndicator = waveIndicatorObject.GetComponent<WaveIndicator>();
+
+        TDObject gameOverObject = PrefabFactory.CreatePrefab(PrefabType.GameOverOverlay);
+        GameOverOverlay = gameOverObject.GetComponent<GameOverOverlay>();
+    }
+
+    public void ShowGameOver()
+    {
+        GameOverOverlay.Show();
     }
 
     public void AddPlayerDisplay(Player player)

@@ -3,6 +3,11 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 
+public enum GameState
+{
+    Playing,
+    GameOver
+}
 
 public class GameManager : TDComponent
 {
@@ -17,6 +22,17 @@ public class GameManager : TDComponent
         {
             _resourcePool = value;
             UIManager.Instance?.ResourceDisplay.UpdateDisplay();
+        }
+    }
+
+    private GameState _gameState = GameState.Playing;
+    public GameState GameState
+    {
+        get => _gameState;
+        set
+        {
+            _gameState = value;
+            if (_gameState == GameState.GameOver) UIManager.Instance.ShowGameOver();
         }
     }
 

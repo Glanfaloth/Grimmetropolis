@@ -42,8 +42,6 @@ public class Player : Character
         buildMenuObject.RectTransform.Offset = 2f * Vector3.Backward;
 
         GameManager.Instance.Players.Add(this);
-
-        Health *= 0.75f;
     }
 
     public override void Update(GameTime gameTime)
