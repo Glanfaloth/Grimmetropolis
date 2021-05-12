@@ -28,8 +28,7 @@ public class EnemyController : TDComponent
     private bool _spawnLocationSet = false;
 
     // TODO: Why is it 0 the first time, this scene is started?
-    // private int _spawnLocationIndex = -1;
-    private int _spawnLocationIndex = 0;
+    private int _spawnLocationIndex = -1;
     private List<MapTile> _spawnTiles = new List<MapTile>();
 
     private List<MapTile> _highlightedPath = new List<MapTile>();
@@ -107,7 +106,7 @@ public class EnemyController : TDComponent
         _waveTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
         _spawnTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        if (_waveTimer < 0f)
+        if (_spawnLocationSet && _waveTimer < 0f)
         {
             _spawnTimer = _waveTimer;
             _waveTimer += _timeBetweenWaves;
