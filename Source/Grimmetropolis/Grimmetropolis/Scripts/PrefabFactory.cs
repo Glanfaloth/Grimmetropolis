@@ -41,6 +41,7 @@ public enum PrefabType
     Icicle,
 
     UIManager,
+    MenuUIManager,
 
     EmptyUI,
     EmptyUI3D,
@@ -51,7 +52,9 @@ public enum PrefabType
     BuildMenu,
     WaveIndicator,
     PlayerDisplay,
-    GameOverOverlay
+    GameOverOverlay,
+
+    MainMenu
 }
 
 public static class PrefabFactory
@@ -370,6 +373,11 @@ public static class PrefabFactory
                     prefab.AddComponent<UIManager>();
                     break;
                 }
+            case PrefabType.MenuUIManager:
+                {
+                    prefab.AddComponent<MenuUIManager>();
+                    break;
+                }
 
             case PrefabType.EmptyUI:
                 {
@@ -575,7 +583,28 @@ public static class PrefabFactory
                     gameOverOverlay.GameOverText = gameOverText;
                     gameOverOverlay.SurvivalTimeText = survivalTimeText;
                     gameOverOverlay.RestartText = restartText;
+                    break;
+                }
 
+            case PrefabType.MainMenu:
+                {
+                    CreateEmptyUI(prefab, localPosition, localRotation, localScale);
+                    TDObject gameLogoObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite gameLogo = gameLogoObject.AddComponent<TDSprite>();
+                    gameLogo.Texture = TDContentManager.LoadTexture("UIGameLogo");
+                    gameLogo.Depth = 1f;
+                    gameLogoObject.RectTransform.Origin = new Vector2(.5f * gameLogo.Texture.Width, .5f * gameLogo.Texture.Height);
+                    gameLogoObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth, TDSceneManager.Graphics.PreferredBackBufferHeight - 600);
+
+                    TDObject startButtonObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite startButton = startButtonObject.AddComponent<TDSprite>();
+                    startButton.Texture = TDContentManager.LoadTexture("UIButtonStart");
+                    startButton.Depth = 1f;
+                    startButtonObject.RectTransform.Origin = new Vector2(.5f * startButton.Texture.Width, .5f * startButton.Texture.Height);
+                    startButtonObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth, TDSceneManager.Graphics.PreferredBackBufferHeight + 200);
+
+                    MainMenu mainMenu = prefab.AddComponent<MainMenu>();
+                    mainMenu.GameLogo = gameLogo;
 
                     break;
                 }
@@ -648,7 +677,7 @@ public static class PrefabFactory
         return CreatePrefab(type, localPosition, localRotation, Vector3.One, parent);
     }
 
-    public static void CreateEmptyUI(TDObject prefab, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
+    private static void CreateEmptyUI(TDObject prefab, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
     {
         prefab.RectTransform = new TDRectTransform
         {
@@ -660,7 +689,7 @@ public static class PrefabFactory
         };
     }
 
-    public static void CreateEmptyUI3D(TDObject prefab, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
+    private static void CreateEmptyUI3D(TDObject prefab, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
     {
         prefab.RectTransform = new TDRectTransform
         {

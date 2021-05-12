@@ -150,6 +150,25 @@ public class GameManager : TDComponent
         //TDObject resourceStoneObject = PrefabFactory.CreatePrefab(PrefabType.Stone, StructureTransform);
         //ResourceDeposit resourceStone = resourceStoneObject.GetComponent<ResourceDeposit>();
         //resourceStone.Position = new Point(7, 10);
+
+        /*TDObject[] testObject = new TDObject[1000];
+        TDObject.RunAction(4f, (p) => { }, () =>
+        {
+            Debug.WriteLine("CreatingObjects");
+            for (int i = 0; i < testObject.Length; i++)
+            {
+                testObject[i] = PrefabFactory.CreatePrefab(PrefabType.Arrow);
+            }
+        });
+
+        TDObject.RunAction(8f, (p) => { }, () =>
+        {
+            Debug.WriteLine("DeletingObjects");
+            for (int i = 0; i < testObject.Length; i++)
+            {
+                testObject[i].Destroy();
+            }
+        });*/
     }
 
     private void SpawnEntity(TDObject enemyList, MapDTO.EntityToSpawn entityToSpawn)

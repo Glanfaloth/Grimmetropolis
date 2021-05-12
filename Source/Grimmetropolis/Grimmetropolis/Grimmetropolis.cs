@@ -27,7 +27,7 @@ public class Grimmetropolis : Game
         Window.Title = "Grimmetropolis";
 
         TDInputManager.Initialize();
-        TDSceneManager.LoadScene(new GameScene());
+        TDSceneManager.LoadScene(new MenuScene());
     }
 
     protected override void LoadContent()

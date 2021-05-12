@@ -55,6 +55,11 @@ public class Bridge : Building
         base.Initialize();
     }
 
+    public override void Destroy()
+    {
+        base.Destroy();
+    }
+
     protected override void SetAsPreview()
     {
         base.SetAsPreview();
