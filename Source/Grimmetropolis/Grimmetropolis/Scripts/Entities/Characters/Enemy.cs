@@ -77,7 +77,7 @@ public abstract class Enemy : Character
         switch (nextMove.MovementType)
         {
             case EnemyMove.Type.None:
-                Debug.WriteLine("ERROR: no valid move found for enemy");
+                // Debug.WriteLine("ERROR: no valid move found for enemy");
                 break;
             //case EnemyMove.Type.EndOfPath:
             //    // end of path means the enemy arrived at it's destination and has nothing to do
@@ -106,6 +106,7 @@ public abstract class Enemy : Character
                 break;
             case EnemyMove.Type.StealArtifact:
                 // TODO: implement win condition
+                GameManager.Instance.GameState = GameState.GameOver;
                 Debug.WriteLine("YOU LOSE");
                 break;
             default:
@@ -132,9 +133,9 @@ public abstract class Enemy : Character
             float closestBuildingDistance = float.MaxValue;
             Player closestPlayer = null;
             Building closestBuilding = null;
-            foreach (Tuple<TDCollider, float> colliderEntry in _colliderList)
+            foreach (Tuple<TDCollider, float, float> colliderEntry in _colliderList)
             {
-                if (colliderEntry.Item1 is TDCylinderCollider && closestPlayerDistance > colliderEntry.Item2)
+                if (colliderEntry.Item1 is TDCylinderCollider && closestPlayerDistance > colliderEntry.Item3)
                 {
                     Player player = colliderEntry.Item1.TDObject?.GetComponent<Player>();
                     if (player != null)
@@ -143,11 +144,11 @@ public abstract class Enemy : Character
                         closestPlayer = player;
                     }
                 }
-                else if (colliderEntry.Item1 is TDCuboidCollider && closestBuildingDistance > colliderEntry.Item2)
+                else if (colliderEntry.Item1 is TDCuboidCollider && closestBuildingDistance > colliderEntry.Item3)
                 {
                     if (colliderEntry.Item1.TDObject?.GetComponent<MapTile>().Structure is Building building)
                     {
-                        closestBuildingDistance = colliderEntry.Item2;
+                        closestBuildingDistance = colliderEntry.Item3;
                         closestBuilding = building;
                     }
                 }

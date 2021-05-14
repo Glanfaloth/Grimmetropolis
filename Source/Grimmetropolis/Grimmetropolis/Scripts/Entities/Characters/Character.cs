@@ -37,8 +37,9 @@ public abstract class Character : TDComponent, ITarget
 
     public Item[] Items = new Item[3];
 
+    public TDCylinderCollider Collider;
     public TDCylinderCollider InteractionCollider;
-    protected List<Tuple<TDCollider, float>> _colliderList = new List<Tuple<TDCollider, float>> ();
+    protected List<Tuple<TDCollider, float, float>> _colliderList = new List<Tuple<TDCollider, float, float>> ();
 
     // TODO: add shooting range collider
 
@@ -104,6 +105,13 @@ public abstract class Character : TDComponent, ITarget
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
+
+        Vector3 position = TDObject.Transform.Position;
+        if (position.X < GameManager.Instance.Map.Corner.X + Collider.Radius) position.X = GameManager.Instance.Map.Corner.X + Collider.Radius;
+        else if (position.X > GameManager.Instance.Map.Corner.X + GameManager.Instance.Map.Width - Collider.Radius) position.X = GameManager.Instance.Map.Corner.X + GameManager.Instance.Map.Width - Collider.Radius;
+        if (position.Y < GameManager.Instance.Map.Corner.Y + Collider.Radius) position.Y = GameManager.Instance.Map.Corner.Y + Collider.Radius;
+        else if (position.Y > GameManager.Instance.Map.Corner.Y + GameManager.Instance.Map.Height - Collider.Radius) position.Y = GameManager.Instance.Map.Corner.Y + GameManager.Instance.Map.Height - Collider.Radius;
+                TDObject.Transform.Position = position;
 
         Cooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -176,7 +184,16 @@ public abstract class Character : TDComponent, ITarget
     private void GetClosestCollider(TDCollider collider1, TDCollider collider2, float intersection)
     {
         TDCollider oppositeCollider = InteractionCollider == collider2 ? collider1 : collider2;
-        _colliderList.Add(new Tuple<TDCollider, float>(oppositeCollider, intersection));
+        float distance = float.MaxValue;
+        if (oppositeCollider is TDCylinderCollider cylinderCollider)
+        {
+            distance = Vector2.Distance(Collider.CenterXY, cylinderCollider.CenterXY);
+        }
+        if (oppositeCollider is TDCuboidCollider cuboidCollider)
+        {
+            distance = Vector2.Distance(Collider.CenterXY, cuboidCollider.CuboidCenter.GetXY());
+        }
+        _colliderList.Add(new Tuple<TDCollider, float, float>(oppositeCollider, intersection, distance));
     }
 
     public void Highlight(bool highlight)

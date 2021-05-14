@@ -27,6 +27,7 @@ public class EnemyController : TDComponent
 
     private bool _spawnLocationSet = false;
 
+    // TODO: Why is it 0 the first time, this scene is started?
     private int _spawnLocationIndex = -1;
     private List<MapTile> _spawnTiles = new List<MapTile>();
 
@@ -38,7 +39,7 @@ public class EnemyController : TDComponent
 
     private EnemyGroup _currentGroup;
 
-    public bool _waveIndicator = false;
+    public bool WaveIndicator = false;
 
     // TODO: introduce seed for rng
     // maybe create custom class in engine for providing all random numbers
@@ -105,7 +106,7 @@ public class EnemyController : TDComponent
         _waveTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
         _spawnTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        if (_waveTimer < 0f)
+        if (_spawnLocationSet && _waveTimer < 0f)
         {
             _spawnTimer = _waveTimer;
             _waveTimer += _timeBetweenWaves;
@@ -132,7 +133,6 @@ public class EnemyController : TDComponent
             _currentGroup = new EnemyGroup(spawnTile, this, new MoveToArtifactState());
             Groups.Add(_currentGroup);
             ClearPathHighlight();
-            _waveIndicator = false;
         }
 
         if ((!_spawnLocationSet) && _waveTimer - Config.WAVE_ALERT_TIME < 0)
@@ -140,7 +140,6 @@ public class EnemyController : TDComponent
             _spawnLocationIndex = (_spawnLocationIndex + 1) % SpawnLocations.Count;
             _spawnLocationSet = true;
             HightlightPath();
-            _waveIndicator = true;
         }
 
         if (_alwaysShowPath && _spawnLocationIndex >= 0)
@@ -163,6 +162,7 @@ public class EnemyController : TDComponent
             tile.Highlight(false);
         }
         _highlightedPath.Clear();
+        WaveIndicator = false;
     }
 
     private void HightlightPath()
@@ -186,6 +186,7 @@ public class EnemyController : TDComponent
         {
             tile.Highlight(true);
         }
+        WaveIndicator = true;
     }
 
     private void SpawnEnemy()

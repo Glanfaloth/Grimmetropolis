@@ -23,6 +23,7 @@ public class MapDTO
         EnemySpawnPoint,
         ToolAxe,
         ToolPickaxe,
+        ToolHammer,
         WeaponSword
     }
 

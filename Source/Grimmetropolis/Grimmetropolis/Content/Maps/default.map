@@ -49,6 +49,10 @@
       "TileType": "ground",
       "SpawnedEntity": "toolAxe"
     },
+    "H": {
+      "TileType": "ground",
+      "SpawnedEntity": "toolHammer"
+    },
     "I": {
       "TileType": "ground",
       "SpawnedEntity": "weaponSword"
@@ -77,7 +81,7 @@
     "                 TTT         11                 ",
     "                 DDD          11                ",
     "                 III  W        11               ",
-    "                                11       W      ",
+    "                 HHH            11       W      ",
     "             S                   11             ",
     "                                  11            ",
     "   S     11                        11           ",

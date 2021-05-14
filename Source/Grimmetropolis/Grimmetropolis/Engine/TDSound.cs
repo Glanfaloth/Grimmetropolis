@@ -7,6 +7,8 @@ public class TDSound : TDComponent
 {
     public SoundEffect SoundEffect;
 
+    public float Volume = 1f;
+
     public bool SingleInstance = false;
 
     public bool IsPositional = false;
@@ -32,6 +34,13 @@ public class TDSound : TDComponent
     private List<SoundEffectInstance> _soundEffectInstances = new List<SoundEffectInstance>();
     private List<float> _targetTimes = new List<float>();
 
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        TDSceneManager.ActiveScene.SoundObjects.Add(this);
+    }
+
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
@@ -45,6 +54,14 @@ public class TDSound : TDComponent
         }
     }
 
+    public override void Destroy()
+    {
+        base.Destroy();
+
+        Stop();
+        TDSceneManager.ActiveScene.SoundObjects.Remove(this);
+    }
+
     public void Play()
     {
 
@@ -54,6 +71,7 @@ public class TDSound : TDComponent
 
             SoundEffectInstance soundEffectInstance = SoundEffect.CreateInstance();
             soundEffectInstance.IsLooped = IsLooped;
+            soundEffectInstance.Volume = Volume;
             soundEffectInstance.Play();
 
             _soundEffectInstances.Add(soundEffectInstance);

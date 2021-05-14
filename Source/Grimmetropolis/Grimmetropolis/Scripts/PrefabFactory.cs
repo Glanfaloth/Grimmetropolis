@@ -32,6 +32,7 @@ public enum PrefabType
 
     ToolAxe,
     ToolPickaxe,
+    ToolHammer,
 
     WeaponSword,
 
@@ -40,6 +41,7 @@ public enum PrefabType
     Icicle,
 
     UIManager,
+    MenuUIManager,
 
     EmptyUI,
     EmptyUI3D,
@@ -49,7 +51,10 @@ public enum PrefabType
     ProgressBar,
     BuildMenu,
     WaveIndicator,
-    PlayerDisplay
+    PlayerDisplay,
+    GameOverOverlay,
+
+    MainMenu
 }
 
 public static class PrefabFactory
@@ -102,6 +107,7 @@ public static class PrefabFactory
                     animation.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
                     animation.CharacterTexture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     player.Animation = animation;
+                    player.Collider = collider;
                     /*mesh.Model = TDContentManager.LoadModel("PlayerCindarella");
                     mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");*/
                     collider.Radius = .25f;
@@ -309,6 +315,16 @@ public static class PrefabFactory
                     break;
                 }
 
+            case PrefabType.ToolHammer:
+                {
+                    TDMesh mesh = prefab.AddComponent<TDMesh>();
+                    ToolHammer hammer = prefab.AddComponent<ToolHammer>();
+                    mesh.Model = TDContentManager.LoadModel("ToolHammer");
+                    mesh.Texture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    hammer.Mesh = mesh;
+                    break;
+                }
+
             case PrefabType.WeaponSword:
                 {
                     TDMesh mesh = prefab.AddComponent<TDMesh>();
@@ -357,6 +373,11 @@ public static class PrefabFactory
                     prefab.AddComponent<UIManager>();
                     break;
                 }
+            case PrefabType.MenuUIManager:
+                {
+                    prefab.AddComponent<MenuUIManager>();
+                    break;
+                }
 
             case PrefabType.EmptyUI:
                 {
@@ -390,11 +411,11 @@ public static class PrefabFactory
                     resourceDisplay.StoneUI = stone;
                     resourceDisplay.FoodUI = food;
                     woodObject.RectTransform.Scale = 0.05f * Vector2.One;
-                    woodObject.RectTransform.LocalPosition = new Vector2(-2f, 10f);
+                    woodObject.RectTransform.LocalPosition = new Vector2(-6f, 10f);
                     stoneObject.RectTransform.Scale = 0.04f * Vector2.One;
-                    stoneObject.RectTransform.LocalPosition = new Vector2(5f + 0.05f * wood.Texture.Width, 10f);
-                    foodObject.RectTransform.Scale = 0.06f * Vector2.One;
-                    foodObject.RectTransform.LocalPosition = new Vector2(0.05f * wood.Texture.Width + 0.06f * stone.Texture.Width, 25f);
+                    stoneObject.RectTransform.LocalPosition = new Vector2(-2f + 0.05f * wood.Texture.Width, 10f);
+                    foodObject.RectTransform.Scale = 0.08f * Vector2.One;
+                    foodObject.RectTransform.LocalPosition = new Vector2(-8f + 0.05f * wood.Texture.Width + 0.06f * stone.Texture.Width, 25f);
                     break;
                 }
 
@@ -441,10 +462,12 @@ public static class PrefabFactory
             case PrefabType.PlayerDisplay:
                 {
                     CreateEmptyUI(prefab, localPosition, localRotation, localScale);
-                    TDSprite playerIcon = prefab.AddComponent<TDSprite>();
+                    TDSprite playerIconBackground = prefab.AddComponent<TDSprite>();
+   
                     PlayerDisplay playerDisplay = prefab.AddComponent<PlayerDisplay>();
-                    playerIcon.Texture = TDContentManager.LoadTexture("UIPlayer");
-                    prefab.RectTransform.Origin = new Vector2(.5f * playerIcon.Texture.Width, playerIcon.Texture.Height);
+                    playerIconBackground.Texture = TDContentManager.LoadTexture("UIPlayer");
+                    playerIconBackground.Depth = 1f;
+                    prefab.RectTransform.Origin = new Vector2(.5f * playerIconBackground.Texture.Width, playerIconBackground.Texture.Height);
 
                     TDObject healthBarObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     HealthBar healthBar = healthBarObject.AddComponent<HealthBar>();
@@ -452,16 +475,33 @@ public static class PrefabFactory
                     background.Texture = TDContentManager.LoadTexture("UIPlayerBar");
                     background.Color = Color.Black;
                     background.Depth = 1f;
-                    healthBarObject.RectTransform.LocalPosition = new Vector2(.5f * playerIcon.Texture.Width, -.8f * playerIcon.Texture.Height);
+                    healthBarObject.RectTransform.LocalPosition = new Vector2(.5f * playerIconBackground.Texture.Width, -.8f * playerIconBackground.Texture.Height);
 
                     TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, healthBarObject.Transform);
                     TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
                     foreground.Texture = TDContentManager.LoadTexture("UIPlayerBar");
-                    foreground.Depth = .1f;
+                    foreground.Depth = .9f;
                     healthBar.Background = background;
                     healthBar.Foreground = foreground;
                     healthBar.AlwaysShow = true;
                     playerDisplay.HealthBar = healthBar;
+
+                    TDObject playerIconObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite playerIcon = playerIconObject.AddComponent<TDSprite>();
+                    playerIcon.Texture = TDContentManager.LoadTexture("UICinderella");
+                    playerIcon.Depth = 0.9f;
+                    playerIconObject.RectTransform.Origin = new Vector2(.5f * playerIcon.Texture.Width, playerIcon.Texture.Height);
+                    playerIconObject.RectTransform.Scale = 0.3f * Vector2.One;
+                    playerIconObject.RectTransform.LocalPosition = new Vector2(0f, 0.7f * playerIconBackground.Texture.Height);
+                    playerDisplay.PlayerIcon = playerIcon;
+
+                    TDObject playerNameObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDText playerName = playerNameObject.AddComponent<TDText>();
+                    playerName.Text = "Player Name";
+                    playerName.Depth = 0.9f;
+                    playerNameObject.RectTransform.Origin = new Vector2(0.5f * playerName.Width, playerName.Height);
+                    playerNameObject.RectTransform.LocalPosition = new Vector2(0f, -2f - playerIconBackground.Texture.Height);
+                    playerDisplay.PlayerName = playerName;
                     break;
                 }
 
@@ -477,6 +517,7 @@ public static class PrefabFactory
                     TDObject iconObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDSprite icon = iconObject.AddComponent<TDSprite>();
                     icon.Texture = TDContentManager.LoadTexture("UIBuildingOutpostIcon");
+                    icon.Depth = .9f;
                     iconObject.RectTransform.Origin = .5f * new Vector2(icon.Texture.Width, icon.Texture.Height);
                     iconObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin + .5f * new Vector2(buildSprite.Texture.Width, buildSprite.Texture.Height);
                     buildMenu.BuildSprite = buildSprite;
@@ -503,6 +544,68 @@ public static class PrefabFactory
                     textInfoObject.RectTransform.LocalPosition = new Vector2(-(testImage.Texture.Width + 10f), 0f);
                     textInfoObject.RectTransform.Scale = 1.5f * Vector2.One;
                     waveIndicator.Info = testText;
+                    break;
+                }
+
+            case PrefabType.GameOverOverlay:
+                {
+                    CreateEmptyUI(prefab, localPosition, localRotation, localScale);
+                    TDSprite blackOverlay = prefab.AddComponent<TDSprite>();
+                    blackOverlay.Texture = TDContentManager.LoadTexture("UIOverlayTexture");
+                    blackOverlay.Color = new Color(0f, 0f, 0f, .5f);
+                    blackOverlay.Depth = 1f;
+                    prefab.RectTransform.Origin = new Vector2(.5f * blackOverlay.Texture.Width, .5f * blackOverlay.Texture.Height);
+                    prefab.RectTransform.Position = prefab.RectTransform.Origin;
+                    prefab.RectTransform.Scale = 2f * Vector2.One;
+
+                    TDObject gameOverTextObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDText gameOverText = gameOverTextObject.AddComponent<TDText>();
+                    gameOverText.Text = "Game Over";
+                    gameOverTextObject.RectTransform.Origin = new Vector2(.5f * gameOverText.Width, .5f * gameOverText.Height);
+                    gameOverTextObject.RectTransform.LocalPosition = new Vector2(0, -100);
+
+                    TDObject survivalTimeTextObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDText survivalTimeText = survivalTimeTextObject.AddComponent<TDText>();
+                    survivalTimeText.Text = "It's over.";
+                    survivalTimeTextObject.RectTransform.Origin = new Vector2(.5f * survivalTimeText.Width, .5f * survivalTimeText.Height);
+                    survivalTimeTextObject.RectTransform.LocalPosition = new Vector2(0, -40);
+                    survivalTimeTextObject.RectTransform.Scale = Vector2.One;
+
+                    TDObject restartTextObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDText restartText = restartTextObject.AddComponent<TDText>();
+                    restartText.Text = "Press A to restart!";
+                    restartTextObject.RectTransform.Origin = new Vector2(.5f * restartText.Width, .5f * restartText.Height);
+                    restartTextObject.RectTransform.LocalPosition = new Vector2(0, 40);
+                    restartTextObject.RectTransform.Scale = Vector2.One;
+
+                    GameOverOverlay gameOverOverlay = prefab.AddComponent<GameOverOverlay>();
+                    gameOverOverlay.BlackOverlay = blackOverlay;
+                    gameOverOverlay.GameOverText = gameOverText;
+                    gameOverOverlay.SurvivalTimeText = survivalTimeText;
+                    gameOverOverlay.RestartText = restartText;
+                    break;
+                }
+
+            case PrefabType.MainMenu:
+                {
+                    CreateEmptyUI(prefab, localPosition, localRotation, localScale);
+                    TDObject gameLogoObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite gameLogo = gameLogoObject.AddComponent<TDSprite>();
+                    gameLogo.Texture = TDContentManager.LoadTexture("UIGameLogo");
+                    gameLogo.Depth = 1f;
+                    gameLogoObject.RectTransform.Origin = new Vector2(.5f * gameLogo.Texture.Width, .5f * gameLogo.Texture.Height);
+                    gameLogoObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth, TDSceneManager.Graphics.PreferredBackBufferHeight - 600);
+
+                    TDObject startButtonObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite startButton = startButtonObject.AddComponent<TDSprite>();
+                    startButton.Texture = TDContentManager.LoadTexture("UIButtonStart");
+                    startButton.Depth = 1f;
+                    startButtonObject.RectTransform.Origin = new Vector2(.5f * startButton.Texture.Width, .5f * startButton.Texture.Height);
+                    startButtonObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth, TDSceneManager.Graphics.PreferredBackBufferHeight + 200);
+
+                    MainMenu mainMenu = prefab.AddComponent<MainMenu>();
+                    mainMenu.GameLogo = gameLogo;
+
                     break;
                 }
         }
@@ -541,6 +644,7 @@ public static class PrefabFactory
         }
         if (enemy is EnemyCatapult) collider.Radius = .375f;
         else collider.Radius = .25f;
+        enemy.Collider = collider;
         collider.Height = .5f;
         collider.Offset = .5f * Vector3.Backward;
 
@@ -573,7 +677,7 @@ public static class PrefabFactory
         return CreatePrefab(type, localPosition, localRotation, Vector3.One, parent);
     }
 
-    public static void CreateEmptyUI(TDObject prefab, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
+    private static void CreateEmptyUI(TDObject prefab, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
     {
         prefab.RectTransform = new TDRectTransform
         {
@@ -585,7 +689,7 @@ public static class PrefabFactory
         };
     }
 
-    public static void CreateEmptyUI3D(TDObject prefab, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
+    private static void CreateEmptyUI3D(TDObject prefab, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
     {
         prefab.RectTransform = new TDRectTransform
         {

@@ -14,10 +14,11 @@ public class GameScene : TDScene
         PrefabFactory.CreatePrefab(PrefabType.Light, new Vector3(24f, 24f, 36f), Quaternion.CreateFromYawPitchRoll(-.31f * MathHelper.Pi, .1f * MathHelper.Pi, -.85f * MathHelper.Pi));
 
         TDObject gameManager = PrefabFactory.CreatePrefab(PrefabType.GameManager);
-        /*TDSound backgroundTest = gameManager.AddComponent<TDSound>();
+        TDSound backgroundTest = gameManager.AddComponent<TDSound>();
         backgroundTest.IsLooped = true;
+        backgroundTest.Volume = .1f;
         backgroundTest.SoundEffect = TDContentManager.LoadSoundEffect("BackgroundMusic");
-        backgroundTest.Play();*/
+        backgroundTest.Play();
 
         PrefabFactory.CreatePrefab(PrefabType.UIManager);
 

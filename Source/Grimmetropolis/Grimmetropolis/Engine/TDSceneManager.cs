@@ -7,9 +7,26 @@ public static class TDSceneManager
 	public static SpriteBatch SpriteBatch;
 	public static TDScene ActiveScene;
 
+	private static TDScene _temporaryScene;
+
 	public static void LoadScene(TDScene scene)
 	{
-		ActiveScene = scene;
-		ActiveScene.Initialize();
+		if (ActiveScene == null)
+        {
+			ActiveScene = scene;
+			ActiveScene.Initialize();
+        }
+		else
+        {
+			ActiveScene.RequiresLoadingScene = true;
+			_temporaryScene = scene;
+        }
+
 	}
+
+	public static void LoadTemporaryScene()
+    {
+		ActiveScene = _temporaryScene;
+		ActiveScene.Initialize();
+    }
 }

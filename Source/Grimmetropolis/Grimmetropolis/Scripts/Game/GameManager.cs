@@ -3,6 +3,11 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 
+public enum GameState
+{
+    Playing,
+    GameOver
+}
 
 public class GameManager : TDComponent
 {
@@ -17,6 +22,17 @@ public class GameManager : TDComponent
         {
             _resourcePool = value;
             UIManager.Instance?.ResourceDisplay.UpdateDisplay();
+        }
+    }
+
+    private GameState _gameState = GameState.Playing;
+    public GameState GameState
+    {
+        get => _gameState;
+        set
+        {
+            _gameState = value;
+            if (_gameState == GameState.GameOver) UIManager.Instance.ShowGameOver();
         }
     }
 
@@ -53,7 +69,7 @@ public class GameManager : TDComponent
         // List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/testEmpty128.map");
 
         // ResourcePool
-        ResourcePool = new ResourcePile(100, 100);
+        ResourcePool = new ResourcePile();
 
         // EnemyBrain
         TDObject enemyAI = PrefabFactory.CreatePrefab(PrefabType.Empty);
@@ -71,17 +87,21 @@ public class GameManager : TDComponent
         TDObject playerList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         PlayerTransform = playerList.Transform;
 
-        TDObject playerObject0 = PrefabFactory.CreatePrefab(PrefabType.Player, playerList.Transform);
-        playerObject0.GetComponent<Player>().Input = TDInputManager.Inputs[0];
+        Player player0 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(3, -2, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
+        player0.Animation.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
+        player0.Input = TDInputManager.Inputs[0];
+        
+        Player player1 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(3, -1, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
+        player1.Animation.CharacterModel = TDContentManager.LoadModel("PlayerSnowwhite");
+        player1.Input = TDInputManager.Inputs[1];
 
-        TDObject playerObject1 = PrefabFactory.CreatePrefab(PrefabType.Player, playerList.Transform);
-        playerObject1.GetComponent<Player>().Input = TDInputManager.Inputs[1];
+        Player player2 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(4, -2, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
+        player2.Animation.CharacterModel = TDContentManager.LoadModel("PlayerFrog");
+        player2.Input = TDInputManager.Inputs[2];
 
-        TDObject playerObject2 = PrefabFactory.CreatePrefab(PrefabType.Player, playerList.Transform);
-        playerObject2.GetComponent<Player>().Input = TDInputManager.Inputs[2];
-
-        TDObject playerObject3 = PrefabFactory.CreatePrefab(PrefabType.Player, playerList.Transform);
-        playerObject3.GetComponent<Player>().Input = TDInputManager.Inputs[3];
+        Player player3 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(4, -1, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
+        player3.Animation.CharacterModel = TDContentManager.LoadModel("PlayerBeast");
+        player3.Input = TDInputManager.Inputs[3];
 
         /*playerObject1.GetComponent<Player>().Mesh.BaseColor = new Vector3(1, .5f, .5f);
         playerObject2.GetComponent<Player>().Mesh.BaseColor = new Vector3(.5f, 1, .5f);
@@ -130,6 +150,25 @@ public class GameManager : TDComponent
         //TDObject resourceStoneObject = PrefabFactory.CreatePrefab(PrefabType.Stone, StructureTransform);
         //ResourceDeposit resourceStone = resourceStoneObject.GetComponent<ResourceDeposit>();
         //resourceStone.Position = new Point(7, 10);
+
+        /*TDObject[] testObject = new TDObject[1000];
+        TDObject.RunAction(4f, (p) => { }, () =>
+        {
+            Debug.WriteLine("CreatingObjects");
+            for (int i = 0; i < testObject.Length; i++)
+            {
+                testObject[i] = PrefabFactory.CreatePrefab(PrefabType.Arrow);
+            }
+        });
+
+        TDObject.RunAction(8f, (p) => { }, () =>
+        {
+            Debug.WriteLine("DeletingObjects");
+            for (int i = 0; i < testObject.Length; i++)
+            {
+                testObject[i].Destroy();
+            }
+        });*/
     }
 
     private void SpawnEntity(TDObject enemyList, MapDTO.EntityToSpawn entityToSpawn)
@@ -192,6 +231,10 @@ public class GameManager : TDComponent
             case MapDTO.EntityType.ToolPickaxe:
                 TDObject toolPickaxeObject = PrefabFactory.CreatePrefab(PrefabType.ToolPickaxe, ItemTransform);
                 toolPickaxeObject.GetComponent<ToolPickaxe>().Position = entityToSpawn.Position;
+                break;
+            case MapDTO.EntityType.ToolHammer:
+                TDObject toolHammerObject = PrefabFactory.CreatePrefab(PrefabType.ToolHammer, ItemTransform);
+                toolHammerObject.GetComponent<ToolHammer>().Position = entityToSpawn.Position;
                 break;
             case MapDTO.EntityType.WeaponSword:
                 TDObject weaponSwordObject = PrefabFactory.CreatePrefab(PrefabType.WeaponSword, ItemTransform);
