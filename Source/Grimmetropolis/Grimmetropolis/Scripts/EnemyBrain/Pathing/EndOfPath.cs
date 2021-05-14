@@ -18,4 +18,9 @@ class EndOfPath : EnemyMove
     {
         return new NextMoveInfo(null, MovementType, Vector2.Zero);
     }
+
+    public override bool ShouldPathBeRecomputed()
+    {
+        return true;
+    }
 }

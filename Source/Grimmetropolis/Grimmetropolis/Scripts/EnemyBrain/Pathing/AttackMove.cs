@@ -19,4 +19,9 @@ internal class AttackMove : EnemyMove
     {
         return new NextMoveInfo(Target, MovementType, Target.TDObject.Transform.LocalPosition.GetXY());
     }
+
+    public override bool ShouldPathBeRecomputed()
+    {
+        return Target.Health <= 0;
+    }
 }

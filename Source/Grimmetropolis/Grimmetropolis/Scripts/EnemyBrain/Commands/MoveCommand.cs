@@ -15,9 +15,20 @@ public class MoveCommand : EnemyCommand
         _endOfPathAction = endOfPathAction;
     }
 
-    protected override NextMoveInfo DoGetNextMoveInfo(MapTile tile, EnemyMove.Type actions, float attackRange, Vector2 localPosition)
+    public override bool IsDifferent(EnemyCommand other)
     {
-        EnemyMove nextMove = Graph.GetNextMoveFromMapTile(tile, actions, attackRange, _targetLocation, _endOfPathAction);
-        return nextMove.CreateInfo();
+        if (other is MoveCommand otherMove)
+        {
+            return (_targetLocation != otherMove._targetLocation)
+                    || (_endOfPathAction != otherMove._endOfPathAction);
+        }
+
+        return true;
+    }
+
+    protected override NextMoveInfo DoGetNextMoveInfo(Vector2 localPosition, EnemyMove.Type actions, float attackRange)
+    {
+        MapTile tile = Graph.Map.GetMapTile(localPosition);
+        return ComputePathToTile(tile, actions, attackRange, _targetLocation, _endOfPathAction);
     }
 }
