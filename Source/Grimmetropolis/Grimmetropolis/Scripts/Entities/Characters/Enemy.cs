@@ -36,7 +36,18 @@ public abstract class Enemy : Character
     protected float DamageAgainstPlayers => _damageAgainstPlayers;
     protected float DamageAgainstBuildigns => _damageAgainstBuildings;
 
-    public EnemyCommand CurrentCommand { get; set; }
+    private EnemyCommand _currentCommand;
+    public EnemyCommand CurrentCommand 
+    {
+        get => _currentCommand;
+        set
+        {
+            if (_currentCommand == null || _currentCommand.IsDifferent(value))
+            {
+                _currentCommand = value;
+            }
+        }
+    }
 
     public override Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
 
@@ -69,7 +80,7 @@ public abstract class Enemy : Character
     {
         if (CurrentCommand == null) return;
 
-        NextMoveInfo nextMove = CurrentCommand.GetNextMoveInfo(TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange);
+        NextMoveInfo nextMove = CurrentCommand.GetNextMoveInfo(gameTime, TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange);
 
 
         CurrentWalkSpeed = 0f;
@@ -77,7 +88,6 @@ public abstract class Enemy : Character
         switch (nextMove.MovementType)
         {
             case EnemyMove.Type.None:
-                // Debug.WriteLine("ERROR: no valid move found for enemy");
                 break;
             //case EnemyMove.Type.EndOfPath:
             //    // end of path means the enemy arrived at it's destination and has nothing to do

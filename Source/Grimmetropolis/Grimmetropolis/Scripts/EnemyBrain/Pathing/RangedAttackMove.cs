@@ -31,5 +31,10 @@ public class RangedAttackMove : EnemyMove
     {
         return new NextMoveInfo(Target, MovementType, To.Tile.TDObject.Transform.LocalPosition.GetXY());
     }
+
+    public override bool ShouldPathBeRecomputed()
+    {
+        return Target.Health <= 0;
+    }
 }
 
