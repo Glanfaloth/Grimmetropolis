@@ -5,14 +5,17 @@ using System;
 public class WaveIndicator : TDComponent
 {
     public TDSprite Image;
-    public TDText Info;
+    public TDText Text;
+    public WaveBar WaveCountDown = null;
 
     protected bool _isShowing = false;
+    protected bool _isFirstWave = true;
 
     public override void Initialize()
     {
         base.Initialize();
 
+        /*
         Vector2 startPosition = new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 10f, 10f);
         Vector2 endPosition = new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 10f, 40f);
 
@@ -20,6 +23,9 @@ public class WaveIndicator : TDComponent
         {
             TDObject.RectTransform.Position = Vector2.Lerp(startPosition, endPosition, .5f + .5f * MathF.Sin(MathHelper.TwoPi * p));
         }, true);
+        */
+
+        WaveCountDown.Initialize();
 
         Hide();
     }
@@ -27,6 +33,21 @@ public class WaveIndicator : TDComponent
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
+
+        if (_isFirstWave)
+        {
+            WaveCountDown.MaxProgress = Config.TIME_UNTIL_FIRST_WAVE;
+            WaveCountDown.CurrentProgress = Config.TIME_UNTIL_FIRST_WAVE - GameManager.Instance.EnemyController._waveTimer;
+            _isFirstWave = false;
+        }
+        else
+        {
+            WaveCountDown.MaxProgress = Config.TIME_BETWEEN_WAVES;
+            WaveCountDown.CurrentProgress = Config.TIME_BETWEEN_WAVES - GameManager.Instance.EnemyController._waveTimer;
+        }
+
+        WaveCountDown.Show();
+        
 
         _isShowing = GameManager.Instance.EnemyController.WaveIndicator;
 
@@ -37,12 +58,10 @@ public class WaveIndicator : TDComponent
     public virtual void Show()
     {
         if (!TDSceneManager.ActiveScene.SpriteObjects.Contains(Image)) TDSceneManager.ActiveScene.SpriteObjects.Add(Image);
-        if (!TDSceneManager.ActiveScene.TextObjects.Contains(Info)) TDSceneManager.ActiveScene.TextObjects.Add(Info);
     }
 
     public virtual void Hide()
     {
         if (TDSceneManager.ActiveScene.SpriteObjects.Contains(Image)) TDSceneManager.ActiveScene.SpriteObjects.Remove(Image); 
-        if (TDSceneManager.ActiveScene.TextObjects.Contains(Info)) TDSceneManager.ActiveScene.TextObjects.Remove(Info);
     }
 }

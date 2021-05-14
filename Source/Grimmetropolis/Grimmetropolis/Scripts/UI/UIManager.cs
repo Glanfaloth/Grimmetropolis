@@ -55,6 +55,7 @@ public class UIManager : TDComponent
         {
             PlayerDisplays[i].PlayerIcon.Texture = TDContentManager.LoadTexture(_playerIcons[i]);
             PlayerDisplays[i].PlayerName.Text = _playerNames[i];
+            //PlayerDisplays[i].CurrentItem = player.Items;
             PlayerDisplays[i].TDObject.RectTransform.LocalPosition = new Vector2(offsetStart + i * _offsetBetweenPlayerDisplay, TDSceneManager.Graphics.PreferredBackBufferHeight - 60f);
         }
     }

@@ -20,7 +20,7 @@ public class EnemyController : TDComponent
 
     private float _interval = .2f;
     private float _spawnTimer = 0f;
-    private float _waveTimer = 0f;
+    public float _waveTimer = 0f;
 
     private float _timeBetweenWaves;
     private float _growthFactor;
