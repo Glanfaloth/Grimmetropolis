@@ -47,7 +47,27 @@ public class UIManager : TDComponent
         player.HealthBar = PlayerDisplays[_playerDisplayIndex].HealthBar;
         PlayerDisplays[_playerDisplayIndex].HealthBar.CurrentProgress = player.Health;
         PlayerDisplays[_playerDisplayIndex].HealthBar.MaxProgress = player.BaseHealth;
-        //player.PlayerIcon = PlayerDisplays[_playerDisplayIndex].PlayerIcon;
+
+        if (player.Items[0] == null)
+        {
+            PlayerDisplays[_playerDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIPlayer");
+        }
+        else if (player.Items[0] is ToolAxe)
+        {
+            PlayerDisplays[_playerDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIAxe");
+        }
+        else if (player.Items[0] is ToolHammer)
+        {
+            PlayerDisplays[_playerDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIAxe");
+        }
+        else if (player.Items[0] is ToolPickaxe)
+        {
+            PlayerDisplays[_playerDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIPickaxe");
+        }
+        else
+        {
+            PlayerDisplays[_playerDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UISword");
+        }
 
         _playerDisplayIndex++;
 

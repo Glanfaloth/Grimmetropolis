@@ -61,7 +61,7 @@ public class Player : Character
             if (Input.BuildModePressed() && Items[0] is ToolHammer && Cooldown <= 0f)
                 _buildMenu.Show();
         }
-
+        //UIManager.Instance.AddPlayerDisplay(this);
         base.Update(gameTime);
     }
 
