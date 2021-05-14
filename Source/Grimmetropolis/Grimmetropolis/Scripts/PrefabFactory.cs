@@ -49,6 +49,7 @@ public enum PrefabType
     ResourceDisplay,
     HealthBar,
     ProgressBar,
+    WaveBar,
     BuildMenu,
     WaveIndicator,
     PlayerDisplay,
@@ -439,6 +440,26 @@ public static class PrefabFactory
                     break;
                 }
 
+            case PrefabType.WaveBar:
+                {
+                    CreateEmptyUI3D(prefab, localPosition, localRotation, localScale);
+                    TDSprite background = prefab.AddComponent<TDSprite>();
+                    WaveBar waveBar = prefab.AddComponent<WaveBar>();
+                    background.Texture = TDContentManager.LoadTexture("UIBar");
+                    background.Color = Color.Black;
+                    background.Depth = 1f;
+                    prefab.RectTransform.Origin = new Vector2(.5f * background.Texture.Width, background.Texture.Height);
+
+                    TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
+                    foreground.Texture = TDContentManager.LoadTexture("UIBar");
+                    foreground.Depth = .1f;
+                    waveBar.Background = background;
+                    waveBar.Foreground = foreground;
+                    foregroundObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin;
+                    break;
+                }
+
             case PrefabType.ProgressBar:
                 {
                     CreateEmptyUI3D(prefab, localPosition, localRotation, localScale);
@@ -536,22 +557,39 @@ public static class PrefabFactory
             case PrefabType.WaveIndicator:
                 {
                     CreateEmptyUI(prefab, localPosition, localRotation, localScale);
-                    TDSprite testImage = prefab.AddComponent<TDSprite>();
                     WaveIndicator waveIndicator = prefab.AddComponent<WaveIndicator>();
-                    testImage.Texture = TDContentManager.LoadTexture("UIWarning");
-                    testImage.Depth = 1f;
-                    waveIndicator.Image = testImage;
-                    prefab.RectTransform.Origin = new Vector2(testImage.Texture.Width, 0f);
-                    prefab.RectTransform.Scale = 0.2f * Vector2.One;
-                    
-                    TDObject textInfoObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
-                    TDText testText = textInfoObject.AddComponent<TDText>();
-                    testText.Text = "The next wave is coming!";
-                    testImage.Depth = .9f;
-                    textInfoObject.RectTransform.Origin = new Vector2(testText.Width, 0f);
-                    textInfoObject.RectTransform.LocalPosition = new Vector2(-(testImage.Texture.Width + 10f), 0f);
-                    textInfoObject.RectTransform.Scale = 1.5f * Vector2.One;
-                    waveIndicator.Info = testText;
+                    WaveBar waveCountDown = prefab.AddComponent<WaveBar>();
+                    TDSprite background = prefab.AddComponent<TDSprite>();
+                    background.Texture = TDContentManager.LoadTexture("UIPlayerBar");
+                    background.Color = Color.Black;
+                    background.Depth = 1f;
+                    prefab.RectTransform.Origin = new Vector2(background.Texture.Width, 0f);
+                    prefab.RectTransform.LocalPosition = new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 20f, 20f);
+                    prefab.RectTransform.Scale = Vector2.One;
+
+                    TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
+                    foreground.Texture = TDContentManager.LoadTexture("UIPlayerBar");
+                    foreground.Depth = 0.1f;
+                    foregroundObject.RectTransform.LocalPosition = new Vector2(-background.Texture.Width, 0f);
+                    waveCountDown.Background = background;
+                    waveCountDown.Foreground = foreground;
+                    waveCountDown.AlwaysShow = true;
+                    waveIndicator.WaveCountDown = waveCountDown;
+
+                    TDObject textObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDText text = textObject.AddComponent<TDText>();
+                    text.Text = "Next Wave:";
+                    textObject.RectTransform.LocalPosition = new Vector2(- text.Width - background.Texture.Width - 10f, 0f);
+                    waveIndicator.Text = text;
+
+                    TDObject imageObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite image = imageObject.AddComponent<TDSprite>();
+                    image.Texture = TDContentManager.LoadTexture("UIWarning");
+                    image.Depth = 2f;
+                    waveIndicator.Image = image;
+                    imageObject.RectTransform.Origin = new Vector2(image.Texture.Width, 0f);
+                    imageObject.RectTransform.Scale = 0.2f * Vector2.One;
                     break;
                 }
 

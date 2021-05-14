@@ -235,4 +235,5 @@ public class MapTile : TDComponent
         Structure?.Highlight(highlight);
         Item?.Highlight(highlight);
     }
+
 }
