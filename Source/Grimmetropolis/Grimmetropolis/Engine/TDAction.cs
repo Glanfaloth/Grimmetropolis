@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using System;
+using System.Diagnostics;
 
 public delegate void ActionProcess(float progress);
 public class TDAction

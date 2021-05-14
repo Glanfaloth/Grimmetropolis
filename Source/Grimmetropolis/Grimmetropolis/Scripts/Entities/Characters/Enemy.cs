@@ -77,7 +77,7 @@ public abstract class Enemy : Character
         switch (nextMove.MovementType)
         {
             case EnemyMove.Type.None:
-                Debug.WriteLine("ERROR: no valid move found for enemy");
+                // Debug.WriteLine("ERROR: no valid move found for enemy");
                 break;
             //case EnemyMove.Type.EndOfPath:
             //    // end of path means the enemy arrived at it's destination and has nothing to do
@@ -106,6 +106,7 @@ public abstract class Enemy : Character
                 break;
             case EnemyMove.Type.StealArtifact:
                 // TODO: implement win condition
+                GameManager.Instance.GameState = GameState.GameOver;
                 Debug.WriteLine("YOU LOSE");
                 break;
             default:

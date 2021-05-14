@@ -3,6 +3,11 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 
+public enum GameState
+{
+    Playing,
+    GameOver
+}
 
 public class GameManager : TDComponent
 {
@@ -17,6 +22,17 @@ public class GameManager : TDComponent
         {
             _resourcePool = value;
             UIManager.Instance?.ResourceDisplay.UpdateDisplay();
+        }
+    }
+
+    private GameState _gameState = GameState.Playing;
+    public GameState GameState
+    {
+        get => _gameState;
+        set
+        {
+            _gameState = value;
+            if (_gameState == GameState.GameOver) UIManager.Instance.ShowGameOver();
         }
     }
 
@@ -134,6 +150,25 @@ public class GameManager : TDComponent
         //TDObject resourceStoneObject = PrefabFactory.CreatePrefab(PrefabType.Stone, StructureTransform);
         //ResourceDeposit resourceStone = resourceStoneObject.GetComponent<ResourceDeposit>();
         //resourceStone.Position = new Point(7, 10);
+
+        /*TDObject[] testObject = new TDObject[1000];
+        TDObject.RunAction(4f, (p) => { }, () =>
+        {
+            Debug.WriteLine("CreatingObjects");
+            for (int i = 0; i < testObject.Length; i++)
+            {
+                testObject[i] = PrefabFactory.CreatePrefab(PrefabType.Arrow);
+            }
+        });
+
+        TDObject.RunAction(8f, (p) => { }, () =>
+        {
+            Debug.WriteLine("DeletingObjects");
+            for (int i = 0; i < testObject.Length; i++)
+            {
+                testObject[i].Destroy();
+            }
+        });*/
     }
 
     private void SpawnEntity(TDObject enemyList, MapDTO.EntityToSpawn entityToSpawn)

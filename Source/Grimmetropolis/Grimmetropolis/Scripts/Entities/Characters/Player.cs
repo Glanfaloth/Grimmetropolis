@@ -151,7 +151,7 @@ public class Player : Character
         }
         else if (building.TryRepair(Config.PLAYER_BUILD_STRENGTH))
         {
-            Cooldown = Config.PLAYER_BUILD_COOLDOWN;
+            Cooldown = 1.5f * Config.PLAYER_BUILD_COOLDOWN;
             ResetProgressBarForProgress();
             SetProgressBar(Cooldown);
         }
