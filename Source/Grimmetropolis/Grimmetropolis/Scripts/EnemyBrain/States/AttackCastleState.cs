@@ -32,7 +32,7 @@ public class AttackCastleState : EnemyGroupState
         }
 
         // TODO: split up large groups
-        if (offensiveBuildings.Count > 0)
+        if (offensiveBuildings.Count > 0 && !map[map.EnemyTarget].IsPassable)
         {
             SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, map[offensiveBuildings.Values[0].Position].TileVertex, EnemyMove.Type.None));
         }
