@@ -14,6 +14,7 @@ public enum PlayerType
 
 public class Player : Character
 {
+    public int UiIndex;
     public TDInput Input;
 
     public override float WalkSpeed => Config.PLAYER_WALK_SPEED;
@@ -50,6 +51,11 @@ public class Player : Character
         _buildMenu = buildMenuObject.GetComponent<BuildMenu>();
         _buildMenu.Player = this;
         buildMenuObject.RectTransform.Offset = 2f * Vector3.Backward;
+
+        foreach (var uiElement in _buildMenu.UiElements)
+        {
+            uiElement.Depth -= UiIndex * 0.05f;
+        }
 
         GameManager.Instance.Players.Add(this);
     }
