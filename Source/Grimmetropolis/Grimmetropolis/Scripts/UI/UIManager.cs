@@ -10,6 +10,8 @@ public class UIManager : TDComponent
     public GameOverOverlay GameOverOverlay;
 
     private int _playerDisplayIndex = 0;
+    private int _playerItemDisplayIndex = 0;
+
     private float _offsetBetweenPlayerDisplay = .2f * TDSceneManager.Graphics.PreferredBackBufferWidth;
     private string[] _playerIcons = { "UICinderella", "UISnowWhite", "UIFrog", "UIBeast" };
     private string[] _playerNames = { "Cinderella", "Snow White", "Frog King", "The Beast" };
@@ -79,4 +81,31 @@ public class UIManager : TDComponent
             PlayerDisplays[i].TDObject.RectTransform.LocalPosition = new Vector2(offsetStart + i * _offsetBetweenPlayerDisplay, TDSceneManager.Graphics.PreferredBackBufferHeight - 60f);
         }
     }
+
+    public void UpdatePlayerDisplay(Player player)
+    {
+        if (_playerItemDisplayIndex >= PlayerDisplays.Length) _playerItemDisplayIndex = 0;
+        if (player.Items[0] == null)
+        {
+            PlayerDisplays[_playerItemDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIPlayer");
+        }
+        else if (player.Items[0] is ToolAxe)
+        {
+            PlayerDisplays[_playerItemDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIAxe");
+        }
+        else if (player.Items[0] is ToolHammer)
+        {
+            PlayerDisplays[_playerItemDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIAxe");
+        }
+        else if (player.Items[0] is ToolPickaxe)
+        {
+            PlayerDisplays[_playerItemDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIPickaxe");
+        }
+        else
+        {
+            PlayerDisplays[_playerItemDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UISword");
+        }
+        _playerItemDisplayIndex++;
+    }
+
 }
