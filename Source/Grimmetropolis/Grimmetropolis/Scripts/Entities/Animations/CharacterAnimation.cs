@@ -58,19 +58,7 @@ public class CharacterAnimation : EntityAnimation
     {
         base.Initialize();
 
-        CreateBodyPart("Head", out Head, out _headMesh);
-        CreateBodyPart("Body", out Body, out _bodyMesh);
-        CreateBodyPart("LeftLeg", out LeftLeg, out _leftLegMesh);
-        CreateBodyPart("RightLeg", out RightLeg, out _rightLegMesh);
-        CreateBodyPart("LeftArm", out LeftArm, out _leftArmMesh);
-        CreateBodyPart("RightArm", out RightArm, out _rightArmMesh);
-
-        Head.LocalPosition = _headPositionStandard;
-        Body.LocalPosition = _bodyPositionStandard;
-        LeftLeg.LocalPosition = _leftLegPositionStandard;
-        RightLeg.LocalPosition = _rightLegPositionStandard;
-        LeftArm.LocalPosition = _leftArmPositionStandard;
-        RightArm.LocalPosition = _rightArmPositionStandard;
+        CreateBodyParts();
     }
 
     public override void Update(GameTime gameTime)
@@ -79,7 +67,7 @@ public class CharacterAnimation : EntityAnimation
 
         if (!_readyForAnimation) return;
 
-        if (Character.CurrentWalkSpeed <= 1e-5f) IdleAnimation(gameTime);
+        if ((Character?.CurrentWalkSpeed ?? 0f) <= 1e-5f) IdleAnimation(gameTime);
         else WalkAnimation(gameTime, Character.CurrentWalkSpeed);
     }
 
@@ -209,5 +197,58 @@ public class CharacterAnimation : EntityAnimation
         _rightLegMesh.Highlight(highlight);
         _leftArmMesh.Highlight(highlight);
         _rightArmMesh.Highlight(highlight);
+    }
+
+    public override void SetShowing()
+    {
+        if (_bodyMesh == null) return;
+
+        _headMesh.IsShowing = IsShowing;
+        _bodyMesh.IsShowing = IsShowing;
+        _leftLegMesh.IsShowing = IsShowing;
+        _rightLegMesh.IsShowing = IsShowing;
+        _leftArmMesh.IsShowing = IsShowing;
+        _rightArmMesh.IsShowing = IsShowing;
+    }
+
+    private void CreateBodyParts()
+    {
+        CreateBodyPart("Head", out Head, out _headMesh);
+        CreateBodyPart("Body", out Body, out _bodyMesh);
+        CreateBodyPart("LeftLeg", out LeftLeg, out _leftLegMesh);
+        CreateBodyPart("RightLeg", out RightLeg, out _rightLegMesh);
+        CreateBodyPart("LeftArm", out LeftArm, out _leftArmMesh);
+        CreateBodyPart("RightArm", out RightArm, out _rightArmMesh);
+
+        Head.LocalPosition = _headPositionStandard;
+        Body.LocalPosition = _bodyPositionStandard;
+        LeftLeg.LocalPosition = _leftLegPositionStandard;
+        RightLeg.LocalPosition = _rightLegPositionStandard;
+        LeftArm.LocalPosition = _leftArmPositionStandard;
+        RightArm.LocalPosition = _rightArmPositionStandard;
+    }
+
+    public void RecreateBodyParts()
+    {
+        Head.TDObject.Destroy();
+        Body.TDObject.Destroy();
+        LeftLeg.TDObject.Destroy();
+        RightLeg.TDObject.Destroy();
+        LeftArm.TDObject.Destroy();
+        RightArm.TDObject.Destroy();
+
+        CreateBodyParts();
+    }
+
+    public Model GetModelFromPlayerType(PlayerType playerType)
+    {
+        return playerType switch
+        {
+            PlayerType.Cinderella => TDContentManager.LoadModel("PlayerCindarella"),
+            PlayerType.Snowwhite => TDContentManager.LoadModel("PlayerSnowwhite"),
+            PlayerType.Frog => TDContentManager.LoadModel("PlayerFrog"),
+            PlayerType.Beast => TDContentManager.LoadModel("PlayerBeast"),
+            _ => TDContentManager.LoadModel("PlayerCindarella"),
+        };
     }
 }

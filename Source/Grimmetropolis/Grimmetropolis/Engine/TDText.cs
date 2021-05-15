@@ -56,7 +56,10 @@ public class TDText : TDComponent
     }
     private void AddToList()
     {
-        if (_isShowing && !TDSceneManager.ActiveScene.TextObjects.Contains(this)) TDSceneManager.ActiveScene.TextObjects.Add(this);
+        if (_isShowing)
+        {
+            if (!TDSceneManager.ActiveScene.TextObjects.Contains(this)) TDSceneManager.ActiveScene.TextObjects.Add(this);
+        }
         else TDSceneManager.ActiveScene.TextObjects.Remove(this);
     }
 }

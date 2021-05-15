@@ -12,6 +12,7 @@ public enum PrefabType
     GameManager,
 
     Player,
+    PlayerPreview,
     // Enemy,
 
     MapTileGround,
@@ -55,7 +56,8 @@ public enum PrefabType
     PlayerDisplay,
     GameOverOverlay,
 
-    MainMenu
+    MainMenu,
+    CharacterDisplay
 }
 
 public static class PrefabFactory
@@ -126,6 +128,14 @@ public static class PrefabFactory
                     interactionCollider.Offset = .5f * Vector3.Backward;
                     player.InteractionCollider = interactionCollider;
                     // player.Mesh = mesh;
+                    break;
+                }
+
+            case PrefabType.PlayerPreview:
+                {
+                    CharacterAnimation animation = prefab.AddComponent<CharacterAnimation>();
+                    animation.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
+                    animation.CharacterTexture = TDContentManager.LoadTexture("ColorPaletteTexture");
                     break;
                 }
 
@@ -651,6 +661,46 @@ public static class PrefabFactory
 
                     MainMenu mainMenu = prefab.AddComponent<MainMenu>();
                     mainMenu.GameLogo = gameLogo;
+
+                    break;
+                }
+
+            case PrefabType.CharacterDisplay:
+                {
+                    CreateEmptyUI(prefab, localPosition, localRotation, localScale);
+                    TDObject infoTextObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDText infoText = infoTextObject.AddComponent<TDText>();
+                    infoText.Text = "Press    ";
+                    infoText.Depth = 1f;
+                    infoTextObject.RectTransform.Origin = new Vector2(.5f * infoText.Width, .5f * infoText.Height);
+                    infoTextObject.RectTransform.LocalPosition = 200f * Vector2.One;
+
+                    TDObject buttonIconObject = CreatePrefab(PrefabType.EmptyUI, infoTextObject.Transform);
+                    TDSprite buttonIcon = buttonIconObject.AddComponent<TDSprite>();
+                    buttonIcon.Texture = TDContentManager.LoadTexture("UIXboxA");
+                    buttonIconObject.RectTransform.Origin = .5f * new Vector2(buttonIcon.Texture.Width, buttonIcon.Texture.Height);
+                    buttonIconObject.RectTransform.LocalPosition = new Vector2(50f, 0f);
+                    buttonIconObject.RectTransform.LocalScale = .5f * Vector2.One;
+
+                    TDObject leftArrowObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite leftArrow = leftArrowObject.AddComponent<TDSprite>();
+                    leftArrow.Texture = TDContentManager.LoadTexture("UIXboxDpadLeft");
+                    leftArrowObject.RectTransform.Origin = .5f * new Vector2(leftArrow.Texture.Width, leftArrow.Texture.Height);
+                    leftArrowObject.RectTransform.LocalPosition = new Vector2(120f, 200f);
+                    leftArrowObject.RectTransform.LocalScale = .5f * Vector2.One;
+
+                    TDObject rightArrowObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite rightArrow = rightArrowObject.AddComponent<TDSprite>();
+                    rightArrow.Texture = TDContentManager.LoadTexture("UIXboxDpadRight");
+                    rightArrowObject.RectTransform.Origin = .5f * new Vector2(rightArrow.Texture.Width, rightArrow.Texture.Height);
+                    rightArrowObject.RectTransform.LocalPosition = new Vector2(320f, 200f);
+                    rightArrowObject.RectTransform.LocalScale = .5f * Vector2.One;
+
+                    CharacterSelectionDisplay characterDisplay = prefab.AddComponent<CharacterSelectionDisplay>();
+                    characterDisplay.InfoText = infoText;
+                    characterDisplay.ButtonIcon = buttonIcon;
+                    characterDisplay.LeftArrow = leftArrow;
+                    characterDisplay.RightArrow = rightArrow;
 
                     break;
                 }

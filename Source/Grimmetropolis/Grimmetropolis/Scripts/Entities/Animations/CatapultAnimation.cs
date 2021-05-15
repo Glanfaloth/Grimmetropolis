@@ -71,7 +71,7 @@ public class CatapultAnimation : EntityAnimation
         BackWheel.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, _wheelAngle);
     }
 
-    public override  void UseAnimation()
+    public override void UseAnimation()
     {
         if (_armInUse) return;
 
@@ -89,7 +89,7 @@ public class CatapultAnimation : EntityAnimation
 
                 _reloadAngle = MathHelper.Lerp(0f, -MathHelper.TwoPi, p);
                 ReloadWheel.LocalRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, _reloadAngle);
-        }, 2f * PartialArmUseTime, _armInUse = false);
+            }, 2f * PartialArmUseTime, _armInUse = false);
         });
     }
 
@@ -101,5 +101,17 @@ public class CatapultAnimation : EntityAnimation
         _backWheelMesh.Highlight(highlight);
         _armMesh.Highlight(highlight);
         _reloadWheel.Highlight(highlight);
+    }
+
+    public override void SetShowing()
+    {
+        if (_bodyMesh == null) return;
+
+        _bodyMesh.IsShowing = IsShowing;
+        _bodyMesh.IsShowing = IsShowing;
+        _frontWheelMesh.IsShowing = IsShowing;
+        _backWheelMesh.IsShowing = IsShowing;
+        _armMesh.IsShowing = IsShowing;
+        _reloadWheel.IsShowing = IsShowing;
     }
 }

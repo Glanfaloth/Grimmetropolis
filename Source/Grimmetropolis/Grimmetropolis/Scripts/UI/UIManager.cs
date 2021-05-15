@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 public class UIManager : TDComponent
 {
@@ -11,8 +12,6 @@ public class UIManager : TDComponent
 
     private int _playerDisplayIndex = 0;
     private float _offsetBetweenPlayerDisplay = .2f * TDSceneManager.Graphics.PreferredBackBufferWidth;
-    private string[] _playerIcons = { "UICinderella", "UISnowWhite", "UIFrog", "UIBeast" };
-    private string[] _playerNames = { "Cinderella", "Snow White", "Frog King", "The Beast" };
 
     public override void Initialize()
     {
@@ -53,10 +52,34 @@ public class UIManager : TDComponent
 
         for (int i = 0; i < _playerDisplayIndex; i++)
         {
-            PlayerDisplays[i].PlayerIcon.Texture = TDContentManager.LoadTexture(_playerIcons[i]);
-            PlayerDisplays[i].PlayerName.Text = _playerNames[i];
+            PlayerDisplays[i].PlayerIcon.Texture = GetPlayerIconFromPlayerType(GameManager.PlayerTypes[i]);
+            PlayerDisplays[i].PlayerName.Text = GetNameFromPlayerType(GameManager.PlayerTypes[i]);
             //PlayerDisplays[i].CurrentItem = player.Items;
             PlayerDisplays[i].TDObject.RectTransform.LocalPosition = new Vector2(offsetStart + i * _offsetBetweenPlayerDisplay, TDSceneManager.Graphics.PreferredBackBufferHeight - 60f);
         }
+    }
+
+    public Texture2D GetPlayerIconFromPlayerType(PlayerType playerType)
+    {
+        return playerType switch
+        {
+            PlayerType.Cinderella => TDContentManager.LoadTexture("UICinderella"),
+            PlayerType.Snowwhite => TDContentManager.LoadTexture("UISnowWhite"),
+            PlayerType.Frog => TDContentManager.LoadTexture("UIFrog"),
+            PlayerType.Beast => TDContentManager.LoadTexture("UIBeast"),
+            _ => TDContentManager.LoadTexture("UICinderella"),
+        };
+    }
+
+    public string GetNameFromPlayerType(PlayerType playerType)
+    {
+        return playerType switch
+        {
+            PlayerType.Cinderella => "Cinderella",
+            PlayerType.Snowwhite => "Snow White",
+            PlayerType.Frog => "Frog King",
+            PlayerType.Beast => "The Beast",
+            _ => "Cinderella"
+        };
     }
 }

@@ -42,7 +42,10 @@ public class TDSprite : TDComponent
 
     private void AddToList()
     {
-        if (_isShowing && !TDSceneManager.ActiveScene.SpriteObjects.Contains(this)) TDSceneManager.ActiveScene.SpriteObjects.Add(this);
+        if (_isShowing)
+        {
+            if (!TDSceneManager.ActiveScene.SpriteObjects.Contains(this)) TDSceneManager.ActiveScene.SpriteObjects.Add(this);
+        }
         else TDSceneManager.ActiveScene.SpriteObjects.Remove(this);
     }
 }

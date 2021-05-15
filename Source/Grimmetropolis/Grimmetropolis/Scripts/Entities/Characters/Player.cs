@@ -3,6 +3,15 @@
 using System;
 using System.Diagnostics;
 
+public enum PlayerType
+{
+    None,
+    Cinderella,
+    Snowwhite,
+    Frog,
+    Beast
+}
+
 public class Player : Character
 {
     public TDInput Input;
