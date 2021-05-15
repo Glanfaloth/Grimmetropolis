@@ -29,7 +29,8 @@ public class Player : Character
     public ResourceDeposit LastClosestResourceDeposit = null;
     public bool NeedsToShowHarvestProgress = false;
 
-    // public TDSprite PlayerIcon = null;
+    public PlayerType PlayerType = PlayerType.Cinderella;
+    public PlayerDisplay PlayerDisplay = null;
 
     private Enemy _closestEnemy = null;
     private MapTile _interactionCollidingMapTile = null;
@@ -43,7 +44,7 @@ public class Player : Character
         base.Initialize();
 
         HealthBar.TDObject.Destroy();
-        UIManager.Instance.AddPlayerDisplay(this);
+        PlayerDisplay = UIManager.Instance.AddPlayerDisplay(this);
 
         TDObject buildMenuObject = PrefabFactory.CreatePrefab(PrefabType.BuildMenu, TDObject.Transform);
         _buildMenu = buildMenuObject.GetComponent<BuildMenu>();
@@ -70,7 +71,6 @@ public class Player : Character
             if (Input.BuildModePressed() && Items[0] is ToolHammer && Cooldown <= 0f)
                 _buildMenu.Show();
         }
-        UIManager.Instance.UpdatePlayerDisplay(this);
         base.Update(gameTime);
     }
 
