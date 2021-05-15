@@ -87,20 +87,21 @@ public class CharacterSelectionDisplay : TDComponent
                     {
                         _cooldown = _cooldownTimer;
                         if (MenuUIManager.Instance.MainMenu.CharacterDisplays.All(o => o.CharacterDisplayState != CharacterDisplayState.SelectingCharacter))
+                        {
                             for (int i = 0; i < GameManager.PlayerTypes.Length; i++)
                             {
                                 GameManager.PlayerTypes[i] = MenuUIManager.Instance.MainMenu.CharacterDisplays[i].CharacterDisplayState == CharacterDisplayState.Ready
                                     ? GameManager.PlayerTypes[i] = MenuUIManager.Instance.MainMenu.CharacterDisplays[i]._currentPlayerType : PlayerType.None;
                             }
                             TDSceneManager.LoadScene(new GameScene());
+                        }
                         return;
                     }
 
                     if (Input.CancelPressed())
                     {
                         _cooldown = _cooldownTimer;
-                        if (CharacterDisplayState == CharacterDisplayState.SelectingCharacter) SetCharacterDisplayState(CharacterDisplayState.Ready);
-                        else if (CharacterDisplayState == CharacterDisplayState.SelectingCharacter) MenuUIManager.Instance.MainMenu.RemovePlayer(Input);
+                        SetCharacterDisplayState(CharacterDisplayState.SelectingCharacter);
                         return;
                     }
                     break;

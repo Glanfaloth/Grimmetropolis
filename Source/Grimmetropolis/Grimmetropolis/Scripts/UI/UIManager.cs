@@ -11,6 +11,8 @@ public class UIManager : TDComponent
     public GameOverOverlay GameOverOverlay;
 
     private int _playerDisplayIndex = 0;
+    private int _playerItemDisplayIndex = 0;
+
     private float _offsetBetweenPlayerDisplay = .2f * TDSceneManager.Graphics.PreferredBackBufferWidth;
 
     public override void Initialize()
@@ -46,11 +48,31 @@ public class UIManager : TDComponent
         player.HealthBar = PlayerDisplays[_playerDisplayIndex].HealthBar;
         PlayerDisplays[_playerDisplayIndex].HealthBar.CurrentProgress = player.Health;
         PlayerDisplays[_playerDisplayIndex].HealthBar.MaxProgress = player.BaseHealth;
-        //player.PlayerIcon = PlayerDisplays[_playerDisplayIndex].PlayerIcon;
+
+        if (player.Items[0] == null)
+        {
+            PlayerDisplays[_playerDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIPlayer");
+        }
+        else if (player.Items[0] is ToolAxe)
+        {
+            PlayerDisplays[_playerDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIAxe");
+        }
+        else if (player.Items[0] is ToolHammer)
+        {
+            PlayerDisplays[_playerDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIHammer");
+        }
+        else if (player.Items[0] is ToolPickaxe)
+        {
+            PlayerDisplays[_playerDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIPickaxe");
+        }
+        else
+        {
+            PlayerDisplays[_playerDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UISword");
+        }
 
         _playerDisplayIndex++;
 
-        for (int i = 0; i < _playerDisplayIndex; i++)
+            for (int i = 0; i < _playerDisplayIndex; i++)
         {
             PlayerDisplays[i].PlayerIcon.Texture = GetPlayerIconFromPlayerType(GameManager.PlayerTypes[i]);
             PlayerDisplays[i].PlayerName.Text = GetNameFromPlayerType(GameManager.PlayerTypes[i]);
@@ -59,6 +81,34 @@ public class UIManager : TDComponent
         }
     }
 
+    public void UpdatePlayerDisplay(Player player)
+    {
+        if (_playerItemDisplayIndex >= PlayerDisplays.Length) _playerItemDisplayIndex = 0;
+        if (GameManager.PlayerTypes[_playerDisplayIndex] != PlayerType.None)
+        {
+            if (player.Items[0] == null)
+            {
+                PlayerDisplays[_playerItemDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIPlayer");
+            }
+            else if (player.Items[0] is ToolAxe)
+            {
+                PlayerDisplays[_playerItemDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIAxe");
+            }
+            else if (player.Items[0] is ToolHammer)
+            {
+                PlayerDisplays[_playerItemDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIHammer");
+            }
+            else if (player.Items[0] is ToolPickaxe)
+            {
+                PlayerDisplays[_playerItemDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIPickaxe");
+            }
+            else
+            {
+                PlayerDisplays[_playerItemDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UISword");
+            }
+        }
+        _playerItemDisplayIndex++;
+    }
     public Texture2D GetPlayerIconFromPlayerType(PlayerType playerType)
     {
         return playerType switch

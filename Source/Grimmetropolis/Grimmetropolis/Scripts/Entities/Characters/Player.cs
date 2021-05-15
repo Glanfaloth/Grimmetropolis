@@ -70,7 +70,7 @@ public class Player : Character
             if (Input.BuildModePressed() && Items[0] is ToolHammer && Cooldown <= 0f)
                 _buildMenu.Show();
         }
-
+        UIManager.Instance.UpdatePlayerDisplay(this);
         base.Update(gameTime);
     }
 
