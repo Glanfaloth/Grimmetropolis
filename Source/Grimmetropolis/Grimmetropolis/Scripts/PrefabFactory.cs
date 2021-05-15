@@ -166,7 +166,7 @@ public static class PrefabFactory
             case PrefabType.TutorialGuy:
                 {
                     TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
-                    TutorialAdvicer tutorialGuy = prefab.AddComponent<TutorialAdvicer>();
+                    TutorialAdvisor tutorialGuy = prefab.AddComponent<TutorialAdvisor>();
                     tutorialGuy.SetBaseStats(Config.TUTORIAL_GUY_STATS);
 
                     CharacterAnimation animation = prefab.AddComponent<CharacterAnimation>();

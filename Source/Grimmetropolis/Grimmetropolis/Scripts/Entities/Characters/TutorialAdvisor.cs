@@ -2,18 +2,18 @@
 
 using System.Collections.Generic;
 
-public enum TutorialAdvicerTask
+public enum TutorialAdvisorTask
 {
     Waiting,
     Walking,
 }
 
-public class TutorialAdvicer : Enemy
+public class TutorialAdvisor : Enemy
 {
     public override EnemyMove.Type Actions => EnemyMove.Type.Run;
     public override string MeshName => "TutorialAdvicer";
 
-    private TutorialAdvicerTask _tutorialAdvicerTask = TutorialAdvicerTask.Waiting;
+    private TutorialAdvisorTask _tutorialAdvicerTask = TutorialAdvisorTask.Waiting;
 
     private Vector2 _targetPosition = Vector2.Zero;
 
@@ -33,11 +33,11 @@ public class TutorialAdvicer : Enemy
 
         _tickTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        if (_tutorialAdvicerTask == TutorialAdvicerTask.Walking) MoveToTargetPosition(gameTime);
+        if (_tutorialAdvicerTask == TutorialAdvisorTask.Walking) MoveToTargetPosition(gameTime);
 
         if (_tickTimer <= 0f)
         {
-            if (_tutorialAdvicerTask == TutorialAdvicerTask.Waiting)
+            if (_tutorialAdvicerTask == TutorialAdvisorTask.Waiting)
             {
                 if (TDRandom.RandomFloat() < .3f) FindTargetMapTile();
             }
@@ -60,13 +60,13 @@ public class TutorialAdvicer : Enemy
         {
             if (possibleTargetPositions[i].X < 0 || possibleTargetPositions[i].X >= GameManager.Instance.Map.Width
                 || possibleTargetPositions[i].Y < 0 || possibleTargetPositions[i].Y >= GameManager.Instance.Map.Height) possibleTargetPositions.RemoveAt(i);
-            if (GameManager.Instance.Map.MapTiles[possibleTargetPositions[i].X, possibleTargetPositions[i].Y].Structure != null) possibleTargetPositions.RemoveAt(i);
-            if (GameManager.Instance.Map.MapTiles[possibleTargetPositions[i].X, possibleTargetPositions[i].Y].Type == MapTileType.Water) possibleTargetPositions.RemoveAt(i);
+            else if (GameManager.Instance.Map.MapTiles[possibleTargetPositions[i].X, possibleTargetPositions[i].Y].Structure != null) possibleTargetPositions.RemoveAt(i);
+            else if (GameManager.Instance.Map.MapTiles[possibleTargetPositions[i].X, possibleTargetPositions[i].Y].Type == MapTileType.Water) possibleTargetPositions.RemoveAt(i);
         }
 
         Point targetMapTilePosition = possibleTargetPositions[TDRandom.RandomInt(possibleTargetPositions.Count)];
         _targetPosition = GameManager.Instance.Map.MapTiles[targetMapTilePosition.X, targetMapTilePosition.Y].TDObject.Transform.Position.GetXY();
-        _tutorialAdvicerTask = TutorialAdvicerTask.Walking;
+        _tutorialAdvicerTask = TutorialAdvisorTask.Walking;
     }
 
     private void MoveToTargetPosition(GameTime gameTime)
@@ -74,7 +74,7 @@ public class TutorialAdvicer : Enemy
         if (Vector2.Distance(_targetPosition, TDObject.Transform.Position.GetXY()) < .05f)
         {
             Move(Vector2.Zero, gameTime);
-            _tutorialAdvicerTask = TutorialAdvicerTask.Waiting;
+            _tutorialAdvicerTask = TutorialAdvisorTask.Waiting;
         }
         else Move(Vector2.Normalize(_targetPosition - TDObject.Transform.Position.GetXY()), gameTime);
     }
