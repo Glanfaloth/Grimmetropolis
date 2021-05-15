@@ -121,9 +121,12 @@ public class GameManager : TDComponent
             player3.Input = TDInputManager.PlayerInputs[PlayerTypeIndices[3]];
         }
 
+
         // Enemies
         TDObject enemyList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         EnemyTransform = enemyList.Transform;
+
+        PrefabFactory.CreatePrefab(PrefabType.TutorialGuy, new Vector3(6, 2, 0), Quaternion.Identity, enemyList.Transform);
 
         // Structures
         TDObject structureList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
