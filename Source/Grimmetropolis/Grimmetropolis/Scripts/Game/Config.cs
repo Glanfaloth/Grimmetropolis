@@ -142,6 +142,15 @@ public static class Config
         attackRange: .25f,
         attackDuration: 2f,
         projectileSpeed: 0f);
+    public static readonly EnemyStats TUTORIAL_GUY_STATS = new EnemyStats(
+        walkSpeed: 1f,
+        rotateSpeed: 3f * MathHelper.Pi,
+        health: 5f,
+        damageAgainstPlayer: 1f,
+        damageAgainstBuilding: 1f,
+        attackRange: 2f,
+        attackDuration: 4f,
+        projectileSpeed: 8f);
 
     #endregion
 

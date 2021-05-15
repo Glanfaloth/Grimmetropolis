@@ -14,6 +14,7 @@ public enum PrefabType
     Player,
     PlayerPreview,
     // Enemy,
+    TutorialGuy,
 
     MapTileGround,
     MapTileWater,
@@ -162,6 +163,36 @@ public static class PrefabFactory
             //        enemy.InteractionCollider = interactionCollider;
             //        break;
             //    }
+            case PrefabType.TutorialGuy:
+                {
+                    TDCylinderCollider collider = prefab.AddComponent<TDCylinderCollider>();
+                    TutorialAdvicer tutorialGuy = prefab.AddComponent<TutorialAdvicer>();
+                    tutorialGuy.SetBaseStats(Config.TUTORIAL_GUY_STATS);
+
+                    CharacterAnimation animation = prefab.AddComponent<CharacterAnimation>();
+                    animation.Character = tutorialGuy;
+                    tutorialGuy.Animation = animation;
+                    animation.CharacterModel = TDContentManager.LoadModel(tutorialGuy.MeshName);
+                    animation.CharacterTexture = TDContentManager.LoadTexture("ColorPaletteTexture");
+                    
+                    collider.Radius = .25f;
+                    tutorialGuy.Collider = collider;
+                    collider.Height = .5f;
+                    collider.Offset = .5f * Vector3.Backward;
+
+                    TDObject interactionObject = CreatePrefab(PrefabType.Empty, 1f * Vector3.Right, Quaternion.Identity, prefab.Transform);
+                    // TDMesh meshCollider = interactionObject.AddComponent<TDMesh>();
+                    // meshCollider.Model = TDContentManager.LoadModel("DefaultCylinder");
+                    // meshCollider.Texture = TDContentManager.LoadTexture("DefaultTexture");
+                    TDCylinderCollider interactionCollider = interactionObject.AddComponent<TDCylinderCollider>();
+                    interactionCollider.IsTrigger = true;
+                    interactionCollider.Radius = .5f;
+                    interactionCollider.Height = 2f;
+                    interactionCollider.Offset = .5f * Vector3.Backward;
+                    tutorialGuy.InteractionCollider = interactionCollider;
+
+                    break;
+                }
 
             // Map tiles
             case PrefabType.MapTileGround:
