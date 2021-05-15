@@ -3,29 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 using System;
 
-public class TDSprite : TDComponent
+public class TDSprite : TDUI
 {
     public Texture2D Texture;
     public Color Color = Color.White;
     public float Depth = 0f;
-
-    private bool _isShowing = true;
-    public bool IsShowing
-    {
-        get => _isShowing;
-        set
-        {
-            _isShowing = value;
-            AddToList();
-        }
-    }
-
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        AddToList();
-    }
 
     public override void Destroy()
     {
@@ -40,9 +22,9 @@ public class TDSprite : TDComponent
             TDObject.RectTransform.Origin, TDObject.RectTransform.Scale, SpriteEffects.None, Depth);
     }
 
-    private void AddToList()
+    protected override void AddToList()
     {
-        if (_isShowing)
+        if (IsShowing)
         {
             if (!TDSceneManager.ActiveScene.SpriteObjects.Contains(this)) TDSceneManager.ActiveScene.SpriteObjects.Add(this);
         }

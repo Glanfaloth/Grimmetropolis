@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-public class TDText : TDComponent
+public class TDText : TDUI
 {
     public SpriteFont SpriteFont = TDContentManager.LoadSpriteFont("Montserrat");
 
@@ -24,24 +24,6 @@ public class TDText : TDComponent
     public float Width { get; private set; }
     public float Height { get; private set; }
 
-    private bool _isShowing = true;
-    public bool IsShowing
-    {
-        get => _isShowing;
-        set
-        {
-            _isShowing = value;
-            AddToList();
-        }
-    }
-
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        AddToList();
-    }
-
     public override void Destroy()
     {
         base.Destroy();
@@ -54,9 +36,9 @@ public class TDText : TDComponent
         TDSceneManager.SpriteBatch.DrawString(SpriteFont, Text, TDObject.RectTransform.Position, Color, TDObject.RectTransform.Rotation,
             TDObject.RectTransform.Origin, TDObject.RectTransform.Scale, SpriteEffects.None, Depth);
     }
-    private void AddToList()
+    protected override void AddToList()
     {
-        if (_isShowing)
+        if (IsShowing)
         {
             if (!TDSceneManager.ActiveScene.TextObjects.Contains(this)) TDSceneManager.ActiveScene.TextObjects.Add(this);
         }

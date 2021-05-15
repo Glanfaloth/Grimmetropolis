@@ -558,9 +558,82 @@ public static class PrefabFactory
                     icon.Texture = TDContentManager.LoadTexture("UIBuildingOutpostIcon");
                     icon.Depth = .9f;
                     iconObject.RectTransform.Origin = .5f * new Vector2(icon.Texture.Width, icon.Texture.Height);
-                    iconObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin + .5f * new Vector2(buildSprite.Texture.Width, buildSprite.Texture.Height);
+                    iconObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin + new Vector2(60, .5f * buildSprite.Texture.Height + 10);
                     buildMenu.BuildSprite = buildSprite;
                     buildMenu.Icon = icon;
+
+                    TDObject detailObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    detailObject.RectTransform.LocalPosition = new Vector2(icon.Texture.Width, -buildSprite.Texture.Height);
+
+                    TDObject textTitleObject = CreatePrefab(PrefabType.EmptyUI, detailObject.Transform);
+                    TDText textTitle = textTitleObject.AddComponent<TDText>();
+                    textTitleObject.RectTransform.LocalPosition = new Vector2(0, 30);
+                    textTitle.Color = Color.Black;
+
+                    TDObject costObject = CreatePrefab(PrefabType.EmptyUI, detailObject.Transform);
+                    costObject.RectTransform.LocalPosition = new Vector2(icon.Texture.Width - 15, 50);
+
+                    int iconWidth = 30;
+
+                    // wood cost
+                    TDObject woodCostObject = CreatePrefab(PrefabType.EmptyUI, costObject.Transform);
+                    woodCostObject.RectTransform.LocalPosition = Vector2.Zero;
+
+                    TDObject woodObject = CreatePrefab(PrefabType.EmptyUI, woodCostObject.Transform);
+                    TDSprite wood = woodObject.AddComponent<TDSprite>();
+                    wood.Texture = TDContentManager.LoadTexture("UIWood");
+                    woodObject.RectTransform.Scale = iconWidth / (float)wood.Texture.Width * Vector2.One;
+
+                    TDObject textCostWoodObject = CreatePrefab(PrefabType.EmptyUI, woodCostObject.Transform);
+                    TDText textCostWood = textCostWoodObject.AddComponent<TDText>();
+                    textCostWoodObject.RectTransform.LocalPosition = new Vector2(iconWidth + 5, 0);
+                    textCostWood.Color = Color.Black;
+
+                    // stone cost
+                    TDObject stoneCostObject = CreatePrefab(PrefabType.EmptyUI, costObject.Transform);
+                    stoneCostObject.RectTransform.LocalPosition = new Vector2(0, 15);
+
+                    TDObject stoneObject = CreatePrefab(PrefabType.EmptyUI, stoneCostObject.Transform);
+                    TDSprite stone = stoneObject.AddComponent<TDSprite>();
+                    stone.Texture = TDContentManager.LoadTexture("UIStone");
+                    stoneObject.RectTransform.Scale = iconWidth / (float)stone.Texture.Width * Vector2.One;
+                    stoneObject.RectTransform.LocalPosition = new Vector2(0, 0);
+
+                    TDObject textCostStoneObject = CreatePrefab(PrefabType.EmptyUI, stoneCostObject.Transform);
+                    TDText textCostStone = textCostStoneObject.AddComponent<TDText>();
+                    textCostStoneObject.RectTransform.LocalPosition = new Vector2(iconWidth + 5, 0);
+                    textCostStone.Color = Color.Black;
+
+                    // food cost
+                    TDObject foodCostObject = CreatePrefab(PrefabType.EmptyUI, costObject.Transform);
+                    foodCostObject.RectTransform.LocalPosition = new Vector2(0, 30);
+
+                    TDObject foodObject = CreatePrefab(PrefabType.EmptyUI, foodCostObject.Transform);
+                    TDSprite food = foodObject.AddComponent<TDSprite>();
+                    food.Texture = TDContentManager.LoadTexture("UIFood");
+                    foodObject.RectTransform.Scale = iconWidth / (float)(food.Texture.Width + 100) * Vector2.One;
+                    foodObject.RectTransform.LocalPosition = new Vector2(3, 5);
+
+                    TDObject textCostFoodObject = CreatePrefab(PrefabType.EmptyUI, foodCostObject.Transform);
+                    TDText textCostFood = textCostFoodObject.AddComponent<TDText>();
+                    textCostFoodObject.RectTransform.LocalPosition = new Vector2(iconWidth + 5, 0);
+                    textCostFood.Color = Color.Black;
+
+                    buildMenu.Title = textTitle;
+                    buildMenu.WoodCost = textCostWood;
+                    buildMenu.StoneCost = textCostStone;
+                    buildMenu.FoodCost = textCostFood;
+
+                    buildMenu.UiElements.Add(buildSprite);
+                    buildMenu.UiElements.Add(icon);
+                    buildMenu.UiElements.Add(textTitle);
+                    buildMenu.UiElements.Add(textCostFood);
+                    buildMenu.UiElements.Add(textCostStone);
+                    buildMenu.UiElements.Add(textCostWood);
+                    buildMenu.UiElements.Add(food);
+                    buildMenu.UiElements.Add(stone);
+                    buildMenu.UiElements.Add(wood);
+
                     break;
                 }
 
