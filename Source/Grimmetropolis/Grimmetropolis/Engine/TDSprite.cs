@@ -7,7 +7,6 @@ public class TDSprite : TDUI
 {
     public Texture2D Texture;
     public Color Color = Color.White;
-    public float Depth = 0f;
 
     public override void Destroy()
     {

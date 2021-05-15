@@ -581,13 +581,11 @@ public static class PrefabFactory
                     TDSprite buildSprite = prefab.AddComponent<TDSprite>();
                     BuildMenu buildMenu = prefab.AddComponent<BuildMenu>();
                     buildSprite.Texture = TDContentManager.LoadTexture("UIBuild");
-                    buildSprite.Depth = 1f;
                     prefab.RectTransform.Origin = new Vector2(0f, buildSprite.Texture.Height);
 
                     TDObject iconObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDSprite icon = iconObject.AddComponent<TDSprite>();
                     icon.Texture = TDContentManager.LoadTexture("UIBuildingOutpostIcon");
-                    icon.Depth = .9f;
                     iconObject.RectTransform.Origin = .5f * new Vector2(icon.Texture.Width, icon.Texture.Height);
                     iconObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin + new Vector2(60, .5f * buildSprite.Texture.Height + 10);
                     buildMenu.BuildSprite = buildSprite;
@@ -654,6 +652,17 @@ public static class PrefabFactory
                     buildMenu.WoodCost = textCostWood;
                     buildMenu.StoneCost = textCostStone;
                     buildMenu.FoodCost = textCostFood;
+
+                    float elementDepth = .975f;
+                    buildSprite.Depth = 1f;
+                    icon.Depth = elementDepth;
+                    textTitle.Depth = elementDepth;
+                    textCostFood.Depth = elementDepth;
+                    textCostStone.Depth = elementDepth;
+                    textCostWood.Depth = elementDepth;
+                    food.Depth = elementDepth;
+                    stone.Depth = elementDepth;
+                    wood.Depth = elementDepth;
 
                     buildMenu.UiElements.Add(buildSprite);
                     buildMenu.UiElements.Add(icon);

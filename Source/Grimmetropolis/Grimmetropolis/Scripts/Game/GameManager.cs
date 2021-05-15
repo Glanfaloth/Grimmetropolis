@@ -93,6 +93,7 @@ public class GameManager : TDComponent
         if (PlayerTypes[0] != PlayerType.None)
         {
             Player player0 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(3, -2, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
+            player0.UiIndex = 0;
             player0.PlayerType = PlayerTypes[0];
             if (player0.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(PlayerTypes[0]);
             player0.Input = TDInputManager.PlayerInputs[PlayerTypeIndices[0]];
@@ -101,6 +102,7 @@ public class GameManager : TDComponent
         if (PlayerTypes[1] != PlayerType.None)
         {
             Player player1 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(3, -1, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
+            player1.UiIndex = 1;
             player1.PlayerType = PlayerTypes[1];
             if (player1.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(PlayerTypes[1]);
             player1.Input = TDInputManager.PlayerInputs[PlayerTypeIndices[1]];
@@ -110,6 +112,7 @@ public class GameManager : TDComponent
         {
             Player player2 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(4, -2, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
             player2.PlayerType = PlayerTypes[2];
+            player2.UiIndex = 2;
             if (player2.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(PlayerTypes[2]);
             player2.Input = TDInputManager.PlayerInputs[PlayerTypeIndices[2]];
         }
@@ -117,6 +120,7 @@ public class GameManager : TDComponent
         {
             Player player3 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(4, -1, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
             player3.PlayerType = PlayerTypes[3];
+            player3.UiIndex = 3;
             if (player3.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(PlayerTypes[3]);
             player3.Input = TDInputManager.PlayerInputs[PlayerTypeIndices[3]];
         }

@@ -19,7 +19,6 @@ public class TDText : TDUI
     }
 
     public Color Color = Color.White;
-    public float Depth = 0f;
 
     public float Width { get; private set; }
     public float Height { get; private set; }

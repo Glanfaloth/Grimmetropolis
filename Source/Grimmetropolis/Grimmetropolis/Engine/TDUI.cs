@@ -4,6 +4,8 @@ using System.Text;
 
 public abstract class TDUI : TDComponent
 {
+    public float Depth = 0f;
+
     public override void Initialize()
     {
         base.Initialize();
