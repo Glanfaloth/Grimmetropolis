@@ -60,7 +60,7 @@ public class UIManager : TDComponent
         }
         else if (player.Items[0] is ToolHammer)
         {
-            PlayerDisplays[_playerDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIAxe");
+            PlayerDisplays[_playerDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIHammer");
         }
         else if (player.Items[0] is ToolPickaxe)
         {
@@ -95,7 +95,7 @@ public class UIManager : TDComponent
         }
         else if (player.Items[0] is ToolHammer)
         {
-            PlayerDisplays[_playerItemDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIAxe");
+            PlayerDisplays[_playerItemDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIHammer");
         }
         else if (player.Items[0] is ToolPickaxe)
         {
