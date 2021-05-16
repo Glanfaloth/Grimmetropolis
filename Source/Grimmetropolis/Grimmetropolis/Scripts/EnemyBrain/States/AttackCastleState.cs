@@ -22,14 +22,20 @@ public class AttackCastleState : EnemyGroupState
         }
 
         // TODO: how to handle walls
+        // TODO: use a sorted list that allows duplicate keys
         SortedList<float, Outpost> offensiveBuildings = new SortedList<float, Outpost>();
         foreach (var tile in _nearbyTiles)
         {
             if (tile.Structure is Outpost outpost)
             {
-                offensiveBuildings.Add((outpost.Position.ToVector2() - enemyGroup.Leader.Position).LengthSquared(), outpost);
+                float key = (outpost.Position.ToVector2() - enemyGroup.Leader.Position).LengthSquared();
+                if (!offensiveBuildings.ContainsKey(key))
+                {
+                    offensiveBuildings.Add(key, outpost);
+                }
             }
         }
+
 
         // TODO: split up large groups
         if (offensiveBuildings.Count > 0 && !map[map.EnemyTarget].IsPassable)
