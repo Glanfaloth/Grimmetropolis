@@ -56,6 +56,8 @@ public enum PrefabType
     WaveIndicator,
     PlayerDisplay,
     GameOverOverlay,
+    SpeechBubble,
+    ButtonIcon,
 
     MainMenu,
     CharacterDisplay
@@ -190,6 +192,8 @@ public static class PrefabFactory
                     interactionCollider.Height = 2f;
                     interactionCollider.Offset = .5f * Vector3.Backward;
                     tutorialGuy.InteractionCollider = interactionCollider;
+
+                    prefab.AddComponent<TutorialPipeline>();
 
                     break;
                 }
@@ -814,6 +818,62 @@ public static class PrefabFactory
                     characterDisplay.ButtonIcon = buttonIcon;
                     characterDisplay.LeftArrow = leftArrow;
                     characterDisplay.RightArrow = rightArrow;
+
+                    break;
+                }
+
+            case PrefabType.SpeechBubble:
+                {
+                    CreateEmptyUI(prefab, localPosition, localRotation, localScale);
+                    TDObject backgroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite background = backgroundObject.AddComponent<TDSprite>();
+                    background.Texture = TDContentManager.LoadTexture("UISpeechBubble");
+                    background.Depth = 1f;
+                    backgroundObject.RectTransform.Origin = .5f * new Vector2(background.Texture.Width, background.Texture.Height);
+                    backgroundObject.RectTransform.LocalPosition = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth, TDSceneManager.Graphics.PreferredBackBufferHeight);
+
+                    TDObject speakerIconObject = CreatePrefab(PrefabType.EmptyUI, backgroundObject.Transform);
+                    TDSprite speakerIcon = speakerIconObject.AddComponent<TDSprite>();
+                    speakerIcon.Texture = TDContentManager.LoadTexture("UICinderella");
+                    speakerIcon.Depth = .9f;
+                    speakerIconObject.RectTransform.LocalPosition = new Vector2(-289f, -185f);
+                    speakerIconObject.RectTransform.LocalScale = .15f * Vector2.One;
+
+                    TDObject messageObject = CreatePrefab(PrefabType.EmptyUI, backgroundObject.Transform);
+                    TDText message = messageObject.AddComponent<TDText>();
+                    message.Text = "This is an example text. A very long text.\nWith this, I can check how much text fits in one line.\nDo such weird signs work as well?";
+                    message.Depth = .9f;
+                    messageObject.RectTransform.LocalPosition = new Vector2(20f, 80f) - backgroundObject.RectTransform.Origin;
+                    messageObject.RectTransform.Scale = Vector2.One;
+
+                    TDObject buttonIconObject = CreatePrefab(PrefabType.EmptyUI, backgroundObject.Transform);
+                    TDSprite buttonIcon = buttonIconObject.AddComponent<TDSprite>();
+                    buttonIcon.Texture = TDContentManager.LoadTexture("UIXboxA");
+                    buttonIcon.Depth = .9f;
+                    buttonIconObject.RectTransform.Origin = .5f * new Vector2(buttonIcon.Texture.Width, buttonIcon.Texture.Height);
+                    buttonIconObject.RectTransform.LocalPosition = backgroundObject.RectTransform.Origin - 40f * Vector2.One;
+                    buttonIconObject.RectTransform.LocalScale = .5f * Vector2.One;
+
+                    SpeechBubble speechBubble = prefab.AddComponent<SpeechBubble>();
+                    speechBubble.Background = background;
+                    speechBubble.SpeakerIcon = speakerIcon;
+                    speechBubble.Message = message;
+                    speechBubble.ButtonIcon = buttonIcon;
+                    break;
+                }
+
+            case PrefabType.ButtonIcon:
+                {
+                    CreateEmptyUI3D(prefab, localPosition, localRotation, localScale);
+
+                    TDSprite icon = prefab.AddComponent<TDSprite>();
+                    icon.Texture = TDContentManager.LoadTexture("UISpeechBubble");
+                    icon.Depth = 1f;
+
+                    ButtonIcon buttonIcon = prefab.AddComponent<ButtonIcon>();
+                    buttonIcon.Icon = icon;
+
+                    prefab.RectTransform.Scale = .5f * Vector2.One;
 
                     break;
                 }
