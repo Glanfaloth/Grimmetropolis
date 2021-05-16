@@ -12,8 +12,20 @@ public class AttackPlayerCommand : EnemyCommand
         _target = target;
     }
 
-    protected override NextMoveInfo DoGetNextMoveInfo(MapTile tile, EnemyMove.Type actions, float attackRange, Vector2 localPosition)
+    public override bool IsDifferent(EnemyCommand other)
     {
+        if (other is AttackPlayerCommand otherAttack)
+        {
+            return (_target != otherAttack._target);
+        }
+
+        return true;
+    }
+
+    protected override NextMoveInfo DoGetNextMoveInfo(Vector2 localPosition, EnemyMove.Type actions, float attackRange)
+    {
+        MapTile tile = Graph.Map.GetMapTile(localPosition);
+
         Vector2 targetPosition = _target.TDObject.Transform.LocalPosition.GetXY();
         Vector2 toTarget = targetPosition - localPosition;
         MapTile targetTile = Graph.Map.GetMapTile(targetPosition);
@@ -26,8 +38,7 @@ public class AttackPlayerCommand : EnemyCommand
             }
             else
             {
-                EnemyMove nextMove = Graph.GetNextMoveFromMapTile(tile, actions, attackRange, targetTile.TileVertex, EnemyMove.Type.None);
-                return nextMove.CreateInfo();
+                return ComputePathToTile(tile, actions, attackRange, targetTile.TileVertex, EnemyMove.Type.None);
             }
         }
         else
@@ -39,8 +50,7 @@ public class AttackPlayerCommand : EnemyCommand
             }
             else
             {
-                EnemyMove nextMove = Graph.GetNextMoveFromMapTile(tile, actions, attackRange, targetTile.TileVertex, EnemyMove.Type.None);
-                return nextMove.CreateInfo();
+                return ComputePathToTile(tile, actions, attackRange, targetTile.TileVertex, EnemyMove.Type.None);
             }
         }
     }

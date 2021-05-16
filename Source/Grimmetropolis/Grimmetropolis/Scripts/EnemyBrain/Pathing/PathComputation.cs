@@ -45,8 +45,10 @@ public class PathComputation
     {
         ResetPaths();
 
+        var endOfPathMove = new EndOfPath(target, endOfPathAction);
+
         var pq = new TDPriorityQueue<EnemyMove>();
-        pq.Insert(0f, 0f, new EndOfPath(target, endOfPathAction));
+        pq.Insert(0f, 0f, endOfPathMove);
 
         while (!pq.IsEmpty())
         {
@@ -96,7 +98,7 @@ public class PathComputation
             }
         }
 
-        return EnemyMove.NONE;
+        return endOfPathMove;
     }
 
     internal List<EnemyMove> GetPathToLocation(MapTile startTile, Location targetLocation)

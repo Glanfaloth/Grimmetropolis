@@ -35,7 +35,7 @@ public class GameOverOverlay : TDComponent
             case GameState.GameOver:
                 foreach (TDInput input in TDInputManager.Inputs)
                 {
-                    if (input.ActionPressed()) TDSceneManager.LoadScene(new GameScene());
+                    if (input.ActionPressed() && input.CancelPressed()) TDSceneManager.LoadScene(new GameScene());
                 }
                 break;
         }

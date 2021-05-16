@@ -3,9 +3,6 @@ using System;
 
 public abstract class EnemyMove
 {
-    private static Location _noLocation = new Location(null);
-    public static EnemyMove NONE { get; } = new NoMove(_noLocation);
-
     [Flags]
     public enum Type
     {
@@ -28,6 +25,8 @@ public abstract class EnemyMove
 
     public abstract float Cost { get; }
 
+    public abstract bool ShouldPathBeRecomputed();
+
     protected EnemyMove(Location location)
     {
         From = location;
@@ -46,22 +45,5 @@ public abstract class EnemyMove
     public virtual bool IsMoveAllowed(Type actions, float attackRange)
     {
         return (actions & MovementType) == MovementType;
-    }
-
-    private class NoMove : EnemyMove
-    {
-
-        public override Type MovementType => Type.None;
-
-        public override float Cost => 0;
-
-        internal NoMove(Location location) : base(location)
-        {
-        }
-
-        public override NextMoveInfo CreateInfo()
-        {
-            return new NextMoveInfo(null, MovementType, Vector2.Zero);
-        }
     }
 }

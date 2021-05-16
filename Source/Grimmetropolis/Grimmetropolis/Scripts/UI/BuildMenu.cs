@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using System;
+using System.Collections.Generic;
 
 public enum SelectableBuilding
 {
@@ -20,6 +21,12 @@ public class BuildMenu : TDComponent
     public TDSprite BuildSprite;
     public TDSprite Icon;
 
+    public TDText Title;
+
+    public TDText WoodCost;
+    public TDText StoneCost;
+    public TDText FoodCost;
+
     public bool IsShowing = true;
 
     private SelectableBuilding _currentBuilding;
@@ -30,11 +37,15 @@ public class BuildMenu : TDComponent
 
     private Building _previewBuilding = null;
 
+    private readonly Dictionary<SelectableBuilding, ResourcePile> _costs = new Dictionary<SelectableBuilding, ResourcePile>();
+    public readonly List<TDUI> UiElements = new List<TDUI>();
+
     public override void Initialize()
     {
         base.Initialize();
 
-        Icon.Texture = GetIcon(_currentBuilding);
+        InitializeCosts();
+        SetDescription(_currentBuilding);
 
         Hide();
     }
@@ -73,8 +84,10 @@ public class BuildMenu : TDComponent
         if (IsShowing) return;
         IsShowing = true;
 
-        BuildSprite.IsShowing = IsShowing;
-        Icon.IsShowing = IsShowing;
+        foreach (var item in UiElements)
+        {
+            item.IsShowing = IsShowing;
+        }
 
         _previewBuilding = GetBuilding(_currentBuilding);
         _previewBuilding.Position = GameManager.Instance.Map.GetMapTile(Player.InteractionCollider.CenterXY).Position;
@@ -88,8 +101,10 @@ public class BuildMenu : TDComponent
         if (!IsShowing) return;
         IsShowing = false;
 
-        BuildSprite.IsShowing = IsShowing;
-        Icon.IsShowing = IsShowing;
+        foreach (var item in UiElements)
+        {
+            item.IsShowing = IsShowing;
+        }
 
         _previewBuilding?.TDObject.Destroy();
         ReturnControl();
@@ -120,7 +135,7 @@ public class BuildMenu : TDComponent
         if ((int)_currentBuilding == selectableBuildingCount - 1) _currentBuilding = 0;
         else _currentBuilding++;
 
-        Icon.Texture = GetIcon(_currentBuilding);
+        SetDescription(_currentBuilding);
 
         _previewBuilding.TDObject.Destroy();
         _previewBuilding = GetBuilding(_currentBuilding);
@@ -136,13 +151,25 @@ public class BuildMenu : TDComponent
         if ((int)_currentBuilding == 0) _currentBuilding = (SelectableBuilding)selectableBuildingCount - 1;
         else _currentBuilding--;
 
-        Icon.Texture = GetIcon(_currentBuilding);
+        SetDescription(_currentBuilding);
 
         _previewBuilding.TDObject.Destroy();
         _previewBuilding = GetBuilding(_currentBuilding);
         _previewBuilding.IsPreview = true;
 
         _cooldown = _cooldownDuration;
+    }
+
+    private void SetDescription(SelectableBuilding currentBuilding)
+    {
+        Icon.Texture = GetIcon(_currentBuilding);
+        Title.Text = GetTitle(_currentBuilding);
+
+        var cost = GetCost(_currentBuilding);
+        FoodCost.Text = cost.Food.ToString();
+        WoodCost.Text = cost.Wood.ToString();
+        StoneCost.Text = cost.Stone.ToString();
+
     }
 
     private Texture2D GetIcon(SelectableBuilding buildingIcon)
@@ -159,6 +186,51 @@ public class BuildMenu : TDComponent
             SelectableBuilding.ResourceBuilding => TDContentManager.LoadTexture("UIBuildingResourceBuildingIcon"),
             _ => TDContentManager.LoadTexture("UIBuildingOutpostIcon")
         };
+    }
+
+    private string GetTitle(SelectableBuilding building)
+    {
+        return building switch
+        {
+            SelectableBuilding.ResourceBuilding => "Collector",
+            _ => building.ToString(),
+        };
+    }
+
+    private string GetDescription(SelectableBuilding building)
+    {
+        return building switch
+        {
+            SelectableBuilding.Outpost => $"Shoots at enemies in range. \nConsumes {Config.OUTPOST_FOOD_UPKEEP} food/s.",
+            SelectableBuilding.Wall => "Stops enemies from passing through.",
+            SelectableBuilding.Farm => $"Needed to sustain outposts. \nProduces {Config.FARM_FOOD_UPKEEP} food/s",
+            SelectableBuilding.Bridge => "Allows both players and enemies to cross bodies of water.",
+            SelectableBuilding.Hospital => "Continously heals nearby players.",
+            SelectableBuilding.ResourceBuilding => "Automatically collects nearby resources.",
+            _ => throw new NotImplementedException(),
+        };
+    }
+
+    private void InitializeCosts()
+    {
+        foreach (SelectableBuilding building in Enum.GetValues(typeof(SelectableBuilding)))
+        {
+            _costs[building] = building switch
+            {
+                SelectableBuilding.Outpost => new ResourcePile(Config.OUTPOST_WOOD_COST, Config.OUTPOST_STONE_COST, Config.OUTPOST_FOOD_UPKEEP),
+                SelectableBuilding.Wall => new ResourcePile(Config.WALL_WOOD_COST, Config.WALL_STONE_COST),
+                SelectableBuilding.Farm => new ResourcePile(Config.FARM_WOOD_COST, Config.FARM_STONE_COST, Config.FARM_FOOD_UPKEEP),
+                SelectableBuilding.Bridge => new ResourcePile(Config.BRIDGE_WOOD_COST, Config.BRIDGE_STONE_COST),
+                SelectableBuilding.Hospital => new ResourcePile(Config.HOSPITAL_WOOD_COST, Config.HOSPITAL_STONE_COST),
+                SelectableBuilding.ResourceBuilding => new ResourcePile(Config.RESOURCE_BUILDING_WOOD_COST, Config.RESOURCE_BUILDING_STONE_COST),
+                _ => throw new NotImplementedException(),
+            };
+        }
+    }
+
+    private ResourcePile GetCost(SelectableBuilding building)
+    {
+        return _costs[building];
     }
 
     private Building GetBuilding(SelectableBuilding buildingIcon)

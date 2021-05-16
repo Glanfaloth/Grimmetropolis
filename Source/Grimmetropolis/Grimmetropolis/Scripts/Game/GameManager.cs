@@ -13,6 +13,9 @@ public class GameManager : TDComponent
 {
     public static GameManager Instance;
 
+    public static PlayerType[] PlayerTypes = new PlayerType[4];
+    public static List<int> PlayerTypeIndices = new List<int>();
+
     public Map Map;
     private ResourcePile _resourcePool;
     public ResourcePile ResourcePool
@@ -69,7 +72,8 @@ public class GameManager : TDComponent
         // List<MapDTO.EntityToSpawn> entitiesToSpawn = Map.LoadFromFile("Content/Maps/testEmpty128.map");
 
         // ResourcePool
-        ResourcePool = new ResourcePile();
+        int amount = (int)(1f / PlayerTypeIndices.Count * 50f);
+        ResourcePool = new ResourcePile(amount, amount);
 
         // EnemyBrain
         TDObject enemyAI = PrefabFactory.CreatePrefab(PrefabType.Empty);
@@ -87,29 +91,47 @@ public class GameManager : TDComponent
         TDObject playerList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         PlayerTransform = playerList.Transform;
 
-        Player player0 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(3, -2, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
-        player0.Animation.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
-        player0.Input = TDInputManager.Inputs[0];
-        
-        Player player1 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(3, -1, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
-        player1.Animation.CharacterModel = TDContentManager.LoadModel("PlayerSnowwhite");
-        player1.Input = TDInputManager.Inputs[1];
+        if (PlayerTypes[0] != PlayerType.None)
+        {
+            Player player0 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(3, -2, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
+            player0.UiIndex = 0;
+            player0.PlayerType = PlayerTypes[0];
+            if (player0.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(PlayerTypes[0]);
+            player0.Input = TDInputManager.PlayerInputs[PlayerTypeIndices[0]];
+        }
 
-        Player player2 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(4, -2, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
-        player2.Animation.CharacterModel = TDContentManager.LoadModel("PlayerFrog");
-        player2.Input = TDInputManager.Inputs[2];
+        if (PlayerTypes[1] != PlayerType.None)
+        {
+            Player player1 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(3, -1, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
+            player1.UiIndex = 1;
+            player1.PlayerType = PlayerTypes[1];
+            if (player1.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(PlayerTypes[1]);
+            player1.Input = TDInputManager.PlayerInputs[PlayerTypeIndices[1]];
+        }
 
-        Player player3 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(4, -1, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
-        player3.Animation.CharacterModel = TDContentManager.LoadModel("PlayerBeast");
-        player3.Input = TDInputManager.Inputs[3];
+        if (PlayerTypes[2] != PlayerType.None)
+        {
+            Player player2 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(4, -2, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
+            player2.PlayerType = PlayerTypes[2];
+            player2.UiIndex = 2;
+            if (player2.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(PlayerTypes[2]);
+            player2.Input = TDInputManager.PlayerInputs[PlayerTypeIndices[2]];
+        }
+        if (PlayerTypes[3] != PlayerType.None)
+        {
+            Player player3 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(4, -1, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
+            player3.PlayerType = PlayerTypes[3];
+            player3.UiIndex = 3;
+            if (player3.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(PlayerTypes[3]);
+            player3.Input = TDInputManager.PlayerInputs[PlayerTypeIndices[3]];
+        }
 
-        /*playerObject1.GetComponent<Player>().Mesh.BaseColor = new Vector3(1, .5f, .5f);
-        playerObject2.GetComponent<Player>().Mesh.BaseColor = new Vector3(.5f, 1, .5f);
-        playerObject3.GetComponent<Player>().Mesh.BaseColor = new Vector3(.5f, .5f, 1);*/
 
         // Enemies
         TDObject enemyList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         EnemyTransform = enemyList.Transform;
+
+        PrefabFactory.CreatePrefab(PrefabType.TutorialGuy, new Vector3(6, 2, 0), Quaternion.Identity, enemyList.Transform);
 
         // Structures
         TDObject structureList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);

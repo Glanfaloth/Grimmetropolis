@@ -33,6 +33,7 @@ public class Item : TDComponent
             if (Character is Player player)
             {
                 player.SetProgressForCooldown();
+                player.PlayerDisplay.SetItemSprite(null);
             }
         }
         SetMapTransform();
@@ -80,6 +81,7 @@ public class Item : TDComponent
         if (Character is Player player)
         {
             player.SetProgressForCooldown();
+            player.PlayerDisplay.SetItemSprite(this);
         }
     }
 

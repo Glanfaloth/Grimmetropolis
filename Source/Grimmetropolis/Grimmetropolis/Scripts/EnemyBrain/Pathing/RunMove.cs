@@ -27,4 +27,9 @@ internal class RunMove : EnemyMove
     {
         return new NextMoveInfo(null, MovementType, To.Tile.TDObject.Transform.LocalPosition.GetXY());
     }
+
+    public override bool ShouldPathBeRecomputed()
+    {
+        return !Destination.IsPassable;
+    }
 }

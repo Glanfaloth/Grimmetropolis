@@ -6,6 +6,9 @@ public static class TDInputManager
 {
 
     public static List<TDInput> Inputs = new List<TDInput>();
+
+    public static List<TDInput> PlayerInputs = new List<TDInput>();
+
     public static TDInput DefaultInput;
 
     public static void Initialize()

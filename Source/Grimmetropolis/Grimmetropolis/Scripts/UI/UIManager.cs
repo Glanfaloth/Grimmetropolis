@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 public class UIManager : TDComponent
 {
@@ -11,8 +12,6 @@ public class UIManager : TDComponent
 
     private int _playerDisplayIndex = 0;
     private float _offsetBetweenPlayerDisplay = .2f * TDSceneManager.Graphics.PreferredBackBufferWidth;
-    private string[] _playerIcons = { "UICinderella", "UISnowWhite", "UIFrog", "UIBeast" };
-    private string[] _playerNames = { "Cinderella", "Snow White", "Frog King", "The Beast" };
 
     public override void Initialize()
     {
@@ -35,10 +34,8 @@ public class UIManager : TDComponent
         GameOverOverlay.Show();
     }
 
-    public void AddPlayerDisplay(Player player)
+    public PlayerDisplay AddPlayerDisplay(Player player)
     {
-        if (_playerDisplayIndex >= PlayerDisplays.Length) return;
-
         TDObject playerDisplayObject = PrefabFactory.CreatePrefab(PrefabType.PlayerDisplay);
         PlayerDisplays[_playerDisplayIndex] = playerDisplayObject.GetComponent<PlayerDisplay>();
         float offsetAmount = _playerDisplayIndex * _offsetBetweenPlayerDisplay;
@@ -47,15 +44,17 @@ public class UIManager : TDComponent
         player.HealthBar = PlayerDisplays[_playerDisplayIndex].HealthBar;
         PlayerDisplays[_playerDisplayIndex].HealthBar.CurrentProgress = player.Health;
         PlayerDisplays[_playerDisplayIndex].HealthBar.MaxProgress = player.BaseHealth;
-        //player.PlayerIcon = PlayerDisplays[_playerDisplayIndex].PlayerIcon;
+        PlayerDisplays[_playerDisplayIndex].CurrentItem.Texture = TDContentManager.LoadTexture("UIAxe");
+
+        PlayerDisplays[_playerDisplayIndex].PlayerType = player.PlayerType;
 
         _playerDisplayIndex++;
 
         for (int i = 0; i < _playerDisplayIndex; i++)
         {
-            PlayerDisplays[i].PlayerIcon.Texture = TDContentManager.LoadTexture(_playerIcons[i]);
-            PlayerDisplays[i].PlayerName.Text = _playerNames[i];
             PlayerDisplays[i].TDObject.RectTransform.LocalPosition = new Vector2(offsetStart + i * _offsetBetweenPlayerDisplay, TDSceneManager.Graphics.PreferredBackBufferHeight - 60f);
         }
+
+        return PlayerDisplays[_playerDisplayIndex - 1];
     }
 }

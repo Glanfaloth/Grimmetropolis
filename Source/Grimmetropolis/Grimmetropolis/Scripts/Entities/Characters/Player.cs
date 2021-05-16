@@ -3,8 +3,18 @@
 using System;
 using System.Diagnostics;
 
+public enum PlayerType
+{
+    None,
+    Cinderella,
+    Snowwhite,
+    Frog,
+    Beast
+}
+
 public class Player : Character
 {
+    public int UiIndex;
     public TDInput Input;
 
     public override float WalkSpeed => Config.PLAYER_WALK_SPEED;
@@ -20,7 +30,8 @@ public class Player : Character
     public ResourceDeposit LastClosestResourceDeposit = null;
     public bool NeedsToShowHarvestProgress = false;
 
-    // public TDSprite PlayerIcon = null;
+    public PlayerType PlayerType = PlayerType.Cinderella;
+    public PlayerDisplay PlayerDisplay = null;
 
     private Enemy _closestEnemy = null;
     private MapTile _interactionCollidingMapTile = null;
@@ -34,12 +45,17 @@ public class Player : Character
         base.Initialize();
 
         HealthBar.TDObject.Destroy();
-        UIManager.Instance.AddPlayerDisplay(this);
+        PlayerDisplay = UIManager.Instance.AddPlayerDisplay(this);
 
         TDObject buildMenuObject = PrefabFactory.CreatePrefab(PrefabType.BuildMenu, TDObject.Transform);
         _buildMenu = buildMenuObject.GetComponent<BuildMenu>();
         _buildMenu.Player = this;
         buildMenuObject.RectTransform.Offset = 2f * Vector3.Backward;
+
+        foreach (var uiElement in _buildMenu.UiElements)
+        {
+            uiElement.Depth -= UiIndex * 0.05f;
+        }
 
         GameManager.Instance.Players.Add(this);
     }
@@ -61,7 +77,6 @@ public class Player : Character
             if (Input.BuildModePressed() && Items[0] is ToolHammer && Cooldown <= 0f)
                 _buildMenu.Show();
         }
-
         base.Update(gameTime);
     }
 

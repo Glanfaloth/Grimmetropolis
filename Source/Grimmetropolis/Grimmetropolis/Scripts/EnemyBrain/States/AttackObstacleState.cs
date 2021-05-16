@@ -117,12 +117,18 @@ public class AttackObstacleState : EnemyGroupState
         // 2. attack outpost in wall
         // 3. breach wall (siege attack outpost behind wall)
 
+        // TODO: use a sorted list that allows duplicate keys
         SortedList<float, Outpost> offensiveBuildings = new SortedList<float, Outpost>();
         foreach (var tile in _outsideTiles)
         {
             if (tile.Structure is Outpost outpost)
             {
-                offensiveBuildings.Add((outpost.Position.ToVector2() - enemyGroup.Leader.Position).LengthSquared(), outpost);
+                float key = (outpost.Position.ToVector2() - enemyGroup.Leader.Position).LengthSquared();
+                if (!offensiveBuildings.ContainsKey(key))
+                {
+                    // current version only cares about one closest building.
+                    offensiveBuildings.Add(key, outpost);
+                }
             }
         }
 
