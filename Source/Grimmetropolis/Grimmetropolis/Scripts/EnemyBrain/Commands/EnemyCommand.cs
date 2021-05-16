@@ -13,41 +13,21 @@ public abstract class EnemyCommand
 
     public MovementGraph Graph { get; }
 
-    private EnemyMove _currentMove;
-    private MapTile _currentStartTile;
-    private Location _currentEndLocation;
+    public abstract NextMoveInfo GetNextMoveInfo(CommandCache cache, Vector2 localPosition, EnemyMove.Type actions, float attackRange);
 
-    private double _timeUntilRecomputePath = 0;
-
-    public NextMoveInfo GetNextMoveInfo(GameTime gameTime, Vector2 localPosition, EnemyMove.Type actions, float attackRange)
+    protected NextMoveInfo ComputePathToTile(CommandCache cache, MapTile startTile, EnemyMove.Type actions, float attackRange, Location endLocation, EnemyMove.Type endOfPathAction)
     {
-        _timeUntilRecomputePath -= gameTime.ElapsedGameTime.TotalSeconds;
-
-        if (_timeUntilRecomputePath <= 0)
+        EnemyMove nextMove;
+        if (cache.IsInvalid(startTile, endLocation))
         {
-            _currentMove = null;
+            nextMove = Graph.GetNextMoveFromMapTile(startTile, actions, attackRange, endLocation, endOfPathAction);
+            cache.Reset(nextMove, startTile, endLocation);
+        }
+        else
+        {
+            nextMove = cache.NextMove;
         }
 
-        return DoGetNextMoveInfo(localPosition, actions, attackRange);
+        return nextMove.CreateInfo(); ;
     }
-
-    protected NextMoveInfo ComputePathToTile(MapTile startTile, EnemyMove.Type actions, float attackRange, Location endLocation, EnemyMove.Type endOfPathAction)
-    {
-        if (_currentMove == null
-            || _currentMove.ShouldPathBeRecomputed()
-            || _currentStartTile != startTile
-            || _currentEndLocation != endLocation)
-        {
-            _currentMove = Graph.GetNextMoveFromMapTile(startTile, actions, attackRange, endLocation, endOfPathAction);
-            _currentStartTile = startTile;
-            _currentEndLocation = endLocation;
-            _timeUntilRecomputePath = 2;
-        }
-
-        return _currentMove.CreateInfo(); ;
-    }
-
-    protected abstract NextMoveInfo DoGetNextMoveInfo(Vector2 localPosition, EnemyMove.Type actions, float attackRange);
-
-    public abstract bool IsDifferent(EnemyCommand other);
 }

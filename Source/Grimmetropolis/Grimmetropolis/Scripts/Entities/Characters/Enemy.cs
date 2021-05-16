@@ -36,18 +36,9 @@ public abstract class Enemy : Character
     protected float DamageAgainstPlayers => _damageAgainstPlayers;
     protected float DamageAgainstBuildigns => _damageAgainstBuildings;
 
-    private EnemyCommand _currentCommand;
-    public EnemyCommand CurrentCommand 
-    {
-        get => _currentCommand;
-        set
-        {
-            if (_currentCommand == null || _currentCommand.IsDifferent(value))
-            {
-                _currentCommand = value;
-            }
-        }
-    }
+    public EnemyCommand CurrentCommand { get; set; }
+
+    private CommandCache _commandCache = new CommandCache();
 
     public override Vector3 OffsetTarget { get; } = .5f * Vector3.Backward;
 
@@ -80,7 +71,8 @@ public abstract class Enemy : Character
     {
         if (CurrentCommand == null) return;
 
-        NextMoveInfo nextMove = CurrentCommand.GetNextMoveInfo(gameTime, TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange);
+        _commandCache.Update(gameTime);
+        NextMoveInfo nextMove = CurrentCommand.GetNextMoveInfo(_commandCache, TDObject.Transform.LocalPosition.GetXY(), Actions, _attackRange);
 
 
         CurrentWalkSpeed = 0f;
