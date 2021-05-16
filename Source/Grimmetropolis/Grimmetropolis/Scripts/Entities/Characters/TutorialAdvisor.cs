@@ -14,7 +14,6 @@ public class TutorialAdvisor : Enemy
     public override string MeshName => "TutorialAdvicer";
 
     private TutorialAdvisorTask _tutorialAdvicerTask = TutorialAdvisorTask.Waiting;
-
     private Vector2 _targetPosition = Vector2.Zero;
 
     private float _tickTimer = 1f;

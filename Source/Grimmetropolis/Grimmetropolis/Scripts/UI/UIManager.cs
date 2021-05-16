@@ -9,6 +9,7 @@ public class UIManager : TDComponent
     public WaveIndicator WaveIndicator;
     public PlayerDisplay[] PlayerDisplays = new PlayerDisplay[4];
     public GameOverOverlay GameOverOverlay;
+    public SpeechBubble SpeechBubble;
 
     private int _playerDisplayIndex = 0;
     private float _offsetBetweenPlayerDisplay = .2f * TDSceneManager.Graphics.PreferredBackBufferWidth;
@@ -27,6 +28,9 @@ public class UIManager : TDComponent
 
         TDObject gameOverObject = PrefabFactory.CreatePrefab(PrefabType.GameOverOverlay);
         GameOverOverlay = gameOverObject.GetComponent<GameOverOverlay>();
+
+        TDObject speechBubbleObject = PrefabFactory.CreatePrefab(PrefabType.SpeechBubble);
+        SpeechBubble = speechBubbleObject.GetComponent<SpeechBubble>();
     }
 
     public void ShowGameOver()
