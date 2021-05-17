@@ -486,8 +486,15 @@ private string _resting2Text =
     private void EndTutorial()
     {
         GameManager.TutorialFinished = true;
-        GameManager.Instance.ResourcePool += _temporaryResourcePile;
+        GameManager.Instance.ResourcePool = _temporaryResourcePile;
         GameManager.Instance.EnemyController.IsActive = true;
+
+        /*for (int i = GameManager.Instance.Structures.Count - 1; i >= 0; i--)
+        {
+            Structure structure = GameManager.Instance.Structures[i];
+            if (!(structure is ResourceDeposit || structure is Outpost || structure is Farm || structure is Castle))
+                structure.Destroy();
+        }*/
     }
 
     private void AddButtonIcon(TDTransform transform, ButtonType buttonType, Vector3 offset)
@@ -505,7 +512,7 @@ private string _resting2Text =
     {
         for (int i = _buttonIcons.Count - 1; i >= 0; i--)
         {
-            _buttonIcons[i].TDObject.Destroy();
+            _buttonIcons[i].TDObject?.Destroy();
             _buttonIcons.RemoveAt(i);
         }
     }
