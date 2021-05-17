@@ -40,6 +40,7 @@ public class EnemyController : TDComponent
     private EnemyGroup _currentGroup;
 
     public bool WaveIndicator = false;
+    public bool IsActive = true;
 
     // TODO: introduce seed for rng
     // maybe create custom class in engine for providing all random numbers
@@ -70,6 +71,8 @@ public class EnemyController : TDComponent
 
     public override void Update(GameTime gameTime)
     {
+        if (!IsActive) return;
+
         base.Update(gameTime);
 
         ClearPaths(gameTime);

@@ -26,6 +26,7 @@ public class Player : Character
     public override Vector3 OffsetTarget => .5f * Vector3.Backward;
 
     public bool ActiveInput = true;
+    public bool PartialActiveInput = true;
 
     public ResourceDeposit LastClosestResourceDeposit = null;
     public bool NeedsToShowHarvestProgress = false;
@@ -37,7 +38,7 @@ public class Player : Character
     private MapTile _interactionCollidingMapTile = null;
     private MapTile _collidingMapTile = null;
 
-    private BuildMenu _buildMenu = null;
+    public BuildMenu BuildMenu = null;
 
 
     public override void Initialize()
@@ -48,11 +49,11 @@ public class Player : Character
         PlayerDisplay = UIManager.Instance.AddPlayerDisplay(this);
 
         TDObject buildMenuObject = PrefabFactory.CreatePrefab(PrefabType.BuildMenu, TDObject.Transform);
-        _buildMenu = buildMenuObject.GetComponent<BuildMenu>();
-        _buildMenu.Player = this;
+        BuildMenu = buildMenuObject.GetComponent<BuildMenu>();
+        BuildMenu.Player = this;
         buildMenuObject.RectTransform.Offset = 2f * Vector3.Backward;
 
-        foreach (var uiElement in _buildMenu.UiElements)
+        foreach (var uiElement in BuildMenu.UiElements)
         {
             uiElement.Depth -= UiIndex * 0.05f;
         }
@@ -65,18 +66,22 @@ public class Player : Character
         HighlightClosestCharacter();
         HighlightMapTile();
 
-        Vector2 inputDirection = Input.MoveDirection();
-        Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
-
         if (ActiveInput)
         {
+            Vector2 inputDirection = Input.MoveDirection();
+            Move(new Vector2(-inputDirection.Y, inputDirection.X), gameTime);
 
-            if (Input.ActionPressed()) Interact(gameTime);
-            else ResetProgressBarForProgress();
-            if (Input.CancelPressed()) Drop();
-            if (Input.BuildModePressed() && Items[0] is ToolHammer && Cooldown <= 0f)
-                _buildMenu.Show();
+            if (PartialActiveInput)
+            {
+
+                if (Input.ActionPressed()) Interact(gameTime);
+                else ResetProgressBarForProgress();
+                if (Input.CancelPressed()) Drop();
+                if (Input.BuildModePressed() && Items[0] is ToolHammer && Cooldown <= 0f)
+                    BuildMenu.Show();
+            }
         }
+
         base.Update(gameTime);
     }
 
@@ -143,6 +148,7 @@ public class Player : Character
         {
             GameManager.Instance.ResourcePool -= building.GetResourceCost();
             building.IsBlueprint = true;
+            building.IsPlaced = true;
 
             Cooldown = Config.PLAYER_PLACE_BUILDING_COOLDOWN;
             ResetProgressBarForProgress();
@@ -211,7 +217,7 @@ public class Player : Character
         _collidingMapTile?.Item?.Highlight(false);
         _interactionCollidingMapTile = GameManager.Instance.Map.GetMapTile(InteractionCollider.CenterXY);
         _collidingMapTile = GameManager.Instance.Map.GetMapTile(Collider.CenterXY);
-        if (_buildMenu.IsShowing)
+        if (BuildMenu.IsShowing)
         {
             _interactionCollidingMapTile.Highlight(true);
         }

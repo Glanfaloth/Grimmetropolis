@@ -36,16 +36,38 @@ public class AttackCastleState : EnemyGroupState
             }
         }
 
-
-        // TODO: split up large groups
-        if (offensiveBuildings.Count > 0 && !map[map.EnemyTarget].IsPassable)
+        if (map.MagicalArtifact.Character is Player player)
         {
-            SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, map[offensiveBuildings.Values[0].Position].TileVertex, EnemyMove.Type.None));
+            SendCommandToAll(enemyGroup, new AttackPlayerCommand(enemyGroup.Graph, player));
+
+            EnemyCommand catapultCommand;
+            if (offensiveBuildings.Count > 0 && !map[map.EnemyTarget].IsPassable)
+            {
+                catapultCommand = new MoveCommand(enemyGroup.Graph, map[offensiveBuildings.Values[0].Position].TileVertex, EnemyMove.Type.None);
+            }
+            else
+            {
+                catapultCommand = new MoveCommand(enemyGroup.Graph, map[map.EnemyTarget].TileVertex, EnemyMove.Type.PickUpArtifact);
+            }
+
+            foreach (var catapult in enemyGroup.Catapults)
+            {
+                catapult.CurrentCommand = catapultCommand;
+            }
         }
         else
         {
-            SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, map[map.EnemyTarget].TileVertex, EnemyMove.Type.PickUpArtifact));
+            // TODO: split up large groups
+            if (offensiveBuildings.Count > 0 && !map[map.EnemyTarget].IsPassable)
+            {
+                SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, map[offensiveBuildings.Values[0].Position].TileVertex, EnemyMove.Type.None));
+            }
+            else
+            {
+                SendCommandToAll(enemyGroup, new MoveCommand(enemyGroup.Graph, map[map.EnemyTarget].TileVertex, EnemyMove.Type.PickUpArtifact));
+            }
         }
+
     }
 
     internal override EnemyGroupState UpdateState(EnemyGroup enemyGroup)

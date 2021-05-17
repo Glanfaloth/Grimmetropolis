@@ -29,7 +29,7 @@ public class BuildMenu : TDComponent
 
     public bool IsShowing = true;
 
-    private SelectableBuilding _currentBuilding;
+    public SelectableBuilding CurrentBuilding;
     private bool _activeControl = true;
 
     private float _cooldown = 0f;
@@ -45,7 +45,7 @@ public class BuildMenu : TDComponent
         base.Initialize();
 
         InitializeCosts();
-        SetDescription(_currentBuilding);
+        SetDescription(CurrentBuilding);
 
         Hide();
     }
@@ -63,7 +63,7 @@ public class BuildMenu : TDComponent
 
             if (Player.Input.ActionPressed())
             {
-                Building building = GetBuilding(_currentBuilding);
+                Building building = GetBuilding(CurrentBuilding);
                 building.Position = _previewBuilding.Position;
                 Player.BuildBlueprint(building);
                 Hide();
@@ -89,7 +89,7 @@ public class BuildMenu : TDComponent
             item.IsShowing = IsShowing;
         }
 
-        _previewBuilding = GetBuilding(_currentBuilding);
+        _previewBuilding = GetBuilding(CurrentBuilding);
         _previewBuilding.Position = GameManager.Instance.Map.GetMapTile(Player.InteractionCollider.CenterXY).Position;
         _previewBuilding.IsPreview = true;
 
@@ -115,13 +115,13 @@ public class BuildMenu : TDComponent
         if (_activeControl) return;
         _activeControl = true;
 
-        Player.ActiveInput = false;
+        Player.PartialActiveInput = false;
         _cooldown = _cooldownDuration;
     }
 
     private void ReturnControl()
     {
-        Player.ActiveInput = true;
+        Player.PartialActiveInput = true;
         _activeControl = false;
 
         Player.Cooldown = _cooldownDuration;
@@ -132,13 +132,13 @@ public class BuildMenu : TDComponent
     {
         int selectableBuildingCount = Enum.GetNames(typeof(SelectableBuilding)).Length;
 
-        if ((int)_currentBuilding == selectableBuildingCount - 1) _currentBuilding = 0;
-        else _currentBuilding++;
+        if ((int)CurrentBuilding == selectableBuildingCount - 1) CurrentBuilding = 0;
+        else CurrentBuilding++;
 
-        SetDescription(_currentBuilding);
+        SetDescription(CurrentBuilding);
 
         _previewBuilding.TDObject.Destroy();
-        _previewBuilding = GetBuilding(_currentBuilding);
+        _previewBuilding = GetBuilding(CurrentBuilding);
         _previewBuilding.IsPreview = true;
 
         _cooldown = _cooldownDuration;
@@ -148,13 +148,13 @@ public class BuildMenu : TDComponent
     {
         int selectableBuildingCount = Enum.GetNames(typeof(SelectableBuilding)).Length;
 
-        if ((int)_currentBuilding == 0) _currentBuilding = (SelectableBuilding)selectableBuildingCount - 1;
-        else _currentBuilding--;
+        if ((int)CurrentBuilding == 0) CurrentBuilding = (SelectableBuilding)selectableBuildingCount - 1;
+        else CurrentBuilding--;
 
-        SetDescription(_currentBuilding);
+        SetDescription(CurrentBuilding);
 
         _previewBuilding.TDObject.Destroy();
-        _previewBuilding = GetBuilding(_currentBuilding);
+        _previewBuilding = GetBuilding(CurrentBuilding);
         _previewBuilding.IsPreview = true;
 
         _cooldown = _cooldownDuration;
@@ -162,10 +162,10 @@ public class BuildMenu : TDComponent
 
     private void SetDescription(SelectableBuilding currentBuilding)
     {
-        Icon.Texture = GetIcon(_currentBuilding);
-        Title.Text = GetTitle(_currentBuilding);
+        Icon.Texture = GetIcon(CurrentBuilding);
+        Title.Text = GetTitle(CurrentBuilding);
 
-        var cost = GetCost(_currentBuilding);
+        var cost = GetCost(CurrentBuilding);
         FoodCost.Text = cost.Food.ToString();
         WoodCost.Text = cost.Wood.ToString();
         StoneCost.Text = cost.Stone.ToString();

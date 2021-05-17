@@ -45,6 +45,7 @@ public abstract class Building : Structure, ITarget
     TDObject ITarget.TDObject => TDObject;
 
     public bool IsBlueprint;
+    public bool IsPlaced = false;
 
     private HealthBar _healthBar;
     protected float _buildProgress;
