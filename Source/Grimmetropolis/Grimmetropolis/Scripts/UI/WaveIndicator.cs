@@ -51,8 +51,8 @@ public class WaveIndicator : TDComponent
 
         _isShowing = GameManager.Instance.EnemyController.WaveIndicator;
 
-        if (_isShowing) Show();
-        else if (!_isShowing) Hide();
+        // if (_isShowing) Show();
+        // else if (!_isShowing) Hide();
     }
 
     public virtual void Show()

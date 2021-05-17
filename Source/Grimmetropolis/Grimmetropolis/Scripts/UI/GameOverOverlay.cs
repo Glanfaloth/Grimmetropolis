@@ -4,7 +4,7 @@ public class GameOverOverlay : TDComponent
 {
     public TDSprite BlackOverlay;
 
-    public TDText GameOverText;
+    public TDSprite GameOverText;
     public TDText SurvivalTimeText;
     public TDText RestartText;
 
@@ -13,6 +13,8 @@ public class GameOverOverlay : TDComponent
     private Vector2 _offsetSurvivalTimeText;
 
     private bool _isShowing = true;
+
+    private float _time = 1f;
 
     public override void Initialize()
     {
@@ -33,9 +35,12 @@ public class GameOverOverlay : TDComponent
                 _playTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 break;
             case GameState.GameOver:
+                _time -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (_time > 0f) return;
+
                 foreach (TDInput input in TDInputManager.Inputs)
                 {
-                    if (input.ActionPressed() && input.CancelPressed()) TDSceneManager.LoadScene(new GameScene());
+                    if (input.BuildModePressed()) TDSceneManager.LoadScene(new GameScene());
                 }
                 break;
         }

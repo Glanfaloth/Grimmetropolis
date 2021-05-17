@@ -166,7 +166,10 @@ public abstract class Character : TDComponent, ITarget
         MapTile mapTile = GameManager.Instance.Map.GetMapTile(TDObject.Transform.Position.GetXY()) ;
         if (mapTile.Type == MapTileType.Ground && mapTile.Structure == null)
         {
-            if (Items[0] == null && mapTile.Item != null) mapTile.Item.TakeItem(this);
+            if (mapTile.Item != null)
+            {
+                mapTile.Item.TakeItem(this);
+            }
         }
     }
 

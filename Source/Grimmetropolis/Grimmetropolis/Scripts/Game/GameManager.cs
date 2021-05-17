@@ -16,6 +16,8 @@ public class GameManager : TDComponent
     public static PlayerType[] PlayerTypes = new PlayerType[4];
     public static List<int> PlayerTypeIndices = new List<int>();
 
+    public static bool TutorialFinished = false;
+
     public Map Map;
     private ResourcePile _resourcePool;
     public ResourcePile ResourcePool

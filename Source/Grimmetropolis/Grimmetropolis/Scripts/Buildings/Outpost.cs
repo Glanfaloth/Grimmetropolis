@@ -74,7 +74,7 @@ public class Outpost : Building
     {
         TDCollider oppositeCollider = ShootingRange == collider2 ? collider1 : collider2;
         Enemy enemy = oppositeCollider.TDObject.GetComponent<Enemy>();
-        if (enemy != null)
+        if (enemy != null && !(enemy is TutorialAdvisor))
         {
             if (_intersectionEnemy < intersection)
             {
