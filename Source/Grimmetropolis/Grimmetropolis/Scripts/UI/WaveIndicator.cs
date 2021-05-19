@@ -18,7 +18,6 @@ public class WaveIndicator : TDComponent
         WaveCountDown.Initialize();
 
         // WarningSign.TDObject.RectTransform.Parent3D = GameManager.Instance.Map.MapTiles[10, 10].TDObject.Transform;
-
         HideWarningSign();
     }
 
@@ -46,7 +45,12 @@ public class WaveIndicator : TDComponent
         if (_isShowingWarningSign) return;
         _isShowingWarningSign = true;
         WarningSign.TDObject.RectTransform.Parent3D = GameManager.Instance.EnemyController.StartTile.TDObject.Transform;
-
+        Vector3 startPosition = .2f * Vector3.Backward;
+        Vector3 endPosition = 1.2f * Vector3.Backward;
+        WarningSign.TDObject.RunAction(1f, (p) =>
+        {
+            WarningSign.TDObject.RectTransform.Offset = Vector3.Lerp(startPosition, endPosition, .5f + .5f * MathF.Sin(MathHelper.TwoPi * p));
+        }, true);
         WarningSign.IsShowing = true;
     }
 

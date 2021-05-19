@@ -720,7 +720,7 @@ public static class PrefabFactory
                     warningSign.Depth = .5f;
                     waveIndicator.WarningSign = warningSign;
                     warningSignObject.RectTransform.Origin = new Vector2(.5f * warningSign.Texture.Width, warningSign.Texture.Height);
-                    warningSignObject.RectTransform.Offset = 2f * Vector3.Backward;
+                    warningSignObject.RectTransform.Offset = 0.2f * Vector3.Backward;
                     warningSignObject.RectTransform.Scale = 0.15f * Vector2.One;
                     break;
                 }
