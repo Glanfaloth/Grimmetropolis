@@ -39,7 +39,7 @@ public class EnemyController : TDComponent
 
     private EnemyGroup _currentGroup;
 
-    public bool WaveIndicator = false;
+    public MapTile StartTile;
     public bool IsActive = true;
 
     // TODO: introduce seed for rng
@@ -165,13 +165,15 @@ public class EnemyController : TDComponent
             tile.Highlight(false);
         }
         _highlightedPath.Clear();
-        WaveIndicator = false;
+        UIManager.Instance.WaveIndicator.HideWarningSign();
     }
 
     private void HightlightPath()
     {
         EnemyMove.Type actions = EnemyMove.Type.Run | EnemyMove.Type.Attack;
         MapTile startTile = Map.MapTiles[SpawnLocations[_spawnLocationIndex].X, SpawnLocations[_spawnLocationIndex].Y];
+        
+        StartTile = startTile; // for putting warning sign
 
         List<EnemyMove> moves = Graph.GetPathToTile(startTile, Map.EnemyTarget, actions, 0);
 
@@ -189,7 +191,8 @@ public class EnemyController : TDComponent
         {
             tile.Highlight(true);
         }
-        WaveIndicator = true;
+
+        UIManager.Instance.WaveIndicator.ShowWarningSign();
     }
 
     private void SpawnEnemy()

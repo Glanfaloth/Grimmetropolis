@@ -714,13 +714,14 @@ public static class PrefabFactory
                     textObject.RectTransform.LocalPosition = new Vector2(- text.Width - background.Texture.Width - 10f, 0f);
                     waveIndicator.Text = text;
 
-                    /*TDObject imageObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
-                    TDSprite image = imageObject.AddComponent<TDSprite>();
-                    image.Texture = TDContentManager.LoadTexture("UIWarning");
-                    image.Depth = .5f;
-                    waveIndicator.Image = image;
-                    imageObject.RectTransform.Origin = new Vector2(image.Texture.Width, 0f);
-                    imageObject.RectTransform.Scale = 0.2f * Vector2.One;*/
+                    TDObject warningSignObject = CreatePrefab(PrefabType.EmptyUI3D, prefab.Transform);
+                    TDSprite warningSign = warningSignObject.AddComponent<TDSprite>();
+                    warningSign.Texture = TDContentManager.LoadTexture("UIWarning");
+                    warningSign.Depth = .5f;
+                    waveIndicator.WarningSign = warningSign;
+                    warningSignObject.RectTransform.Origin = new Vector2(.5f * warningSign.Texture.Width, warningSign.Texture.Height);
+                    warningSignObject.RectTransform.Offset = 2f * Vector3.Backward;
+                    warningSignObject.RectTransform.Scale = 0.15f * Vector2.One;
                     break;
                 }
 
