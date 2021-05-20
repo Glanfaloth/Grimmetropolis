@@ -695,8 +695,7 @@ public static class PrefabFactory
                     background.Color = Color.Black;
                     background.Depth = .4f;
                     prefab.RectTransform.Origin = new Vector2(background.Texture.Width, 0f);
-                    prefab.RectTransform.LocalPosition = new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 20f, 20f);
-                    prefab.RectTransform.Scale = Vector2.One;
+                    prefab.RectTransform.LocalPosition = new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 30f, 30f);
 
                     TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
