@@ -79,13 +79,14 @@ public class Item : TDComponent
         Character = character;
 
         Character.Cooldown = _cooldown;
+        temporaryItem?.Drop(true);
+
         if (Character is Player player)
         {
             player.SetProgressForCooldown();
             player.PlayerDisplay.SetItemSprite(this);
         }
 
-        temporaryItem?.Drop(true);
     }
 
     protected virtual void SetMapTransform()

@@ -54,6 +54,8 @@ public class GameManager : TDComponent
 
     private EnemyGroup _spawnGroup;
 
+    public List<PlayerInfo> ActivePlayerInfos = new List<PlayerInfo>();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -93,39 +95,24 @@ public class GameManager : TDComponent
         TDObject playerList = PrefabFactory.CreatePrefab(PrefabType.Empty, TDObject.Transform);
         PlayerTransform = playerList.Transform;
 
-        if (PlayerTypes[0] != PlayerType.None)
+        Vector3[] spawnLocations =
         {
-            Player player0 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(3, -2, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
-            player0.UiIndex = 0;
-            player0.PlayerType = PlayerTypes[0];
-            if (player0.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(PlayerTypes[0]);
-            player0.Input = TDInputManager.PlayerInputs[PlayerTypeIndices[0]];
-        }
+            new Vector3(3, -2, 0),
+            new Vector3(3, -1, 0),
+            new Vector3(4, -2, 0),
+            new Vector3(4, -1, 0),
+        };
 
-        if (PlayerTypes[1] != PlayerType.None)
-        {
-            Player player1 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(3, -1, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
-            player1.UiIndex = 1;
-            player1.PlayerType = PlayerTypes[1];
-            if (player1.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(PlayerTypes[1]);
-            player1.Input = TDInputManager.PlayerInputs[PlayerTypeIndices[1]];
-        }
+        int typeIndicesIndex = 0;
 
-        if (PlayerTypes[2] != PlayerType.None)
+        for (int i = 0; i < PlayerTypes.Length; i++)
         {
-            Player player2 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(4, -2, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
-            player2.PlayerType = PlayerTypes[2];
-            player2.UiIndex = 2;
-            if (player2.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(PlayerTypes[2]);
-            player2.Input = TDInputManager.PlayerInputs[PlayerTypeIndices[2]];
-        }
-        if (PlayerTypes[3] != PlayerType.None)
-        {
-            Player player3 = PrefabFactory.CreatePrefab(PrefabType.Player, new Vector3(4, -1, 0), Quaternion.Identity, playerList.Transform).GetComponent<Player>();
-            player3.PlayerType = PlayerTypes[3];
-            player3.UiIndex = 3;
-            if (player3.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(PlayerTypes[3]);
-            player3.Input = TDInputManager.PlayerInputs[PlayerTypeIndices[3]];
+            if (PlayerTypes[i] != PlayerType.None)
+            {
+                PlayerInfo playerInfo = new PlayerInfo(PlayerTypes[i], PlayerTypeIndices[typeIndicesIndex++], i, playerList.Transform);
+                PrefabFactory.SpawnPlayer(playerInfo, spawnLocations[i]);
+                ActivePlayerInfos.Add(playerInfo);
+            }
         }
 
 

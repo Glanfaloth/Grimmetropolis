@@ -55,6 +55,8 @@ public class ProgressBar : TDComponent
 
     protected virtual void SetProgressBar()
     {
-        Foreground.TDObject.RectTransform.Scale = new Vector2(CurrentProgress / MaxProgress, 1f);
+        Vector2 currentScale = Foreground.TDObject.RectTransform.Scale;
+        currentScale.X = CurrentProgress / MaxProgress;
+        Foreground.TDObject.RectTransform.Scale = currentScale;
     }
 }

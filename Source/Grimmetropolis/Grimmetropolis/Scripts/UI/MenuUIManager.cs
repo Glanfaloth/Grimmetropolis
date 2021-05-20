@@ -13,19 +13,19 @@ public class MenuUIManager : TDComponent
 
         MainMenu = PrefabFactory.CreatePrefab(PrefabType.MainMenu).GetComponent<MainMenu>();
 
-        CharacterAnimation player0 = PrefabFactory.CreatePrefab(PrefabType.PlayerPreview, new Vector3(0f, -4.9f, 1.4f), Quaternion.Identity).GetComponent<CharacterAnimation>();
+        CharacterAnimation player0 = PrefabFactory.CreatePrefab(PrefabType.PlayerPreview, new Vector3(0f, -5f, 1.4f), Quaternion.Identity).GetComponent<CharacterAnimation>();
         player0.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
         player0.IsShowing = false;
 
-        CharacterAnimation player1 = PrefabFactory.CreatePrefab(PrefabType.PlayerPreview, new Vector3(0f, -4.9f, -3.4f), Quaternion.Identity).GetComponent<CharacterAnimation>();
+        CharacterAnimation player1 = PrefabFactory.CreatePrefab(PrefabType.PlayerPreview, new Vector3(0f, -5f, -3.2f), Quaternion.Identity).GetComponent<CharacterAnimation>();
         player1.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
         player1.IsShowing = false;
 
-        CharacterAnimation player2 = PrefabFactory.CreatePrefab(PrefabType.PlayerPreview, new Vector3(0f, 4.9f, 1.4f), Quaternion.Identity).GetComponent<CharacterAnimation>();
+        CharacterAnimation player2 = PrefabFactory.CreatePrefab(PrefabType.PlayerPreview, new Vector3(0f, 5f, 1.4f), Quaternion.Identity).GetComponent<CharacterAnimation>();
         player2.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
         player2.IsShowing = false;
 
-        CharacterAnimation player3 = PrefabFactory.CreatePrefab(PrefabType.PlayerPreview, new Vector3(0f, 4.9f, -3.4f), Quaternion.Identity).GetComponent<CharacterAnimation>();
+        CharacterAnimation player3 = PrefabFactory.CreatePrefab(PrefabType.PlayerPreview, new Vector3(0f, 5f, -3.2f), Quaternion.Identity).GetComponent<CharacterAnimation>();
         player3.CharacterModel = TDContentManager.LoadModel("PlayerCindarella");
         player3.IsShowing = false;
 

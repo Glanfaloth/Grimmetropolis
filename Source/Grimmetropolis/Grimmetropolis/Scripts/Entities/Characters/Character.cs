@@ -31,7 +31,12 @@ public abstract class Character : TDComponent, ITarget
                 HealthBar.CurrentProgress = _health;
                 HealthBar.Show();
             }
-            if (_health <= 0f) TDObject?.Destroy();
+            if (_health <= 0f)
+            {
+                TDObject?.Destroy();
+                // bugfix: player dying near hospital may not be resurrected
+                _health = -9000;
+            }
         }
     }
 
@@ -86,13 +91,13 @@ public abstract class Character : TDComponent, ITarget
         Health = BaseHealth;
 
         TDObject healthBarObject = PrefabFactory.CreatePrefab(PrefabType.HealthBar, TDObject.Transform);
-        healthBarObject.RectTransform.Offset = 2.5f * Vector3.Backward;
+        healthBarObject.RectTransform.Offset = 3f * Vector3.Backward;
         HealthBar = healthBarObject.GetComponent<HealthBar>();
         HealthBar.CurrentProgress = Health;
         HealthBar.MaxProgress = BaseHealth;
 
         TDObject progessBarObject = PrefabFactory.CreatePrefab(PrefabType.ProgressBar, TDObject.Transform);
-        progessBarObject.RectTransform.Offset = 2f * Vector3.Backward;
+        progessBarObject.RectTransform.Offset = 2.5f * Vector3.Backward;
         ProgressBar = progessBarObject.GetComponent<ProgressBar>();
         ProgressBar.CurrentProgress = Progress;
         ProgressBar.MaxProgress = 1f;
