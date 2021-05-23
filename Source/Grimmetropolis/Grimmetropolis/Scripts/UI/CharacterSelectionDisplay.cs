@@ -48,6 +48,9 @@ public class CharacterSelectionDisplay : TDComponent
             switch (CharacterDisplayState)
             {
                 case CharacterDisplayState.SelectingCharacter:
+                    Vector2 joystickDirection = Input.MoveDirection();
+
+
                     if (Input.ActionPressed())
                     {
                         _cooldown = _cooldownTimer;
@@ -59,7 +62,7 @@ public class CharacterSelectionDisplay : TDComponent
                         MenuUIManager.Instance.MainMenu.RemovePlayer(Input);
                         return;
                     }
-                    if (Input.CycleLeftPressed())
+                    if (Input.CycleLeftPressed() || joystickDirection.X <= -.8f)
                     {
                         _cooldown = _cooldownTimer;
                         int playerTypeCount = Enum.GetNames(typeof(PlayerType)).Length;
@@ -70,7 +73,7 @@ public class CharacterSelectionDisplay : TDComponent
                         CharacterAnimation.RecreateBodyParts();
                         return;
                     }
-                    if (Input.CycleRightPressed())
+                    if (Input.CycleRightPressed() || joystickDirection.X >= .8f)
                     {
                         _cooldown = _cooldownTimer;
                         int playerTypeCount = Enum.GetNames(typeof(PlayerType)).Length;
@@ -117,20 +120,20 @@ public class CharacterSelectionDisplay : TDComponent
         switch (CharacterDisplayState)
         {
             case CharacterDisplayState.NotUsed:
-                InfoText.IsShowing = true;
+                InfoText.Text = "Press   ";
                 ButtonIcon.IsShowing = true;
                 LeftArrow.IsShowing = false;
                 RightArrow.IsShowing = false;
                 break;
             case CharacterDisplayState.SelectingCharacter:
-                InfoText.IsShowing = false;
+                InfoText.Text = " Choose";
                 ButtonIcon.IsShowing = false;
                 LeftArrow.IsShowing = true;
                 RightArrow.IsShowing = true;
                 _cooldown = _cooldownTimer;
                 break;
             case CharacterDisplayState.Ready:
-                InfoText.IsShowing = false;
+                InfoText.Text = "  Ready";
                 ButtonIcon.IsShowing = false;
                 LeftArrow.IsShowing = false;
                 RightArrow.IsShowing = false;

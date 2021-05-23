@@ -53,6 +53,8 @@ public class MainMenu : TDComponent
                 {
                     _showSplashScreen = false;
                     SplashScreen.IsShowing = false;
+                    SplashScreenText.IsShowing = false;
+                    SplashScreenButton.IsShowing = false;
                     _cooldown = _cooldownDuration;
                 }
             }

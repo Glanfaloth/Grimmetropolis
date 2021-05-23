@@ -805,6 +805,8 @@ public static class PrefabFactory
 
                     MainMenu mainMenu = prefab.AddComponent<MainMenu>();
                     mainMenu.SplashScreen = splashScreen;
+                    mainMenu.SplashScreenText = splashScreenText;
+                    mainMenu.SplashScreenButton = splashScreenButton;
                     mainMenu.GameLogo = gameLogo;
 
                     break;
@@ -813,35 +815,43 @@ public static class PrefabFactory
             case PrefabType.CharacterDisplay:
                 {
                     CreateEmptyUI(prefab, localPosition, localRotation, localScale);
-                    TDObject infoTextObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+
+                    TDObject backgroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite background = backgroundObject.AddComponent<TDSprite>();
+                    background.Texture = TDContentManager.LoadTexture("UIBoard");
+                    background.Depth = .9f;
+                    backgroundObject.RectTransform.LocalScale = .4f * Vector2.One;
+
+                    TDObject infoTextObject = CreatePrefab(PrefabType.EmptyUI, backgroundObject.Transform);
                     TDText infoText = infoTextObject.AddComponent<TDText>();
-                    infoText.Text = "Press    ";
+                    infoText.Text = "Press   ";
                     infoText.Depth = .8f;
                     infoTextObject.RectTransform.Origin = new Vector2(.5f * infoText.Width, .5f * infoText.Height);
-                    infoTextObject.RectTransform.LocalPosition = 200f * Vector2.One;
+                    infoTextObject.RectTransform.LocalPosition = new Vector2(.5f * background.Texture.Width - 5f, 55f);
+                    infoTextObject.RectTransform.Scale = .35f * Vector2.One;
 
                     TDObject buttonIconObject = CreatePrefab(PrefabType.EmptyUI, infoTextObject.Transform);
                     TDSprite buttonIcon = buttonIconObject.AddComponent<TDSprite>();
                     buttonIcon.Texture = TDContentManager.LoadTexture("UIXboxA");
                     buttonIcon.Depth = .8f;
                     buttonIconObject.RectTransform.Origin = .5f * new Vector2(buttonIcon.Texture.Width, buttonIcon.Texture.Height);
-                    buttonIconObject.RectTransform.LocalPosition = new Vector2(50f, 0f);
-                    buttonIconObject.RectTransform.LocalScale = .5f * Vector2.One;
+                    buttonIconObject.RectTransform.LocalPosition = new Vector2(105f, 5f);
+                    buttonIconObject.RectTransform.Scale = .3f * Vector2.One;
 
                     TDObject leftArrowObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDSprite leftArrow = leftArrowObject.AddComponent<TDSprite>();
-                    leftArrow.Texture = TDContentManager.LoadTexture("UIXboxDpadLeft");
+                    leftArrow.Texture = TDContentManager.LoadTexture("UIButtonLeft");
                     leftArrow.Depth = .8f;
                     leftArrowObject.RectTransform.Origin = .5f * new Vector2(leftArrow.Texture.Width, leftArrow.Texture.Height);
-                    leftArrowObject.RectTransform.LocalPosition = new Vector2(120f, 200f);
+                    leftArrowObject.RectTransform.LocalPosition = new Vector2(115f, 180f);
                     leftArrowObject.RectTransform.LocalScale = .5f * Vector2.One;
 
                     TDObject rightArrowObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDSprite rightArrow = rightArrowObject.AddComponent<TDSprite>();
-                    rightArrow.Texture = TDContentManager.LoadTexture("UIXboxDpadRight");
+                    rightArrow.Texture = TDContentManager.LoadTexture("UIButtonRight");
                     rightArrow.Depth = .8f;
                     rightArrowObject.RectTransform.Origin = .5f * new Vector2(rightArrow.Texture.Width, rightArrow.Texture.Height);
-                    rightArrowObject.RectTransform.LocalPosition = new Vector2(320f, 200f);
+                    rightArrowObject.RectTransform.LocalPosition = new Vector2(305f, 180f);
                     rightArrowObject.RectTransform.LocalScale = .5f * Vector2.One;
 
                     CharacterSelectionDisplay characterDisplay = prefab.AddComponent<CharacterSelectionDisplay>();
