@@ -20,9 +20,9 @@ public class MainMenu : TDComponent
             switch (i)
             {
                 case 0: CharacterDisplays[i].TDObject.RectTransform.Position = new Vector2(100f, 100f); break;
-                case 1: CharacterDisplays[i].TDObject.RectTransform.Position = new Vector2(100f, 800f); break;
+                case 1: CharacterDisplays[i].TDObject.RectTransform.Position = new Vector2(100f, 700f); break;
                 case 2: CharacterDisplays[i].TDObject.RectTransform.Position = new Vector2(1400f, 100f); break;
-                case 3: CharacterDisplays[i].TDObject.RectTransform.Position = new Vector2(1400f, 800f); break;
+                case 3: CharacterDisplays[i].TDObject.RectTransform.Position = new Vector2(1400f, 700f); break;
             }
             CharacterDisplays[i].CharacterAnimation = MenuUIManager.Instance.CharacterAnimations[i];
         }

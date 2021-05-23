@@ -45,6 +45,13 @@ public class TutorialAdvisor : Enemy
         }
     }
 
+    public override void Destroy()
+    {
+        base.Destroy();
+
+        GameManager.Instance.ResourcePool += new ResourcePile(0, 0, 10);
+    }
+
     private void FindTargetMapTile()
     {
         Point mapTilePosition = GameManager.Instance.Map.GetMapTile(TDObject.Transform.Position.GetXY()).Position;

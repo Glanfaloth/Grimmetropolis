@@ -23,12 +23,12 @@ public class Item : TDComponent
         GameManager.Instance.Items.Add(this);
     }
 
-    public void Drop()
+    public void Drop(bool exchangeItem = false)
     {
         if (Character != null)
         {
             Position = GameManager.Instance.Map.GetMapTile(Character.TDObject.Transform.Position.GetXY()).Position;
-            Character.Items[0] = null;
+            if (!exchangeItem) Character.Items[0] = null;
             Character.Cooldown = _cooldown;
             if (Character is Player player)
             {
@@ -66,6 +66,7 @@ public class Item : TDComponent
 
     public virtual void TakeItem(Character character)
     {
+        Item temporaryItem = character.Items[0];
 
         character.Items[0] = this;
         if (character.Animation is CharacterAnimation characterAnimation) TDObject.Transform.Parent = characterAnimation.RightArm;
@@ -83,6 +84,8 @@ public class Item : TDComponent
             player.SetProgressForCooldown();
             player.PlayerDisplay.SetItemSprite(this);
         }
+
+        temporaryItem?.Drop(true);
     }
 
     protected virtual void SetMapTransform()

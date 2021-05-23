@@ -4,30 +4,21 @@ using System;
 
 public class WaveIndicator : TDComponent
 {
-    public TDSprite Image;
+    public TDSprite WarningSign;
     public TDText Text;
     public WaveBar WaveCountDown = null;
 
-    protected bool _isShowing = false;
-    protected bool _isFirstWave = true;
+    private bool _isShowingWarningSign = true;
+    private bool _isFirstWave = true;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        /*
-        Vector2 startPosition = new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 10f, 10f);
-        Vector2 endPosition = new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 10f, 40f);
-
-        TDObject.RunAction(1f, (p) =>
-        {
-            TDObject.RectTransform.Position = Vector2.Lerp(startPosition, endPosition, .5f + .5f * MathF.Sin(MathHelper.TwoPi * p));
-        }, true);
-        */
-
         WaveCountDown.Initialize();
 
-        Hide();
+        // WarningSign.TDObject.RectTransform.Parent3D = GameManager.Instance.Map.MapTiles[10, 10].TDObject.Transform;
+        HideWarningSign();
     }
 
     public override void Update(GameTime gameTime)
@@ -47,21 +38,27 @@ public class WaveIndicator : TDComponent
         }
 
         WaveCountDown.Show();
-        
-
-        _isShowing = GameManager.Instance.EnemyController.WaveIndicator;
-
-        if (_isShowing) Show();
-        else if (!_isShowing) Hide();
     }
 
-    public virtual void Show()
+    public void ShowWarningSign()
     {
-        if (!TDSceneManager.ActiveScene.SpriteObjects.Contains(Image)) TDSceneManager.ActiveScene.SpriteObjects.Add(Image);
+        if (_isShowingWarningSign) return;
+        _isShowingWarningSign = true;
+        WarningSign.TDObject.RectTransform.Parent3D = GameManager.Instance.EnemyController.StartTile.TDObject.Transform;
+        Vector3 startPosition = .2f * Vector3.Backward;
+        Vector3 endPosition = 1.2f * Vector3.Backward;
+        WarningSign.TDObject.RunAction(1f, (p) =>
+        {
+            WarningSign.TDObject.RectTransform.Offset = Vector3.Lerp(startPosition, endPosition, .5f + .5f * MathF.Sin(MathHelper.TwoPi * p));
+        }, true);
+        WarningSign.IsShowing = true;
     }
 
-    public virtual void Hide()
+    public void HideWarningSign()
     {
-        if (TDSceneManager.ActiveScene.SpriteObjects.Contains(Image)) TDSceneManager.ActiveScene.SpriteObjects.Remove(Image); 
+        if (!_isShowingWarningSign) return;
+        _isShowingWarningSign = false;
+
+        WarningSign.IsShowing = false;
     }
 }

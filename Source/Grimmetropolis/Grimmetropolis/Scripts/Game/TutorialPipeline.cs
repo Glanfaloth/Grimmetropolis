@@ -25,6 +25,8 @@ public enum TutorialState
     ShowOutpostText,
     ShowingOutpostText,
     WaitingForBuildOutpost,
+    ShowBuildOutpostText,
+    ShowingBuildOutpostText,
     ShowFarmText,
     ShowingFarmText,
     WaitingForFarmBuildMenu,
@@ -33,6 +35,8 @@ public enum TutorialState
     WaitingForBuildFarm,
     ShowRestText,
     ShowingRestText,
+    ShowRest2Text,
+    ShowingRest2Text,
     Ending
 }
 
@@ -44,6 +48,7 @@ private string _introductionText =
 
 You are chosen to be the protector of the magical artifact.
 You see this beautiful artifact over the castle?
+
 Such magnificiency!";
 
 private string _introduction2Text =
@@ -52,8 +57,9 @@ private string _introduction2Text =
 We have to setup a defense. Quick, get me an axe!";
 
 private string _axeText =
-@"You see the small forests around the world? Chop some trees
-to get some wood. We will need several wood logs to build some defenses.";
+@"You see the small forests around the world? Chop some
+trees to get some wood. We will need several wood logs
+to build up some defenses.";
 
 private string _stoneText =
 @"Besides wood, stone is also a very important resource.
@@ -61,32 +67,39 @@ Collect some stone with a pickaxe.";
 
 private string _hammerText =
 @"There are a lot of different buildings you can construct.
-Let's start with an outpost. It will shoot down close by enemies in a circle of around
-two map tiles";
+Let's start with an outpost. It will shoot down close by
+enemies in a circle of around two map tiles";
 
 private string _placeOutpostText =
-@"Now, that you have placed the building, it needs to be constructed. Use the hammer on
-the building. Besides that, you can also use this tool to repair damaged buildings.";
+@"Now, that you have placed the building, it needs to be
+constructed. Use the hammer on the building. Besides
+that, you can also use the hammer to repair damaged
+buildings.";
+
+private string _buildOutpostText =
+@"The outpost is the only building which requires
+an upkeep of one food resource per second. If you
+cannot deliver the food, the shooting distance
+and rate will be halfed.";
 
 private string _buildFarmText =
-@"The outpost is the only building which requires
-an upkeep of 1 food resource per second. If you cannot deliver the food, the shooting
-distance and rate will be halfed. Therefore, it is always important to keep a close
-eye on your food income. Food can be collected from a farm. As a last resort, you can
-always use the sword to kill an enemy by yourself.
+@"Therefore, it is always important to keep a close
+eye on your food income. Food can be collected from
+a farm.
 
-Therefore, build a farm.";
+As a next task, build a farm!";
 
 private string _restingText =
 @"Well done!
 
-The castle will protect the magical artifact as long as the castle is intact. If the
-castle is almost destroyed, the enemies are able to get the magical artifact. Your
-last resort is then to attack the carrier of the magical artifact with a sword.
+The castle will protect the magical artifact as long as the
+castle is intact. If the castle is almost destroyed, the
+enemies are able to get the magical artifact. Your last
+resort is then to attack that thief and bring it back to
+the castle.";
 
-If he dies, he will drop the magical artifact. Take it and bring it back to the castle!
-
-Good luck with your defence!";
+private string _resting2Text =
+@"Good luck with your defence! May the gods help you!";
 
 
     private TutorialState _tutorialState = TutorialState.ShowIntroductionText;
@@ -100,6 +113,12 @@ Good luck with your defence!";
     public override void Initialize()
     {
         base.Initialize();
+
+        if (GameManager.TutorialFinished)
+        {
+            _tutorialState = TutorialState.Ending;
+            return;
+        }
 
         _temporaryResourcePile = GameManager.Instance.ResourcePool;
         GameManager.Instance.ResourcePool = new ResourcePile();
@@ -119,19 +138,16 @@ Good luck with your defence!";
                 case TutorialState.ShowIntroductionText:
                     UIManager.Instance.SpeechBubble.Show(_introductionText);
                     _tutorialState = TutorialState.ShowingIntroductionText;
-                    _time = 1f;
                     break;
                 case TutorialState.ShowingIntroductionText:
                     if (!UIManager.Instance.SpeechBubble.IsShowing)
                     {
                         _tutorialState = TutorialState.ShowIntroduction2Text;
-                        _time = 1f;
                     }
                     break;
                 case TutorialState.ShowIntroduction2Text:
                     UIManager.Instance.SpeechBubble.Show(_introduction2Text);
                     _tutorialState = TutorialState.ShowingIntroduction2Text;
-                    _time = 1f;
                     break;
                 case TutorialState.ShowingIntroduction2Text:
                     if (!UIManager.Instance.SpeechBubble.IsShowing) _tutorialState = TutorialState.WaitingForAxe;
@@ -151,7 +167,6 @@ Good luck with your defence!";
                             if (player.Items[0] is ToolAxe)
                             {
                                 _tutorialState = TutorialState.ShowAxeText;
-                                _time = 1f;
                                 DestroyButtonIcons();
                             }
                         }
@@ -160,7 +175,6 @@ Good luck with your defence!";
                 case TutorialState.ShowAxeText:
                     UIManager.Instance.SpeechBubble.Show(_axeText);
                     _tutorialState = TutorialState.ShowingAxeText;
-                    _time = 1f;
                     break;
                 case TutorialState.ShowingAxeText:
                     if (!UIManager.Instance.SpeechBubble.IsShowing) _tutorialState = TutorialState.WaitingForHarvestWood;
@@ -179,7 +193,6 @@ Good luck with your defence!";
                         if (GameManager.Instance.ResourcePool.Wood >= 9)
                         {
                             _tutorialState = TutorialState.ShowStoneText;
-                            _time = 1f;
                             DestroyButtonIcons();
                         }
                     }
@@ -187,7 +200,6 @@ Good luck with your defence!";
                 case TutorialState.ShowStoneText:
                     UIManager.Instance.SpeechBubble.Show(_stoneText);
                     _tutorialState = TutorialState.ShowingStoneText;
-                    _time = 1f;
                     break;
                 case TutorialState.ShowingStoneText:
                     if (!UIManager.Instance.SpeechBubble.IsShowing) _tutorialState = TutorialState.WaitingForPickaxe;
@@ -207,7 +219,6 @@ Good luck with your defence!";
                             if (player.Items[0] is ToolPickaxe)
                             {
                                 _tutorialState = TutorialState.WaitingForHarvestStone;
-                                _time = 1f;
                                 DestroyButtonIcons();
                             }
                         }
@@ -227,7 +238,6 @@ Good luck with your defence!";
                         if (GameManager.Instance.ResourcePool.Stone >= 7)
                         {
                             _tutorialState = TutorialState.ShowHammerText;
-                            _time = 1f;
                             DestroyButtonIcons();
                         }
                     }
@@ -235,7 +245,6 @@ Good luck with your defence!";
                 case TutorialState.ShowHammerText:
                     UIManager.Instance.SpeechBubble.Show(_hammerText);
                     _tutorialState = TutorialState.ShowingHammerText;
-                    _time = 1f;
                     break;
                 case TutorialState.ShowingHammerText:
                     if (!UIManager.Instance.SpeechBubble.IsShowing) _tutorialState = TutorialState.WaitingForHammer;
@@ -255,7 +264,6 @@ Good luck with your defence!";
                             if (player.Items[0] is ToolHammer)
                             {
                                 _tutorialState = TutorialState.WaitingForOutpostBuildMenu;
-                                _time = 1f;
                                 DestroyButtonIcons();
                             }
                         }
@@ -276,7 +284,6 @@ Good luck with your defence!";
                             if (player.BuildMenu.IsShowing)
                             {
                                 _tutorialState = TutorialState.WaitingForOutpostIconBuildMenu;
-                                _time = 1f;
                                 DestroyButtonIcons();
                             }
                         }
@@ -297,7 +304,6 @@ Good luck with your defence!";
                             if (player.BuildMenu.CurrentBuilding == SelectableBuilding.Outpost)
                             {
                                 _tutorialState = TutorialState.WaitingForPlaceOutpost;
-                                _time = 1f;
                                 DestroyButtonIcons();
                             }
                         }
@@ -318,7 +324,6 @@ Good luck with your defence!";
                             if (structure is Outpost outpost && outpost.IsPlaced)
                             {
                                 _tutorialState = TutorialState.ShowOutpostText;
-                                _time = 1f;
                                 DestroyButtonIcons();
                             }
                         }
@@ -327,7 +332,6 @@ Good luck with your defence!";
                 case TutorialState.ShowOutpostText:
                     UIManager.Instance.SpeechBubble.Show(_placeOutpostText);
                     _tutorialState = TutorialState.ShowingOutpostText;
-                    _time = 1f;
                     break;
                 case TutorialState.ShowingOutpostText:
                     if (!UIManager.Instance.SpeechBubble.IsShowing) _tutorialState = TutorialState.WaitingForBuildOutpost;
@@ -346,17 +350,22 @@ Good luck with your defence!";
                         {
                             if (structure is Outpost outpost && !outpost.IsBlueprint)
                             {
-                                _tutorialState = TutorialState.ShowFarmText;
-                                _time = 1f;
+                                _tutorialState = TutorialState.ShowBuildOutpostText;
                                 DestroyButtonIcons();
                             }
                         }
                     }
                     break;
+                case TutorialState.ShowBuildOutpostText:
+                    UIManager.Instance.SpeechBubble.Show(_buildOutpostText);
+                    _tutorialState = TutorialState.ShowingBuildOutpostText;
+                    break;
+                case TutorialState.ShowingBuildOutpostText:
+                    if (!UIManager.Instance.SpeechBubble.IsShowing) _tutorialState = TutorialState.ShowFarmText;
+                    break;
                 case TutorialState.ShowFarmText:
                     UIManager.Instance.SpeechBubble.Show(_buildFarmText);
                     _tutorialState = TutorialState.ShowingFarmText;
-                    _time = 1f;
                     break;
                 case TutorialState.ShowingFarmText:
                     if (!UIManager.Instance.SpeechBubble.IsShowing) _tutorialState = TutorialState.WaitingForFarmBuildMenu;
@@ -376,7 +385,6 @@ Good luck with your defence!";
                             if (player.BuildMenu.IsShowing)
                             {
                                 _tutorialState = TutorialState.WaitingForFarmIconBuildMenu;
-                                _time = 1f;
                                 DestroyButtonIcons();
                             }
                         }
@@ -397,7 +405,6 @@ Good luck with your defence!";
                             if (player.BuildMenu.CurrentBuilding == SelectableBuilding.Farm)
                             {
                                 _tutorialState = TutorialState.WaitingForPlaceFarm;
-                                _time = 1f;
                                 DestroyButtonIcons();
                             }
                         }
@@ -418,7 +425,6 @@ Good luck with your defence!";
                             if (structure is Farm farm && farm.IsPlaced)
                             {
                                 _tutorialState = TutorialState.WaitingForBuildFarm;
-                                _time = 1f;
                                 DestroyButtonIcons();
                             }
                         }
@@ -439,7 +445,6 @@ Good luck with your defence!";
                             if (structure is Farm farm && !farm.IsBlueprint)
                             {
                                 _tutorialState = TutorialState.ShowRestText;
-                                _time = 1f;
                                 DestroyButtonIcons();
                             }
                         }
@@ -448,18 +453,48 @@ Good luck with your defence!";
                 case TutorialState.ShowRestText:
                     UIManager.Instance.SpeechBubble.Show(_restingText);
                     _tutorialState = TutorialState.ShowingRestText;
-                    _time = 1f;
                     break;
                 case TutorialState.ShowingRestText:
                     if (!UIManager.Instance.SpeechBubble.IsShowing)
                     {
+                        _tutorialState = TutorialState.ShowRest2Text;
+                    }
+                    break;
+                case TutorialState.ShowRest2Text:
+                    UIManager.Instance.SpeechBubble.Show(_resting2Text);
+                    _tutorialState = TutorialState.ShowingRest2Text;
+                    break;
+                case TutorialState.ShowingRest2Text:
+                    if (!UIManager.Instance.SpeechBubble.IsShowing)
+                    {
                         _tutorialState = TutorialState.Ending;
-                        GameManager.Instance.ResourcePool += _temporaryResourcePile;
-                        GameManager.Instance.EnemyController.IsActive = true;
+                        EndTutorial();
                     }
                     break;
             }
         }
+    }
+
+    public override void Destroy()
+    {
+        base.Destroy();
+
+        DestroyButtonIcons();
+        EndTutorial();
+    }
+
+    private void EndTutorial()
+    {
+        GameManager.TutorialFinished = true;
+        GameManager.Instance.ResourcePool = _temporaryResourcePile;
+        GameManager.Instance.EnemyController.IsActive = true;
+
+        /*for (int i = GameManager.Instance.Structures.Count - 1; i >= 0; i--)
+        {
+            Structure structure = GameManager.Instance.Structures[i];
+            if (!(structure is ResourceDeposit || structure is Outpost || structure is Farm || structure is Castle))
+                structure.Destroy();
+        }*/
     }
 
     private void AddButtonIcon(TDTransform transform, ButtonType buttonType, Vector3 offset)
@@ -477,7 +512,7 @@ Good luck with your defence!";
     {
         for (int i = _buttonIcons.Count - 1; i >= 0; i--)
         {
-            _buttonIcons[i].TDObject.Destroy();
+            _buttonIcons[i].TDObject?.Destroy();
             _buttonIcons.RemoveAt(i);
         }
     }
