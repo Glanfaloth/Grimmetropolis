@@ -19,12 +19,26 @@
 /processorParam:DebugMode=Auto
 /build:Effects/LightEffect.fx
 
+#begin Fonts/LobsterTwo.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/LobsterTwo.spritefont
+
 #begin Fonts/Montserrat.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Montserrat.spritefont
+
+#begin Fonts/Righteous.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Righteous.spritefont
 
 #begin Models/BuildingBridge.fbx
 /importer:FbxImporter
@@ -668,6 +682,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/DefaultTexture.png
+
+#begin Textures/SplashScreen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/SplashScreen.png
 
 #begin Textures/UIAxe.png
 /importer:TextureImporter

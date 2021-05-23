@@ -161,8 +161,8 @@ public abstract class Building : Structure, ITarget
         int xHigh = mapTile.Position.X + Size.X;
         int yHigh = mapTile.Position.Y + Size.Y;
 
-        if (xHigh >= GameManager.Instance.Map.Width) return false;
-        if (yHigh >= GameManager.Instance.Map.Height) return false;
+        if (xHigh > GameManager.Instance.Map.Width) return false;
+        if (yHigh > GameManager.Instance.Map.Height) return false;
 
         for (int x = mapTile.Position.X; x < xHigh; x++)
         {

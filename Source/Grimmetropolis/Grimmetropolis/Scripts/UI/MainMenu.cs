@@ -2,12 +2,20 @@
 
 public class MainMenu : TDComponent
 {
+    public TDSprite SplashScreen;
+    public TDText SplashScreenText;
+    public TDSprite SplashScreenButton;
 
     public TDSprite GameLogo;
 
     public TDSprite StartButton;
 
     public CharacterSelectionDisplay[] CharacterDisplays = new CharacterSelectionDisplay[4];
+
+    private bool _showSplashScreen = true;
+
+    private float _cooldown = 0f;
+    private float _cooldownDuration = .5f;
 
     public override void Initialize()
     {
@@ -34,11 +42,33 @@ public class MainMenu : TDComponent
     {
         base.Update(gameTime);
 
-        foreach (TDInput input in TDInputManager.Inputs)
-        {
-            if (TDInputManager.PlayerInputs.Contains(input)) continue;
+        _cooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (_cooldown > 0f) return;
 
-            if (input.ActionPressed()) AddPlayer(input);
+        if (_showSplashScreen)
+        {
+            foreach (TDInput input in TDInputManager.Inputs)
+            {
+                if (input.ActionPressed())
+                {
+                    _showSplashScreen = false;
+                    SplashScreen.IsShowing = false;
+                    _cooldown = _cooldownDuration;
+                }
+            }
+        }
+        else
+        {
+            foreach (TDInput input in TDInputManager.Inputs)
+            {
+                if (TDInputManager.PlayerInputs.Contains(input)) continue;
+
+                if (input.ActionPressed())
+                {
+                    AddPlayer(input);
+                    _cooldown = _cooldownDuration;
+                }
+            }
         }
     }
 

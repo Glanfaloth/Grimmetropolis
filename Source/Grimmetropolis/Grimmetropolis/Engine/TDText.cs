@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class TDText : TDUI
 {
-    public SpriteFont SpriteFont = TDContentManager.LoadSpriteFont("Montserrat");
+    public SpriteFont SpriteFont = TDContentManager.LoadSpriteFont("Righteous");
 
     private string _text;
     public string Text
