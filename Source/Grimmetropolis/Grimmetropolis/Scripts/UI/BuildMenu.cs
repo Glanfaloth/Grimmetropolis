@@ -25,7 +25,6 @@ public class BuildMenu : TDComponent
 
     public TDText WoodCost;
     public TDText StoneCost;
-    public TDText FoodCost;
 
     public bool IsShowing = true;
 
@@ -164,9 +163,9 @@ public class BuildMenu : TDComponent
     {
         Icon.Texture = GetIcon(CurrentBuilding);
         Title.Text = GetTitle(CurrentBuilding);
+        Title.TDObject.RectTransform.Origin = .5f * new Vector2(Title.Width, Title.Height);
 
         var cost = GetCost(CurrentBuilding);
-        FoodCost.Text = cost.Food.ToString();
         WoodCost.Text = cost.Wood.ToString();
         StoneCost.Text = cost.Stone.ToString();
 

@@ -52,38 +52,47 @@ You see this beautiful artifact over the castle?
 Such magnificiency!";
 
 private string _introduction2Text =
-@"Oh my god, I can see enemies in the far distance!
+@"
+Oh my god, I can see enemies in the far distance!
 
 We have to setup a defense. Quick, get me an axe!";
 
 private string _axeText =
-@"You see the small forests around the world? Chop some
-trees to get some wood. We will need several wood logs
-to build up some defenses.";
+@"
+You see the small forests around the world?
+
+Chop some trees to get some wood. We will need several
+wood logs to build up some defenses.";
 
 private string _stoneText =
-@"Besides wood, stone is also a very important resource.
+@"
+Besides wood, stone is also a very important resource.
+
 Collect some stone with a pickaxe.";
 
 private string _hammerText =
-@"There are a lot of different buildings you can construct.
+@"
+There are a lot of different buildings you can construct.
+
 Let's start with an outpost. It will shoot down close by
 enemies in a circle of around two map tiles";
 
 private string _placeOutpostText =
-@"Now, that you have placed the building, it needs to be
+@"
+Now, that you have placed the building, it needs to be
 constructed. Use the hammer on the building. Besides
 that, you can also use the hammer to repair damaged
 buildings.";
 
 private string _buildOutpostText =
-@"The outpost is the only building which requires
-an upkeep of one food resource per second. If you
-cannot deliver the food, the shooting distance
-and rate will be halfed.";
+@"
+The outpost is the only building which requires an upkeep
+of one food resource per second. If you cannot deliver the
+food, the shooting distance and rate will be halfed.";
 
 private string _buildFarmText =
-@"Therefore, it is always important to keep a close
+@"
+Therefore, it is always important to keep a close
 eye on your food income. Food can be collected from
 a farm.
 
@@ -99,7 +108,9 @@ resort is then to attack that thief and bring it back to
 the castle.";
 
 private string _resting2Text =
-@"Good luck with your defence! May the gods help you!";
+@"
+
+Good luck with your defence! May the gods help you!";
 
 
     private TutorialState _tutorialState = TutorialState.ShowIntroductionText;
