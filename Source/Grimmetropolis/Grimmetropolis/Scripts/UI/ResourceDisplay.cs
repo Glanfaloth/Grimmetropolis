@@ -17,8 +17,8 @@ public class ResourceDisplay : TDComponent
         StoneText.Text = GameManager.Instance.ResourcePool.Stone.ToString();
         FoodText.Text = GameManager.Instance.ResourcePool.Food.ToString();
 
-        WoodText.TDObject.RectTransform.Origin = new Vector2(WoodText.Width, WoodText.Height);
-        StoneText.TDObject.RectTransform.Origin = new Vector2(StoneText.Width, StoneText.Height);
-        FoodText.TDObject.RectTransform.Origin = new Vector2(FoodText.Width, FoodText.Height);
+        WoodText.TDObject.RectTransform.Origin = .5f * new Vector2(WoodText.Width, WoodText.Height);
+        StoneText.TDObject.RectTransform.Origin = .5f * new Vector2(StoneText.Width, StoneText.Height);
+        FoodText.TDObject.RectTransform.Origin = .5f * new Vector2(FoodText.Width, FoodText.Height);
     }
 }

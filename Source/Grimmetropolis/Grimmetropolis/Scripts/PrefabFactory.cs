@@ -466,7 +466,7 @@ public static class PrefabFactory
                     woodText.Text = "0";
                     woodText.Depth = .55f;
                     woodText.TDObject.RectTransform.Origin = .5f * new Vector2(woodText.Width, woodText.Height);
-                    woodText.TDObject.RectTransform.LocalPosition = new Vector2(145f, 25f);
+                    woodText.TDObject.RectTransform.LocalPosition = new Vector2(130f, -5f);
                     woodText.TDObject.RectTransform.LocalScale = .75f * Vector2.One;
 
                     TDObject stoneDisplayObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
@@ -494,7 +494,7 @@ public static class PrefabFactory
                     stoneText.Text = "0";
                     stoneText.Depth = .55f;
                     stoneText.TDObject.RectTransform.Origin = .5f * new Vector2(stoneText.Width, stoneText.Height);
-                    stoneText.TDObject.RectTransform.LocalPosition = new Vector2(145f, 25f);
+                    stoneText.TDObject.RectTransform.LocalPosition = new Vector2(130f, -5f);
                     stoneText.TDObject.RectTransform.LocalScale = .75f * Vector2.One;
 
                     TDObject foodDisplayObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
@@ -522,7 +522,7 @@ public static class PrefabFactory
                     foodText.Text = "0";
                     foodText.Depth = .55f;
                     foodText.TDObject.RectTransform.Origin = .5f * new Vector2(foodText.Width, foodText.Height);
-                    foodText.TDObject.RectTransform.LocalPosition = new Vector2(145f, 25f);
+                    foodText.TDObject.RectTransform.LocalPosition = new Vector2(130f, -5f);
                     foodText.TDObject.RectTransform.LocalScale = .75f * Vector2.One;
 
                     ResourceDisplay resourceDisplay = prefab.AddComponent<ResourceDisplay>();
