@@ -440,28 +440,95 @@ public static class PrefabFactory
             case PrefabType.ResourceDisplay:
                 {
                     CreateEmptyUI(prefab, localPosition, localRotation, localScale);
-                    TDText text = prefab.AddComponent<TDText>();
-                    ResourceDisplay resourceDisplay = prefab.AddComponent<ResourceDisplay>();
-                    resourceDisplay.TextUI = text;
 
-                    TDObject woodObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
-                    TDObject stoneObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
-                    TDObject foodObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
-                    TDSprite wood = woodObject.AddComponent<TDSprite>();
-                    TDSprite stone = stoneObject.AddComponent<TDSprite>();
-                    TDSprite food = foodObject.AddComponent<TDSprite>();
-                    wood.Texture = TDContentManager.LoadTexture("UIWood");
-                    stone.Texture = TDContentManager.LoadTexture("UIStone");
-                    food.Texture = TDContentManager.LoadTexture("UIFood");
-                    resourceDisplay.WoodUI = wood;
-                    resourceDisplay.StoneUI = stone;
-                    resourceDisplay.FoodUI = food;
-                    woodObject.RectTransform.Scale = 0.05f * Vector2.One;
-                    woodObject.RectTransform.LocalPosition = new Vector2(-6f, 10f);
-                    stoneObject.RectTransform.Scale = 0.04f * Vector2.One;
-                    stoneObject.RectTransform.LocalPosition = new Vector2(-2f + 0.05f * wood.Texture.Width, 10f);
-                    foodObject.RectTransform.Scale = 0.08f * Vector2.One;
-                    foodObject.RectTransform.LocalPosition = new Vector2(-8f + 0.05f * wood.Texture.Width + 0.06f * stone.Texture.Width, 25f);
+                    TDObject woodDisplayObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite woodBackground = woodDisplayObject.AddComponent<TDSprite>();
+                    woodBackground.Texture = TDContentManager.LoadTexture("UISquare");
+                    woodBackground.Depth = .6f;
+                    woodDisplayObject.RectTransform.Origin = .5f * new Vector2(woodBackground.Texture.Width, woodBackground.Texture.Height);
+                    woodDisplayObject.RectTransform.Position = woodDisplayObject.RectTransform.Origin;
+                    woodDisplayObject.RectTransform.Scale = .75f * Vector2.One;
+
+                    TDSprite woodIcon = CreatePrefab(PrefabType.EmptyUI, woodDisplayObject.Transform).AddComponent<TDSprite>();
+                    woodIcon.Texture = TDContentManager.LoadTexture("UIWood");
+                    woodIcon.Depth = .55f;
+                    woodIcon.TDObject.RectTransform.Origin = .5f * new Vector2(woodIcon.Texture.Width, woodIcon.Texture.Height);
+                    woodIcon.TDObject.RectTransform.LocalPosition = new Vector2(6f, 0f);
+                    woodIcon.TDObject.RectTransform.LocalScale = .12f * Vector2.One;
+
+                    TDSprite woodTextBackground = CreatePrefab(PrefabType.EmptyUI, woodDisplayObject.Transform).AddComponent<TDSprite>();
+                    woodTextBackground.Texture = TDContentManager.LoadTexture("UIRectangle");
+                    woodTextBackground.Depth = .65f;
+                    woodTextBackground.TDObject.RectTransform.Origin = .5f * new Vector2(0f, woodTextBackground.Texture.Height);
+                    woodTextBackground.TDObject.RectTransform.LocalScale = .65f * Vector2.One;
+
+                    TDText woodText = CreatePrefab(PrefabType.EmptyUI, woodDisplayObject.Transform).AddComponent<TDText>();
+                    woodText.Text = "0";
+                    woodText.Depth = .55f;
+                    woodText.TDObject.RectTransform.Origin = .5f * new Vector2(woodText.Width, woodText.Height);
+                    woodText.TDObject.RectTransform.LocalPosition = new Vector2(145f, 25f);
+                    woodText.TDObject.RectTransform.LocalScale = .75f * Vector2.One;
+
+                    TDObject stoneDisplayObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite stoneBackground = stoneDisplayObject.AddComponent<TDSprite>();
+                    stoneBackground.Texture = TDContentManager.LoadTexture("UISquare");
+                    stoneBackground.Depth = .6f;
+                    stoneDisplayObject.RectTransform.Origin = .5f * new Vector2(stoneBackground.Texture.Width, stoneBackground.Texture.Height);
+                    stoneDisplayObject.RectTransform.Position = new Vector2(250f, 0f) + stoneDisplayObject.RectTransform.Origin;
+                    stoneDisplayObject.RectTransform.Scale = .75f * Vector2.One;
+
+                    TDSprite stoneIcon = CreatePrefab(PrefabType.EmptyUI, stoneDisplayObject.Transform).AddComponent<TDSprite>();
+                    stoneIcon.Texture = TDContentManager.LoadTexture("UIStone");
+                    stoneIcon.Depth = .55f;
+                    stoneIcon.TDObject.RectTransform.Origin = .5f * new Vector2(stoneIcon.Texture.Width, stoneIcon.Texture.Height);
+                    stoneIcon.TDObject.RectTransform.LocalPosition = new Vector2(6f, -2f);
+                    stoneIcon.TDObject.RectTransform.LocalScale = .1f * Vector2.One;
+
+                    TDSprite stoneTextBackground = CreatePrefab(PrefabType.EmptyUI, stoneDisplayObject.Transform).AddComponent<TDSprite>();
+                    stoneTextBackground.Texture = TDContentManager.LoadTexture("UIRectangle");
+                    stoneTextBackground.Depth = .65f;
+                    stoneTextBackground.TDObject.RectTransform.Origin = .5f * new Vector2(0f, woodTextBackground.Texture.Height);
+                    stoneTextBackground.TDObject.RectTransform.LocalScale = .65f * Vector2.One;
+
+                    TDText stoneText = CreatePrefab(PrefabType.EmptyUI, stoneDisplayObject.Transform).AddComponent<TDText>();
+                    stoneText.Text = "0";
+                    stoneText.Depth = .55f;
+                    stoneText.TDObject.RectTransform.Origin = .5f * new Vector2(stoneText.Width, stoneText.Height);
+                    stoneText.TDObject.RectTransform.LocalPosition = new Vector2(145f, 25f);
+                    stoneText.TDObject.RectTransform.LocalScale = .75f * Vector2.One;
+
+                    TDObject foodDisplayObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite foodBackground = foodDisplayObject.AddComponent<TDSprite>();
+                    foodBackground.Texture = TDContentManager.LoadTexture("UISquare");
+                    foodBackground.Depth = .6f;
+                    foodDisplayObject.RectTransform.Origin = .5f * new Vector2(foodBackground.Texture.Width, foodBackground.Texture.Height);
+                    foodDisplayObject.RectTransform.Position = new Vector2(500f, 0f) + foodDisplayObject.RectTransform.Origin;
+                    foodDisplayObject.RectTransform.Scale = .75f * Vector2.One;
+
+                    TDSprite foodIcon = CreatePrefab(PrefabType.EmptyUI, foodDisplayObject.Transform).AddComponent<TDSprite>();
+                    foodIcon.Texture = TDContentManager.LoadTexture("UIFood");
+                    foodIcon.Depth = .55f;
+                    foodIcon.TDObject.RectTransform.Origin = .5f * new Vector2(foodIcon.Texture.Width, foodIcon.Texture.Height);
+                    foodIcon.TDObject.RectTransform.LocalPosition = new Vector2(6f, 0f);
+                    foodIcon.TDObject.RectTransform.LocalScale = .2f * Vector2.One;
+
+                    TDSprite foodTextBackground = CreatePrefab(PrefabType.EmptyUI, foodDisplayObject.Transform).AddComponent<TDSprite>();
+                    foodTextBackground.Texture = TDContentManager.LoadTexture("UIRectangle");
+                    foodTextBackground.Depth = .65f;
+                    foodTextBackground.TDObject.RectTransform.Origin = .5f * new Vector2(0f, woodTextBackground.Texture.Height);
+                    foodTextBackground.TDObject.RectTransform.LocalScale = .65f * Vector2.One;
+
+                    TDText foodText = CreatePrefab(PrefabType.EmptyUI, foodDisplayObject.Transform).AddComponent<TDText>();
+                    foodText.Text = "0";
+                    foodText.Depth = .55f;
+                    foodText.TDObject.RectTransform.Origin = .5f * new Vector2(foodText.Width, foodText.Height);
+                    foodText.TDObject.RectTransform.LocalPosition = new Vector2(145f, 25f);
+                    foodText.TDObject.RectTransform.LocalScale = .75f * Vector2.One;
+
+                    ResourceDisplay resourceDisplay = prefab.AddComponent<ResourceDisplay>();
+                    resourceDisplay.WoodText = woodText;
+                    resourceDisplay.StoneText = stoneText;
+                    resourceDisplay.FoodText = foodText;
                     break;
                 }
 
