@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 public class TDRandom
 {
@@ -22,5 +23,10 @@ public class TDRandom
     public static float RandomFloat(float minValue, float maxValue)
     {
         return minValue + (maxValue - minValue) * RandomFloat();
+    }
+
+    public static T SelectRandomEntry<T>(IList<T> items)
+    {
+        return items[RandomInt(items.Count)];
     }
 }

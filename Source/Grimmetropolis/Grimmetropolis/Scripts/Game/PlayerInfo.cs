@@ -6,6 +6,7 @@
     public TDTransform ParentTransform { get; }
 
     public Player Instance { get; set; }
+    public PlayerDisplay Display { get; set; }
 
     public PlayerInfo(PlayerType type, int inputIndex, int uIIndex, TDTransform transform)
     {

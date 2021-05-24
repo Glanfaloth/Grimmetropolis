@@ -1053,6 +1053,7 @@ public static class PrefabFactory
         newPlayer.PlayerType = playerInfo.Type;
         if (newPlayer.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(playerInfo.Type);
         newPlayer.Input = TDInputManager.PlayerInputs[playerInfo.InputIndex];
+        newPlayer.Info = playerInfo;
         playerInfo.Instance = newPlayer;
     }
 }

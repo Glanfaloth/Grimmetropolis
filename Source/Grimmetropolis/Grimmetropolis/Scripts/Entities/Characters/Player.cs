@@ -16,6 +16,7 @@ public class Player : Character
 {
     public int UiIndex;
     public TDInput Input;
+    public PlayerInfo Info;
 
     public override float WalkSpeed => Config.PLAYER_WALK_SPEED;
 
@@ -46,7 +47,17 @@ public class Player : Character
         base.Initialize();
 
         HealthBar.TDObject.Destroy();
-        PlayerDisplay = UIManager.Instance.AddPlayerDisplay(this);
+
+        if (Info.Display == null)
+        {
+            PlayerDisplay = UIManager.Instance.AddPlayerDisplay(this);
+            Info.Display = PlayerDisplay;
+        }
+        else
+        {
+            PlayerDisplay = Info.Display;
+            UIManager.Instance.ReusePlayerDisplay(PlayerDisplay, this);
+        }
 
         TDObject buildMenuObject = PrefabFactory.CreatePrefab(PrefabType.BuildMenu, TDObject.Transform);
         BuildMenu = buildMenuObject.GetComponent<BuildMenu>();
@@ -133,7 +144,17 @@ public class Player : Character
         }
         else if (closestStructure != null && Cooldown <= 0f)
         {
-            if (Items[0] != null) Items[0].InteractWithStructure(gameTime, closestStructure);
+            if (Items[0] != null)
+            {
+                Items[0].InteractWithStructure(gameTime, closestStructure);
+            }
+            else
+            {
+                if (closestStructure.InteractWithPlayer(gameTime, this))
+                {
+                    Cooldown = Config.BUILDING_INTERACTION_COOLDOWN;
+                }
+            }
         }
     }
 

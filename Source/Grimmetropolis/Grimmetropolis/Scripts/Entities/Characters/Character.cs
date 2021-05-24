@@ -31,7 +31,12 @@ public abstract class Character : TDComponent, ITarget
                 HealthBar.CurrentProgress = _health;
                 HealthBar.Show();
             }
-            if (_health <= 0f) TDObject?.Destroy();
+            if (_health <= 0f)
+            {
+                TDObject?.Destroy();
+                // bugfix: player dying near hospital may not be resurrected
+                _health = -9000;
+            }
         }
     }
 
