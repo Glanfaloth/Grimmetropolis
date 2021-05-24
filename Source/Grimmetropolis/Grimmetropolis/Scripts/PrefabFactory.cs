@@ -1046,4 +1046,13 @@ public static class PrefabFactory
             Parent3D = prefab.Transform.Parent
         };
     }
+    internal static void SpawnPlayer(PlayerInfo playerInfo, Vector3 localPosition)
+    {
+        Player newPlayer = CreatePrefab(PrefabType.Player, localPosition, Quaternion.Identity, playerInfo.ParentTransform).GetComponent<Player>();
+        newPlayer.UiIndex = playerInfo.UIIndex;
+        newPlayer.PlayerType = playerInfo.Type;
+        if (newPlayer.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(playerInfo.Type);
+        newPlayer.Input = TDInputManager.PlayerInputs[playerInfo.InputIndex];
+        playerInfo.Instance = newPlayer;
+    }
 }
