@@ -54,6 +54,7 @@ public class PlayerDisplay : TDComponent {
             PlayerType.Snowwhite => TDContentManager.LoadTexture("UISnowWhite"),
             PlayerType.Frog => TDContentManager.LoadTexture("UIFrog"),
             PlayerType.Beast => TDContentManager.LoadTexture("UIBeast"),
+            PlayerType.Cat => TDContentManager.LoadTexture("UICat"),
             _ => TDContentManager.LoadTexture("UICinderella"),
         };
     }
@@ -66,6 +67,7 @@ public class PlayerDisplay : TDComponent {
             PlayerType.Snowwhite => "Snow White",
             PlayerType.Frog => "Frog King",
             PlayerType.Beast => "The Beast",
+            PlayerType.Cat => "Booted Cat",
             _ => "Cinderella"
         };
     }

@@ -9,7 +9,8 @@ public enum PlayerType
     Cinderella,
     Snowwhite,
     Frog,
-    Beast
+    Beast,
+    Cat
 }
 
 public class Player : Character
@@ -51,7 +52,7 @@ public class Player : Character
         TDObject buildMenuObject = PrefabFactory.CreatePrefab(PrefabType.BuildMenu, TDObject.Transform);
         BuildMenu = buildMenuObject.GetComponent<BuildMenu>();
         BuildMenu.Player = this;
-        buildMenuObject.RectTransform.Offset = 2f * Vector3.Backward;
+        buildMenuObject.RectTransform.Offset = 3f * Vector3.Backward;
 
         foreach (var uiElement in BuildMenu.UiElements)
         {
@@ -127,13 +128,13 @@ public class Player : Character
             }
 
         }
-        else if (_collidingMapTile.Item != null)
-        {
-            Take();
-        }
         else if (closestStructure != null && Cooldown <= 0f)
         {
             if (Items[0] != null) Items[0].InteractWithStructure(gameTime, closestStructure);
+        }
+        else if (_collidingMapTile.Item != null)
+        {
+            Take();
         }
     }
 

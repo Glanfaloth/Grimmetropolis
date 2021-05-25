@@ -248,7 +248,8 @@ public class CharacterAnimation : EntityAnimation
             PlayerType.Snowwhite => TDContentManager.LoadModel("PlayerSnowwhite"),
             PlayerType.Frog => TDContentManager.LoadModel("PlayerFrog"),
             PlayerType.Beast => TDContentManager.LoadModel("PlayerBeast"),
-            _ => TDContentManager.LoadModel("PlayerCindarella"),
+            PlayerType.Cat => TDContentManager.LoadModel("PlayerCat"),
+            _ => TDContentManager.LoadModel("PlayerCindarella")
         };
     }
 }

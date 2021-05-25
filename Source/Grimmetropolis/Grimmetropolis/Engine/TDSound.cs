@@ -7,7 +7,7 @@ public class TDSound : TDComponent
 {
     public SoundEffect SoundEffect;
 
-    public float Volume = 1f;
+    public static float Volume = .1f;
 
     public bool SingleInstance = false;
 

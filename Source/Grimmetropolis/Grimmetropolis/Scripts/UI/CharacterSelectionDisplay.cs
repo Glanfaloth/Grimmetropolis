@@ -26,7 +26,7 @@ public class CharacterSelectionDisplay : TDComponent
     private float _cooldown = .2f;
     private float _cooldownTimer = .2f;
 
-    private PlayerType _currentPlayerType = PlayerType.Cinderella;
+    public PlayerType CurrentPlayerType = PlayerType.Cinderella;
 
     public override void Initialize()
     {
@@ -66,10 +66,10 @@ public class CharacterSelectionDisplay : TDComponent
                     {
                         _cooldown = _cooldownTimer;
                         int playerTypeCount = Enum.GetNames(typeof(PlayerType)).Length;
-                        if ((int)_currentPlayerType <= 1) _currentPlayerType = (PlayerType)playerTypeCount - 1;
-                        else _currentPlayerType--;
+                        if ((int)CurrentPlayerType <= 1) CurrentPlayerType = (PlayerType)playerTypeCount - 1;
+                        else CurrentPlayerType--;
 
-                        CharacterAnimation.CharacterModel = CharacterAnimation.GetModelFromPlayerType(_currentPlayerType);
+                        CharacterAnimation.CharacterModel = CharacterAnimation.GetModelFromPlayerType(CurrentPlayerType);
                         CharacterAnimation.RecreateBodyParts();
                         return;
                     }
@@ -77,31 +77,17 @@ public class CharacterSelectionDisplay : TDComponent
                     {
                         _cooldown = _cooldownTimer;
                         int playerTypeCount = Enum.GetNames(typeof(PlayerType)).Length;
-                        if ((int)_currentPlayerType >= playerTypeCount - 1) _currentPlayerType = (PlayerType)1;
-                        else _currentPlayerType++;
+                        if ((int)CurrentPlayerType >= playerTypeCount - 1) CurrentPlayerType = (PlayerType)1;
+                        else CurrentPlayerType++;
 
-                        CharacterAnimation.CharacterModel = CharacterAnimation.GetModelFromPlayerType(_currentPlayerType);
+                        CharacterAnimation.CharacterModel = CharacterAnimation.GetModelFromPlayerType(CurrentPlayerType);
                         CharacterAnimation.RecreateBodyParts();
                         return;
                     }
                     break;
                 case CharacterDisplayState.Ready:
-                    if (Input.ActionPressed())
-                    {
-                        _cooldown = _cooldownTimer;
-                        if (MenuUIManager.Instance.MainMenu.CharacterDisplays.All(o => o.CharacterDisplayState != CharacterDisplayState.SelectingCharacter))
-                        {
-                            for (int i = 0; i < GameManager.PlayerTypes.Length; i++)
-                            {
-                                GameManager.PlayerTypes[i] = MenuUIManager.Instance.MainMenu.CharacterDisplays[i].CharacterDisplayState == CharacterDisplayState.Ready
-                                    ? GameManager.PlayerTypes[i] = MenuUIManager.Instance.MainMenu.CharacterDisplays[i]._currentPlayerType : PlayerType.None;
-                            }
-                            TDSceneManager.LoadScene(new GameScene());
-                        }
-                        return;
-                    }
-
-                    if (Input.CancelPressed())
+                    if (MenuUIManager.Instance.MainMenu.NavigateMainMenu(Input, gameTime)) _cooldown = _cooldownTimer;
+                    else if (Input.CancelPressed())
                     {
                         _cooldown = _cooldownTimer;
                         SetCharacterDisplayState(CharacterDisplayState.SelectingCharacter);
@@ -131,12 +117,20 @@ public class CharacterSelectionDisplay : TDComponent
                 LeftArrow.IsShowing = true;
                 RightArrow.IsShowing = true;
                 _cooldown = _cooldownTimer;
+                if (MenuUIManager.Instance.MainMenu.CharacterDisplays.All(o => o.CharacterDisplayState != CharacterDisplayState.Ready))
+                {
+                    MenuUIManager.Instance.MainMenu.MainMenuState = MainMenuState.MenuInactive;
+                }
                 break;
             case CharacterDisplayState.Ready:
                 InfoText.Text = "  Ready";
                 ButtonIcon.IsShowing = false;
                 LeftArrow.IsShowing = false;
                 RightArrow.IsShowing = false;
+                if (MenuUIManager.Instance.MainMenu.MainMenuState == MainMenuState.MenuInactive)
+                {
+                    MenuUIManager.Instance.MainMenu.MainMenuState = MainMenuState.MenuStart;
+                }
                 break;
         }
     }

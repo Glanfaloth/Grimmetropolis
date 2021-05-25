@@ -541,6 +541,7 @@ public static class PrefabFactory
                     background.Color = Color.Black;
                     background.Depth = .9f;
                     prefab.RectTransform.Origin = new Vector2(.5f * background.Texture.Width, background.Texture.Height);
+                    prefab.RectTransform.LocalScale = new Vector2(1f, .5f);
 
                     TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
@@ -549,6 +550,7 @@ public static class PrefabFactory
                     healthBar.Background = background;
                     healthBar.Foreground = foreground;
                     foregroundObject.RectTransform.LocalPosition = -prefab.RectTransform.Origin;
+                    prefab.RectTransform.LocalScale = new Vector2(1f, .5f);
                     break;
                 }
 
@@ -581,6 +583,7 @@ public static class PrefabFactory
                     background.Color = Color.Black;
                     background.Depth = .9f;
                     prefab.RectTransform.Origin = new Vector2(.5f * background.Texture.Width, background.Texture.Height);
+                    prefab.RectTransform.LocalScale = new Vector2(1f, .5f);
 
                     TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
@@ -598,7 +601,7 @@ public static class PrefabFactory
                     TDSprite playerIconBackground = prefab.AddComponent<TDSprite>();
    
                     PlayerDisplay playerDisplay = prefab.AddComponent<PlayerDisplay>();
-                    playerIconBackground.Texture = TDContentManager.LoadTexture("UIPlayer");
+                    playerIconBackground.Texture = TDContentManager.LoadTexture("UISquare");
                     playerIconBackground.Depth = .7f;
                     prefab.RectTransform.Origin = new Vector2(.5f * playerIconBackground.Texture.Width, playerIconBackground.Texture.Height);
 
@@ -625,7 +628,7 @@ public static class PrefabFactory
                     playerIcon.Depth = .4f;
                     playerIconObject.RectTransform.Origin = new Vector2(.5f * playerIcon.Texture.Width, playerIcon.Texture.Height);
                     playerIconObject.RectTransform.Scale = 0.3f * Vector2.One;
-                    playerIconObject.RectTransform.LocalPosition = new Vector2(0f, 0.7f * playerIconBackground.Texture.Height);
+                    playerIconObject.RectTransform.LocalPosition = new Vector2(.05f * playerIconBackground.Texture.Width, 0.625f * playerIconBackground.Texture.Height);
                     playerDisplay.PlayerIcon = playerIcon;
 
                     TDObject playerNameObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
@@ -633,7 +636,8 @@ public static class PrefabFactory
                     playerName.Text = "Player Name";
                     playerName.Depth = 0.5f;
                     playerNameObject.RectTransform.Origin = new Vector2(0.5f * playerName.Width, playerName.Height);
-                    playerNameObject.RectTransform.LocalPosition = new Vector2(0f, -2f - playerIconBackground.Texture.Height);
+                    playerNameObject.RectTransform.LocalPosition = new Vector2(20f, -2f - playerIconBackground.Texture.Height);
+                    playerNameObject.RectTransform.LocalScale = .5f * Vector2.One;
                     playerDisplay.PlayerName = playerName;
 
                     TDObject currentItemObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
@@ -836,8 +840,61 @@ public static class PrefabFactory
                     TDSprite startButton = startButtonObject.AddComponent<TDSprite>();
                     startButton.Texture = TDContentManager.LoadTexture("UIButtonStart");
                     startButton.Depth = .9f;
-                    startButtonObject.RectTransform.Origin = new Vector2(.5f * startButton.Texture.Width, .5f * startButton.Texture.Height);
+                    startButtonObject.RectTransform.Origin = new Vector2(.5f * startButton.Texture.Width, .5f * startButton.Texture.Height + 200f);
                     startButtonObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth, TDSceneManager.Graphics.PreferredBackBufferHeight + 200);
+
+                    TDObject settingsButtonObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite settingsButton = settingsButtonObject.AddComponent<TDSprite>();
+                    settingsButton.Texture = TDContentManager.LoadTexture("UIButtonSettings");
+                    settingsButton.Depth = .9f;
+                    settingsButtonObject.RectTransform.Origin = new Vector2(.5f * settingsButton.Texture.Width, .5f * settingsButton.Texture.Height);
+                    settingsButtonObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth, TDSceneManager.Graphics.PreferredBackBufferHeight + 200);
+
+                    TDObject soundIconObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite soundIcon = soundIconObject.AddComponent<TDSprite>();
+                    soundIcon.Texture = TDContentManager.LoadTexture("UIVolumeOn");
+                    soundIcon.Depth = .9f;
+                    soundIconObject.RectTransform.Origin = new Vector2(.5f * soundIcon.Texture.Width, .5f * soundIcon.Texture.Height);
+                    soundIconObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 400f, TDSceneManager.Graphics.PreferredBackBufferHeight);
+                    soundIconObject.RectTransform.Scale = .6f * Vector2.One;
+
+                    TDObject soundBarBackgroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite soundBarBackground = soundBarBackgroundObject.AddComponent<TDSprite>();
+                    soundBarBackground.Texture = TDContentManager.LoadTexture("UISoundBarBack");
+                    soundBarBackground.Depth = .95f;
+                    soundBarBackgroundObject.RectTransform.Origin = new Vector2(0f, .5f * soundBarBackground.Texture.Height);
+                    soundBarBackgroundObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 200f, TDSceneManager.Graphics.PreferredBackBufferHeight);
+
+                    TDObject soundBarForegroundObject = CreatePrefab(PrefabType.EmptyUI, soundBarBackgroundObject.Transform);
+                    TDSprite soundBarForeground = soundBarForegroundObject.AddComponent<TDSprite>();
+                    soundBarForeground.Texture = TDContentManager.LoadTexture("UISoundBarFront");
+                    soundBarForeground.Depth = .85f;
+                    soundBarForegroundObject.RectTransform.Origin = new Vector2(0f, .5f * soundBarForeground.Texture.Height);
+
+                    TDObject soundBarObject = CreatePrefab(PrefabType.EmptyUI, soundBarBackgroundObject.Transform);
+                    TDSprite soundBar = soundBarObject.AddComponent<TDSprite>();
+                    soundBar.Texture = TDContentManager.LoadTexture("UIPlayerBar");
+                    soundBar.Color = Color.Green;
+                    soundBar.Depth = .9f;
+                    soundBarObject.RectTransform.Origin = new Vector2(0f, .5f * soundBar.Texture.Height);
+                    soundBarObject.RectTransform.LocalPosition = new Vector2(10f, -2f);
+                    soundBarObject.RectTransform.Scale = new Vector2(2.81f, 1.4f);
+
+                    TDObject goBackTextObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDText goBackText = goBackTextObject.AddComponent<TDText>();
+                    goBackText.Text = "Back   ";
+                    goBackText.Depth = .9f;
+                    goBackTextObject.RectTransform.Origin = .5f * new Vector2(goBackText.Width, goBackText.Height);
+                    goBackTextObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth, TDSceneManager.Graphics.PreferredBackBufferHeight + 300f);
+                    goBackTextObject.RectTransform.Scale = .5f * Vector2.One;
+
+                    TDObject goBackButtonObject = CreatePrefab(PrefabType.EmptyUI, goBackTextObject.Transform);
+                    TDSprite goBackButton = goBackButtonObject.AddComponent<TDSprite>();
+                    goBackButton.Depth = .9f;
+                    goBackButton.Texture = TDContentManager.LoadTexture("UIXBoxB");
+                    goBackButtonObject.RectTransform.Origin = .5f * new Vector2(goBackButton.Texture.Width, goBackButton.Texture.Height);
+                    goBackButtonObject.RectTransform.LocalPosition = new Vector2(120f, 0f);
+
 
                     MainMenu mainMenu = prefab.AddComponent<MainMenu>();
                     mainMenu.SplashScreen = splashScreen;
@@ -845,6 +902,15 @@ public static class PrefabFactory
                     mainMenu.SplashScreenButton = splashScreenButton;
                     mainMenu.GameLogo = gameLogo;
 
+                    mainMenu.StartButton = startButton;
+                    mainMenu.SettingsButton = settingsButton;
+                    mainMenu.SoundIcon = soundIcon;
+                    mainMenu.SoundBarBack = soundBarBackground;
+                    mainMenu.SoundBarFront = soundBarForeground;
+                    mainMenu.SoundBar = soundBar;
+
+                    mainMenu.GoBackButton = goBackButton;
+                    mainMenu.GoBackText = goBackText;
                     break;
                 }
 
@@ -948,7 +1014,7 @@ public static class PrefabFactory
 
                     TDSprite icon = prefab.AddComponent<TDSprite>();
                     icon.Texture = TDContentManager.LoadTexture("UISpeechBubble");
-                    icon.Depth = .5f;
+                    icon.Depth = .9f;
 
                     ButtonIcon buttonIcon = prefab.AddComponent<ButtonIcon>();
                     buttonIcon.Icon = icon;

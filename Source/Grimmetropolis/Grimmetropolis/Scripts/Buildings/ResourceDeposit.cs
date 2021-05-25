@@ -40,7 +40,7 @@ public class ResourceDeposit : Structure
         base.Initialize();
 
         TDObject healthBarObject = PrefabFactory.CreatePrefab(PrefabType.HealthBar, TDObject.Transform);
-        healthBarObject.RectTransform.Offset = 2.5f * Vector3.Backward;
+        healthBarObject.RectTransform.Offset = 3f * Vector3.Backward;
         _healthBar = healthBarObject.GetComponent<HealthBar>();
         _healthBar.CurrentProgress = _currentStorage;
         _healthBar.MaxProgress = Storage;

@@ -168,7 +168,7 @@ Good luck with your defence! May the gods help you!";
                     {
                         foreach (Item item in GameManager.Instance.Items)
                         {
-                            if (item is ToolAxe) AddButtonIcon(item.TDObject.Transform, ButtonType.Action, Vector3.Backward);
+                            if (item is ToolAxe) AddButtonIcon(item.TDObject.Transform, ButtonType.Action, 2f * Vector3.Backward);
                         }
                     }
                     else
@@ -196,7 +196,7 @@ Good luck with your defence! May the gods help you!";
                         foreach (Structure structure in GameManager.Instance.Structures)
                         {
                             if (structure is ResourceDeposit resourceDeposit && resourceDeposit.Type == ResourceDepositType.Wood)
-                                AddButtonIcon(structure.TDObject.Transform, ButtonType.Action, 1.5f * Vector3.Backward);
+                                AddButtonIcon(structure.TDObject.Transform, ButtonType.Action, 2f * Vector3.Backward);
                         }
                     }
                     else
@@ -220,7 +220,7 @@ Good luck with your defence! May the gods help you!";
                     {
                         foreach (Item item in GameManager.Instance.Items)
                         {
-                            if (item is ToolPickaxe) AddButtonIcon(item.TDObject.Transform, ButtonType.Action, Vector3.Backward);
+                            if (item is ToolPickaxe) AddButtonIcon(item.TDObject.Transform, ButtonType.Action, 2f * Vector3.Backward);
                         }
                     }
                     else
@@ -241,7 +241,7 @@ Good luck with your defence! May the gods help you!";
                         foreach (Structure structure in GameManager.Instance.Structures)
                         {
                             if (structure is ResourceDeposit resourceDeposit && resourceDeposit.Type == ResourceDepositType.Stone)
-                                AddButtonIcon(structure.TDObject.Transform, ButtonType.Action, 1.5f * Vector3.Backward);
+                                AddButtonIcon(structure.TDObject.Transform, ButtonType.Action, 2f * Vector3.Backward);
                         }
                     }
                     else
@@ -265,7 +265,7 @@ Good luck with your defence! May the gods help you!";
                     {
                         foreach (Item item in GameManager.Instance.Items)
                         {
-                            if (item is ToolHammer) AddButtonIcon(item.TDObject.Transform, ButtonType.Action, Vector3.Backward);
+                            if (item is ToolHammer) AddButtonIcon(item.TDObject.Transform, ButtonType.Action, 2f * Vector3.Backward);
                         }
                     }
                     else
@@ -305,7 +305,7 @@ Good luck with your defence! May the gods help you!";
                     {
                         foreach (Player player in GameManager.Instance.Players)
                         {
-                            if (player.Items[0] is ToolHammer) AddButtonIcon(player.TDObject.Transform, ButtonType.CycleRight, Vector3.Backward);
+                            if (player.Items[0] is ToolHammer) AddButtonIcon(player.TDObject.Transform, ButtonType.CycleRight, 2f * Vector3.Backward);
                         }
                     }
                     else
@@ -325,7 +325,7 @@ Good luck with your defence! May the gods help you!";
                     {
                         foreach (Player player in GameManager.Instance.Players)
                         {
-                            if (player.Items[0] is ToolHammer) AddButtonIcon(player.TDObject.Transform, ButtonType.Action, Vector3.Backward);
+                            if (player.Items[0] is ToolHammer) AddButtonIcon(player.TDObject.Transform, ButtonType.Action, 2f * Vector3.Backward);
                         }
                     }
                     else
@@ -352,7 +352,7 @@ Good luck with your defence! May the gods help you!";
                     {
                         foreach (Structure structure in GameManager.Instance.Structures)
                         {
-                            if (structure is Outpost outpost && outpost.IsBlueprint) AddButtonIcon(structure.TDObject.Transform, ButtonType.Action, Vector3.Backward);
+                            if (structure is Outpost outpost && outpost.IsBlueprint) AddButtonIcon(structure.TDObject.Transform, ButtonType.Action, 2f * Vector3.Backward);
                         }
                     }
                     else
@@ -386,7 +386,7 @@ Good luck with your defence! May the gods help you!";
                     {
                         foreach (Player player in GameManager.Instance.Players)
                         {
-                            if (player.Items[0] is ToolHammer) AddButtonIcon(player.TDObject.Transform, ButtonType.BuildMenu, 2 * Vector3.Backward);
+                            if (player.Items[0] is ToolHammer) AddButtonIcon(player.TDObject.Transform, ButtonType.BuildMenu, 2f * Vector3.Backward);
                         }
                     }
                     else
@@ -406,7 +406,7 @@ Good luck with your defence! May the gods help you!";
                     {
                         foreach (Player player in GameManager.Instance.Players)
                         {
-                            if (player.Items[0] is ToolHammer) AddButtonIcon(player.TDObject.Transform, ButtonType.CycleRight, Vector3.Backward);
+                            if (player.Items[0] is ToolHammer) AddButtonIcon(player.TDObject.Transform, ButtonType.CycleRight, 2f * Vector3.Backward);
                         }
                     }
                     else
@@ -426,7 +426,7 @@ Good luck with your defence! May the gods help you!";
                     {
                         foreach (Player player in GameManager.Instance.Players)
                         {
-                            if (player.Items[0] is ToolHammer) AddButtonIcon(player.TDObject.Transform, ButtonType.Action, Vector3.Backward);
+                            if (player.Items[0] is ToolHammer) AddButtonIcon(player.TDObject.Transform, ButtonType.Action, 2f * Vector3.Backward);
                         }
                     }
                     else
@@ -446,7 +446,7 @@ Good luck with your defence! May the gods help you!";
                     {
                         foreach (Structure structure in GameManager.Instance.Structures)
                         {
-                            if (structure is Farm farm && farm.IsBlueprint) AddButtonIcon(structure.TDObject.Transform, ButtonType.Action, Vector3.Backward);
+                            if (structure is Farm farm && farm.IsBlueprint) AddButtonIcon(structure.TDObject.Transform, ButtonType.Action, 2f * Vector3.Backward);
                         }
                     }
                     else
