@@ -126,6 +126,9 @@ public class TDRectTransform : TDComponent
         }
     }
 
+    public Vector2 MinPosition = new Vector2(float.MinValue, float.MinValue);
+    public Vector2 MaxPosition = new Vector2(float.MaxValue, float.MaxValue);
+
     public void UpdatePosition()
     {
         CalculatePositionFromParent3D();

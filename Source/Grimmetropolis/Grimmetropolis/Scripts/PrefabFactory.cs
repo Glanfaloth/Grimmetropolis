@@ -758,9 +758,12 @@ public static class PrefabFactory
                     warningSign.Texture = TDContentManager.LoadTexture("UIWarning");
                     warningSign.Depth = .5f;
                     waveIndicator.WarningSign = warningSign;
-                    warningSignObject.RectTransform.Origin = new Vector2(.5f * warningSign.Texture.Width, warningSign.Texture.Height);
-                    warningSignObject.RectTransform.Offset = 0.2f * Vector3.Backward;
+                    warningSignObject.RectTransform.Origin = .5f * new Vector2(warningSign.Texture.Width, warningSign.Texture.Height);
+                    warningSignObject.RectTransform.Offset = 2f * Vector3.Backward;
                     warningSignObject.RectTransform.Scale = 0.15f * Vector2.One;
+                    warningSignObject.RectTransform.MinPosition = new Vector2(100f, 175f);
+                    warningSignObject.RectTransform.MaxPosition = new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth, TDSceneManager.Graphics.PreferredBackBufferHeight) - new Vector2(100f, 100f);
+
                     break;
                 }
 

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using System;
-
 public class TDSprite : TDUI
 {
     public Texture2D Texture;
@@ -17,7 +15,8 @@ public class TDSprite : TDUI
 
     public void Draw()
     {
-        TDSceneManager.SpriteBatch.Draw(Texture, TDObject.RectTransform.Position, null, Color,TDObject.RectTransform.Rotation,
+        Vector2 position = Vector2.Clamp(TDObject.RectTransform.Position, TDObject.RectTransform.MinPosition, TDObject.RectTransform.MaxPosition);
+        TDSceneManager.SpriteBatch.Draw(Texture, position, null, Color,TDObject.RectTransform.Rotation,
             TDObject.RectTransform.Origin, TDObject.RectTransform.Scale, SpriteEffects.None, Depth);
     }
 
