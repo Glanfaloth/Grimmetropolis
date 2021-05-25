@@ -32,7 +32,8 @@ public class TDText : TDUI
 
     public void Draw()
     {
-        TDSceneManager.SpriteBatch.DrawString(SpriteFont, Text, TDObject.RectTransform.Position, Color, TDObject.RectTransform.Rotation,
+        Vector2 position = Vector2.Clamp(TDObject.RectTransform.Position, TDObject.RectTransform.MinPosition, TDObject.RectTransform.MaxPosition);
+        TDSceneManager.SpriteBatch.DrawString(SpriteFont, Text, position, Color, TDObject.RectTransform.Rotation,
             TDObject.RectTransform.Origin, TDObject.RectTransform.Scale, SpriteEffects.None, Depth);
     }
     protected override void AddToList()
