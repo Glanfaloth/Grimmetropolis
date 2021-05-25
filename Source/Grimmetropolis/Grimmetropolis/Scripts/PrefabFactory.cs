@@ -730,27 +730,31 @@ public static class PrefabFactory
                     CreateEmptyUI(prefab, localPosition, localRotation, localScale);
                     WaveIndicator waveIndicator = prefab.AddComponent<WaveIndicator>();
                     WaveBar waveCountDown = prefab.AddComponent<WaveBar>();
+                    TDSprite waveBarDecoration = prefab.AddComponent<TDSprite>();
+                    waveBarDecoration.Texture = TDContentManager.LoadTexture("UISoundBarFront");
+                    waveBarDecoration.Depth = .1f;
                     TDSprite background = prefab.AddComponent<TDSprite>();
                     background.Texture = TDContentManager.LoadTexture("UISoundBarBack");
-                    background.Color = Color.Black;
                     background.Depth = .4f;
                     prefab.RectTransform.Origin = new Vector2(background.Texture.Width, 0f);
                     prefab.RectTransform.LocalPosition = new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 30f, 30f);
 
                     TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
-                    foreground.Texture = TDContentManager.LoadTexture("UISoundBarBack");
-                    foreground.Depth = 0.1f;
+                    foreground.Texture = TDContentManager.LoadTexture("UIWaveBar");
+                    foreground.Depth = 0.2f;
                     foregroundObject.RectTransform.LocalPosition = new Vector2(-background.Texture.Width, 0f);
                     waveCountDown.Background = background;
                     waveCountDown.Foreground = foreground;
                     waveCountDown.AlwaysShow = true;
                     waveIndicator.WaveCountDown = waveCountDown;
+                    waveIndicator.WaveBarDecoration = waveBarDecoration;
 
                     TDObject textObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDText text = textObject.AddComponent<TDText>();
-                    text.Text = "Next Wave:";
-                    textObject.RectTransform.LocalPosition = new Vector2(- text.Width - background.Texture.Width - 10f, 0f);
+                    text.Text = "Next Wave";
+                    textObject.RectTransform.Origin = new Vector2(.5f * text.Width, 0f);
+                    textObject.RectTransform.LocalPosition = new Vector2(- .5f * background.Texture.Width, 30f);
                     waveIndicator.Text = text;
 
                     TDObject warningSignObject = CreatePrefab(PrefabType.EmptyUI3D, prefab.Transform);
