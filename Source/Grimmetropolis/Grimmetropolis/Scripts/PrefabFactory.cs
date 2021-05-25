@@ -731,7 +731,7 @@ public static class PrefabFactory
                     WaveIndicator waveIndicator = prefab.AddComponent<WaveIndicator>();
                     WaveBar waveCountDown = prefab.AddComponent<WaveBar>();
                     TDSprite background = prefab.AddComponent<TDSprite>();
-                    background.Texture = TDContentManager.LoadTexture("UIPlayerBar");
+                    background.Texture = TDContentManager.LoadTexture("UISoundBarBack");
                     background.Color = Color.Black;
                     background.Depth = .4f;
                     prefab.RectTransform.Origin = new Vector2(background.Texture.Width, 0f);
@@ -739,7 +739,7 @@ public static class PrefabFactory
 
                     TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
-                    foreground.Texture = TDContentManager.LoadTexture("UIPlayerBar");
+                    foreground.Texture = TDContentManager.LoadTexture("UISoundBarBack");
                     foreground.Depth = 0.1f;
                     foregroundObject.RectTransform.LocalPosition = new Vector2(-background.Texture.Width, 0f);
                     waveCountDown.Background = background;
