@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-
+using System;
 using System.Collections.Generic;
 
 public class Hospital : Building
 {
     public override ResourcePile GetResourceCost() => new ResourcePile(Config.HOSPITAL_WOOD_COST, Config.HOSPITAL_STONE_COST);
+    private ResourcePile GetResurrectionCost() => new ResourcePile(Config.RESURRECTION_COST_WOOD, Config.RESURRECTION_COST_STONE, Config.RESURRECTION_COST_FOOD);
+
     public override float BuildTime => Config.HOSPITAL_BUILD_VALUE;
 
     public TDCylinderCollider InteractionCollider;
@@ -58,5 +60,31 @@ public class Hospital : Building
         {
             _interactingPlayers.Add(player);
         }
+    }
+
+    internal override bool InteractWithPlayer(GameTime gameTime, Player player)
+    {
+        bool baseResult = base.InteractWithPlayer(gameTime, player);
+
+        List<PlayerInfo> deadPlayers = new List<PlayerInfo>();
+
+        foreach (PlayerInfo info in GameManager.Instance.ActivePlayerInfos)
+        {
+            if (info.Instance.Health <= 0)
+            {
+                deadPlayers.Add(info);
+            }
+        }
+
+        if (deadPlayers.Count > 0 && ResourcePile.CheckAvailability(GameManager.Instance.ResourcePool, GetResurrectionCost()))
+        {
+            PlayerInfo luckyPlayer = TDRandom.SelectRandomEntry(deadPlayers);
+            PrefabFactory.SpawnPlayer(luckyPlayer, player.TDObject.Transform.LocalPosition);
+            GameManager.Instance.ResourcePool -= GetResurrectionCost();
+
+            return true;
+        }
+
+        return baseResult;
     }
 }

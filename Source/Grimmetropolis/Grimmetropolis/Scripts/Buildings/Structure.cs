@@ -80,4 +80,9 @@ public abstract class Structure : TDComponent
     {
         Mesh.Highlight(highlight);
     }
+
+    internal virtual bool InteractWithPlayer(GameTime gameTime, Player player)
+    {
+        return false;
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 public class UIManager : TDComponent
 {
@@ -60,5 +61,10 @@ public class UIManager : TDComponent
         }
 
         return PlayerDisplays[_playerDisplayIndex - 1];
+    }
+
+    internal void ReusePlayerDisplay(PlayerDisplay display, Player player)
+    {
+        player.HealthBar = display.HealthBar;
     }
 }
