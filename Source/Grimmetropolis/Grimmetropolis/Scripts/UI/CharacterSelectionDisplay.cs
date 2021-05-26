@@ -23,8 +23,8 @@ public class CharacterSelectionDisplay : TDComponent
     public TDInput Input;
     public CharacterDisplayState CharacterDisplayState = CharacterDisplayState.Ready;
 
-    private float _cooldown = .2f;
-    private float _cooldownTimer = .2f;
+    public float Cooldown = .2f;
+    public float CooldownTimer = .2f;
 
     public PlayerType CurrentPlayerType = PlayerType.Cinderella;
 
@@ -41,9 +41,9 @@ public class CharacterSelectionDisplay : TDComponent
 
         if (Input == null) return;
 
-        _cooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+        Cooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        if (_cooldown <= 0f)
+        if (Cooldown <= 0f)
         {
             switch (CharacterDisplayState)
             {
@@ -53,18 +53,18 @@ public class CharacterSelectionDisplay : TDComponent
 
                     if (Input.ActionPressed())
                     {
-                        _cooldown = _cooldownTimer;
+                        Cooldown = CooldownTimer;
                         SetCharacterDisplayState(CharacterDisplayState.Ready);
                     }
                     if (Input.CancelPressed())
                     {
-                        _cooldown = _cooldownTimer;
+                        Cooldown = CooldownTimer;
                         MenuUIManager.Instance.MainMenu.RemovePlayer(Input);
                         return;
                     }
                     if (Input.CycleLeftPressed() || joystickDirection.X <= -.8f)
                     {
-                        _cooldown = _cooldownTimer;
+                        Cooldown = CooldownTimer;
                         int playerTypeCount = Enum.GetNames(typeof(PlayerType)).Length;
                         if ((int)CurrentPlayerType <= 1) CurrentPlayerType = (PlayerType)playerTypeCount - 1;
                         else CurrentPlayerType--;
@@ -75,7 +75,7 @@ public class CharacterSelectionDisplay : TDComponent
                     }
                     if (Input.CycleRightPressed() || joystickDirection.X >= .8f)
                     {
-                        _cooldown = _cooldownTimer;
+                        Cooldown = CooldownTimer;
                         int playerTypeCount = Enum.GetNames(typeof(PlayerType)).Length;
                         if ((int)CurrentPlayerType >= playerTypeCount - 1) CurrentPlayerType = (PlayerType)1;
                         else CurrentPlayerType++;
@@ -86,10 +86,10 @@ public class CharacterSelectionDisplay : TDComponent
                     }
                     break;
                 case CharacterDisplayState.Ready:
-                    if (MenuUIManager.Instance.MainMenu.NavigateMainMenu(Input, gameTime)) _cooldown = _cooldownTimer;
+                    if (MenuUIManager.Instance.MainMenu.NavigateMainMenu(Input, gameTime)) Cooldown = CooldownTimer;
                     else if (Input.CancelPressed())
                     {
-                        _cooldown = _cooldownTimer;
+                        Cooldown = CooldownTimer;
                         SetCharacterDisplayState(CharacterDisplayState.SelectingCharacter);
                         return;
                     }
@@ -116,7 +116,7 @@ public class CharacterSelectionDisplay : TDComponent
                 ButtonIcon.IsShowing = false;
                 LeftArrow.IsShowing = true;
                 RightArrow.IsShowing = true;
-                _cooldown = _cooldownTimer;
+                Cooldown = CooldownTimer;
                 if (MenuUIManager.Instance.MainMenu.CharacterDisplays.All(o => o.CharacterDisplayState != CharacterDisplayState.Ready))
                 {
                     MenuUIManager.Instance.MainMenu.MainMenuState = MainMenuState.MenuInactive;

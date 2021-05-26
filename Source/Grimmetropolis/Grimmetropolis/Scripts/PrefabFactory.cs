@@ -898,6 +898,16 @@ public static class PrefabFactory
                     goBackButtonObject.RectTransform.Origin = .5f * new Vector2(goBackButton.Texture.Width, goBackButton.Texture.Height);
                     goBackButtonObject.RectTransform.LocalPosition = new Vector2(120f, 0f);
 
+                    TDObject timerTextObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDText timerText = timerTextObject.AddComponent<TDText>();
+                    timerText.SpriteFont = TDContentManager.LoadSpriteFont("LobsterTwo");
+                    timerText.Text = "3";
+                    timerText.Depth = .4f;
+                    timerTextObject.RectTransform.Origin = .5f * new Vector2(timerText.Width, timerText.Height);
+                    timerTextObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth, TDSceneManager.Graphics.PreferredBackBufferHeight);
+
+                    Timer timer = prefab.AddComponent<Timer>();
+                    timer.TimerText = timerText;
 
                     MainMenu mainMenu = prefab.AddComponent<MainMenu>();
                     mainMenu.SplashScreen = splashScreen;
@@ -914,6 +924,8 @@ public static class PrefabFactory
 
                     mainMenu.GoBackButton = goBackButton;
                     mainMenu.GoBackText = goBackText;
+
+                    mainMenu.Timer = timer;
                     break;
                 }
 

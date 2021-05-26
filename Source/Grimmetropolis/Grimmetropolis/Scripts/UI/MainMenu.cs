@@ -28,6 +28,7 @@ public class MainMenu : TDComponent
     public TDSprite GoBackButton;
 
     public CharacterSelectionDisplay[] CharacterDisplays = new CharacterSelectionDisplay[4];
+    public Timer Timer;
 
     private bool _showSplashScreen = true;
 
@@ -50,6 +51,8 @@ public class MainMenu : TDComponent
     public override void Initialize()
     {
         base.Initialize();
+
+        Timer.OnFinishedTimer = () => TDSceneManager.LoadScene(new GameScene());
 
         _widthScaleSoundBar = SoundBar.TDObject.RectTransform.LocalScale.X;
         UpdateGeneralSound(0f);
@@ -163,7 +166,7 @@ public class MainMenu : TDComponent
                             GameManager.PlayerTypes[i] = CharacterDisplays[i].CharacterDisplayState == CharacterDisplayState.Ready
                                 ? GameManager.PlayerTypes[i] = CharacterDisplays[i].CurrentPlayerType : PlayerType.None;
                         }
-                        TDSceneManager.LoadScene(new GameScene());
+                        Timer.StartTimer();
                     }
                     return true;
                 }
