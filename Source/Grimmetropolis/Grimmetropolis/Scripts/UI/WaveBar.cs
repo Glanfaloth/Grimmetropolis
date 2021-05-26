@@ -5,6 +5,7 @@ using System.Diagnostics;
 public class WaveBar : ProgressBar
 {
 
+
     public bool AlwaysShow = false;
 
     private float _revealTime = 5f;

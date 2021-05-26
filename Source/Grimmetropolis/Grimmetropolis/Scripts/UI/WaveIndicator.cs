@@ -7,6 +7,7 @@ public class WaveIndicator : TDComponent
     public TDSprite WarningSign;
     public TDText Text;
     public WaveBar WaveCountDown = null;
+    public TDSprite WaveBarDecoration;
 
     private bool _isShowingWarningSign = true;
     private bool _isFirstWave = true;
