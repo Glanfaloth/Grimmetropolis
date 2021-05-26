@@ -14,7 +14,7 @@ public class GameOverOverlay : TDComponent
 
     private bool _isShowing = true;
 
-    private float _time = 1f;
+    private float _time = 4f;
 
     public override void Initialize()
     {

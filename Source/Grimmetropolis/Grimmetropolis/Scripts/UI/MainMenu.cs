@@ -21,6 +21,7 @@ public class MainMenu : TDComponent
     public TDSprite StartButton;
     public TDSprite SettingsButton;
     public TDSprite SoundIcon;
+    public TDSprite SoundKnob;
     public TDSprite SoundBarFront;
     public TDSprite SoundBarBack;
     public TDSprite SoundBar;
@@ -231,6 +232,7 @@ public class MainMenu : TDComponent
                 SettingsButton.IsShowing = true;
                 SettingsButton.Color = .5f * Color.White;
                 SoundIcon.IsShowing = false;
+                SoundKnob.IsShowing = false;
                 SoundBarBack.IsShowing = false;
                 SoundBarFront.IsShowing = false;
                 SoundBar.IsShowing = false;
@@ -243,6 +245,7 @@ public class MainMenu : TDComponent
                 SettingsButton.IsShowing = true;
                 SettingsButton.Color = .5f * Color.White;
                 SoundIcon.IsShowing = false;
+                SoundKnob.IsShowing = false;
                 SoundBarBack.IsShowing = false;
                 SoundBarFront.IsShowing = false;
                 SoundBar.IsShowing = false;
@@ -255,6 +258,7 @@ public class MainMenu : TDComponent
                 SettingsButton.IsShowing = true;
                 SettingsButton.Color = Color.White;
                 SoundIcon.IsShowing = false;
+                SoundKnob.IsShowing = false;
                 SoundBarBack.IsShowing = false;
                 SoundBarFront.IsShowing = false;
                 SoundBar.IsShowing = false;
@@ -265,6 +269,7 @@ public class MainMenu : TDComponent
                 StartButton.IsShowing = false;
                 SettingsButton.IsShowing = false;
                 SoundIcon.IsShowing = true;
+                SoundKnob.IsShowing = true;
                 SoundBarBack.IsShowing = true;
                 SoundBarFront.IsShowing = true;
                 SoundBar.IsShowing = true;

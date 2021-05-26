@@ -4,8 +4,6 @@ using System.Diagnostics;
 
 public class WaveBar : ProgressBar
 {
-
-
     public bool AlwaysShow = false;
 
     private float _revealTime = 5f;
@@ -16,10 +14,15 @@ public class WaveBar : ProgressBar
     {
         base.Initialize();
 
+        MaxWidth = 5.7f;
+
         _time = 0f;
 
         if (AlwaysShow)
+        {
             Show();
+            SetProgressBar();
+        }
 
         Hide();
     }

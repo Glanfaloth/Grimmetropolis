@@ -741,21 +741,31 @@ public static class PrefabFactory
 
                     TDObject foregroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDSprite foreground = foregroundObject.AddComponent<TDSprite>();
-                    foreground.Texture = TDContentManager.LoadTexture("UIWaveBar");
+                    foreground.Texture = TDContentManager.LoadTexture("UIPlayerBar");
                     foreground.Depth = 0.2f;
-                    foregroundObject.RectTransform.LocalPosition = new Vector2(-background.Texture.Width, 0f);
+                    foregroundObject.RectTransform.LocalPosition = new Vector2(10f - background.Texture.Width, 5.5f);
+                    foregroundObject.RectTransform.Scale = new Vector2(4f, 1.4f);
                     waveCountDown.Background = background;
                     waveCountDown.Foreground = foreground;
                     waveCountDown.AlwaysShow = true;
                     waveIndicator.WaveCountDown = waveCountDown;
                     waveIndicator.WaveBarDecoration = waveBarDecoration;
 
-                    TDObject textObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
-                    TDText text = textObject.AddComponent<TDText>();
-                    text.Text = "Next Wave";
-                    textObject.RectTransform.Origin = new Vector2(.5f * text.Width, 0f);
-                    textObject.RectTransform.LocalPosition = new Vector2(- .5f * background.Texture.Width, 30f);
-                    waveIndicator.Text = text;
+                    TDObject waveFrontObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite waveFrontIcon = waveFrontObject.AddComponent<TDSprite>();
+                    waveFrontIcon.Texture = TDContentManager.LoadTexture("UIClock");
+                    waveFrontIcon.Depth = 0.2f;
+                    waveFrontObject.RectTransform.Origin = new Vector2(.5f * waveFrontIcon.Texture.Width, .5f * waveFrontIcon.Texture.Height);
+                    waveFrontObject.RectTransform.LocalPosition = new Vector2(-background.Texture.Width - 48f, 12f);
+                    waveFrontObject.RectTransform.LocalScale = .075f * Vector2.One;
+
+                    TDObject waveBackObject = CreatePrefab(PrefabType.EmptyUI, waveFrontObject.Transform);
+                    TDSprite waveBackIcon = waveBackObject.AddComponent<TDSprite>();
+                    waveBackIcon.Texture = TDContentManager.LoadTexture("UICircle");
+                    waveBackIcon.Depth = .3f;
+                    waveBackObject.RectTransform.Origin = new Vector2(.5f * waveBackIcon.Texture.Width, .5f * waveBackIcon.Texture.Height);
+                    waveBackObject.RectTransform.Scale = .6f * Vector2.One;
+                    waveBackObject.RectTransform.LocalPosition = new Vector2(-40f, 60f);
 
                     TDObject warningSignObject = CreatePrefab(PrefabType.EmptyUI3D, prefab.Transform);
                     TDSprite warningSign = warningSignObject.AddComponent<TDSprite>();
@@ -861,15 +871,23 @@ public static class PrefabFactory
                     soundIcon.Texture = TDContentManager.LoadTexture("UIVolumeOn");
                     soundIcon.Depth = .9f;
                     soundIconObject.RectTransform.Origin = new Vector2(.5f * soundIcon.Texture.Width, .5f * soundIcon.Texture.Height);
-                    soundIconObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 400f, TDSceneManager.Graphics.PreferredBackBufferHeight);
+                    soundIconObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 550f, TDSceneManager.Graphics.PreferredBackBufferHeight);
                     soundIconObject.RectTransform.Scale = .6f * Vector2.One;
+
+                    TDObject soundKnobObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
+                    TDSprite soundKnob = soundKnobObject.AddComponent<TDSprite>();
+                    soundKnob.Texture = TDContentManager.LoadTexture("UIKnob");
+                    soundKnob.Depth = .9f;
+                    soundKnobObject.RectTransform.Origin = new Vector2(.5f * soundKnob.Texture.Width, .5f * soundKnob.Texture.Height);
+                    soundKnobObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth + 570f, TDSceneManager.Graphics.PreferredBackBufferHeight);
+                    soundKnobObject.RectTransform.Scale = .8f * Vector2.One;
 
                     TDObject soundBarBackgroundObject = CreatePrefab(PrefabType.EmptyUI, prefab.Transform);
                     TDSprite soundBarBackground = soundBarBackgroundObject.AddComponent<TDSprite>();
                     soundBarBackground.Texture = TDContentManager.LoadTexture("UISoundBarBack");
                     soundBarBackground.Depth = .95f;
                     soundBarBackgroundObject.RectTransform.Origin = new Vector2(0f, .5f * soundBarBackground.Texture.Height);
-                    soundBarBackgroundObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 200f, TDSceneManager.Graphics.PreferredBackBufferHeight);
+                    soundBarBackgroundObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth - 350f, TDSceneManager.Graphics.PreferredBackBufferHeight);
 
                     TDObject soundBarForegroundObject = CreatePrefab(PrefabType.EmptyUI, soundBarBackgroundObject.Transform);
                     TDSprite soundBarForeground = soundBarForegroundObject.AddComponent<TDSprite>();
@@ -907,7 +925,7 @@ public static class PrefabFactory
                     timerText.Text = "3";
                     timerText.Depth = .4f;
                     timerTextObject.RectTransform.Origin = .5f * new Vector2(timerText.Width, timerText.Height);
-                    timerTextObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth, TDSceneManager.Graphics.PreferredBackBufferHeight);
+                    timerTextObject.RectTransform.Position = .5f * new Vector2(TDSceneManager.Graphics.PreferredBackBufferWidth, TDSceneManager.Graphics.PreferredBackBufferHeight + 600f);
 
                     Timer timer = prefab.AddComponent<Timer>();
                     timer.TimerText = timerText;
@@ -921,6 +939,7 @@ public static class PrefabFactory
                     mainMenu.StartButton = startButton;
                     mainMenu.SettingsButton = settingsButton;
                     mainMenu.SoundIcon = soundIcon;
+                    mainMenu.SoundKnob = soundKnob;
                     mainMenu.SoundBarBack = soundBarBackground;
                     mainMenu.SoundBarFront = soundBarForeground;
                     mainMenu.SoundBar = soundBar;
