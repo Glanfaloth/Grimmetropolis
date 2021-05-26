@@ -9,7 +9,7 @@ public class WaveIndicator : TDComponent
     public TDSprite WaveBarDecoration;
 
     private bool _isShowingWarningSign = true;
-    private bool _isFirstWave = true;
+    public bool IsFirstWave = true;
 
     public override void Initialize()
     {
@@ -25,11 +25,10 @@ public class WaveIndicator : TDComponent
     {
         base.Update(gameTime);
 
-        if (_isFirstWave)
+        if (IsFirstWave)
         {
             WaveCountDown.MaxProgress = Config.TIME_UNTIL_FIRST_WAVE;
             WaveCountDown.CurrentProgress = Config.TIME_UNTIL_FIRST_WAVE - GameManager.Instance.EnemyController._waveTimer;
-            _isFirstWave = false;
         }
         else
         {

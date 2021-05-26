@@ -59,6 +59,7 @@ public class EnemyController : TDComponent
         _nextWaveWitch = nrWitches;
         _nextWaveSiege = nrSiege;
         _growthFactor = growthFactor;
+        if (timeUntilSpawn != Config.TIME_UNTIL_FIRST_WAVE) UIManager.Instance.WaveIndicator.IsFirstWave = false;
     }
 
     public override void Initialize()
@@ -160,10 +161,10 @@ public class EnemyController : TDComponent
 
     private void ClearPathHighlight()
     {
-        foreach (var tile in _highlightedPath)
+        /*foreach (var tile in _highlightedPath)
         {
             tile.Highlight(false);
-        }
+        }*/
         _highlightedPath.Clear();
         UIManager.Instance.WaveIndicator.HideWarningSign();
     }
@@ -187,10 +188,10 @@ public class EnemyController : TDComponent
             }
         }
 
-        foreach (var tile in _highlightedPath)
+        /*foreach (var tile in _highlightedPath)
         {
             tile.Highlight(true);
-        }
+        }*/
 
         UIManager.Instance.WaveIndicator.ShowWarningSign();
     }

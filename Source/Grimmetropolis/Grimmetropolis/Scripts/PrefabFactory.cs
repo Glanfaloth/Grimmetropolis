@@ -644,8 +644,17 @@ public static class PrefabFactory
                     TDSprite currentItem = currentItemObject.AddComponent<TDSprite>();
                     currentItem.Texture = TDContentManager.LoadTexture("UIAxe");
                     currentItem.Depth = .4f;
-                    currentItemObject.RectTransform.LocalPosition = new Vector2(.6f * playerIconBackground.Texture.Width, -0.5f * playerIconBackground.Texture.Height);
-                    currentItemObject.RectTransform.Scale = 0.15f * Vector2.One;
+                    currentItemObject.RectTransform.Origin =  new Vector2(.425f * currentItem.Texture.Width, .5f * currentItem.Texture.Height);
+                    currentItemObject.RectTransform.LocalPosition = new Vector2(.8f * playerIconBackground.Texture.Width, -.3f * playerIconBackground.Texture.Height);
+                    currentItemObject.RectTransform.Scale = 0.125f * Vector2.One;
+                    playerDisplay.CurrentItem = currentItem;
+
+                    TDObject itemBackgroundObject = CreatePrefab(PrefabType.EmptyUI, currentItemObject.Transform);
+                    TDSprite itemBackground = itemBackgroundObject.AddComponent<TDSprite>();
+                    itemBackground.Texture = TDContentManager.LoadTexture("UICircle");
+                    itemBackground.Depth = .5f;
+                    itemBackgroundObject.RectTransform.Origin = new Vector2(.5f * itemBackground.Texture.Width, .5f * itemBackground.Texture.Height);
+                    itemBackgroundObject.RectTransform.Scale = .6f * Vector2.One;
                     playerDisplay.CurrentItem = currentItem;
 
                     break;

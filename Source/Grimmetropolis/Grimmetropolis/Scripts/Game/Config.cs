@@ -115,9 +115,9 @@ public static class Config
     public const float PLAYER_BUILD_COOLDOWN = .5f;
     public const float PLAYER_BUILD_STRENGTH = 1f;
 
-    public const int RESURRECTION_COST_WOOD = 50;
-    public const int RESURRECTION_COST_STONE = 50;
-    public const int RESURRECTION_COST_FOOD = 10;
+    public const int RESURRECTION_COST_WOOD = 20;
+    public const int RESURRECTION_COST_STONE = 20;
+    public const int RESURRECTION_COST_FOOD = 100;
     public const float PLAYER_AFTER_RESURRECTION_HEALTH = .2f;
 
     public const float BUILDING_INTERACTION_COOLDOWN = .5f;

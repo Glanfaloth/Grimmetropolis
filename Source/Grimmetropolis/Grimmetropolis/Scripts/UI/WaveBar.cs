@@ -14,7 +14,7 @@ public class WaveBar : ProgressBar
     {
         base.Initialize();
 
-        MaxWidth = 5.7f;
+        MaxWidth = 2.81f;
 
         _time = 0f;
 
