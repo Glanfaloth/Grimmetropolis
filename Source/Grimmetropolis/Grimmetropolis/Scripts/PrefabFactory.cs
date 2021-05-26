@@ -1164,7 +1164,14 @@ public static class PrefabFactory
         newPlayer.UiIndex = playerInfo.UIIndex;
         newPlayer.PlayerType = playerInfo.Type;
         if (newPlayer.Animation is CharacterAnimation characterAnimation) characterAnimation.CharacterModel = characterAnimation.GetModelFromPlayerType(playerInfo.Type);
-        newPlayer.Input = TDInputManager.PlayerInputs[playerInfo.InputIndex];
+
+        int index = 0;
+        for (int i = 0; i < playerInfo.InputIndex; i++)
+        {
+            if (GameManager.PlayerTypes[i] != PlayerType.None) index++;
+        }
+
+        newPlayer.Input = TDInputManager.PlayerInputs[index];
         newPlayer.Info = playerInfo;
         playerInfo.Instance = newPlayer;
     }

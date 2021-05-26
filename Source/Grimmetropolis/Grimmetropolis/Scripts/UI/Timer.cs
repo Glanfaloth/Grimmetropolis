@@ -8,6 +8,7 @@ public class Timer : TDComponent
     public System.Action OnFinishedTimer;
 
     private TDAction _timerAction;
+    private bool _timerStarted = false;
 
     public override void Initialize()
     {
@@ -42,6 +43,9 @@ public class Timer : TDComponent
 
     public void StartTimer()
     {
+        if (_timerStarted) return;
+        _timerStarted = true;
+
         TimerText.Text = "3";
         TimerText.TDObject.RectTransform.Origin = .5f * new Vector2(TimerText.Width, TimerText.Height);
         TimerText.IsShowing = true;
@@ -65,7 +69,9 @@ public class Timer : TDComponent
 
     public void StopTimer()
     {
+        _timerStarted = false;
         _timerAction.Destroy();
+        _timerAction = null;
         TimerText.IsShowing = false;
     }
 }
