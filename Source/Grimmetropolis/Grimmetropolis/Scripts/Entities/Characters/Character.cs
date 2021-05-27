@@ -25,7 +25,7 @@ public abstract class Character : TDComponent, ITarget
         get => _health;
         set
         {
-            _health = value;
+            _health = MathHelper.Min(value, BaseHealth);
             if (HealthBar != null)
             {
                 HealthBar.CurrentProgress = _health;

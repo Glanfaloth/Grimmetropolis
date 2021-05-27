@@ -15,6 +15,8 @@ public class HealthBar : ProgressBar
     {
         base.Initialize();
 
+        MaxWidth = 1f;
+
         _time = 0f;
 
         if (AlwaysShow)

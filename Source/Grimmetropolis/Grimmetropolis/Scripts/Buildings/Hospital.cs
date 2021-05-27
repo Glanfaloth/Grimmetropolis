@@ -11,6 +11,8 @@ public class Hospital : Building
 
     public TDCylinderCollider InteractionCollider;
 
+    public ReviveMenu ReviveMenu;
+
     private float _healRate = 1f;
     private List<Player> _interactingPlayers = new List<Player>();
 
@@ -64,6 +66,8 @@ public class Hospital : Building
 
     internal override bool InteractWithPlayer(GameTime gameTime, Player player)
     {
+        if (!ReviveMenu.IsShowing) return false;
+
         bool baseResult = base.InteractWithPlayer(gameTime, player);
 
         List<PlayerInfo> deadPlayers = new List<PlayerInfo>();

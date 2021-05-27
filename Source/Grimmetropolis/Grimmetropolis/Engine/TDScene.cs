@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ public class TDScene
     public List<TDCylinderCollider> CylinderColliderObjects = new List<TDCylinderCollider>();
     public TDCuboidCollider[,] CuboidColliderObjects = new TDCuboidCollider[0, 0];
 
+    public Texture2D Background;
     public RenderTarget2D ShadowRender;
     public Vector2 InvertedShadowSize;
 
@@ -28,16 +30,29 @@ public class TDScene
     public List<TDSound> SoundObjects = new List<TDSound>();
 
     public bool RequiresLoadingScene = false;
+    public bool F1KeyState = false;
+    public bool ShowUI = true;
 
     public virtual void Initialize()
     {
+        Background = TDContentManager.LoadTexture("Background");
         ShadowRender = new RenderTarget2D(TDSceneManager.Graphics.GraphicsDevice, 4096, 4096, true, SurfaceFormat.Single, DepthFormat.Depth24);
         InvertedShadowSize = new Vector2(1f / ShadowRender.Width, 1f / ShadowRender.Height);
     }
 
     public virtual void Update(GameTime gameTime)
     {
-        if (RequiresLoadingScene)
+        // Check debug options
+        KeyboardState keys = Keyboard.GetState();
+        if (keys.IsKeyDown(Keys.F1)) F1KeyState = true;
+        if (F1KeyState && keys.IsKeyUp(Keys.F1))
+        {
+            F1KeyState = false;
+            ShowUI = !ShowUI;
+        }
+
+            // Load scene if necessary
+            if (RequiresLoadingScene)
         {
             foreach(TDSound soundObject in SoundObjects)
             {
@@ -89,9 +104,7 @@ public class TDScene
 
     public void Draw()
     {
-        TDSceneManager.Graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
-        TDSceneManager.Graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-        TDSceneManager.Graphics.GraphicsDevice.BlendState = BlendState.Opaque;
+        TDSceneManager.Graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);    
 
         // Update camera and light
         CameraObject?.UpdateCamera();
@@ -103,6 +116,9 @@ public class TDScene
             ui3DObject.UpdatePosition();
         }
 
+        TDSceneManager.Graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+        TDSceneManager.Graphics.GraphicsDevice.BlendState = BlendState.Opaque;
+
         // Draw shadow render
         TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(ShadowRender);
         foreach (TDMesh meshObject in MeshObjects)
@@ -110,6 +126,13 @@ public class TDScene
             meshObject.DrawShadow();
         }
         TDSceneManager.Graphics.GraphicsDevice.SetRenderTarget(null);
+
+        TDSceneManager.SpriteBatch.Begin();
+        TDSceneManager.SpriteBatch.Draw(Background, Vector2.Zero, Color.White);
+        TDSceneManager.SpriteBatch.End();
+
+        TDSceneManager.Graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+        TDSceneManager.Graphics.GraphicsDevice.BlendState = BlendState.Opaque;
 
         // Draw render
         for (int i = 0; i < MeshObjects.Count; i++)
@@ -122,15 +145,18 @@ public class TDScene
         }
 
         // Draw sprites and strings
-        TDSceneManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-        foreach (TDSprite spriteObject in SpriteObjects)
+        if (ShowUI)
         {
-            spriteObject.Draw();
+            TDSceneManager.SpriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            foreach (TDSprite spriteObject in SpriteObjects)
+            {
+                spriteObject.Draw();
+            }
+            foreach (TDText textObject in TextObjects)
+            {
+                textObject.Draw();
+            }
+            TDSceneManager.SpriteBatch.End();
         }
-        foreach (TDText textObject in TextObjects)
-        {
-            textObject.Draw();
-        }
-        TDSceneManager.SpriteBatch.End();
     }
 }

@@ -115,6 +115,7 @@ public abstract class Building : Structure, ITarget
         TDObject progessBarObject = PrefabFactory.CreatePrefab(PrefabType.ProgressBar, TDObject.Transform);
         progessBarObject.RectTransform.Offset = 3f * Vector3.Backward;
         _progressBar = progessBarObject.GetComponent<ProgressBar>();
+        _progressBar.MaxWidth = 1f;
         _progressBar.CurrentProgress = _buildProgress;
         _progressBar.MaxProgress = BuildTime;
         _progressBar.Show();

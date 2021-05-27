@@ -654,6 +654,18 @@
 /processorParam:Quality=Best
 /build:SoundEffects/BackgroundMusic.ogg
 
+#begin Textures/Background.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Background.png
+
 #begin Textures/BuildingCastleTexture.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -990,18 +1002,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/UIClock.png
 
-#begin Textures/UIClock.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/UIClock.png
-
 #begin Textures/UIFood.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1134,6 +1134,30 @@
 /processorParam:TextureFormat=Color
 /build:Textures/UIPlayerBar.png
 
+#begin Textures/UIPlayerBarBack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UIPlayerBarBack.png
+
+#begin Textures/UIPlayerBarFront.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UIPlayerBarFront.png
+
 #begin Textures/UIRectangle.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1145,6 +1169,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/UIRectangle.png
+
+#begin Textures/UIRevive.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UIRevive.png
 
 #begin Textures/UISnowWhite.png
 /importer:TextureImporter

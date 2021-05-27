@@ -11,13 +11,13 @@ public class ProgressBar : TDComponent
     protected bool _isShowing = true;
     private bool _requiresHide = false;
 
-    protected float MaxWidth = 0f;
+    public float MaxWidth = 0f;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        MaxWidth = Foreground.TDObject.RectTransform.Scale.X;
+        if (MaxWidth == 0f) MaxWidth = Foreground.TDObject.RectTransform.Scale.X;
 
         SetProgressBar();
         Hide();

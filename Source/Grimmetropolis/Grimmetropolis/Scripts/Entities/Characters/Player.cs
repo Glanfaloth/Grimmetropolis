@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 public enum PlayerType
 {
@@ -69,6 +70,8 @@ public class Player : Character
         {
             uiElement.Depth -= UiIndex * 0.05f;
         }
+
+        Health = 1f;
 
         GameManager.Instance.Players.Add(this);
     }
@@ -242,6 +245,13 @@ public class Player : Character
         if (BuildMenu.IsShowing)
         {
             _interactionCollidingMapTile.Highlight(true);
+        }
+        else if (_interactionCollidingMapTile?.Structure != null && _interactionCollidingMapTile.Structure is Hospital hospital)
+        {
+            if (GameManager.Instance.ActivePlayerInfos.Count > GameManager.Instance.Players.Count)
+            {
+                hospital.ReviveMenu.Show();
+            }
         }
         /*else if (_interactionCollidingMapTile?.Structure != null && !(_interactionCollidingMapTile?.Structure is Bridge))
         {
