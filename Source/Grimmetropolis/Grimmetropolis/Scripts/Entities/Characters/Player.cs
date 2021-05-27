@@ -71,8 +71,6 @@ public class Player : Character
             uiElement.Depth -= UiIndex * 0.05f;
         }
 
-        Health = 1f;
-
         GameManager.Instance.Players.Add(this);
     }
 

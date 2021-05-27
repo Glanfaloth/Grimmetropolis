@@ -79,7 +79,6 @@ public class GameManager : TDComponent
         // ResourcePool
         int amount = (int)(1f / PlayerTypeIndices.Count * 50f);
         ResourcePool = new ResourcePile(amount, amount);
-        ResourcePool = new ResourcePile(100, 100, 100);
 
         // EnemyBrain
         TDObject enemyAI = PrefabFactory.CreatePrefab(PrefabType.Empty);
