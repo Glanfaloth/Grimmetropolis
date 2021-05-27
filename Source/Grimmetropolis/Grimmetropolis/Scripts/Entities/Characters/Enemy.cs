@@ -183,6 +183,7 @@ public abstract class Enemy : Character
     {
         // TODO: this doesn't seem to work when diagonal
         Interact(gameTime);
+        Animation.UseAnimation();
     }
 
     private void RangedAttackTarget(ITarget target, GameTime gameTime)

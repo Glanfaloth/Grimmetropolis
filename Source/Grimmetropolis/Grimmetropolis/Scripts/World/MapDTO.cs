@@ -20,6 +20,7 @@ public class MapDTO
         EnemyKnight,
         EnemyCatapult,
         Outpost,
+        Wall,
         EnemySpawnPoint,
         ToolAxe,
         ToolPickaxe,

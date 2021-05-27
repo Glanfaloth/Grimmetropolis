@@ -2,7 +2,6 @@
 
 public class CameraToPlayers : TDComponent
 {
-
     private Vector3 _defaultOffset = new Vector3(8f, 0f, 18f);
     private Quaternion _defaultRotation = Quaternion.CreateFromYawPitchRoll(-.375f * MathHelper.Pi, 0f, MathHelper.Pi);
     private Quaternion _specialRotation = Quaternion.CreateFromYawPitchRoll(-.5f * MathHelper.Pi, 0f, MathHelper.Pi);

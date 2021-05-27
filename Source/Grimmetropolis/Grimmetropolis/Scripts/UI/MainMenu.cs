@@ -228,9 +228,9 @@ public class MainMenu : TDComponent
         {
             case MainMenuState.MenuInactive:
                 StartButton.IsShowing = true;
-                StartButton.Color = .5f * Color.White;
+                StartButton.Color = new Color(.5f * Color.White, 1f);
                 SettingsButton.IsShowing = true;
-                SettingsButton.Color = .5f * Color.White;
+                SettingsButton.Color = new Color(.5f * Color.White, 1f);
                 SoundIcon.IsShowing = false;
                 SoundKnob.IsShowing = false;
                 SoundBarBack.IsShowing = false;
@@ -243,7 +243,7 @@ public class MainMenu : TDComponent
                 StartButton.IsShowing = true;
                 StartButton.Color = Color.White;
                 SettingsButton.IsShowing = true;
-                SettingsButton.Color = .5f * Color.White;
+                SettingsButton.Color = new Color(.5f * Color.White, 1f);
                 SoundIcon.IsShowing = false;
                 SoundKnob.IsShowing = false;
                 SoundBarBack.IsShowing = false;
@@ -254,7 +254,7 @@ public class MainMenu : TDComponent
                 break;
             case MainMenuState.MenuSettings:
                 StartButton.IsShowing = true;
-                StartButton.Color = .5f * Color.White;
+                StartButton.Color = new Color(.5f * Color.White, 1f);
                 SettingsButton.IsShowing = true;
                 SettingsButton.Color = Color.White;
                 SoundIcon.IsShowing = false;

@@ -23,13 +23,13 @@ public static class Config
     public const int MAX_RANGED_ATTACK = 10;
 
     public const float WAVE_ALERT_TIME = 20f;
-    public const float TIME_UNTIL_FIRST_WAVE = 60f;
-    public const float TIME_BETWEEN_WAVES = 40f;
+    public const float TIME_UNTIL_FIRST_WAVE = 40f;
+    public const float TIME_BETWEEN_WAVES = 30f;
     public const float FIRST_WAVE_WITCH_COUNT = 4;
     public const float FIRST_WAVE_KNIGHT_COUNT = 6;
 
     // this results in first siege appearing in 5th wave
-    public const float FIRST_WAVE_SIEGE_COUNT = 1 / ( WAVE_GROWTH_FACTOR * WAVE_GROWTH_FACTOR * WAVE_GROWTH_FACTOR * WAVE_GROWTH_FACTOR) + 0.05f;
+    public const float FIRST_WAVE_SIEGE_COUNT = 1f;
     public const float WAVE_GROWTH_FACTOR = 1.125f;
 
     public const int WAVE_SPAWN_RADIUS = 5;

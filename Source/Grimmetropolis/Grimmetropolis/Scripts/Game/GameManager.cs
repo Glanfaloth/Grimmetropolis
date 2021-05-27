@@ -233,6 +233,12 @@ public class GameManager : TDComponent
                     newEntity.GetComponent<Outpost>().Position = entityToSpawn.Position;
                 }
                 break;
+            case MapDTO.EntityType.Wall:
+                {
+                    TDObject newEntity = PrefabFactory.CreatePrefab(PrefabType.BuildingWall, StructureTransform);
+                    newEntity.GetComponent<Wall>().Position = entityToSpawn.Position;
+                }
+                break;
             case MapDTO.EntityType.EnemySpawnPoint:
                 EnemyController.SpawnLocations.Add(entityToSpawn.Position);
                 break;
