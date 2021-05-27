@@ -53,6 +53,11 @@ public class MainMenu : TDComponent
     {
         base.Initialize();
 
+        GameManager.PlayerTypes = new PlayerType[] { PlayerType.None, PlayerType.None, PlayerType.None, PlayerType.None };
+        GameManager.PlayerTypeIndices.Clear();
+
+        TDInputManager.PlayerInputs.Clear();
+
         Timer.OnFinishedTimer = () => TDSceneManager.LoadScene(new GameScene());
 
         _widthScaleSoundBar = SoundBar.TDObject.RectTransform.LocalScale.X;

@@ -66,6 +66,10 @@ public class TDScene
                 soundObject.SetVolume();
             }
         }
+        if (keys.IsKeyDown(Keys.F4))
+        {
+            TDSceneManager.LoadScene(new MenuScene());
+        }
 
         // Load scene if necessary
         if (RequiresLoadingScene)
