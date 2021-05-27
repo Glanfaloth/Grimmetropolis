@@ -50,9 +50,25 @@ public class TDScene
             F1KeyState = false;
             ShowUI = !ShowUI;
         }
+        if (keys.IsKeyDown(Keys.F2))
+        {
+            TDSound.Volume = MathHelper.Max(TDSound.Volume - .4f * (float)gameTime.ElapsedGameTime.TotalSeconds, 0f);
+            foreach (TDSound soundObject in SoundObjects)
+            {
+                soundObject.SetVolume();
+            }
+        }
+        if (keys.IsKeyDown(Keys.F3))
+        {
+            TDSound.Volume = MathHelper.Min(TDSound.Volume + .4f * (float)gameTime.ElapsedGameTime.TotalSeconds, 1f);
+            foreach (TDSound soundObject in SoundObjects)
+            {
+                soundObject.SetVolume();
+            }
+        }
 
-            // Load scene if necessary
-            if (RequiresLoadingScene)
+        // Load scene if necessary
+        if (RequiresLoadingScene)
         {
             foreach(TDSound soundObject in SoundObjects)
             {

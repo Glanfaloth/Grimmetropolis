@@ -96,4 +96,12 @@ public class TDSound : TDComponent
             soundEffectInstance.Stop();
         }
     }
+
+    public void SetVolume()
+    {
+        foreach (SoundEffectInstance soundEffectInstance in _soundEffectInstances)
+        {
+            soundEffectInstance.Volume = Volume;
+        }
+    }
 }

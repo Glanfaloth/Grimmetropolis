@@ -18,7 +18,7 @@ public class Grimmetropolis : Game
     protected override void Initialize()
     {
         base.Initialize();
-        _graphics.IsFullScreen = true;
+        // _graphics.IsFullScreen = true;
         _graphics.PreferredBackBufferWidth = 1920;
         _graphics.PreferredBackBufferHeight = 1080;
         _graphics.PreferMultiSampling = true;
