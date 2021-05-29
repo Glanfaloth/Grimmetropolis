@@ -59,7 +59,6 @@ public class EnemyController : TDComponent
         _nextWaveWitch = nrWitches;
         _nextWaveSiege = nrSiege;
         _growthFactor = growthFactor;
-        if (timeUntilSpawn != Config.TIME_UNTIL_FIRST_WAVE) UIManager.Instance.WaveIndicator.IsFirstWave = false;
     }
 
     public override void Initialize()
@@ -114,6 +113,7 @@ public class EnemyController : TDComponent
         {
             _spawnTimer = _waveTimer;
             _waveTimer += _timeBetweenWaves;
+            UIManager.Instance.WaveIndicator.IsFirstWave = false;
 
             _knightToSpawn += (int)_nextWaveKnight;
             _witchToSpawn += (int)_nextWaveWitch;
