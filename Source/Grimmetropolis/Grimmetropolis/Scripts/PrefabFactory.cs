@@ -1147,8 +1147,8 @@ public static class PrefabFactory
                     buttonIcon.Texture = TDContentManager.LoadTexture("UIXboxA");
                     buttonIcon.Depth = .1f;
                     buttonIconObject.RectTransform.Origin = .5f * new Vector2(buttonIcon.Texture.Width, buttonIcon.Texture.Height);
-                    buttonIconObject.RectTransform.LocalPosition = backgroundObject.RectTransform.Origin - 40f * Vector2.One;
-                    buttonIconObject.RectTransform.LocalScale = .5f * Vector2.One;
+                    buttonIconObject.RectTransform.LocalPosition = backgroundObject.RectTransform.Origin - new Vector2(120f, 160f);
+                    buttonIconObject.RectTransform.Scale = .5f * Vector2.One;
 
                     SpeechBubble speechBubble = prefab.AddComponent<SpeechBubble>();
                     speechBubble.Background = background;

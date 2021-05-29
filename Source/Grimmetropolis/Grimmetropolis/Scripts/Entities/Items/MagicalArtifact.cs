@@ -22,6 +22,11 @@ public class MagicalArtifact : Item
         TDObject.Transform.LocalPosition = CarryPosition;
         TDObject.Transform.LocalRotation = CarryRotation;
         TDObject.Transform.LocalScale = CarryScale;
+
+        if (character.Animation == null)
+        {
+            TDObject.Transform.LocalPosition = new Vector3(0f, 0f, .8f);
+        }
     }
 
     protected override void SetMapTransform()
